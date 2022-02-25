@@ -1,0 +1,72 @@
+.main-card{
+    /* box-sizing: border-box; */
+    margin: 0;
+    padding: 20px;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    font-feature-settings: "tnum","tnum";
+    position: relative;
+    background: #fff;
+    border-radius: 0px !important;
+    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 7%), 0px 1px 1px 0px rgb(0 0 0 / 3%), 0px 0px 4px 0px rgb(0 0 0 / 8%) !important;
+}
+.space-css{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.search-field{
+    min-width: 300px;
+}
+
+.dataGridFooter > div > .MuiDataGrid-footerContainer > .MuiTablePagination-root > .MuiTablePagination-toolbar{
+        align-items: baseline !important
+}
+
+.root > div > div > div > .css-1s0hp0k-MuiDataGrid-columnHeadersInner{
+    background: #b9d5ff91 !important;
+}
+
+.badge-css > .css-106c1u2-MuiBadge-badge {
+    position: absolute;
+    right: -3 !important;
+    top: 18 !important;
+    border: 1px solid white !important;
+    background: #42ba96 !important;
+    /* color: #42ba96 !important; */
+    padding: 2px !important;
+}
+
+@media screen and (max-width: 501px) {
+    .main-card{
+        /* box-sizing: border-box; */
+        margin: 0;
+        padding: 10px;
+        color: #666;
+        font-size: 13px;
+        font-variant: tabular-nums;
+        line-height: 1.5715;
+        list-style: none;
+        font-feature-settings: "tnum","tnum";
+        position: relative;
+        background: #fff;
+        border-radius: 0px !important;
+        box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 7%), 0px 1px 1px 0px rgb(0 0 0 / 3%), 0px 0px 4px 0px rgb(0 0 0 / 8%) !important;
+    }
+    .search-field{
+        max-width: 200px;
+    }
+    .search-field > div > .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+        height: 0.6em;
+    }
+    .search-field > .css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root {
+        position: absolute;
+        top: -6px;
+    }
+}

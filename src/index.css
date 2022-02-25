@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.markerCss{
+  background-color: #5664D2;
+  margin-bottom: 60px;
+  padding: 7px;
+  border-radius: 8px;
+}
+
+@media screen and (max-width: 501px ) {
+    .hr-line{
+      margin: 0.5rem 0;
+    }
+}

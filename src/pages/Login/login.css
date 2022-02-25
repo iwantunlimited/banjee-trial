@@ -1,0 +1,20 @@
+.login-background{
+    background: linear-gradient(to left, rgb(109, 194, 161), rgb(17, 169, 196));
+    height: 100%;
+    width: 100% !important;
+}
+.main-div{
+    background-color: azure;
+}
+.login-btn{
+    background: linear-gradient(to left, rgb(109, 194, 161), rgb(17, 169, 196));
+    text-transform: none;
+    border-radius: 20px;
+    padding: 10px 25px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: medium;
+    font-weight: 600;
+}
+.text-input > div {
+    background: transparent !important;
+}
