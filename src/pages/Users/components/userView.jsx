@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@mui/material/styles';
-import {Grid, Typography, Tab, Tabs, AppBar, Button,Box,Card ,CircularProgress, Avatar, Container,Paper,Badge, Zoom} from '@mui/material';
+import {Grid, Typography, Tab, Tabs,Box,Card ,CircularProgress, Avatar, Container,Button,Badge} from '@mui/material';
 import {findCustomer,findCustomerConnection,findBlockedCustomers,penddingConnectionsList} from "../User_Services/UserApiService";
 import { Male, Female,Transgender } from '@mui/icons-material';
 import '../users.css'
@@ -168,8 +168,9 @@ function CustomerView(props) {
 								item
 								xs={12}
 								sm={5}
-								md={3}
-								lg={3}
+								md={4}
+								lg={4}
+								xl={3}
 								style={{
 									height: "auto",
 									paddingRight: "10px",
@@ -206,7 +207,8 @@ function CustomerView(props) {
 												display: "flex",
 												alignItems: "center",
 												marginTop: "10px",
-                                                fontSize: '10px'
+                                                fontSize: '10px',
+												fontWeight:'400'
 											}}
 										>
 											<Typography variant="h6" style={{ marginRight: "5px" }}>
@@ -271,8 +273,9 @@ function CustomerView(props) {
 								item
 								xs={12}
 								sm={7}
-								md={9}
-								lg={9}
+								md={8}
+								lg={8}
+								xl={9}
 								style={{
 									background: "#FFF",
 									paddingTop: "0px",
@@ -314,8 +317,9 @@ function CustomerView(props) {
 														item
 														xs={4}
 														sm={4}
-														md={2}
-														lg={2}
+														md={3}
+														lg={3}
+														xl={2}
 														key={index}
 														onClick={() => navigate('/user/view/' + ele.systemUserId )}
 														style={{
@@ -346,7 +350,7 @@ function CustomerView(props) {
 														<Typography
 															style={{ textAlign: "left", marginTop: "5px",fontSize:'15px' }}
 														>
-															{ele.name}
+															{ele.name.slice(0,20)}
 														</Typography>
 														{/* </Grid> */}
 													</Grid>

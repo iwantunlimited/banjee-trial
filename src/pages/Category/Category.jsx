@@ -1,12 +1,11 @@
 import React from "react";
-import { Box,Grid,Card,Button,IconButton,Modal,TextField,Container,Typography,CircularProgress,Autocomplete,Slider } from "@mui/material";
+import { Box,Grid,Card,Button,IconButton,Modal,TextField,Container,CircularProgress,Autocomplete,Slider } from "@mui/material";
 import TreeView from '@mui/lab/TreeView';
 import {ExpandMore,ChevronRight, Refresh, Add,Delete} from '@mui/icons-material';
 import TreeItem from '@mui/lab/TreeItem';
 import './Category.css'
 import { CategoryList,CreateCategory,CreateSubCategory, deleteCategory,deleteSubCategory } from "../Users/User_Services/UserApiService"; 
 import SwitchSelector from "react-switch-selector";
-import { initial } from "lodash";
 
 const style = {
     position: 'absolute',
@@ -341,7 +340,9 @@ function Category(props){
                                                             </Box>
                                                         </Card>
                                                     </React.Fragment>   
-                                                )}
+                                                )}else{
+                                                    return null;
+                                                }
                                             })
                                         }
                                 </Grid>

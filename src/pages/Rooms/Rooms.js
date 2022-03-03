@@ -1,16 +1,14 @@
 import React from "react";
-import { Grid,Container, Card, IconButton, CircularProgress,Box } from "@mui/material";
+import { Grid,Container, Card, IconButton, CircularProgress } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import { Helmet } from "react-helmet";
 import ChipCompo from "./components/chipCompo";
 import { filterRooms } from "./Services/ApiServices";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 
 function Room(){
-
-    const params = useParams();
 
     const navigate = useNavigate();
 

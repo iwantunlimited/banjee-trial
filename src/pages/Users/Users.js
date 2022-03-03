@@ -3,10 +3,10 @@ import React from "react";
 import Helmet from "react-helmet";
 import ChipComp from "./components/chipComp";
 import UserData from "./components/usersData";
-import { IconButton, Snackbar, Alert,Box, CircularProgress } from "@mui/material";
+import { IconButton, Snackbar, Alert, CircularProgress } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import jwt_decode from "jwt-decode";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import {customerFilter} from './User_Services/User_Payloads';
 import {listCustomer} from "./User_Services/UserApiService";
@@ -57,9 +57,9 @@ function User(){
     })
 
     //---------------------------------------------Customer: Handling dialogue box------------------------------------------------
-	const handleClickOpen = () => {
-		setState((prev)=>({...prev, dialougeOpen: true }));
-	};
+	// const handleClickOpen = () => {
+	// 	setState((prev)=>({...prev, dialougeOpen: true }));
+	// };
 
 	const handleClose = () => {
 		setState((prev) => ({...prev, dialougeOpen: false }));
@@ -202,17 +202,17 @@ function User(){
 			.catch((err) => {
 				console.log(err);
 			});
-	},[])
+	},[CustomerFilter,navigate,state.totalElement])
 
     function sanckbarClose(){
         setState((prev) => ({...prev, snackbar: { ...prev.snackbar, open: !prev.snackbar.open } }))
     }
 
-	const FilterapiCall = (event) => {
-		console.log(event.target.value);
-		CustomerFilter.keywords = event.target.value;
-		apiCall();
-	};
+	// const FilterapiCall = (event) => {
+	// 	console.log(event.target.value);
+	// 	CustomerFilter.keywords = event.target.value;
+	// 	apiCall();
+	// };
 
     React.useEffect(() => {
         apiCall()

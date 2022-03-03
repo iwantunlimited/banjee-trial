@@ -1,13 +1,11 @@
 import React from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import ChipComponent from "./components/chipComponent";
 import { listCustomer } from '../../Users/User_Services/UserApiService'
 import {filterRooms} from '../../Rooms/Services/ApiServices'
 import { ReportedUserList } from '../../Users/User_Services/UserApiService'
 import AnalyticsArea from "./AnalyticsArea";
-import TrialArea from "./TrigeredArea";
 import ChartComp from "./components/chartCompo/chart";
-import Trial from "./components/Trial";
 import TrigeredArea from "./TrigeredArea";
 
 function Analytics(props){
@@ -79,7 +77,7 @@ function Analytics(props){
     },[UserListApiCall,totalRoomApiCall,ReportedUsersApiCall])
 
     return(
-        <Grid item container spacing={4}>
+        <Grid item container spacing={2}>
             <Grid item xs={12}>
                 <ChipComponent totalData={initialData} />
             </Grid>

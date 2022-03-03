@@ -6,9 +6,7 @@ import ReactApexChart from 'react-apexcharts'
 function Trial(props){
 
   console.log(props);
-  const { chart,data,dataType } = props
-
-  const{ option,series } = data
+  const { chart,dataType } = props
 
   console.log(chart);
 

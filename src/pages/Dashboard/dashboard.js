@@ -7,14 +7,14 @@ function DashboardComp(){
 
 
     return(
-        <Container maxWidth="xl" style={{padding: '0px'}}>
+        <Container maxWidth="xl" style={{padding: '0px',margin:'0px'}}>
             <Helmet>
                 <title>Dashboard | Banjee Admin</title>
             </Helmet>
             <Box
                 sx={{
                     minHeight: '100%',
-                    py: 2
+                    // py: 2
                 }}
             >
                 <Grid

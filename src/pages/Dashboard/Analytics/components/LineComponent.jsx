@@ -6,17 +6,12 @@ import {
 	CardContent,
 	IconButton,
 	Typography,
-	Menu,
-	MenuItem,
 	Tooltip,
 	ButtonGroup,
 	CircularProgress,
 } from "@mui/material";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
 import TableChartIcon from "@mui/icons-material/TableChart";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import { DataGrid } from "@mui/x-data-grid";
 import Trial from './Trial'
 import DataGridCustom from "./dataGrid";
 import '../Analytics.css'
@@ -25,25 +20,19 @@ export default function LineComponent(props) {
 
     const { data,chart, showData,myDate, title} = props
 
-    const { series,option } = data
+    const { series } = data
 
     console.log(chart);
 
-    const [state,setState] = React.useState({
-        series: series,
-        option: option
-    })
-
-    const [anchorEl, setAnchorEl] = React.useState({
-		filter: false,
-	});
+    // const [state,setState] = React.useState({
+    //     series: series,
+    //     option: option
+    // })
 
 	const [filter, setFilter] = React.useState({
 		line: true,
 		stats: false,
 	});
-
-	const open = Boolean(anchorEl);
 
 	return (
         <Card
@@ -142,7 +131,6 @@ export default function LineComponent(props) {
                                 <React.Fragment>
                                     {!filter.stats ? (
                                         <Trial 
-                                            data={data}
                                             chart={chart}
                                             dataType={myDate}
                                         />

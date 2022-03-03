@@ -1,13 +1,13 @@
 
 import Dashboard from "./pages/Dashboard/dashboard";
 import User from "./pages/Users/Users";
-import Account from "./pages/Account/Account";
+// import Account from "./pages/Account/Account";
 import Navbar from "./pages/navbar/navbar";
 import { useRoutes } from "react-router-dom";
 import Login from "./pages/Login/login";
 import Category from "./pages/Category/Category";
 import CustomerView from "./pages/Users/components/userView";
-import Example from "./pages/Users/components/example";
+// import Example from "./pages/Users/components/example";
 import ReportedUser1 from "./pages/Users/components/ReportedUser";
 import ViewReportedUsers from "./pages/Users/components/ViewReportedUsers";
 import Room from "./pages/Rooms/Rooms";

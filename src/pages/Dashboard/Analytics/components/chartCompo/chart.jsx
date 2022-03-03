@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import ReactApexChart from "react-apexcharts";
 import { Card, CircularProgress } from "@mui/material";
 import '../../Analytics.css'
@@ -42,58 +42,3 @@ function ChartComp(props){
 }
 
 export default ChartComp;
-
-
-
-// import React, { Component } from "react";
-// import ReactApexChart from "react-apexcharts";
-// import { Card } from "@mui/material";
-// import '../../Analytics.css'
-
-// class ChartComp extends Component {
-//   constructor(props) {
-//     super(props);
-
-
-
-//     const { data } = props;
-
-//     console.log(this.state.male);
-
-//     this.state = {
-//     male: 0,
-//     female: 0,
-//     series: [50, 44, 13],
-//     options: {
-//         chart: {
-//         width: 380,
-//         type: 'pie',
-//         },
-//         labels: ['Male', 'Female', 'TransGender'],
-//         responsive: [{
-//         breakpoint: 480,
-//         options: {
-//             chart: {
-//             width: 200
-//             },
-//             legend: {
-//             position: 'bottom'
-//             }
-//         }
-//         }]
-//     }
-//     }
-//     }
-
-//   render() {
-//     return (
-//         <Card className="main-card" style={{display:'flex',justifyContent: 'center',padding:'10px'}}>
-//             <div id="chart">
-//                 <ReactApexChart options={this.state.options} series={this.state.series} type="pie" width={window.innerWidth< 769 ? 370 : 450} />
-//             </div>
-//         </Card>
-//     );
-//   }
-// }
-
-// export default ChartComp;

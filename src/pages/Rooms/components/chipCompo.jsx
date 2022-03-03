@@ -1,13 +1,10 @@
 import React from 'react';
-import { Refresh, Report } from "@mui/icons-material";
-import { Card, IconButton, TextField, Tooltip } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
+import { Refresh } from "@mui/icons-material";
+import { Card, IconButton, TextField } from "@mui/material";
 import '../../Users/users.css';
 
 
 function ChipCompo({refreshApi,handleSearch, words}){
-
-    const navigate = useNavigate();
 
     return(
         <Card  

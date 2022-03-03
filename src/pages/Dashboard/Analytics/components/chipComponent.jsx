@@ -1,4 +1,4 @@
-import { Grid,Card, CardContent, Typography,Box } from '@mui/material';
+import { Grid,Card, CardContent,Box } from '@mui/material';
 import React from 'react'
 import './chip.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

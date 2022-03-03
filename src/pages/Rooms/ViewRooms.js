@@ -1,22 +1,17 @@
 import React from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import { useParams} from "react-router-dom";
 import {
 	Container,
-	Box,
 	Card,
 	Grid,
 	Typography,
 	Avatar,
 	CircularProgress,
-	IconButton,
-	useTheme,
 } from "@mui/material";
 import {makeStyles} from "@mui/styles";
 import {findRoomsById} from "./Services/ApiServices";
-import {Male, Female, Transgender} from "@mui/icons-material";
 import moment from "moment";
 import '../Users/users.css'
-import { DataGrid } from "@mui/x-data-grid";
 
 const useStyles = makeStyles((theme) => ({
 	typoColor: {
@@ -24,51 +19,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const useRowStyles = makeStyles((theme) => ({
-	root: {
-		"& > *": {
-			borderBottom: "1px solid #E0E0E0",
-		},
-	},
-	gridItem: {
-		height: "70px",
-	},
-	gridItemTitle: {
-		height: "70px",
-		padding: "7px 0",
-	},
-	gridItemTypo: {
-		height: "100%",
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "space-between",
-		color: "#858585",
-		fontWeight: "bold",
-	},
-	gray: {
-		color: theme.palette.primary.main,
-	},
-	graylight: {
-		color: "#787878",
-	},
-	formControl: {
-		margin: theme.spacing(1),
-		minWidth: 150,
-	},
-	tableCell: {
-		padding: "10px 16px !important",
-	},
-
-	// Pagination CSS
-
-	rootPage: {
-		flexShrink: 0,
-	},
-}));
 
 function ViewRooms() {
-
-	const navigate = useNavigate();
 
 	const params = useParams();
 
@@ -78,11 +30,11 @@ function ViewRooms() {
 
 	const [data, setData] = React.useState();
 
-	const [ pagination, setPagination ] = React.useState({
-		page: 0,
-		pageSize: 10,
-		tootalElement: 0
-	})
+	// const [ pagination, setPagination ] = React.useState({
+	// 	page: 0,
+	// 	pageSize: 10,
+	// 	tootalElement: 0
+	// })
 
 
 	// ------------------------------------ find Groups By ID Api Call ---------------------------------------
@@ -106,40 +58,40 @@ function ViewRooms() {
 
 	// const rows = connectedUser ? connectedUser : [] ;
 
-    const columns = [
-        { 
-            id:"1",
-            field: "avatarUrl", 
-            headerClassName: 'app-header',
-            headerName: "User Name", 
-            flex: 0.5 ,
-            // renderCell: (params) => (
-            //     <Avatar src={params.row.connectedUser.avtarUrl} alt={params.row.connectedUser.name} />
-            //     )
-        },
-        { 
-            id:"2",
-            field: "username", 
-            headerClassName: 'app-header',
-            headerName: "User Name", 
-            flex: 0.3 ,
-        },
-        { 
-            id:"3",
-            field: "email", 
-            headerClassName: 'app-header',
-            headerName: "Email", 
-            flex: 0.4 
-        },
-        { 
-            id:"4",
-            field: "mobile",
-            headerClassName: 'app-header', 
-            headerName: "Mobile Number", 
-            align:'center',
-            flex: 0.4  
-        }
-      ];
+    // const columns = [
+    //     { 
+    //         id:"1",
+    //         field: "avatarUrl", 
+    //         headerClassName: 'app-header',
+    //         headerName: "User Name", 
+    //         flex: 0.5 ,
+    //         // renderCell: (params) => (
+    //         //     <Avatar src={params.row.connectedUser.avtarUrl} alt={params.row.connectedUser.name} />
+    //         //     )
+    //     },
+    //     { 
+    //         id:"2",
+    //         field: "username", 
+    //         headerClassName: 'app-header',
+    //         headerName: "User Name", 
+    //         flex: 0.3 ,
+    //     },
+    //     { 
+    //         id:"3",
+    //         field: "email", 
+    //         headerClassName: 'app-header',
+    //         headerName: "Email", 
+    //         flex: 0.4 
+    //     },
+    //     { 
+    //         id:"4",
+    //         field: "mobile",
+    //         headerClassName: 'app-header', 
+    //         headerName: "Mobile Number", 
+    //         align:'center',
+    //         flex: 0.4  
+    //     }
+    //   ];
 
 	function ImageAvatar(){
 		if(data && data.imageContent && data.imageContent.src){

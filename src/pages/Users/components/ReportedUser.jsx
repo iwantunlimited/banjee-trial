@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@mui/styles';
 import {Container,Card,Button, Avatar,IconButton, CircularProgress} from '@mui/material';
 import { ReportedUserList } from '../User_Services/UserApiService';
-import { DataGrid, RowsProp, ColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
@@ -123,14 +123,14 @@ function ReportedUser1(props) {
             pageSize: response.pageable.pageSize,
             totalElement: response.totalElements
         }))
-    }).catch((err) => {
-        console.log(err);
-    })
+        }).catch((err) => {
+            console.log(err);
+        })
   },[])
 
   React.useEffect(() => {
     listApiCall(pagination)
-  },[listApiCall])
+  },[listApiCall,pagination])
 
 
     if(reportList && rows.length>0){

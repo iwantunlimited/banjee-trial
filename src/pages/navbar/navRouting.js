@@ -1,7 +1,7 @@
 import DashboardComp from "../Dashboard/dashboard";
 import User from "../Users/Users";
-import { Dashboard,PeopleAlt, AccountBox,ViewHeadline, Category as CategoryIcon } from '@mui/icons-material';
-import Account from "../Account/Account";
+import { Dashboard,PeopleAlt,ViewHeadline, Category as CategoryIcon } from '@mui/icons-material';
+// import Account from "../Account/Account";
 import Category from "../Category/Category";
 import Room from "../Rooms/Rooms";
 

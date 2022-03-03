@@ -1,4 +1,4 @@
-import { Avatar, Container,Grid,Card, TextField } from "@mui/material";
+import { Avatar,Grid,Card, TextField } from "@mui/material";
 import React from "react";
 import { findAdmin } from './Account_Services/AccountApiService'
 
@@ -9,13 +9,16 @@ function AccountProfile(){
 
     const [userData , setUserData] = React.useState({})
    
+    const findApi = React.useCallback(() => {
+        findAdmin(Id).then( response => {
+            setUserData(response)
+            console.log(response)
+          });
+    },[])
+    
     React.useEffect(() => {
-      console.log('hju')
-      findAdmin(Id).then( response => {
-          setUserData(response)
-          console.log(response)
-        });
-    },[]);
+        findApi()
+    },[findApi,Id]);
 
     return(
         <div style={{display:'flex',justifyContent:'center'}}>
