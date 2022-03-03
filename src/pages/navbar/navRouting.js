@@ -1,8 +1,9 @@
 import DashboardComp from "../Dashboard/dashboard";
 import User from "../Users/Users";
-import { Dashboard,PeopleAlt, AccountBox, Category as CategoryIcon } from '@mui/icons-material';
+import { Dashboard,PeopleAlt, AccountBox,ViewHeadline, Category as CategoryIcon } from '@mui/icons-material';
 import Account from "../Account/Account";
 import Category from "../Category/Category";
+import Room from "../Rooms/Rooms";
 
 const routing=[
     {
@@ -25,6 +26,13 @@ const routing=[
         name: 'Users',
         icon: <PeopleAlt fontSize="medium" />,
         component: <User />
+    },
+    {
+        id:4,
+        path: '/rooms',
+        name: 'Rooms',
+        icon: <ViewHeadline fontSize="medium" />,
+        component: <Room />
     },
     // {
     //     id:3,

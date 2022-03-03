@@ -2,17 +2,34 @@ import React from "react";
 import {
 	Grid,
 	Card,
+    Box,
 	ButtonGroup,
 	CircularProgress,
+    Typography,
+    Select,
+    Menu,
+    MenuItem,
+    Button,
 } from "@mui/material";
 import MapComponent from "./components/MapComponent";
 import LineComponent from "./components/LineComponent";
+import TextField from '@mui/material/TextField';
+import DateRangePicker from '@mui/lab/DateRangePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { series,options ,NewUserRegistered} from "./components/data";
 import './Analytics.css'
+import ChartComp from "./components/chartCompo/chart";
+import TrialArea from "./TrigeredArea";
 
 export default function AnalyticsArea(props) {
 
-	const { showData, analyticsValues,typeData,myDate,userData} = props;
+
+    const [value, setValue] = React.useState([null, null]);
+
+	const { showData, analyticsValues,dataType,userData} = props;
+
+    const data = showData 
 
 	const analyticsData = analyticsValues;
 	console.log(analyticsData);
@@ -22,19 +39,64 @@ export default function AnalyticsArea(props) {
 		option: options
 	});
 
-	const { content } = userData;
+	const { content } = userData;   
 
 	if(analyticsValues && userData){
 		return (
 			<Grid item container spacing={4} id="canvas">
+                {/* <Grid item xs={12} sm={6} md={6} lg={4} xl={4}>
+                    <ChartComp data={userData} />
+				</Grid>
+                <Grid item xs={12} sm={6} md={6} lg={8} xl={8}>
+                    <TrialArea 
+                        handleAnalyticsData={(data) => handleAnalyticsData(data)}
+						showData={(data) => handleIsLoad(data)}
+						dataType={myDate}
+                    />
+                    <Card className="main-card" style={{display:'flex',justifyContent:'center'}}>
+                        <Box>
+                            <div>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DateRangePicker
+                                    startText="Start-Date"
+                                    endText="End-Date"
+                                    value={value}
+                                    onChange={(newValue) => {
+                                        setValue(newValue);
+                                    }}
+                                    renderInput={(startProps, endProps) => (
+                                    <React.Fragment>
+                                        <TextField {...startProps} />
+                                        <Box sx={{ mx: 2 }}> to </Box>
+                                        <TextField {...endProps} />
+                                    </React.Fragment>
+                                    )}
+                                />
+                                </LocalizationProvider>
+                            </div>
+                        <div style={{display:'flex',alignItems:'center',marginTop: '20px'}}>
+                            <Typography variant="h6">21/02/2022</Typography>
+                            <Select style={{marginLeft: '20px'}}>
+                                <Menu>
+                                    <MenuItem>1</MenuItem>
+                                    <MenuItem>2</MenuItem>
+                                </Menu>
+                            </Select>
+                        </div>
+                        <div>
+                            <Button>
+                                Submit
+                            </Button>
+                        </div>
+                        </Box>
+                    </Card>
+                </Grid>  */}
 				<Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
 					<LineComponent
 						title={"Total Registered User's"}
-						dataType="date"
-						calendarData={(data) => typeData(data)}
-						showData={showData}
+						showData={data}
 						data={state}
-						myDate={myDate}
+						myDate={dataType}
 						chart={analyticsData}
 					/>
 				</Grid>

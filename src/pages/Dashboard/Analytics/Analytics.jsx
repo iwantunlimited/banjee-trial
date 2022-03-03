@@ -5,6 +5,10 @@ import { listCustomer } from '../../Users/User_Services/UserApiService'
 import {filterRooms} from '../../Rooms/Services/ApiServices'
 import { ReportedUserList } from '../../Users/User_Services/UserApiService'
 import AnalyticsArea from "./AnalyticsArea";
+import TrialArea from "./TrigeredArea";
+import ChartComp from "./components/chartCompo/chart";
+import Trial from "./components/Trial";
+import TrigeredArea from "./TrigeredArea";
 
 function Analytics(props){
 
@@ -29,7 +33,7 @@ function Analytics(props){
         setType(data)
     }
 
-	const handleIsLoad = (data) =>{
+	const handleIsLoad = () =>{
 		setIsLoad(true)
 	}
 
@@ -46,6 +50,8 @@ function Analytics(props){
             setInitialData((prev) => ({...prev, userData: res, totalUsers: res.totalElements}))
         }).catch((err) => console.log(err))
     },[])
+
+    console.log(initialData.totalMale);
 
     const totalRoomApiCall = React.useCallback(() => {
         filterRooms({
@@ -78,12 +84,28 @@ function Analytics(props){
                 <ChipComponent totalData={initialData} />
             </Grid>
             <Grid item xs={12}>
+                <Grid item container xs={12} spacing={4}>
+                <Grid item xs={12} sm={6} md={6} lg={4}>
+                    <ChartComp 
+                        data={initialData.userData}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6} lg={8}>
+                    <TrigeredArea 
+						dataType={type}
+                        handleAnalyticsData={handleAnalyticsData}
+                        handleIsLoad={handleIsLoad}
+                        typeData={(data) =>  handleTypeData(data)}
+                    />
+                </Grid>
+                </Grid>
+            </Grid>
+            <Grid item xs={12}>
                 <AnalyticsArea 
                     userData={initialData.userData}
                     analyticsValues={analyticsData}
                     showData={isLoad}
-                    myDate={type}
-                    typeData={(data) => handleTypeData(data)}
+                    dataType={type}
                 />
             </Grid>
         </Grid>

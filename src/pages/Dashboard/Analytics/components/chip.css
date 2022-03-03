@@ -24,7 +24,7 @@
     display: flex;
 }
 .cardinfo-title{
-    font-size: large;
+    font-size: larger;
     color: rgb(100, 99, 99);
 }
 .cardinfo-number{

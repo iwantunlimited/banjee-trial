@@ -86,22 +86,22 @@ function ReportedUser1(props) {
         align: 'center',
         
     },
-    // { 
-    //     id:"6",
-    //     field: "view", 
-    //     headerClassName: 'app-header',
-    //     headerName: "View", 
-    //     align: 'center',
-    //     flex: 0.3 ,
-    //     renderCell: (params) => (
-    //         <strong>
-    //             <IconButton onClick={() => props.history.push(props.location.pathname + '/view/' + params.row.toUserId)}>
-    //                 <VisibilityIcon/>
-    //             </IconButton>
-    //         </strong>
-    //     )
+    {
+        id:"6",
+        field: "view", 
+        headerClassName: 'app-header',
+        headerName: "View", 
+        align: 'center',
+        flex: 0.3 ,
+        renderCell: (params) => (
+            <strong>
+                <IconButton onClick={() => { navigate('/user/reportedUserView/' + params.row.toUserId) }}>
+                    <VisibilityIcon/>
+                </IconButton>
+            </strong>
+        )
         
-    // }
+    }
   ];
 
 

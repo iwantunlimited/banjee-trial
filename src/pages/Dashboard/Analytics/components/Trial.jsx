@@ -1,22 +1,16 @@
 
 import { CircularProgress } from "@mui/material";
-import React, { Component } from "react";
-import Chart from "react-apexcharts";
+import React from "react";
+import ReactApexChart from 'react-apexcharts'
 
-class Trial extends Component {
+function Trial(props){
 
-  constructor(props) {
-    super(props);
-  }
-  render() {
-
-  const { chart,data ,myDate} = this.props
+  console.log(props);
+  const { chart,data,dataType } = props
 
   const{ option,series } = data
-  const { options } = option
 
   console.log(chart);
-  console.log(myDate,'date,month,year');
 
   const monthData = {
     "Jan" :0,
@@ -31,11 +25,11 @@ class Trial extends Component {
    "Oct":0,
    "Nov":0,
    "Dec":0,
- }
+  }
 
-  
   const { Female,Male } = chart;
   console.log(chart);
+  console.log("data type for date",dataType);
 
 
   // typeData === 'month' ? console.log('month done') : console.log('year,done');;
@@ -43,73 +37,70 @@ class Trial extends Component {
   // console.log(Object.keys({...month,...Female}));
 	// console.log(Object.values({...month , ...Female}));
 
-   if(chart){
+  if(chart){
     return (
-      <div className="app">
-        <div className="row">
-          <div className="mixed-chart">
-            <Chart
-                options={{
-                    chart: {
-                        type: 'bar',
-                        height: 350
-                      },
-                      plotOptions: {
-                        bar: {
-                          horizontal: false,
-                          columnWidth: '55%',
-                          endingShape: 'rounded'
-                        },
-                      },
-                      dataLabels: {
-                        enabled: false
-                      },
-                      stroke: {
-                        show: true,
-                        width: 2,
-                        colors: ['transparent']
-                      },
-                      xaxis: {
-                        categories: myDate === 'month' ? Object.keys(monthData) :  Object.keys({...Male,...Female}) ,
-                      },
-                      yaxis: {
-                        title: {
-                          text: 'Users'
-                        }
-                      },
-                      fill: {
-                        opacity: 1
-                      },
-                      tooltip: {
-                        y: {
-                          formatter: function (val) {
-                            return "" + val + ""
-                          }
-                        }
-                      }
-                }}
-                series={[
-                  { 
-                    name: 'Male',
-                    // data:  [0,25,52],
-                    data: Object.values({...monthData, ...Male}) 
-                  }, 
-                  {
-                    name: 'Female',
-                    // data:  [0,52,52,52],
-                    data: Object.values({...monthData , ...Female})
-                  }, 
-                  // {
-                  //   name: 'Total User',
-                  //   data: []
-                  // },
-                ]}
-                type="bar" 
-                width={window.innerWidth > 1440 ? '600': '430'}
-                height={window.innerHeight > 1440 ? '300' : '220'}
-            />
-          </div>
-        </div>
+      <div id="chart" style={{width:'100%',display:'flex',justifyContent:'center'}}>
+        <ReactApexChart
+            options= {{
+              chart: {
+                type: 'bar',
+                height: 300
+              },
+              plotOptions: {
+                bar: {
+                  horizontal: false,
+                  columnWidth: '55%',
+                  endingShape: 'rounded'
+                },
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+              },
+              xaxis: {
+                // categories: Object.keys(monthData) ,
+                categories: dataType === 'month' ? Object.keys(monthData) :  Object.keys({...Male,...Female}) ,
+              },
+              yaxis: {
+                title: {
+                  text: 'Users  '
+                }
+              },
+              fill: {
+                opacity: 1
+              },
+              tooltip: {
+                y: {
+                  formatter: function (val) {
+                    return " " + val + " users"
+                  }
+                }
+              }
+            }}
+            series={[
+              { 
+                name: 'Male',
+                // data:  [0,25,52],
+                data: Object.values({...monthData, ...Male}) 
+              }, 
+              {
+                name: 'Female',
+                // data:  [0,52,52,52],
+                data: Object.values({...monthData , ...Female})
+              }, 
+              // {
+              //   name: 'Total User',
+              //   data: []
+              // },
+            ]}
+            type="bar"
+            width={window.innerWidth > 1440 ? 650 : 450}
+            height={300}
+        />
       </div>
     );
    }else{
@@ -118,8 +109,7 @@ class Trial extends Component {
          <CircularProgress />
        </div>
 
-     )
-   }
+    )
   }
 }
 

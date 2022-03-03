@@ -8,8 +8,10 @@ import Login from "./pages/Login/login";
 import Category from "./pages/Category/Category";
 import CustomerView from "./pages/Users/components/userView";
 import Example from "./pages/Users/components/example";
-import { ReportedUserList } from "./pages/Users/User_Services/UserApiService";
 import ReportedUser1 from "./pages/Users/components/ReportedUser";
+import ViewReportedUsers from "./pages/Users/components/ViewReportedUsers";
+import Room from "./pages/Rooms/Rooms";
+import ViewRooms from "./pages/Rooms/ViewRooms";
 
 const Routes = () => {
 
@@ -31,12 +33,24 @@ const Routes = () => {
                     element: <User />,
                 },
                 {
+                    path: '/rooms',
+                    element: <Room />
+                },
+                {
                     path: 'user/view/:id',
                     element: <CustomerView />
                 },
                 {
                     path: 'user/reporteduser',
                     element: <ReportedUser1 />
+                },
+                {
+                    path: 'user/reportedUserView/:id',
+                    element: <ViewReportedUsers />
+                },
+                {
+                    path: 'rooms/view/:id',
+                    element: <ViewRooms />
                 }
                 // {
                 //     path: '/account',

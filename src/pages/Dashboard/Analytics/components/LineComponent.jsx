@@ -23,7 +23,7 @@ import '../Analytics.css'
 
 export default function LineComponent(props) {
 
-    const { data,chart, showData,calendarData,myDate } = props
+    const { data,chart, showData,myDate} = props
 
     const { series,option } = data
 
@@ -39,77 +39,11 @@ export default function LineComponent(props) {
 	});
 
 	const [filter, setFilter] = React.useState({
-		line: false,
+		line: true,
 		stats: false,
 	});
 
 	const open = Boolean(anchorEl);
-	const handleClick = (event) => {
-		setAnchorEl((prev) => ({
-			...prev,
-			filter: event.currentTarget,
-		}));
-	};
-	const handleClose = () => {
-		setAnchorEl((prev) => ({
-			...prev,
-			filter: null,
-		}));
-	};
-
-    console.log(myDate);
-
-    const renderMenu = (
-		<Menu
-			id="basic-menu"
-			anchorEl={anchorEl.filter}
-			open={anchorEl.filter}
-			onClose={handleClose}
-			MenuListProps={{
-				"aria-labelledby": "basic-button",
-			}}
-		>
-			<MenuItem
-				disabled={series && series.length === 0}
-				sx={{
-					color: myDate === "" ? "primary.main" : "text.secondary",
-					borderColor: myDate === "" ? "primary.main" : "text.secondary",
-				}}
-				onClick={() => {
-					calendarData("");
-					handleClose();
-				}}
-			>
-				Date
-			</MenuItem>
-			<MenuItem
-				disabled={series && series.length === 0}
-				sx={{
-					color: myDate === "month" ? "primary.main" : "text.secondary",
-					borderColor: myDate === "month" ? "primary.main" : "text.secondary",
-				}}
-				onClick={() => {
-					calendarData("month");
-					handleClose();
-				}}
-			>
-				Month
-			</MenuItem>
-			<MenuItem
-				disabled={series && series.length === 0}
-				sx={{
-					color: myDate === "year" ? "primary.main" : "text.secondary",
-					borderColor: myDate === "year" ? "primary.main" : "text.secondary",
-				}}
-				onClick={() => {
-					calendarData("year");
-					handleClose();
-				}}
-			>
-				Year
-			</MenuItem>
-		</Menu>
-	);
 
 	return (
         <Card
@@ -119,7 +53,7 @@ export default function LineComponent(props) {
                 <Grid container>
                     <Grid item xs={8} lg={9} xl={10}>
                         <Typography
-                            style={{fontSize: window.innerWidth < 500 ? '20px' : '25px',fontWeight:500, color:'grey'}}
+                            style={{fontSize: window.innerWidth < 500 ? '20px' : '25px',fontWeight:400, color:'grey'}}
                             className="customLabelData"
                             // color="textSecondary"
                         >
@@ -155,7 +89,7 @@ export default function LineComponent(props) {
                                         color: filter.stats ? "primary.main" : "text.secondary",
                                     }}
                                     onClick={() => {
-                                        setFilter((prev) => ({ ...prev, stats: !prev.stats }));
+                                        setFilter((prev) => ({ ...prev, stats: !prev.stats,line: !prev.line }));
                                     }}
                                 >
                                     <TableChartIcon fontSize="small" />
@@ -165,13 +99,13 @@ export default function LineComponent(props) {
                                 <IconButton
                                     disabled={series && series.length === 0}
                                     sx={{
-                                        color: !filter.line ? "primary.main" : "text.secondary",
+                                        color: filter.line ? "primary.main" : "text.secondary",
                                     }}
                                     onClick={() => {
                                         setFilter((prev) => ({
                                             ...prev,
-                                            line: false,
-                                            stats: false,
+                                            stats: !prev.stats,
+                                            line: !prev.line,
                                         }));
                                         // handleGraphChange("bar");
                                     }}
@@ -179,15 +113,6 @@ export default function LineComponent(props) {
                                     <EqualizerIcon fontSize="small" />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title="Filter">
-                                <IconButton
-                                    aria-expanded={open ? "true" : undefined}
-                                    onClick={handleClick}
-                                >
-                                    <FilterAltIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-
                             {/* {dataType === "date" && (
                                 <Tooltip title="Filter">
                                     <IconButton
@@ -219,7 +144,7 @@ export default function LineComponent(props) {
                                         <Trial 
                                             data={props.data}
                                             chart={chart}
-                                            myDate={myDate}
+                                            dataType={myDate}
                                         />
                                     ) : (
                                         <DataGridCustom
@@ -240,7 +165,6 @@ export default function LineComponent(props) {
                     )}
                 </Box>
             </CardContent>
-            {renderMenu}
         </Card>
 	);
 }
