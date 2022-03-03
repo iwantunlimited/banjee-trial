@@ -51,11 +51,11 @@
         box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 7%), 0px 1px 1px 0px rgb(0 0 0 / 3%), 0px 0px 4px 0px rgb(0 0 0 / 8%) !important;
     }
 }
-@media screen and (min-width: 768px) and (max-width: 1440px) {
+@media screen and (min-width: 768px) and (max-width: 1442px) {
     .chip-card{
         /* box-sizing: border-box; */
         margin: 0;
-        padding: 10px;
+        padding: 5px;
         color: #666;
         display: flex;
         justify-content: center;
@@ -69,5 +69,18 @@
         background: #fff;
         border-radius: 0px !important;
         box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 7%), 0px 1px 1px 0px rgb(0 0 0 / 3%), 0px 0px 4px 0px rgb(0 0 0 / 8%) !important;
+    }
+    .card-icon{
+        width: 35px;
+        height: 35px;
+        margin-right: 15px;
+    }
+    .cardinfo-title{
+        font-size: small;
+        color: rgb(100, 99, 99);
+    }  
+    .cardinfo-number{
+        font-size: larger;
+        font-weight: 700;
     }
 }

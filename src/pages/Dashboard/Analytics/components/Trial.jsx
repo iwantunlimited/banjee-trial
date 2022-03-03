@@ -98,8 +98,8 @@ function Trial(props){
               // },
             ]}
             type="bar"
-            width={window.innerWidth > 1440 ? 650 : 450}
-            height={300}
+            width={window.innerWidth > 1442 ? 650 : 450}
+            height={window.innerWidth > 1442 ? 300 : 200}
         />
       </div>
     );

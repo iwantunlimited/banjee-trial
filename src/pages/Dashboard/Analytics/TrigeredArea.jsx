@@ -9,7 +9,6 @@ import {
 	TextField,
 } from "@mui/material";
 
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -26,8 +25,11 @@ function TrigeredArea(props){
     // const [age, setAge] = React.useState(' ');
 
     const handleChange = (event) => {
-        typeData(event.target.value);
-        listApiCall(event.target.value)
+        console.log(event.target.value);
+        if(event.target.value){
+            typeData(event.target.value);
+            listApiCall()
+        }
     };
 
     const[data,setData] = React.useState([])
@@ -59,7 +61,7 @@ function TrigeredArea(props){
 
     console.log(dataType);
 
-    const listApiCall = React.useCallback((dataType) => {
+    const listApiCall = React.useCallback(() => {
         DashboardlistCustomer({
             startDate: searchData[0].toISOString(),
             endDate: searchData[1].toISOString(),
@@ -69,17 +71,18 @@ function TrigeredArea(props){
             handleAnalyticsData(res)
             setData(res)
         }).catch((err) => {console.log(err)})
-    },[searchData])
+    },[handleAnalyticsData,dataType, searchData])
 
-    React.useEffect(() => {
-        console.log("Called");  
-        listApiCall(typeData)
-    },[listApiCall])
+    // React.useEffect(() => {
+    //     console.log("Called");  
+    //     listApiCall()
+    // },[listApiCall])
 
     return(
         <Card
             className='chip-card'
-			elevation={6}
+			elevation={2}
+            style={{width:'100%',height: '100%'}}
 		>
             <CardContent style={{paddingBottom: '20px'}}>
 				{/* <Grid container spacing={4}> */}

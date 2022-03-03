@@ -37,9 +37,9 @@ function Analytics(props){
 		setIsLoad(true)
 	}
 
-	const handleAnalyticsData = (data) => {
+	const handleAnalyticsData = React.useCallback( (data) => {
 		setAnalyticsData(() => data);
-	};
+	},[]);
 
     const UserListApiCall = React.useCallback(() => {
         listCustomer({
@@ -84,20 +84,20 @@ function Analytics(props){
                 <ChipComponent totalData={initialData} />
             </Grid>
             <Grid item xs={12}>
-                <Grid item container xs={12} spacing={4}>
-                <Grid item xs={12} sm={6} md={6} lg={4}>
-                    <ChartComp 
-                        data={initialData.userData}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={6} lg={8}>
-                    <TrigeredArea 
-						dataType={type}
-                        handleAnalyticsData={handleAnalyticsData}
-                        handleIsLoad={handleIsLoad}
-                        typeData={(data) =>  handleTypeData(data)}
-                    />
-                </Grid>
+                <Grid item container xs={12} spacing={2}>
+                    <Grid item xs={12} sm={6} md={6} lg={6} xl={4}>
+                        <ChartComp 
+                            data={initialData.userData}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6} lg={6} xl={8}>
+                        <TrigeredArea 
+                            dataType={type}
+                            handleAnalyticsData={handleAnalyticsData}
+                            handleIsLoad={handleIsLoad}
+                            typeData={(data) =>  handleTypeData(data)}
+                        />
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid item xs={12}>

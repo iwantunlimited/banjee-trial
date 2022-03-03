@@ -23,7 +23,7 @@ import '../Analytics.css'
 
 export default function LineComponent(props) {
 
-    const { data,chart, showData,myDate} = props
+    const { data,chart, showData,myDate, title} = props
 
     const { series,option } = data
 
@@ -53,11 +53,11 @@ export default function LineComponent(props) {
                 <Grid container>
                     <Grid item xs={8} lg={9} xl={10}>
                         <Typography
-                            style={{fontSize: window.innerWidth < 500 ? '20px' : '25px',fontWeight:400, color:'grey'}}
+                            style={{fontSize: window.innerWidth < 500 ? '20px' : '20px',fontWeight:400, color:'grey'}}
                             className="customLabelData"
                             // color="textSecondary"
                         >
-                            {props.title}
+                            {title}
                         </Typography>
                     </Grid>
                     <Grid
@@ -142,7 +142,7 @@ export default function LineComponent(props) {
                                 <React.Fragment>
                                     {!filter.stats ? (
                                         <Trial 
-                                            data={props.data}
+                                            data={data}
                                             chart={chart}
                                             dataType={myDate}
                                         />
@@ -154,7 +154,7 @@ export default function LineComponent(props) {
                                 </React.Fragment>
                             ) : (
                                 <Typography
-                                    style={{fontSize: window.innerWidth < 500 ? '18px' : '25px',fontWeight: 500,color:'grey' }}
+                                    style={{fontSize: window.innerWidth < 500 ? '18px' : window.innerWidth < 1442 ? "20px" : '25px',fontWeight: 500,color:'grey' }}
                                 >
                                     No data for current selection
                                 </Typography>
