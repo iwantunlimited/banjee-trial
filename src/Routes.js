@@ -1,4 +1,3 @@
-
 import Dashboard from "./pages/Dashboard/dashboard";
 import User from "./pages/Users/Users";
 // import Account from "./pages/Account/Account";
@@ -12,57 +11,61 @@ import ReportedUser1 from "./pages/Users/components/ReportedUser";
 import ViewReportedUsers from "./pages/Users/components/ViewReportedUsers";
 import Room from "./pages/Rooms/Rooms";
 import ViewRooms from "./pages/Rooms/ViewRooms";
+import Social_Feeds from "./pages/Social_Feeds/Social_Feed";
 
 const Routes = () => {
-
-    return useRoutes([
-        {
-            path: '',
-            element: <Navbar />,
-            children: [
-                {
-                    path: '',
-                    element: <Dashboard />
-                },
-                {
-                    path: 'category',
-                    element: <Category />
-                },
-                {
-                    path: 'user',
-                    element: <User />,
-                },
-                {
-                    path: '/rooms',
-                    element: <Room />
-                },
-                {
-                    path: 'user/view/:id',
-                    element: <CustomerView />
-                },
-                {
-                    path: 'user/reporteduser',
-                    element: <ReportedUser1 />
-                },
-                {
-                    path: 'user/reportedUserView/:id',
-                    element: <ViewReportedUsers />
-                },
-                {
-                    path: 'rooms/view/:id',
-                    element: <ViewRooms />
-                }
-                // {
-                //     path: '/account',
-                //     element: <Account />
-                // }
-            ]
-        },
-        {
-            path: 'login',
-            element: <Login />,
-        }
-    ])
-} 
+	return useRoutes([
+		{
+			path: "",
+			element: <Navbar />,
+			children: [
+				{
+					path: "/",
+					element: <Dashboard />,
+				},
+				{
+					path: "/category",
+					element: <Category />,
+				},
+				{
+					path: "/user",
+					element: <User />,
+				},
+				{
+					path: "/rooms",
+					element: <Room />,
+				},
+				{
+					path: "/user/view/:id",
+					element: <CustomerView />,
+				},
+				{
+					path: "/user/reporteduser",
+					element: <ReportedUser1 />,
+				},
+				{
+					path: "/user/reportedUserView/:id",
+					element: <ViewReportedUsers />,
+				},
+				{
+					path: "/rooms/view/:id",
+					element: <ViewRooms />,
+				},
+				{
+					path: "social-feeds",
+					element: <Social_Feeds />,
+				},
+				// {
+				//     path: '/account',
+				//     element: <Account />
+				// }
+			],
+		},
+		{
+			path: "login",
+			element: <Login />,
+		},
+	]);
+};
 
 export default Routes;

@@ -6,7 +6,7 @@ export const services = {
 	HOST: host,
 
 	SOCIAL_CONNECTIONS: host + "/services/social-connections/api/",
-
+	SOCIAL_FEEDS: host + "/services/social-feeds/",
 	SVOD: host + "/services/svod-plan/api/",
 	CDN_SERVICE: host + "/services/media-service/api/",
 	PRODUCT: host + "/services/products/api/",

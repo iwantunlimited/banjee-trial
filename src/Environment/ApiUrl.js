@@ -1,4 +1,4 @@
-import {services} from "./Environment.dev";
+import { services } from "./Environment.dev";
 
 let token = "Basic aXRwbDppd2FudHVubGltaXRlZA==";
 
@@ -31,6 +31,12 @@ export const urls = {
 	SOCIAL_CONNECTION: {
 		FILTER: services.SOCIAL_CONNECTIONS + "social-connection/group/filter",
 		FIND_BY_ID: services.SOCIAL_CONNECTIONS + "social-connection/group/findById/",
+	},
+
+	SOCIAL_FEEDS: {
+		FILTER: services.SOCIAL_FEEDS + "api/feeds/admin/filter",
+		GET_COMMENTS: services.SOCIAL_FEEDS + "comments/byFeed/",
+		DELETEFEED: services.SOCIAL_FEEDS + "api/feeds/admin/remove",
 	},
 
 	CDN: {

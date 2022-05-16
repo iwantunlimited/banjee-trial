@@ -52,7 +52,7 @@ function Login(){
         if(formType === 'login'){
             const formData = new FormData();
             //domain ---------------  balajihouse
-            formData.append("domain", "208991");
+            formData.append("domain", "208991"); 
             formData.append("username", username);
             formData.append("password", password);
             formData.append("accountType", -1);
@@ -64,23 +64,23 @@ function Login(){
             .then( response => {
                 console.log(response);
               const {access_token}  = response && response.data ? response.data : null ;
-              const {firstName}  = response && response.data ? response.data : null ;
-              const {lastName}  = response && response.data ? response.data : null ;
-              const {mobile}  = response && response.data ? response.data : null ;
-              const {email}  = response && response.data ? response.data : null ;
-              const {externalReferenceId} = response && response.data ? response.data : null ;
+            //   const {firstName}  = response && response.data ? response.data : null ;
+            //   const {lastName}  = response && response.data ? response.data : null ;
+            //   const {mobile}  = response && response.data ? response.data : null ;
+            //   const {email}  = response && response.data ? response.data : null ;
+            //   const {externalReferenceId} = response && response.data ? response.data : null ;
               localStorage.setItem('token', access_token);
-              localStorage.setItem('id', externalReferenceId);
-              localStorage.setItem('firstName', firstName);
-              localStorage.setItem('lastName', lastName);
-              localStorage.setItem('mobile', mobile);
-              localStorage.setItem('email', email);
+            //   localStorage.setItem('id', externalReferenceId);
+            //   localStorage.setItem('firstName', firstName);
+            //   localStorage.setItem('lastName', lastName);
+            //   localStorage.setItem('mobile', mobile);
+            //   localStorage.setItem('email', email);
               console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"+response.data.externalReferenceId)
               const resCode = response.status;
               console.log(resCode);
               setState({
                   isLoggedIn : true,
-                  token : localStorage.getItem('token'),
+                  token : access_token,
                   currentItem : localStorage.setItem('currentItem',"Dashboard")
               })
               navigate("/");
@@ -104,7 +104,7 @@ function Login(){
         <Helmet>
           <title>Login | Banjee Admin</title>
         </Helmet>
-       <div className='main-div'>
+        <div className='main-div'>
             <Container maxWidth="sm">
                 <div  style={{display:'flex',alignItems:'center',justifyContent:'center',height:'100vh',width:'100%'}}>
                     <Card elevation={5} style={{width:'100%'}}>
