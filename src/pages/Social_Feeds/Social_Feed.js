@@ -1,7 +1,13 @@
 import React from "react";
 import { Container, Grid, Typography, Box, CircularProgress, IconButton } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import { FavoriteBorder, ChatBubbleOutline, Fullscreen, Search, Delete } from "@mui/icons-material";
+import {
+	FavoriteBorder,
+	ChatBubbleOutline,
+	Fullscreen,
+	Search,
+	Delete,
+	Report,
+} from "@mui/icons-material";
 import moment from "moment";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -11,16 +17,20 @@ import { filterSocialFeeds, deleteSocialFeed } from "./services/ApiServices";
 
 import FullScreenImageModal from "./Components/FullScreenImageModal";
 import DetailsModal from "./Components/DetailsModal";
+import { useNavigate } from "react-router-dom";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // import required modules
-import { EffectCube, Pagination } from "swiper";
+import { Pagination } from "swiper";
 import { Button, Card, Modal, TextField } from "@mui/material";
 import DeleteFeedSnackBar from "./Components/SnackBar";
+import DeleteFeedModal from "./Components/DeleteFeedModal";
 
 export default function Social_Feeds(props) {
+	const navigate = useNavigate();
+
 	const [data, setData] = React.useState([]);
 	const [modal, setModal] = React.useState({ open: false });
 	//delete menu ------
@@ -90,7 +100,14 @@ export default function Social_Feeds(props) {
 	if (data) {
 		return (
 			<Container style={{ padding: "20px 10px 10px 10px", maxWidth: "1440px" }}>
-				<Card sx={{ p: 2, mb: 2 }}>
+				<Card
+					sx={{
+						p: 2,
+						mb: 2,
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center",
+					}}>
 					<Box sx={{ display: "flex", alignItems: "center" }}>
 						<Box>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -124,6 +141,18 @@ export default function Social_Feeds(props) {
 								<Search color='primary' />
 							</IconButton>
 						</Box>
+					</Box>
+					<Box>
+						<IconButton
+							onClick={() => navigate("reported-feeds")}
+							style={{
+								borderRadius: "50px",
+								background: "#1976D2",
+								padding: window.innerWidth < 501 ? "5px" : "10px",
+								color: "white",
+							}}>
+							<Report />
+						</IconButton>
 					</Box>
 				</Card>
 				{/* <Typography variant="h3">Social Feeds</Typography> */}
@@ -159,6 +188,7 @@ export default function Social_Feeds(props) {
 												paddingLeft: "10px",
 											}}>
 											<img
+												alt='#'
 												src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${ele?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 												style={{
 													height: "40px",
@@ -169,7 +199,7 @@ export default function Social_Feeds(props) {
 											/>
 											<Typography
 												style={{
-													padding: "10px 15px",
+													padding: "10px 10px",
 													display: "flex",
 													flexDirection: "column",
 												}}>
@@ -189,7 +219,14 @@ export default function Social_Feeds(props) {
 											style={{ width: "40px", height: "40px" }}>
 											<Delete />
 										</IconButton>
-										<Modal
+										<DeleteFeedModal
+											open={openDModal}
+											openModalfun={setOpenDModal}
+											dFeedData={dFeedData}
+											FeedDataFun={setDFeedData}
+											socialFilterApi={filterSocialFeedsApiCall}
+										/>
+										{/* <Modal
 											className='delete-modal'
 											sx={{
 												"& > div": {
@@ -266,24 +303,16 @@ export default function Social_Feeds(props) {
 													</Box>
 												</form>
 											</Box>
-										</Modal>
+										</Modal> */}
 									</Box>
 
 									<Box
-										sx={{ my: 1, maxHeight: "200px" }}
+										sx={{ my: 1, height: "200px" }}
 										onClick={() => setModal({ open: true, data: ele })}>
 										<Swiper
 											onClick={() => setModal({ open: true, data: ele })}
-											effect={"cube"}
-											grabCursor={true}
-											cubeEffect={{
-												shadow: true,
-												slideShadows: true,
-												shadowOffset: 20,
-												shadowScale: 0.94,
-											}}
 											pagination={true}
-											modules={[EffectCube, Pagination]}
+											modules={[Pagination]}
 											className='mySwiper'>
 											{ele?.mediaContent?.length > 0 ? (
 												ele?.mediaContent?.map((item, iIndex) => {
@@ -472,7 +501,7 @@ export default function Social_Feeds(props) {
 						handleClose={() => setFullScreenState({ imageModal: false })}
 					/>
 				)}
-				{modal.open && <DetailsModal state={modal} handleClose={() => setModal({ open: false })} />}
+				{modal.open && <DetailsModal state={modal} handleClose={() => setModal({ open: false })} filterApi={filterSocialFeedsApiCall} />}
 				<DeleteFeedSnackBar open={openSnackBar} openFun={(e) => setOpenSnackBar(e)} />
 			</Container>
 		);

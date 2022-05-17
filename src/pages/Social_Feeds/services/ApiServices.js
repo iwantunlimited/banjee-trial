@@ -25,3 +25,18 @@ export const getSocialFeedsComments = (requestLoad) => {
 	let method = "GET";
 	return executeGet(url, actionCode, payload, method);
 };
+export const getSocialFeedsReactions = (requestLoad) => {
+	let url = urls.SOCIAL_FEEDS.GET_REACTIONS + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
+
+export const getReportedFeedDetail = (requestLoad) => {
+	let url = urls.SOCIAL_FEEDS.REPORTED_FEED_DETAIL + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};

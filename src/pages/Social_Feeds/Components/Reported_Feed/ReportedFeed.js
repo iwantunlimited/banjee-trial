@@ -1,11 +1,12 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import { Container, Card, Button, Avatar, IconButton, CircularProgress } from "@mui/material";
-import { ReportedUserList } from "../User_Services/UserApiService";
+import { ReportedUserList } from "../../../Users/User_Services/UserApiService";
 import { DataGrid } from "@mui/x-data-grid";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
+import { filterSocialFeeds } from "../../services/ApiServices";
 
 const useStyles = makeStyles({
 	root: {
@@ -28,12 +29,14 @@ const useStyles = makeStyles({
 	},
 });
 
-function ReportedUser1(props) {
+function ReportedFeed(props) {
 	const navigate = useNavigate();
 
 	const classes = useStyles();
 
-	const [reportList, setReportList] = React.useState([]);
+	const [reportedFeed, setReportedFeed] = React.useState([]);
+
+	console.log("reportedFeed-------------", reportedFeed);
 
 	const [pagination, setPagination] = React.useState({
 		page: 0,
@@ -43,51 +46,44 @@ function ReportedUser1(props) {
 
 	const { page, pageSize } = pagination;
 
-	const rows = reportList ? reportList : [];
+	const rows = reportedFeed ? reportedFeed : [];
 
 	const columns = [
 		{
 			id: "1",
-			field: "avatarurl",
+			field: "username",
 			headerClassName: "app-header",
-			headerName: "Avatar",
+			headerName: "UserName",
 			flex: 0.2,
 			align: "center",
-			renderCell: (params) => (
-				<Avatar src={params.row.toUser.avtarUrl} alt={params.row.toUser.name} />
-			),
+			// renderCell: (params) => (
+			// 	<Avatar src={params.row.toUser.avtarUrl} alt={params.row.toUser.name} />
+			// ),
 		},
 		{
 			id: "2",
-			field: "name",
+			field: "email",
 			headerClassName: "app-header",
-			headerName: "User Name",
+			headerName: "Email",
 			flex: 0.5,
 		},
 		{
 			id: "3",
-			field: "email",
+			field: "text",
 			headerClassName: "app-header",
-			headerName: "Email",
-			flex: 0.7,
+			headerName: "Text",
+			flex: 0.5,
 		},
 		{
 			id: "4",
-			field: "mobile",
+			field: "remark",
 			headerClassName: "app-header",
-			headerName: "Mobile",
-			flex: 0.4,
+			headerName: "Remark",
+			flex: 0.5,
+			// align: "center",
 		},
 		{
 			id: "5",
-			field: "reports",
-			headerClassName: "app-header",
-			headerName: "Reported By",
-			flex: 0.5,
-			align: "center",
-		},
-		{
-			id: "6",
 			field: "view",
 			headerClassName: "app-header",
 			headerName: "View",
@@ -97,7 +93,8 @@ function ReportedUser1(props) {
 				<strong>
 					<IconButton
 						onClick={() => {
-							navigate("/user/reportedUserView/" + params.row.toUserId);
+							console.log("params datagrid", params);
+							navigate("/social-feeds/reported-feeds/" + params.id);
 						}}>
 						<VisibilityIcon />
 					</IconButton>
@@ -106,24 +103,22 @@ function ReportedUser1(props) {
 		},
 	];
 
-	const listApiCall = React.useCallback((page, pageSize) => {
-		// console.log("data ---------", data);
-		ReportedUserList({ page: page, pageSize: pageSize })
-			.then((response) => {
-				const resp = response.content.map((ele) => {
+	const feedListApiCall = React.useCallback((page, pageSize) => {
+		filterSocialFeeds({ reported: true, page: page, pageSize: pageSize })
+			.then((res) => {
+				console.log("res", res);
+				const resp = res.content.map((ele) => {
 					return {
 						...ele,
-						...ele.toUser,
-						reports: ele.reports ? (ele.reports.length > 0 ? ele.reports.length : 0) : null,
+						...ele.author,
+						reports: ele?.reportedCount ? ele?.reportedCount : null,
 					};
 				});
-				console.log(resp, "report");
-				console.log(response);
-				setReportList(() => resp);
+				setReportedFeed(resp);
 				setPagination(() => ({
-					page: response.pageable.pageNumber,
-					pageSize: response.pageable.pageSize,
-					totalElement: response.totalElements,
+					page: res.pageable.pageNumber,
+					pageSize: res.pageable.pageSize,
+					totalElement: res.totalElements,
 				}));
 			})
 			.catch((err) => {
@@ -132,10 +127,10 @@ function ReportedUser1(props) {
 	}, []);
 
 	React.useEffect(() => {
-		listApiCall(page, pageSize);
-	}, [listApiCall, page, pageSize]);
+		feedListApiCall(page, pageSize);
+	}, [feedListApiCall, page, pageSize]);
 
-	if (reportList && rows.length > 0) {
+	if (reportedFeed && rows.length > 0) {
 		return (
 			<div style={{ marginBottom: "20px" }}>
 				<Button
@@ -160,7 +155,7 @@ function ReportedUser1(props) {
 							borderRadius: "10px",
 						}}>
 						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
-							Reported Users List
+							Reported Social Feeds
 						</div>
 						<hr />
 						<div style={{ width: "100%" }}>
@@ -174,7 +169,7 @@ function ReportedUser1(props) {
 											...prev,
 											pageSize: event,
 										}));
-										listApiCall(pagination.page, event);
+										feedListApiCall(pagination.page, event);
 									}}
 									rowCount={pagination.totalElement}
 									rows={rows}
@@ -183,7 +178,7 @@ function ReportedUser1(props) {
 									// autoPageSize
 									pagination
 									onPageChange={(event) => {
-										listApiCall(event, pagination.pageSize);
+										feedListApiCall(event, pagination.pageSize);
 									}}
 									rowsPerPageOptions={[5, 10, 20]}
 									className={classes.dataGridFooter}
@@ -204,4 +199,4 @@ function ReportedUser1(props) {
 		);
 	}
 }
-export default ReportedUser1;
+export default ReportedFeed;

@@ -1,18 +1,12 @@
 import * as React from "react";
-import {
-	Modal,
-	Typography,
-	Box,
-	Button,
-	IconButton,
-	makeStyles,
-	Grid,
-	Tab,
-	Tabs,
-} from "@mui/material";
+import { Modal, Typography, Box, Grid, Tab, Tabs, IconButton } from "@mui/material";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { getSocialFeedsComments } from "../services/ApiServices";
+import {
+	getSocialFeedsComments,
+	getSocialFeedsReactions,
+	deleteSocialFeed,
+} from "../services/ApiServices";
 
 import AngryEmoji from "../../../assets/emojis/Angry.svg";
 import LaughEmoji from "../../../assets/emojis/Laugh.svg";
@@ -23,15 +17,16 @@ import WowEmoji from "../../../assets/emojis/Wow.svg";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Delete } from "@mui/icons-material";
+import DeleteFeedModal from "./DeleteFeedModal";
 
-// import required modules
-import { EffectCube, Pagination } from "swiper";
+// // import required modules
+// import { EffectCube, Pagination } from "swiper";
 
 const style = {
 	position: "absolute",
 	top: "50%",
 	left: "50%",
-	height: "80%",
 	transform: "translate(-50%, -50%)",
 	bgcolor: "background.paper",
 	boxShadow: 24,
@@ -73,10 +68,21 @@ export default function CommentsModal(props) {
 	const {
 		state: { open, data },
 		handleClose,
+		filterApi,
 	} = props;
 
+	const [openDModal, setOpenDModal] = React.useState(false);
+	const [dFeedData, setDFeedData] = React.useState({
+		feedId: "",
+		remark: "",
+	});
+
 	const [result, setResult] = React.useState([]);
+	const [reaction, setReaction] = React.useState([]);
 	const [value, setValue] = React.useState(0);
+
+	console.log("result------", result);
+	console.log("reaction------", reaction);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -101,7 +107,7 @@ export default function CommentsModal(props) {
 		}
 	};
 
-	React.useEffect(() => {
+	const feedCommentApiCall = React.useCallback(() => {
 		getSocialFeedsComments(data?.id)
 			.then((res) => {
 				console.log(res);
@@ -110,7 +116,23 @@ export default function CommentsModal(props) {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
+	}, [data?.id]);
+
+	const feedReactionApiCall = React.useCallback(() => {
+		getSocialFeedsReactions(data?.id)
+			.then((res) => {
+				console.log(res);
+				setReaction(res);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, [data?.id]);
+
+	React.useEffect(() => {
+		feedCommentApiCall();
+		feedReactionApiCall();
+	}, [feedCommentApiCall, feedReactionApiCall]);
 
 	return (
 		<Modal
@@ -119,39 +141,64 @@ export default function CommentsModal(props) {
 			aria-labelledby='modal-modal-title'
 			aria-describedby='modal-modal-description'>
 			<Box sx={style}>
-				<Grid container spacing={2}>
-					<Grid item container xs={6} md={6}>
+				<Grid container>
+					<Grid item container xs={6} md={6} spacing={2}>
 						<Grid item xs={12}>
-							<Box
-								style={{
-									display: "flex",
-									alignItems: "center",
-									paddingLeft: "10px",
-									marginBottom: "20px",
-								}}>
-								<img
-									src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${data?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+								<Box
 									style={{
-										height: "60px",
-										width: "60px",
-										objectFit: "contain",
-										borderRadius: "50%",
-									}}
-								/>
-								<Typography
-									style={{
-										padding: "0 15px",
+										width: "100%",
 										display: "flex",
-										flexDirection: "column",
-										fontSize: "18px",
+										alignItems: "center",
+										paddingLeft: "10px",
+										marginBottom: "20px",
 									}}>
-									<span>{`${data?.author?.username || data?.author?.userName || "userName"}`}</span>
-									<span style={{ fontSize: "14px" }}>{moment(data?.createdOn).format("lll")}</span>
-								</Typography>
+									<img
+										alt='#'
+										src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${data?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+										style={{
+											height: "60px",
+											width: "60px",
+											objectFit: "contain",
+											borderRadius: "50%",
+										}}
+									/>
+									<Typography
+										style={{
+											padding: "0 15px",
+											display: "flex",
+											flexDirection: "column",
+											fontSize: "18px",
+										}}>
+										<span>{`${
+											data?.author?.username || data?.author?.userName || "userName"
+										}`}</span>
+										<span style={{ fontSize: "14px" }}>
+											{moment(data?.createdOn).format("lll")}
+										</span>
+									</Typography>
+								</Box>
+								<Box>
+									<IconButton
+										onClick={() => {
+											setDFeedData({ feedId: data?.id });
+											setOpenDModal(true);
+										}}
+										style={{ width: "40px", height: "40px" }}>
+										<Delete />
+									</IconButton>
+								</Box>
+								<DeleteFeedModal
+									open={openDModal}
+									openModalfun={setOpenDModal}
+									dFeedData={dFeedData}
+									FeedDataFun={setDFeedData}
+									mainModal={handleClose}
+									socialFilterApi={() => filterApi()}
+								/>
 							</Box>
 							<Box>
 								<Swiper
-									effect={"cube"}
 									grabCursor={true}
 									cubeEffect={{
 										shadow: true,
@@ -159,8 +206,8 @@ export default function CommentsModal(props) {
 										shadowOffset: 20,
 										shadowScale: 0.94,
 									}}
-									pagination={true}
-									modules={[EffectCube, Pagination]}
+									// pagination={true}
+									// modules={[Pagination]}
 									className='mySwiper'>
 									{data?.mediaContent?.length > 0 ? (
 										data?.mediaContent?.map((item, iIndex) => {
@@ -282,7 +329,7 @@ export default function CommentsModal(props) {
 						</Grid>
 					</Grid>
 					<Grid item container xs={12} md={6}>
-						<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+						<Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
 							<Tabs
 								value={value}
 								onChange={handleChange}
@@ -297,14 +344,14 @@ export default function CommentsModal(props) {
 							<Box
 								style={{
 									height: "310px",
-									width: "440px",
+									width: "100%",
+									minWidth: "440px",
 									overflowY: data?.reactions?.length > 5 && "scroll",
 									overflowX: "hidden",
 								}}>
 								<Grid item container xs={12} spacing={2}>
-									{data?.reactions &&
-										data?.reactions?.length > 0 &&
-										data?.reactions?.map((ele, index) => (
+									{reaction?.length > 0 ? (
+										reaction?.map((ele, index) => (
 											<React.Fragment key={index}>
 												<Grid item xs={4}>
 													<span
@@ -329,7 +376,12 @@ export default function CommentsModal(props) {
 													/>
 												</Grid>
 											</React.Fragment>
-										))}
+										))
+									) : (
+										<Grid item xs={12}>
+											<Typography>No Reactions !</Typography>
+										</Grid>
+									)}
 								</Grid>
 							</Box>
 						</TabPanel>
@@ -337,13 +389,13 @@ export default function CommentsModal(props) {
 							<Box
 								style={{
 									height: "310px",
-									width: "440px",
+									width: "100%",
+									minWidth: "440px",
 									overflowY: data?.reactions?.length > 5 && "scroll",
 									overflowX: "hidden",
 								}}>
 								<Grid container spacing={1}>
-									{result &&
-										result?.length > 0 &&
+									{result?.length > 0 ? (
 										result?.map((ele, index) => (
 											<React.Fragment key={index}>
 												<Grid item xs={4}>
@@ -353,7 +405,12 @@ export default function CommentsModal(props) {
 													<span>{ele?.text}</span>
 												</Grid>
 											</React.Fragment>
-										))}
+										))
+									) : (
+										<Grid item xs={12}>
+											<Typography>No Comments !</Typography>
+										</Grid>
+									)}
 								</Grid>
 							</Box>
 						</TabPanel>

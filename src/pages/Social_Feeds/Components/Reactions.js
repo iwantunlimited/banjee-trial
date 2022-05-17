@@ -82,7 +82,7 @@ export default function ReactionsModal(props) {
 				</Typography>
 				<Box style={{ marginTop: "10px" }}>
 					<Grid container spacing={2}>
-						{data?.reactions &&
+						{data?.reactions ? (
 							data?.reactions?.length > 0 &&
 							data?.reactions?.map((ele, index) => (
 								<React.Fragment key={index}>
@@ -108,7 +108,12 @@ export default function ReactionsModal(props) {
 										/>
 									</Grid>
 								</React.Fragment>
-							))}
+							))
+						) : (
+							<Grid item xs={12}>
+								<Typography>No Reactions !</Typography>
+							</Grid>
+						)}
 					</Grid>
 				</Box>
 			</Box>

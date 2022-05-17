@@ -6,6 +6,7 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	/* background-color: #eff1f4; */
 }
+@import "swiper/css";
 
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
@@ -23,3 +24,5 @@ code {
 		margin: 0.5rem 0;
 	}
 }
+
+/* Social feed swiper style */

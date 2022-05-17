@@ -154,7 +154,7 @@ function Navbar(props) {
 				<Hidden mdUp>{mobile}</Hidden>
 				<Box
 					component='main'
-					style={{ width: "100%", height: "100%", minHeight: "60vh", background: "#EFF1F4" }}
+					style={{ width: "100%", height: "100%", minHeight: "100vh", background: "#EFF1F4" }}
 					sx={{ p: 2 }}>
 					<Toolbar />
 					<Outlet />
