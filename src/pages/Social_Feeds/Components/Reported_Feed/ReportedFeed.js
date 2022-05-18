@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import { Container, Card, Button, Avatar, IconButton, CircularProgress } from "@mui/material";
-import { ReportedUserList } from "../../../Users/User_Services/UserApiService";
+import { Container, Card, Button, IconButton, CircularProgress } from "@mui/material";
+// import { ReportedUserList } from "../../../Users/User_Services/UserApiService";
 import { DataGrid } from "@mui/x-data-grid";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -41,10 +41,9 @@ function ReportedFeed(props) {
 	const [pagination, setPagination] = React.useState({
 		page: 0,
 		pageSize: 10,
-		totalElement: 0,
 	});
 
-	const { page, pageSize } = pagination;
+	const [totalEle, setTotalEle] = React.useState();
 
 	const rows = reportedFeed ? reportedFeed : [];
 
@@ -94,7 +93,7 @@ function ReportedFeed(props) {
 					<IconButton
 						onClick={() => {
 							console.log("params datagrid", params);
-							navigate("/social-feeds/reported-feeds/" + params.id);
+							navigate("/social-feeds/reported-feeds/" + params.row.mainId);
 						}}>
 						<VisibilityIcon />
 					</IconButton>
@@ -104,22 +103,25 @@ function ReportedFeed(props) {
 	];
 
 	const feedListApiCall = React.useCallback((page, pageSize) => {
+		setReportedFeed();
 		filterSocialFeeds({ reported: true, page: page, pageSize: pageSize })
 			.then((res) => {
 				console.log("res", res);
 				const resp = res.content.map((ele) => {
 					return {
 						...ele,
+						mainId: ele.id,
 						...ele.author,
 						reports: ele?.reportedCount ? ele?.reportedCount : null,
 					};
 				});
 				setReportedFeed(resp);
-				setPagination(() => ({
-					page: res.pageable.pageNumber,
-					pageSize: res.pageable.pageSize,
-					totalElement: res.totalElements,
-				}));
+				setTotalEle(res.totalElements);
+				// setPagination(() => ({
+				// 	page: res.pageable.pageNumber,
+				// 	pageSize: res.pageable.pageSize,
+				// 	totalElement: res.totalElements,
+				// }));
 			})
 			.catch((err) => {
 				console.log(err);
@@ -127,8 +129,8 @@ function ReportedFeed(props) {
 	}, []);
 
 	React.useEffect(() => {
-		feedListApiCall(page, pageSize);
-	}, [feedListApiCall, page, pageSize]);
+		feedListApiCall(0, 10);
+	}, [feedListApiCall]);
 
 	if (reportedFeed && rows.length > 0) {
 		return (
@@ -155,7 +157,7 @@ function ReportedFeed(props) {
 							borderRadius: "10px",
 						}}>
 						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
-							Reported Social Feeds
+							Reported Feeds ({totalEle})
 						</div>
 						<hr />
 						<div style={{ width: "100%" }}>
@@ -171,7 +173,7 @@ function ReportedFeed(props) {
 										}));
 										feedListApiCall(pagination.page, event);
 									}}
-									rowCount={pagination.totalElement}
+									rowCount={totalEle}
 									rows={rows}
 									columns={columns}
 									paginationMode='server'

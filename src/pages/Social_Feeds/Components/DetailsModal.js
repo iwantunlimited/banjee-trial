@@ -1,12 +1,8 @@
 import * as React from "react";
-import { Modal, Typography, Box, Grid, Tab, Tabs, IconButton } from "@mui/material";
+import { Modal, Typography, Box, Grid, Tab, Tabs, IconButton, Card } from "@mui/material";
 import moment from "moment";
 import PropTypes from "prop-types";
-import {
-	getSocialFeedsComments,
-	getSocialFeedsReactions,
-	deleteSocialFeed,
-} from "../services/ApiServices";
+import { getSocialFeedsComments, getSocialFeedsReactions } from "../services/ApiServices";
 
 import AngryEmoji from "../../../assets/emojis/Angry.svg";
 import LaughEmoji from "../../../assets/emojis/Laugh.svg";
@@ -141,8 +137,8 @@ export default function CommentsModal(props) {
 			aria-labelledby='modal-modal-title'
 			aria-describedby='modal-modal-description'>
 			<Box sx={style}>
-				<Grid container>
-					<Grid item container xs={6} md={6} spacing={2}>
+				<Grid container sx={{ position: "relative" }}>
+					<Grid item container xs={12} md={6} spacing={2}>
 						<Grid item xs={12}>
 							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 								<Box
@@ -340,12 +336,12 @@ export default function CommentsModal(props) {
 								<Tab label='Comments' {...a11yProps(0)} />
 							</Tabs>
 						</Box>
-						<TabPanel value={value} index={0}>
+						<TabPanel value={value} index={0} style={{ width: "100%" }}>
 							<Box
 								style={{
 									height: "310px",
 									width: "100%",
-									minWidth: "440px",
+									// minWidth: "440px",
 									overflowY: data?.reactions?.length > 5 && "scroll",
 									overflowX: "hidden",
 								}}>
@@ -385,25 +381,33 @@ export default function CommentsModal(props) {
 								</Grid>
 							</Box>
 						</TabPanel>
-						<TabPanel value={value} index={1}>
+						<TabPanel value={value} index={1} style={{ width: "100%" }}>
 							<Box
 								style={{
 									height: "310px",
 									width: "100%",
-									minWidth: "440px",
+									// minWidth: "440px",
 									overflowY: data?.reactions?.length > 5 && "scroll",
 									overflowX: "hidden",
 								}}>
-								<Grid container spacing={1}>
+								<Grid item container xs={12} spacing={1}>
 									{result?.length > 0 ? (
 										result?.map((ele, index) => (
 											<React.Fragment key={index}>
-												<Grid item xs={4}>
-													<span>{ele?.createdByUser?.username}</span>
+												<Grid item xs={12}>
+													{/* <span>{ele?.createdByUser?.username}</span> */}
+													<Card sx={{ width: "100%", p: 1, background: "#f2eeee", boxShadow: 0 }}>
+														<Box sx={{ width: "100%" }}>
+															<Typography sx={{ fontSize: "12px" }}>
+																{ele?.createdByUser?.username + " :"}
+															</Typography>
+															<Typography>{ele?.text}</Typography>
+														</Box>
+													</Card>
 												</Grid>
-												<Grid item xs={8}>
+												{/* <Grid item xs={8}>
 													<span>{ele?.text}</span>
-												</Grid>
+												</Grid> */}
 											</React.Fragment>
 										))
 									) : (

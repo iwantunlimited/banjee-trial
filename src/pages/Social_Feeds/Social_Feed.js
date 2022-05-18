@@ -1,5 +1,16 @@
 import React from "react";
-import { Container, Grid, Typography, Box, CircularProgress, IconButton } from "@mui/material";
+import {
+	Container,
+	Grid,
+	Typography,
+	Box,
+	CircularProgress,
+	IconButton,
+	Card,
+	TextField,
+	Tooltip,
+	TablePagination,
+} from "@mui/material";
 import {
 	FavoriteBorder,
 	ChatBubbleOutline,
@@ -13,7 +24,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import { filterSocialFeeds, deleteSocialFeed } from "./services/ApiServices";
+import { filterSocialFeeds } from "./services/ApiServices";
 
 import FullScreenImageModal from "./Components/FullScreenImageModal";
 import DetailsModal from "./Components/DetailsModal";
@@ -24,7 +35,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // import required modules
 import { Pagination } from "swiper";
-import { Button, Card, Modal, TextField } from "@mui/material";
 import DeleteFeedSnackBar from "./Components/SnackBar";
 import DeleteFeedModal from "./Components/DeleteFeedModal";
 
@@ -40,10 +50,17 @@ export default function Social_Feeds(props) {
 		remark: "",
 	});
 
+	// pagination state
+	const [pagination, setPagination] = React.useState({
+		page: 0,
+		pageSize: 12,
+	});
+	const [totalEle, setTotalEle] = React.useState();
+
 	console.log("delete modal data", dFeedData);
 
-	const [startDate, setStartDate] = React.useState("2022-04-16T07:12:48.135Z");
-	const [endDate, setEndDate] = React.useState(moment(new Date()).format());
+	const [startDate, setStartDate] = React.useState();
+	const [endDate, setEndDate] = React.useState();
 
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
@@ -51,42 +68,34 @@ export default function Social_Feeds(props) {
 
 	const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
-	const filterSocialFeedsApiCall = React.useCallback(() => {
-		filterSocialFeeds({
-			deleted: null,
-			domain: null,
-			fields: null,
-			finishDate: endDate,
-			inactive: null,
-			keywords: null,
-			page: 0,
-			pageSize: 15,
-			sortBy: null,
-			startDate: startDate,
-		})
-			.then((res) => {
-				setData(res);
+	const filterSocialFeedsApiCall = React.useCallback(
+		(page, pageSize) => {
+			setData();
+			filterSocialFeeds({
+				deleted: null,
+				domain: null,
+				fields: null,
+				finishDate: endDate,
+				inactive: null,
+				keywords: null,
+				page: page,
+				pageSize: pageSize,
+				sortBy: null,
+				startDate: startDate,
 			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}, [startDate, endDate]);
-
-	const deleteFeedApiCall = React.useCallback(() => {
-		deleteSocialFeed({
-			feedId: dFeedData.feedId,
-			remark: dFeedData.remark,
-		})
-			.then((res) => {
-				setOpenSnackBar(true);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}, [dFeedData.remark, dFeedData.feedId]);
+				.then((res) => {
+					setData(res);
+					setTotalEle(res.totalElements);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		[startDate, endDate]
+	);
 
 	React.useEffect(() => {
-		filterSocialFeedsApiCall();
+		filterSocialFeedsApiCall(0, 12);
 	}, [filterSocialFeedsApiCall]);
 
 	console.log("data----------", data);
@@ -99,7 +108,7 @@ export default function Social_Feeds(props) {
 
 	if (data) {
 		return (
-			<Container style={{ padding: "20px 10px 10px 10px", maxWidth: "1440px" }}>
+			<Container sx={{ p: "0px !important", margin: "auto" }} maxWidth='xl'>
 				<Card
 					sx={{
 						p: 2,
@@ -107,7 +116,14 @@ export default function Social_Feeds(props) {
 						display: "flex",
 						justifyContent: "space-between",
 						alignItems: "center",
+						flexDirection: { xs: "column", sm: "row" },
 					}}>
+					<Box sx={{ mb: { xs: 2, sm: 0 } }}>
+						<Typography
+							sx={{ color: "#6b778c", fontSize: "20px", fontWeight: "500", textAlign: "left" }}>
+							Feeds({totalEle})
+						</Typography>
+					</Box>
 					<Box sx={{ display: "flex", alignItems: "center" }}>
 						<Box>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -121,7 +137,7 @@ export default function Social_Feeds(props) {
 								/>
 							</LocalizationProvider>
 						</Box>
-						<Box sx={{ px: 1 }}>
+						<Box sx={{ px: 2 }}>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
 									label='End Date'
@@ -133,37 +149,48 @@ export default function Social_Feeds(props) {
 								/>
 							</LocalizationProvider>
 						</Box>
-						<Box>
-							<IconButton
-								onClick={() => {
-									filterSocialFeedsApiCall();
-								}}>
-								<Search color='primary' />
-							</IconButton>
+						<Box sx={{ px: 1 }}>
+							<Tooltip title='Search'>
+								<IconButton
+									style={{
+										borderRadius: "50px",
+										background: "#1976D2",
+										padding: window.innerWidth < 501 ? "5px" : "10px",
+										color: "white",
+									}}
+									onClick={() => {
+										filterSocialFeedsApiCall();
+									}}>
+									<Search />
+								</IconButton>
+							</Tooltip>
 						</Box>
-					</Box>
-					<Box>
-						<IconButton
-							onClick={() => navigate("reported-feeds")}
-							style={{
-								borderRadius: "50px",
-								background: "#1976D2",
-								padding: window.innerWidth < 501 ? "5px" : "10px",
-								color: "white",
-							}}>
-							<Report />
-						</IconButton>
+						<Box sx={{ ml: 1 }}>
+							<Tooltip title='Reported Feeds'>
+								<IconButton
+									onClick={() => navigate("reported-feeds")}
+									style={{
+										borderRadius: "50px",
+										background: "#1976D2",
+										padding: window.innerWidth < 501 ? "5px" : "10px",
+										color: "white",
+									}}>
+									<Report />
+								</IconButton>
+							</Tooltip>
+						</Box>
 					</Box>
 				</Card>
 				{/* <Typography variant="h3">Social Feeds</Typography> */}
 				{data?.content?.length > 0 ? (
 					<Grid container spacing={2}>
 						{data?.content?.map((ele, index) => (
-							<Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+							<Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={index}>
 								<Box
 									sx={{
 										padding: "7px 14px",
 										width: "100%",
+										// height: "100%",
 										// minHeight: "250px",
 										boxShadow:
 											"rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset",
@@ -226,89 +253,12 @@ export default function Social_Feeds(props) {
 											FeedDataFun={setDFeedData}
 											socialFilterApi={filterSocialFeedsApiCall}
 										/>
-										{/* <Modal
-											className='delete-modal'
-											sx={{
-												"& > div": {
-													backgroundColor: "rgb(35 35 35 / 8%)",
-												},
-											}}
-											open={openDModal}
-											onClose={() => setOpenDModal(false)}
-											aria-labelledby='modal-modal-title'
-											aria-describedby='modal-modal-description'>
-											<Box
-												sx={{
-													position: "absolute",
-													top: "50%",
-													left: "50%",
-													transform: "translate(-50%, -50%)",
-													// width: 400,
-													minWidth: 320,
-													background: "white !important",
-													boxShadow: 24,
-													p: 4,
-												}}
-												className='delete1-modal'>
-												<form
-													onSubmit={() => {
-														deleteFeedApiCall();
-														filterSocialFeedsApiCall();
-														setOpenDModal(false);
-													}}>
-													<Typography
-														id='modal-modal-title'
-														style={{
-															fontSize: window.innerWidth < 500 ? "14px" : "24px",
-														}}>
-														<b>Are you sure to delete this feed ?</b>
-													</Typography>
-													<Box sx={{ my: 2 }}>
-														<Typography
-															style={{ fontSize: window.innerWidth < 500 ? "12px" : "14px" }}>
-															Give Remark to feed
-														</Typography>
-														<TextField
-															fullWidth
-															label='remark'
-															name='remark'
-															value={dFeedData.remark}
-															onChange={(event) => {
-																setDFeedData((prev) => {
-																	return {
-																		...prev,
-																		remark: event.target.value,
-																	};
-																});
-															}}
-															required
-															variant='outlined'
-														/>
-													</Box>
-													<Box sx={{ display: "flex", justifyContent: "space-between" }}>
-														<Button variant='outlined' onClick={() => setOpenDModal(false)}>
-															Cancel
-														</Button>
-														<Button
-															variant='contained'
-															type='submit'
-															// onClick={() => {
-															// 	deleteFeedApiCall();
-															// 	filterSocialFeedsApiCall();
-															// 	setOpenDModal(false);
-															// }}
-														>
-															Submit
-														</Button>
-													</Box>
-												</form>
-											</Box>
-										</Modal> */}
 									</Box>
 
 									<Box
 										sx={{ my: 1, height: "200px" }}
-										onClick={() => setModal({ open: true, data: ele })}>
+										// onClick={() => setModal({ open: true, data: ele })}
+									>
 										<Swiper
 											onClick={() => setModal({ open: true, data: ele })}
 											pagination={true}
@@ -481,6 +431,42 @@ export default function Social_Feeds(props) {
 								</Box>
 							</Grid>
 						))}
+						<Grid item xs={12}>
+							{/* <Card> */}
+							<Box
+								className='root'
+								sx={{
+									"& > div > div": {
+										display: "flex",
+										alignItems: "baseline !important",
+									},
+								}}>
+								<TablePagination
+									component='div'
+									count={totalEle}
+									page={pagination.page}
+									rowsPerPage={pagination.pageSize}
+									rowsPerPageOptions={[12, 16, 20]}
+									onPageChange={(event, data) => {
+										console.log("event--------", data);
+										setPagination((prev) => ({
+											...prev,
+											page: data,
+										}));
+										filterSocialFeedsApiCall(data, pagination.pageSize);
+									}}
+									onRowsPerPageChange={(event) => {
+										console.log("pagesizedfddv", event, data);
+										setPagination((prev) => ({
+											...prev,
+											pageSize: event.target.value,
+										}));
+										filterSocialFeedsApiCall(pagination.page, event.target.value);
+									}}
+								/>
+							</Box>
+							{/* </Card> */}
+						</Grid>
 					</Grid>
 				) : (
 					<Box
@@ -501,7 +487,13 @@ export default function Social_Feeds(props) {
 						handleClose={() => setFullScreenState({ imageModal: false })}
 					/>
 				)}
-				{modal.open && <DetailsModal state={modal} handleClose={() => setModal({ open: false })} filterApi={filterSocialFeedsApiCall} />}
+				{modal.open && (
+					<DetailsModal
+						state={modal}
+						handleClose={() => setModal({ open: false })}
+						filterApi={filterSocialFeedsApiCall}
+					/>
+				)}
 				<DeleteFeedSnackBar open={openSnackBar} openFun={(e) => setOpenSnackBar(e)} />
 			</Container>
 		);

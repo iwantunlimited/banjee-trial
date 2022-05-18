@@ -112,7 +112,9 @@ function Navbar(props) {
 							</IconButton>
 						</Hidden>
 						<div style={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
-							<div style={{ display: "flex", alignItems: "center" }}>
+							<div
+								onClick={() => navigate("/")}
+								style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
 								<img
 									src={Logo}
 									style={{ width: window.innerWidth < 520 ? "80px" : "110px" }}
@@ -123,8 +125,7 @@ function Navbar(props) {
 										if (ele.id === id) {
 											return (
 												<Typography
-													variant='h4'
-													style={{ marginLeft: "4em", fontFamily: "inherit" }}
+													sx={{ fontSize: "25px", marginLeft: "4em", fontFamily: "inherit" }}
 													noWrap
 													component='div'>
 													{ele.name}

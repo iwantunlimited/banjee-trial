@@ -10,6 +10,14 @@ export const filterSocialFeeds = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 
+export const getSocialFeedDetails = (requestLoad) => {
+	let url = urls.SOCIAL_FEEDS.GET_FEED_DETAILS + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
+
 export const deleteSocialFeed = (requestLoad) => {
 	let url = urls.SOCIAL_FEEDS.DELETEFEED;
 	let actionCode = "";

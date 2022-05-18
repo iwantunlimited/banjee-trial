@@ -35,6 +35,7 @@ export const urls = {
 
 	SOCIAL_FEEDS: {
 		FILTER: services.SOCIAL_FEEDS + "api/feeds/admin/filter",
+		GET_FEED_DETAILS: services.SOCIAL_FEEDS + "feeds/findById/",
 		GET_COMMENTS: services.SOCIAL_FEEDS + "comments/byFeed/",
 		GET_REACTIONS: services.SOCIAL_FEEDS + "reaction/",
 		DELETEFEED: services.SOCIAL_FEEDS + "api/feeds/admin/remove",

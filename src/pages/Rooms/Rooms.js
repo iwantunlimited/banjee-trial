@@ -1,13 +1,5 @@
 import React from "react";
-import {
-	Grid,
-	Container,
-	Card,
-	IconButton,
-	CircularProgress,
-	Typography,
-	Box,
-} from "@mui/material";
+import { Grid, Container, Card, IconButton, CircularProgress, Box } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import { Helmet } from "react-helmet";
 import ChipCompo from "./components/chipCompo";
@@ -26,10 +18,9 @@ function Room() {
 	const [pagination, setPagination] = React.useState({
 		page: 0,
 		pageSize: 10,
-		totalElement: 0,
 	});
 
-	const { page, pageSize } = pagination;
+	const [totalEle, setTotalEle] = React.useState();
 
 	const [keywords, setKeywords] = React.useState("");
 
@@ -40,6 +31,7 @@ function Room() {
 	}
 
 	const ApiCall = React.useCallback((page, pageSize, keywords) => {
+		setState();
 		filterRooms({
 			inactive: "",
 			page: page,
@@ -57,12 +49,7 @@ function Room() {
 					};
 				});
 				setState(resp);
-				setKeywords(keywords);
-				setPagination({
-					page: res.pageable.pageNumber,
-					pageSize: 10,
-					totalElement: res.totalElements,
-				});
+				setTotalEle(res.totalElements);
 			})
 			.catch((errr) => console.log(errr));
 	}, []);
@@ -75,52 +62,30 @@ function Room() {
 			field: "groupName",
 			headerClassName: "app-header",
 			headerName: "Room Name",
+			cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.5,
-			renderCell: (params) => {
-				if (params.row.live === true) {
-					return (
-						<Box>
-							<Box sx={{ display: "flex", alignItems: "center" }}>
-								<Box
-									sx={{
-										width: "10px",
-										height: "10px",
-										borderRadius: "50%",
-										background: "green",
-										marginRight: "5px",
-									}}></Box>
-								<Typography sx={{ fontSize: "12px" }}>Live</Typography>
-							</Box>
-							<Typography>{params.row.groupName}</Typography>
-						</Box>
-					);
-				} else {
-					return (
-						<Box>
-							<Typography>{params.row.groupName}</Typography>
-						</Box>
-					);
-				}
-			},
 		},
 		{
 			id: "2",
 			field: "userName",
 			headerClassName: "app-header",
 			headerName: "Created By",
-			flex: 0.3,
+			cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+			flex: 0.4,
 		},
 		{
 			id: "3",
 			field: "email",
 			headerClassName: "app-header",
 			headerName: "Email",
+			cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.5,
 		},
 		{
 			id: "4",
 			field: "mobile",
 			headerClassName: "app-header",
+			cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "Mobile Number",
 			align: "center",
 			flex: 0.4,
@@ -129,6 +94,7 @@ function Room() {
 			id: "5",
 			field: "communityType",
 			headerClassName: "app-header",
+			cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "Type",
 			align: "center",
 			flex: 0.3,
@@ -137,9 +103,10 @@ function Room() {
 			id: "6",
 			field: "users",
 			headerClassName: "app-header",
-			headerName: "Total Connected Members",
+			cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+			headerName: "Members",
 			align: "center",
-			flex: 0.4,
+			flex: 0.3,
 			renderCell: (params) => {
 				if (params.row && params.row.users && params.row.users.length > 0) {
 					return params.row.users.length;
@@ -152,6 +119,7 @@ function Room() {
 			id: "7",
 			field: "createdOn",
 			headerClassName: "app-header",
+			cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "Created On",
 			align: "center",
 			flex: 0.4,
@@ -167,7 +135,8 @@ function Room() {
 		{
 			id: "8",
 			field: "id",
-			headerClassName: "app-header",
+			headerClassName: "app-header-rejected",
+			cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "View",
 			// align: 'center',
 			flex: 0.3,
@@ -188,8 +157,8 @@ function Room() {
 	];
 
 	React.useEffect(() => {
-		ApiCall(page, pageSize, keywords);
-	}, [ApiCall, page, pageSize, keywords]);
+		ApiCall(0, 10, "");
+	}, [ApiCall]);
 
 	//    if(state){
 	return (
@@ -213,13 +182,20 @@ function Room() {
 									justifyContent: "left",
 								}}>
 								<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
-									Total Rooms
+									Rooms ({totalEle})
 								</div>
 								<hr />
 								<div style={{ width: "100%" }}>
-									<div className='root'>
+									<Box
+										className='root'
+										sx={{
+											"& .app-header-live": {
+												bgcolor: "#76e060",
+											},
+										}}>
 										<DataGrid
 											autoHeight
+											getRowClassName={(params) => `app-header-${params.row.status}`}
 											page={pagination.page}
 											pageSize={pagination.pageSize}
 											onPageSizeChange={(event) => {
@@ -229,7 +205,7 @@ function Room() {
 												}));
 												ApiCall(pagination.page, event, keywords);
 											}}
-											rowCount={pagination.totalElement}
+											rowCount={totalEle}
 											rows={rows}
 											columns={columns}
 											paginationMode='server'
@@ -237,12 +213,16 @@ function Room() {
 											pagination
 											onPageChange={(event) => {
 												console.log("event--------", event);
+												setPagination((prev) => ({
+													...prev,
+													page: event,
+												}));
 												ApiCall(event, pagination.pageSize, keywords);
 											}}
 											rowsPerPageOptions={[5, 10, 20]}
 											className='dataGridFooter'
 										/>
-									</div>
+									</Box>
 								</div>
 							</Card>
 						) : (

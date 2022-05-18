@@ -160,7 +160,7 @@ function ReportedUser1(props) {
 							borderRadius: "10px",
 						}}>
 						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
-							Reported Users List
+							Reported Users ({pagination?.totalElement})
 						</div>
 						<hr />
 						<div style={{ width: "100%" }}>
