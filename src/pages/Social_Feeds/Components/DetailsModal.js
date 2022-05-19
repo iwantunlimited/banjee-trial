@@ -347,32 +347,37 @@ export default function CommentsModal(props) {
 								}}>
 								<Grid item container xs={12} spacing={2}>
 									{reaction?.length > 0 ? (
-										reaction?.map((ele, index) => (
-											<React.Fragment key={index}>
-												<Grid item xs={4}>
-													<span
-														style={{
-															height: "100%",
-															width: "100%",
-															display: "flex",
-															alignItems: "center",
-														}}>
-														{ele?.user?.username}
-													</span>
-												</Grid>
-												<Grid item xs={8}>
-													<img
-														src={getEmoji(ele?.reactionType)}
-														alt=''
-														style={{
-															height: "35px",
-															width: "35px",
-															objectFit: "contain",
-														}}
-													/>
-												</Grid>
-											</React.Fragment>
-										))
+										reaction?.map((ele, index) => {
+											const userLength = ele?.user?.username.length;
+											return (
+												<React.Fragment key={index}>
+													<Grid item xs={6}>
+														<span
+															style={{
+																height: "100%",
+																width: "100%",
+																display: "flex",
+																alignItems: "center",
+															}}>
+															{userLength > 15
+																? ele?.user?.username.slice(0, 15) + " ..."
+																: ele?.user?.username}
+														</span>
+													</Grid>
+													<Grid item xs={6}>
+														<img
+															src={getEmoji(ele?.reactionType)}
+															alt=''
+															style={{
+																height: "35px",
+																width: "35px",
+																objectFit: "contain",
+															}}
+														/>
+													</Grid>
+												</React.Fragment>
+											);
+										})
 									) : (
 										<Grid item xs={12}>
 											<Typography>No Reactions !</Typography>
@@ -392,24 +397,30 @@ export default function CommentsModal(props) {
 								}}>
 								<Grid item container xs={12} spacing={1}>
 									{result?.length > 0 ? (
-										result?.map((ele, index) => (
-											<React.Fragment key={index}>
-												<Grid item xs={12}>
-													{/* <span>{ele?.createdByUser?.username}</span> */}
-													<Card sx={{ width: "100%", p: 1, background: "#f2eeee", boxShadow: 0 }}>
-														<Box sx={{ width: "100%" }}>
-															<Typography sx={{ fontSize: "12px" }}>
-																{ele?.createdByUser?.username + " :"}
-															</Typography>
-															<Typography>{ele?.text}</Typography>
-														</Box>
-													</Card>
-												</Grid>
-												{/* <Grid item xs={8}>
+										result?.map((ele, index) => {
+											const userLength = ele?.createdByUser?.username.length;
+
+											return (
+												<React.Fragment key={index}>
+													<Grid item xs={12}>
+														{/* <span>{ele?.createdByUser?.username}</span> */}
+														<Card sx={{ width: "100%", p: 1, background: "#f2eeee", boxShadow: 0 }}>
+															<Box sx={{ width: "100%" }}>
+																<Typography sx={{ fontSize: "12px" }}>
+																	{userLength > 20
+																		? ele?.createdByUser?.username.slice(0, 20) + "... :"
+																		: ele?.createdByUser?.username}
+																</Typography>
+																<Typography>{ele?.text}</Typography>
+															</Box>
+														</Card>
+													</Grid>
+													{/* <Grid item xs={8}>
 													<span>{ele?.text}</span>
 												</Grid> */}
-											</React.Fragment>
-										))
+												</React.Fragment>
+											);
+										})
 									) : (
 										<Grid item xs={12}>
 											<Typography>No Comments !</Typography>

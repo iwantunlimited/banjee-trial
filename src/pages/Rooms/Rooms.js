@@ -27,7 +27,7 @@ function Room() {
 	function handleSearch(event) {
 		setState();
 		setKeywords(event.target.value);
-		// ApiCall({page,pageSize},event.target.value)
+		ApiCall(pagination.page, pagination.pageSize, event.target.value);
 	}
 
 	const ApiCall = React.useCallback((page, pageSize, keywords) => {

@@ -45,6 +45,12 @@ function User() {
 		paginationState: { page: 0, pageSize: 10 },
 	});
 
+	const [keyword, setKeyword] = React.useState("");
+	console.log("keywordds---------", keyword);
+	function handleKeyword(event) {
+		setKeyword(event.target.value);
+	}
+
 	////-------------------------------------- Cusatomer Filter ----------------------------------
 	console.log(state);
 	const [CustomerFilter, setCustomerFilter] = React.useState({
@@ -68,7 +74,7 @@ function User() {
 
 	const apiCall = React.useCallback(
 		(data) => {
-			console.log(data);
+			console.log("user Data", data);
 			setState((prev) => ({ ...prev, componentLoad: "Load" }));
 			let customerCols = [
 				{
@@ -136,7 +142,7 @@ function User() {
 			];
 			let customerRows = [];
 			console.log(urls.USERPROFILE.FILTER);
-			listCustomer({ ...CustomerFilter, ...data })
+			listCustomer({ ...CustomerFilter, keywords: data })
 				.then((response) => {
 					console.log("Response----->", response);
 
@@ -213,8 +219,8 @@ function User() {
 	// };
 
 	React.useEffect(() => {
-		apiCall();
-	}, [apiCall]);
+		apiCall(keyword);
+	}, [apiCall, keyword]);
 
 	//------------------------------rendering component on api --------------------//
 	const loadComponent = () => {
@@ -313,7 +319,7 @@ function User() {
 			>
 				<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 					<Grid item xs={12}>
-						<ChipComp refreshApi={apiCall} />
+						<ChipComp refreshApi={apiCall} keyword={keyword} handleKey={handleKeyword} />
 					</Grid>
 					<Grid item xs={12}>
 						<UserData data={state} handleClose={handleClose} loadComponent={loadComponent} />

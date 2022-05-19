@@ -159,7 +159,7 @@ export default function Social_Feeds(props) {
 										color: "white",
 									}}
 									onClick={() => {
-										filterSocialFeedsApiCall();
+										filterSocialFeedsApiCall(0, 12);
 									}}>
 									<Search />
 								</IconButton>
