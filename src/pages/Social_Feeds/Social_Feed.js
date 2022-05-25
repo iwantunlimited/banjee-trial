@@ -60,8 +60,8 @@ export default function SocialFeed(props) {
 
 	console.log("delete modal data", dFeedData);
 
-	const [startDate, setStartDate] = React.useState();
-	const [endDate, setEndDate] = React.useState();
+	const [startDate, setStartDate] = React.useState(new Date(2022, 1, 1, 1, 33, 30, 0));
+	const [endDate, setEndDate] = React.useState(new Date());
 
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
@@ -69,34 +69,31 @@ export default function SocialFeed(props) {
 
 	const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
-	const filterSocialFeedsApiCall = React.useCallback(
-		(page, pageSize) => {
-			setData();
-			filterSocialFeeds({
-				deleted: null,
-				domain: null,
-				fields: null,
-				finishDate: endDate,
-				inactive: null,
-				keywords: null,
-				page: page,
-				pageSize: pageSize,
-				sortBy: null,
-				startDate: startDate,
+	const filterSocialFeedsApiCall = React.useCallback((page, pageSize, startDate, endDate) => {
+		// setData();
+		filterSocialFeeds({
+			deleted: null,
+			domain: null,
+			fields: null,
+			finishDate: endDate && moment(endDate).format(),
+			inactive: null,
+			keywords: null,
+			page: page,
+			pageSize: pageSize,
+			sortBy: null,
+			startDate: startDate && moment(startDate).format(),
+		})
+			.then((res) => {
+				setData(res);
+				setTotalEle(res.totalElements);
 			})
-				.then((res) => {
-					setData(res);
-					setTotalEle(res.totalElements);
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		},
-		[startDate, endDate]
-	);
+			.catch((err) => {
+				console.log(err);
+			});
+	}, []);
 
 	React.useEffect(() => {
-		filterSocialFeedsApiCall(0, 12);
+		filterSocialFeedsApiCall(0, 12, startDate, endDate);
 	}, [filterSocialFeedsApiCall]);
 
 	console.log("data----------", data);
@@ -129,22 +126,26 @@ export default function SocialFeed(props) {
 						<Box>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
+									name='startDate'
 									label='Start Date'
 									value={startDate}
 									onChange={(newValue) => {
-										setStartDate(moment(newValue).format());
+										setStartDate(newValue);
 									}}
-									renderInput={(params) => <TextField {...params} />}
+									renderInput={(params) => (
+										<TextField helperText={params?.InputProps?.placeholder} {...params} />
+									)}
 								/>
 							</LocalizationProvider>
 						</Box>
 						<Box sx={{ px: 2 }}>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
+									name='endDate'
 									label='End Date'
 									value={endDate}
 									onChange={(newValue) => {
-										setEndDate(moment(newValue).format());
+										setEndDate(newValue);
 									}}
 									renderInput={(params) => <TextField {...params} />}
 								/>
@@ -160,7 +161,7 @@ export default function SocialFeed(props) {
 										color: "white",
 									}}
 									onClick={() => {
-										filterSocialFeedsApiCall(0, 12);
+										filterSocialFeedsApiCall(0, 12, startDate, endDate);
 									}}>
 									<Search />
 								</IconButton>
@@ -271,6 +272,7 @@ export default function SocialFeed(props) {
 														return (
 															<SwiperSlide>
 																<Box
+																	onClick={() => setModal({ open: true, data: ele })}
 																	key={iIndex}
 																	sx={{
 																		height: "200px",
@@ -293,6 +295,7 @@ export default function SocialFeed(props) {
 														return (
 															<SwiperSlide>
 																<Box
+																	onClick={() => setModal({ open: true, data: ele })}
 																	key={iIndex}
 																	sx={{
 																		height: "200px",
@@ -314,6 +317,10 @@ export default function SocialFeed(props) {
 														return (
 															<SwiperSlide>
 																<Box
+																	onClick={() =>
+																		ele?.mediaContent?.length === 0 &&
+																		setModal({ open: true, data: ele })
+																	}
 																	sx={{
 																		position: "relative",
 																		height: "200px",

@@ -166,7 +166,7 @@ function Room() {
 			<Helmet>
 				<title>Rooms | Banjee Admin</title>
 			</Helmet>
-			<Container maxWidth='lg' style={{ paddingTop: window.innerWidth < 501 ? "0px" : "20px" }}>
+			<Container maxWidth='xl' style={{ paddingTop: window.innerWidth < 501 ? "0px" : "20px" }}>
 				<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 					<Grid item xs={12}>
 						<ChipCompo refreshApi={ApiCall} handleSearch={handleSearch} words={keywords} />

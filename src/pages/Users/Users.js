@@ -313,7 +313,7 @@ function User() {
 				<title>Users | Banjee Admin</title>
 			</Helmet>
 			<Container
-				maxWidth='lg'
+				maxWidth='xl'
 				sx={{ padding: "0px", margin: "auto" }}
 				// style={{ paddingTop: window.innerWidth < 501 ? "0px" : "20px" }}
 			>

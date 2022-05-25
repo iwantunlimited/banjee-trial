@@ -1,4 +1,4 @@
-const host = "http://gateway.banjee.org";
+const host = "https://gateway.banjee.org";
 //const host = "http://136.232.113.214:9180";
 //  const host = "http://192.168.1.90:9180";
 
