@@ -5,6 +5,7 @@ import { makeStyles } from "@mui/styles";
 import { findRoomsById } from "./Services/ApiServices";
 import moment from "moment";
 import "../Users/users.css";
+import { DataGrid } from "@mui/x-data-grid";
 
 const useStyles = makeStyles((theme) => ({
 	typoColor: {
@@ -21,11 +22,17 @@ function ViewRooms() {
 
 	const [data, setData] = React.useState();
 
-	// const [ pagination, setPagination ] = React.useState({
-	// 	page: 0,
-	// 	pageSize: 10,
-	// 	tootalElement: 0
-	// })
+	const [gridData, setGridData] = React.useState();
+
+	console.log("gridData----", gridData);
+
+	const [pagination, setPagination] = React.useState({
+		page: 0,
+		pageSize: 10,
+	});
+
+	const [totalElement, setTotalElement] = React.useState();
+	console.log("totalElement", totalElement);
 
 	// ------------------------------------ find Groups By ID Api Call ---------------------------------------
 
@@ -33,6 +40,13 @@ function ViewRooms() {
 		findRoomsById(roomId)
 			.then((response) => {
 				setData(response);
+				setTotalElement(response.connectedUsers.length);
+				const res = response?.connectedUsers.map((ele) => {
+					return {
+						...ele,
+					};
+				});
+				setGridData(res);
 				console.log(response);
 			})
 			.catch((err) => {
@@ -44,42 +58,63 @@ function ViewRooms() {
 		findRoomsByIdApiCall();
 	}, [findRoomsByIdApiCall]);
 
-	// const rows = connectedUser ? connectedUser : [] ;
+	const rows = gridData ? gridData : [];
 
-	// const columns = [
-	//     {
-	//         id:"1",
-	//         field: "avatarUrl",
-	//         headerClassName: 'app-header',
-	//         headerName: "User Name",
-	//         flex: 0.5 ,
-	//         // renderCell: (params) => (
-	//         //     <Avatar src={params.row.connectedUser.avtarUrl} alt={params.row.connectedUser.name} />
-	//         //     )
-	//     },
-	//     {
-	//         id:"2",
-	//         field: "username",
-	//         headerClassName: 'app-header',
-	//         headerName: "User Name",
-	//         flex: 0.3 ,
-	//     },
-	//     {
-	//         id:"3",
-	//         field: "email",
-	//         headerClassName: 'app-header',
-	//         headerName: "Email",
-	//         flex: 0.4
-	//     },
-	//     {
-	//         id:"4",
-	//         field: "mobile",
-	//         headerClassName: 'app-header',
-	//         headerName: "Mobile Number",
-	//         align:'center',
-	//         flex: 0.4
-	//     }
-	//   ];
+	const columns = [
+		{
+			id: "1",
+			field: "avatarUrl",
+			headerClassName: "app-header",
+			headerName: "Profile",
+			flex: 0.2,
+			align: "center",
+			renderCell: (params) => {
+				console.log("params----", params);
+				return (
+					<Avatar
+						src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${params.row.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+						alt={params.row.name}
+					/>
+				);
+			},
+		},
+		{
+			id: "2",
+			field: "firstName",
+			headerClassName: "app-header",
+			headerName: "First Name",
+			flex: 0.3,
+		},
+		{
+			id: "3",
+			field: "lastName",
+			headerClassName: "app-header",
+			headerName: "Last Name",
+			flex: 0.3,
+		},
+		{
+			id: "4",
+			field: "username",
+			headerClassName: "app-header",
+			headerName: "User Name",
+			flex: 0.3,
+		},
+		{
+			id: "5",
+			field: "email",
+			headerClassName: "app-header",
+			headerName: "Email",
+			flex: 0.4,
+		},
+		{
+			id: "6",
+			field: "mobile",
+			headerClassName: "app-header",
+			headerName: "Mobile Number",
+			align: "center",
+			flex: 0.3,
+		},
+	];
 
 	function ImageAvatar() {
 		if (data && data.imageContent && data.imageContent.src) {
@@ -213,7 +248,7 @@ function ViewRooms() {
 								borderRadius: "15px",
 								// boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
 							}}>
-							<div>
+							{/* <div>
 								<table className='table'>
 									<thead>
 										<tr style={{ color: "#1976D2" }}>
@@ -236,30 +271,36 @@ function ViewRooms() {
 										})}
 									</tbody>
 								</table>
-							</div>
-							<div className='root'>
-								{/* <DataGrid 
+							</div> */}
+							<Box className='root' sx={{ maxHeight: "400px", overflowY: "scroll" }}>
+								<DataGrid
 									autoHeight
 									page={pagination.page}
 									pageSize={pagination.pageSize}
 									onPageSizeChange={(event) => {
-										setPagination((prev)=>({
+										setPagination((prev) => ({
 											...prev,
-											pageSize:event
-										}))
-										ApiCall({page:pagination.page, pageSize:event});
+											pageSize: event,
+										}));
+										// ApiCall({ page: pagination.page, pageSize: event });
 									}}
-									rowCount={pagination.totalElement}
-									rows={rows} 
-									columns={columns} 
-									paginationMode="server"
+									rowCount={totalElement}
+									rows={rows}
+									columns={columns}
+									paginationMode='server'
 									autoPageSize
 									pagination
-									onPageChange={(event) => { ApiCall({page:event, pageSize: pagination.pageSize})}}
+									onPageChange={(event) => {
+										setPagination((prev) => ({
+											...prev,
+											page: event,
+										}));
+										// ApiCall({ page: event, pageSize: pagination.pageSize });
+									}}
 									rowsPerPageOptions={[5, 10, 20]}
-									className="dataGridFooter"
-								/> */}
-							</div>
+									className='dataGridFooter'
+								/>
+							</Box>
 						</Card>
 					</Grid>
 				</Grid>

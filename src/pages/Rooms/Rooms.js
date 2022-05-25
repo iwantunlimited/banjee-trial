@@ -108,8 +108,8 @@ function Room() {
 			align: "center",
 			flex: 0.3,
 			renderCell: (params) => {
-				if (params.row && params.row.users && params.row.users.length > 0) {
-					return params.row.users.length;
+				if (params?.row?.connectedUserIds.length > 0) {
+					return params?.row?.connectedUserIds?.length;
 				} else {
 					return 0;
 				}

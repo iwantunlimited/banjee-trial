@@ -42,6 +42,7 @@ function CustomerView(props) {
 	const [blockCon, setBlockCon] = React.useState();
 
 	const [state, setState] = React.useState([]);
+	const [penddingConIds, setpenddingConIds] = React.useState();
 
 	// const { currentLocation } = state;
 
@@ -100,7 +101,7 @@ function CustomerView(props) {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, [id]);
+	}, []);
 
 	// ----------------------------------- find user api call --------------------------------------------
 
@@ -108,12 +109,14 @@ function CustomerView(props) {
 		findCustomer(id)
 			.then((response) => {
 				setState(response);
+				setpenddingConIds(response.pendingConnections);
+				penddingConnectionsListApiCall(response.pendingConnections);
 				// console.log(response);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-	}, [id]);
+	}, []);
 
 	// ----------------------------------- find blocked user api call ---------------------------------------
 
@@ -121,38 +124,31 @@ function CustomerView(props) {
 		findBlockedCustomers(id)
 			.then((response) => {
 				setBlockCon(response);
-				console.log(response);
+				console.log("bloecked list users", response);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-	}, [id]);
+	}, []);
 
 	// --------------------------------- pendding connections api call --------------------------------------
 
-	const penddingConnectionsListApiCall = React.useCallback(() => {
-		penddingConnectionsList(id)
+	const penddingConnectionsListApiCall = React.useCallback((data) => {
+		penddingConnectionsList(data)
 			.then((response) => {
 				setPenddingData(response);
-				console.log(response);
+				console.log("pending con res", response);
 			})
 			.catch((err) => {
 				console.log(err);
 			});
-	}, [id]);
+	}, []);
 
 	React.useEffect(() => {
 		findByUserApiCall();
 		findCustomerConnectionApiCall();
 		findBlockedCustomerApiCall();
-		penddingConnectionsListApiCall();
-	}, [
-		findByUserApiCall,
-		findCustomerConnectionApiCall,
-		findBlockedCustomerApiCall,
-		penddingConnectionsListApiCall,
-		id,
-	]);
+	}, [findByUserApiCall, findCustomerConnectionApiCall, findBlockedCustomerApiCall, id]);
 
 	console.log(state);
 	if (state && conData) {
@@ -193,7 +189,7 @@ function CustomerView(props) {
 										boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
 										padding: "40px 10px 40px 10px",
 										background: "white ",
-										minHeight: "400px",
+										minHeight: "420px",
 									}}>
 									<Box
 										style={{
@@ -272,10 +268,9 @@ function CustomerView(props) {
 								md={8}
 								lg={8}
 								xl={9}
-								style={{
+								sx={{
 									background: "#FFF",
-									paddingTop: "0px",
-									paddingLeft: "20px",
+									padding: "5px 5px 5px 20px",
 								}}>
 								{/* <Box sx={{ bgcolor: 'background.paper', width: 500 }}> */}
 								{/* <AppBar position="static"> */}
@@ -360,11 +355,10 @@ function CustomerView(props) {
 												penddingData?.content.map((ele, index) => (
 													<Grid
 														key={index}
-														// onClick={() => {
-														// 	props.history.push(
-														// 		"/users/view/" + ele.systemUserId
-														// 	);
-														// }}
+														onClick={() => {
+															navigate("/user/view/" + ele?.systemUserId);
+															window.location.reload();
+														}}
 														item
 														xs={4}
 														sm={4}
@@ -387,7 +381,8 @@ function CustomerView(props) {
 														/>
 														{/* </Grid>/ */}
 														{/* <Grid item xs={8} sm={8} md={8} lg={8} >/ */}
-														<Typography style={{ textAlign: "center" }} variant='h6'>
+														<Typography
+															style={{ textAlign: "left", marginTop: "5px", fontSize: "15px" }}>
 															{ele?.name}
 														</Typography>
 														{/* </Grid> */}
