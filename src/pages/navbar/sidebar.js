@@ -16,7 +16,7 @@ function Sidebar(props) {
 	const { handleId } = props;
 
 	return (
-		<List>
+		<List sx={{ paddingTop: "4px" }}>
 			{routing.map((text, index) => {
 				return (
 					<Link
@@ -29,16 +29,37 @@ function Sidebar(props) {
 							button
 							key={index}
 							onClick={props.handleClick}
-							style={{ color: `/${path1}` === text.path ? "#1976D2" : "grey" }}>
+							sx={{
+								color: `/${path1}` === text.path ? "white" : "white",
+								// padding: "5px 10px",
+								background: `/${path1}` === text.path ? "rgb(42,149,15)" : "#1976D2",
+								borderRadius: "10px",
+								margin: "5px",
+								":hover": {
+									background: `/${path1}` === text.path ? "rgb(42,149,15)" : "#1976D2",
+									opacity: "0.8",
+								},
+							}}>
 							<ListItemIcon
-								style={{
+								sx={{
 									display: "flex",
 									justifyContent: "center",
-									color: `/${path1}` === text.path ? "#1976D2" : "grey",
+									alignItems: "center",
+									color: `/${path1}` === text.path ? "white" : "white",
+									"& > svg": {
+										fontSize: { xl: "1.8rem", lg: "1.5rem" },
+									},
 								}}>
 								{text.icon}
 							</ListItemIcon>
-							<ListItemText>{text.name}</ListItemText>
+							<ListItemText
+								sx={{
+									"& > span": {
+										fontSize: { sm: "12px", md: "15px", lg: "15px", xl: "18px" },
+									},
+								}}>
+								{text.name}
+							</ListItemText>
 							{/* <Typography variant='h5' style={{marginLeft: window.innerWidth < 500 ? '-20px' : '0px',fontWeight:'500'}}>{text.name}</Typography> */}
 						</ListItem>
 					</Link>

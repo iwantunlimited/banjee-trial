@@ -136,7 +136,7 @@ function ViewRooms() {
 
 	if (data) {
 		return (
-			<Container maxWidth='lg'>
+			<Container maxWidth='xl																							'>
 				<Grid container spacing={3} className='mt-1'>
 					<Grid item xs={12} className='d-flex justify-content-center'>
 						<Card

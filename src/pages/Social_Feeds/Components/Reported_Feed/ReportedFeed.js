@@ -147,7 +147,7 @@ function ReportedFeed(props) {
 					}}>
 					Go Back
 				</Button>
-				<Container maxWidth='lg'>
+				<Container maxWidth='xl'>
 					<Card
 						style={{
 							background: "white",

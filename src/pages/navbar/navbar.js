@@ -50,6 +50,11 @@ function Navbar(props) {
 				width: drawerWidth,
 				flexShrink: 0,
 				[`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
+				"& > div": {
+					// background: "#1976D2",
+					// background: "#2787bd",
+					background: "white",
+				},
 			}}>
 			<Toolbar />
 			<Box sx={{ overflow: "auto" }}>
@@ -63,6 +68,7 @@ function Navbar(props) {
 	const mobile = (
 		<Drawer
 			//   container={container}
+			anchor='top'
 			variant='temporary'
 			open={mobileOpen}
 			onClose={handleDrawerToggle}
@@ -73,7 +79,8 @@ function Navbar(props) {
 				// display: { xs: "block", sm: "none" },
 				"& .MuiDrawer-paper": {
 					boxSizing: "border-box",
-					width: drawerWidth,
+					// width: drawerWidth,
+					width: "100%",
 				},
 			}}>
 			<Toolbar />

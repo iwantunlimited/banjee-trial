@@ -85,7 +85,7 @@ function ViewRFeed() {
 					}}>
 					Go Back
 				</Button>
-				<Container maxWidth='lg'>
+				<Container maxWidth='xl'>
 					<Grid container xs={12} spacing={2}>
 						<Grid item xs={12}>
 							<Container maxWidth='sm'>
