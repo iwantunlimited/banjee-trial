@@ -101,7 +101,7 @@ function CustomerView(props) {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
+	}, [id]);
 
 	// ----------------------------------- find user api call --------------------------------------------
 
@@ -116,7 +116,7 @@ function CustomerView(props) {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
+	}, [id]);
 
 	// ----------------------------------- find blocked user api call ---------------------------------------
 
@@ -129,7 +129,7 @@ function CustomerView(props) {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
+	}, [id]);
 
 	// --------------------------------- pendding connections api call --------------------------------------
 
@@ -142,7 +142,7 @@ function CustomerView(props) {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
+	});
 
 	React.useEffect(() => {
 		findByUserApiCall();

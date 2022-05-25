@@ -3,7 +3,7 @@ import User from "../Users/Users";
 import {
 	Dashboard,
 	PeopleAlt,
-	ViewHeadline,
+	// ViewHeadline,
 	Category as CategoryIcon,
 	ConnectWithoutContact,
 	Groups,
@@ -11,7 +11,7 @@ import {
 // import Account from "../Account/Account";
 import Category from "../Category/Category";
 import Room from "../Rooms/Rooms";
-import Social_Feeds from "../Social_Feeds/Social_Feed";
+import SocialFeed from "../Social_Feeds/Social_Feed";
 
 const routing = [
 	{
@@ -47,7 +47,7 @@ const routing = [
 		path: "/social-feeds",
 		name: "Social Feeds",
 		icon: <ConnectWithoutContact fontSize='medium' />,
-		component: <Social_Feeds />,
+		component: <SocialFeed />,
 	},
 	// {
 	//     id:3,

@@ -11,7 +11,7 @@ import ReportedUser1 from "./pages/Users/components/ReportedUser";
 import ViewReportedUsers from "./pages/Users/components/ViewReportedUsers";
 import Room from "./pages/Rooms/Rooms";
 import ViewRooms from "./pages/Rooms/ViewRooms";
-import Social_Feeds from "./pages/Social_Feeds/Social_Feed";
+import SocialFeed from "./pages/Social_Feeds/Social_Feed";
 import ReportedFeed from "./pages/Social_Feeds/Components/Reported_Feed/ReportedFeed";
 import ViewRFeed from "./pages/Social_Feeds/Components/Reported_Feed/ViewRFeed";
 
@@ -55,7 +55,7 @@ const Routes = () => {
 				},
 				{
 					path: "social-feeds",
-					element: <Social_Feeds />,
+					element: <SocialFeed />,
 				},
 				{
 					path: "/social-feeds/reported-feeds",

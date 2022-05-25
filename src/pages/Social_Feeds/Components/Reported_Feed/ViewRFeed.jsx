@@ -1,5 +1,5 @@
 import React from "react";
-import { ChatBubbleOutline, Delete, FavoriteBorder, Fullscreen, Reddit } from "@mui/icons-material";
+import { ChatBubbleOutline, Delete, FavoriteBorder, Fullscreen } from "@mui/icons-material";
 import {
 	Container,
 	Grid,

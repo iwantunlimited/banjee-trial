@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Modal, Typography, Box, Button, IconButton } from "@mui/material";
-import { PlayCircle, PauseCircle, Fullscreen } from "@mui/icons-material";
-import { makeStyles } from "@mui/styles";
+import { Modal, Box, IconButton } from "@mui/material";
+import { Fullscreen } from "@mui/icons-material";
 
 const style = {
 	position: "absolute",
@@ -13,16 +12,14 @@ const style = {
 
 export default function FullScreenImageModal(props) {
 	const {
-		state: { imageModal, src, type },
+		state: { imageModal, src },
 		handleClose,
 	} = props;
 
-	const [videoState, setVideoState] = React.useState(true);
-
-	function playPause() {
-		if (document.getElementById("video").paused) document.getElementById("video").play();
-		else document.getElementById("video").pause();
-	}
+	// function playPause() {
+	// 	if (document.getElementById("video").paused) document.getElementById("video").play();
+	// 	else document.getElementById("video").pause();
+	// }
 
 	// React.useEffect(() => {
 	// 	if (document.getElementById("video").paused)

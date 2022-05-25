@@ -10,6 +10,7 @@ import {
 	TextField,
 	Tooltip,
 	TablePagination,
+	Avatar,
 } from "@mui/material";
 import {
 	FavoriteBorder,
@@ -38,7 +39,7 @@ import { Pagination } from "swiper";
 import DeleteFeedSnackBar from "./Components/SnackBar";
 import DeleteFeedModal from "./Components/DeleteFeedModal";
 
-export default function Social_Feeds(props) {
+export default function SocialFeed(props) {
 	const navigate = useNavigate();
 
 	const [data, setData] = React.useState([]);
@@ -214,8 +215,8 @@ export default function Social_Feeds(props) {
 												alignItems: "center",
 												paddingLeft: "10px",
 											}}>
-											<img
-												alt='#'
+											<Avatar
+												alt={ele?.author?.userName}
 												src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${ele?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 												style={{
 													height: "40px",

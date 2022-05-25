@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Modal, Typography, Box, Grid, Tab, Tabs, IconButton, Card } from "@mui/material";
+import { Modal, Typography, Box, Grid, Tab, Tabs, IconButton, Card, Avatar } from "@mui/material";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { getSocialFeedsComments, getSocialFeedsReactions } from "../services/ApiServices";
@@ -149,7 +149,7 @@ export default function CommentsModal(props) {
 										paddingLeft: "10px",
 										marginBottom: "20px",
 									}}>
-									<img
+									<Avatar
 										alt='#'
 										src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${data?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 										style={{
