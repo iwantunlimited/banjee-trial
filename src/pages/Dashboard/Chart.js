@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import {Box, IconButton} from "@mui/material";
-import {Filter1Outlined} from "@mui/icons-material";
+import {Filter1Outlined, Refresh} from "@mui/icons-material";
 
 const Chart = ({filter, chartId, height, width}) => {
 	const sdk = new ChartsEmbedSDK({
@@ -26,15 +26,30 @@ const Chart = ({filter, chartId, height, width}) => {
 			.catch((err) => console.log("Error during Charts rendering.", err));
 	}, [chart]);
 
-	useEffect(() => {
-		if (rendered) {
-			chart
-				.setFilter(filter)
-				.catch((err) => console.log("Error while filtering.", err));
-		}
-	}, [chart, filter, rendered]);
+	// useEffect(() => {
+	// 	if (rendered) {
+	// 		chart
+	// 			.setFilter(filter)
+	// 			.catch((err) => console.log("Error while filtering.", err));
+	// 	}
+	// }, [chart, filter, rendered]);
 
-	return <div ref={chartDiv}></div>;
+	return (
+		<Box sx={{position: "relative"}}>
+			{/* <div ref={chartDiv} /> */}
+			<div style={{position: "relative"}} ref={chartDiv}></div>
+			<IconButton
+				onClick={() => chart.refresh()}
+				sx={{
+					position: "absolute",
+					top: "1px",
+					right: "1px",
+				}}
+			>
+				<Refresh style={{color: "white"}} />
+			</IconButton>
+		</Box>
+	);
 };
 
 export default Chart;
