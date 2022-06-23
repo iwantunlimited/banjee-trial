@@ -2,7 +2,7 @@ import Dashboard from "./pages/Dashboard/dashboard";
 import User from "./pages/Users/Users";
 // import Account from "./pages/Account/Account";
 import Navbar from "./pages/navbar/navbar";
-import { useRoutes } from "react-router-dom";
+import {useRoutes} from "react-router-dom";
 import Login from "./pages/Login/login";
 import Category from "./pages/Category/Category";
 import CustomerView from "./pages/Users/components/userView";
@@ -14,6 +14,8 @@ import ViewRooms from "./pages/Rooms/ViewRooms";
 import SocialFeed from "./pages/Social_Feeds/Social_Feed";
 import ReportedFeed from "./pages/Social_Feeds/Components/Reported_Feed/ReportedFeed";
 import ViewRFeed from "./pages/Social_Feeds/Components/Reported_Feed/ViewRFeed";
+import DashboardTrial from "./pages/Dashboard/DashboardChart";
+import Chart from "./pages/Dashboard/Chart";
 
 const Routes = () => {
 	return useRoutes([
@@ -23,7 +25,8 @@ const Routes = () => {
 			children: [
 				{
 					path: "/",
-					element: <Dashboard />,
+					// element: <Dashboard />,
+					element: <DashboardTrial />,
 				},
 				{
 					path: "/category",

@@ -1,18 +1,18 @@
-import { Container, Grid } from "@mui/material";
+import {Container, Grid} from "@mui/material";
 import React from "react";
 import Helmet from "react-helmet";
 import ChipComp from "./components/chipComp";
 import UserData from "./components/usersData";
-import { IconButton, Snackbar, Alert, CircularProgress } from "@mui/material";
+import {IconButton, Snackbar, Alert, CircularProgress} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import jwt_decode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
-import { customerFilter } from "./User_Services/User_Payloads";
-import { listCustomer } from "./User_Services/UserApiService";
+import {useNavigate} from "react-router-dom";
+import {DataGrid} from "@mui/x-data-grid";
+import {customerFilter} from "./User_Services/User_Payloads";
+import {listCustomer} from "./User_Services/UserApiService";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Moment from "moment";
-import { urls } from "../../Environment/ApiUrl";
+import {urls} from "../../Environment/ApiUrl";
 import "./users.css";
 
 function User() {
@@ -42,7 +42,7 @@ function User() {
 		deleteCustomerName: "",
 		currentPage: 0,
 		totalElement: 0,
-		paginationState: { page: 0, pageSize: 10 },
+		paginationState: {page: 0, pageSize: 10},
 	});
 
 	const [keyword, setKeyword] = React.useState("");
@@ -67,7 +67,7 @@ function User() {
 	// };
 
 	const handleClose = () => {
-		setState((prev) => ({ ...prev, dialougeOpen: false }));
+		setState((prev) => ({...prev, dialougeOpen: false}));
 	};
 
 	//-------------------------------------Function For Displaying Customer List Page Fields---------------------------------------
@@ -75,7 +75,7 @@ function User() {
 	const apiCall = React.useCallback(
 		(data) => {
 			console.log("user Data", data);
-			setState((prev) => ({ ...prev, componentLoad: "Load" }));
+			setState((prev) => ({...prev, componentLoad: "Load"}));
 			let customerCols = [
 				{
 					field: "name",
@@ -132,7 +132,8 @@ function User() {
 									// 		params.row.userObject.id
 									// );
 									navigate("/user/view/" + params.row.userObject.id);
-								}}>
+								}}
+							>
 								<VisibilityIcon />
 							</IconButton>
 							{/* </Link> */}
@@ -142,13 +143,13 @@ function User() {
 			];
 			let customerRows = [];
 			console.log(urls.USERPROFILE.FILTER);
-			listCustomer({ ...CustomerFilter, keywords: data })
+			listCustomer({...CustomerFilter, keywords: data})
 				.then((response) => {
 					console.log("Response----->", response);
 
 					if (response === null) {
 						//load manage component
-						setState((prev) => ({ ...prev, componentLoad: "Manage" }));
+						setState((prev) => ({...prev, componentLoad: "Manage"}));
 					}
 					if (response.content.length > 0) {
 						//no data
@@ -176,11 +177,13 @@ function User() {
 										? data.pendingConnections.length
 										: 0
 									: null,
-								displayDate: data.createdOn ? Moment(data.createdOn).format("DD-MM-YYYY") : null,
+								displayDate: data.createdOn
+									? Moment(data.createdOn).format("DD-MM-YYYY")
+									: null,
 								View: "View",
 							});
 						});
-						let CustomerData = { columns: customerCols, rows: customerRows };
+						let CustomerData = {columns: customerCols, rows: customerRows};
 
 						setState((prev) => ({
 							...prev,
@@ -197,7 +200,7 @@ function User() {
 							totalElement: response.totalElements,
 							currentPage: response.number,
 							componentLoad: "List",
-							CustomerData: { columns: customerCols, rows: [] },
+							CustomerData: {columns: customerCols, rows: []},
 						}));
 					}
 				})
@@ -205,11 +208,14 @@ function User() {
 					console.log(err);
 				});
 		},
-		[CustomerFilter, navigate, state.totalElement]
+		[CustomerFilter, navigate, state.totalElement, keyword]
 	);
 
 	function sanckbarClose() {
-		setState((prev) => ({ ...prev, snackbar: { ...prev.snackbar, open: !prev.snackbar.open } }));
+		setState((prev) => ({
+			...prev,
+			snackbar: {...prev.snackbar, open: !prev.snackbar.open},
+		}));
 	}
 
 	// const FilterapiCall = (event) => {
@@ -227,7 +233,10 @@ function User() {
 		switch (state.componentLoad) {
 			case "Load":
 				return (
-					<div className='d-flex justify-content-center' style={{ margin: "30%" }}>
+					<div
+						className="d-flex justify-content-center"
+						style={{margin: "30%"}}
+					>
 						<CircularProgress />
 					</div>
 				);
@@ -235,7 +244,7 @@ function User() {
 				console.log("LIST", state);
 				return (
 					<>
-						<div className='root' style={{ width: "100%" }}>
+						<div className="root" style={{width: "100%"}}>
 							<DataGrid
 								pagination
 								page={state.paginationState.page}
@@ -244,7 +253,14 @@ function User() {
 								onPageSizeChange={(event) => {
 									setState((prev) => ({
 										...prev,
-										paginationState: { pageSize: event, page: prev.paginationState.page },
+										paginationState: {
+											pageSize: event,
+											page: prev.paginationState.page,
+										},
+									}));
+									setCustomerFilter((prev) => ({
+										...prev,
+										pageSize: event,
 									}));
 									apiCall({
 										page: state.paginationState.page,
@@ -252,16 +268,20 @@ function User() {
 									});
 								}}
 								rowCount={state.totalElement}
-								paginationMode='server'
+								paginationMode="server"
 								autoHeight
 								onPageChange={(event) => {
 									console.log(event);
+									setCustomerFilter((prev) => ({
+										...prev,
+										page: event,
+									}));
 									apiCall({
 										page: event,
 										pageSize: state.paginationState.pageSize,
 									});
 								}}
-								className='dataGridFooter'
+								className="dataGridFooter"
 								// onCellClick = {(data) =>
 								//   this.CalltoUpdate(data)
 								// }
@@ -275,20 +295,22 @@ function User() {
 								horizontal: "center",
 							}}
 							open={state.snackbar.open}
-							style={{ width: "100%" }}
+							style={{width: "100%"}}
 							autoHideDuration={6000}
 							onClose={sanckbarClose}
 							action={
 								<React.Fragment>
 									<IconButton
-										size='small'
-										aria-label='close'
-										color='inherit'
-										onClick={sanckbarClose}>
-										<CloseIcon fontSize='small' />
+										size="small"
+										aria-label="close"
+										color="inherit"
+										onClick={sanckbarClose}
+									>
+										<CloseIcon fontSize="small" />
 									</IconButton>
 								</React.Fragment>
-							}>
+							}
+						>
 							<Alert onClose={sanckbarClose} severity={state.snackbar.severity}>
 								{state.snackbar.message}
 							</Alert>
@@ -313,16 +335,24 @@ function User() {
 				<title>Users | Banjee Admin</title>
 			</Helmet>
 			<Container
-				maxWidth='xl'
-				sx={{ padding: "0px", margin: "auto" }}
+				maxWidth="xl"
+				sx={{padding: "0px", margin: "auto"}}
 				// style={{ paddingTop: window.innerWidth < 501 ? "0px" : "20px" }}
 			>
 				<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 					<Grid item xs={12}>
-						<ChipComp refreshApi={apiCall} keyword={keyword} handleKey={handleKeyword} />
+						<ChipComp
+							refreshApi={apiCall}
+							keyword={keyword}
+							handleKey={handleKeyword}
+						/>
 					</Grid>
 					<Grid item xs={12}>
-						<UserData data={state} handleClose={handleClose} loadComponent={loadComponent} />
+						<UserData
+							data={state}
+							handleClose={handleClose}
+							loadComponent={loadComponent}
+						/>
 					</Grid>
 				</Grid>
 			</Container>

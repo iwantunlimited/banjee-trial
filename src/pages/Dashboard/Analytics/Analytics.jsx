@@ -1,12 +1,13 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import {Grid} from "@mui/material";
 import ChipComponent from "./components/chipComponent";
-import { listCustomer } from "../../Users/User_Services/UserApiService";
-import { filterRooms } from "../../Rooms/Services/ApiServices";
-import { ReportedUserList } from "../../Users/User_Services/UserApiService";
+import {listCustomer} from "../../Users/User_Services/UserApiService";
+import {filterRooms} from "../../Rooms/Services/ApiServices";
+import {ReportedUserList} from "../../Users/User_Services/UserApiService";
 import AnalyticsArea from "./AnalyticsArea";
 import ChartComp from "./components/chartCompo/chart";
 import TrigeredArea from "./TrigeredArea";
+import DashboardTrial from "../DashboardChart";
 
 function Analytics(props) {
 	const [initialData, setInitialData] = React.useState({
@@ -44,7 +45,11 @@ function Analytics(props) {
 		})
 			.then((res) => {
 				console.log(res);
-				setInitialData((prev) => ({ ...prev, userData: res, totalUsers: res.totalElements }));
+				setInitialData((prev) => ({
+					...prev,
+					userData: res,
+					totalUsers: res.totalElements,
+				}));
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -57,7 +62,7 @@ function Analytics(props) {
 			pageSize: 100,
 		})
 			.then((res) => {
-				setInitialData((prev) => ({ ...prev, totalRooms: res.totalElements }));
+				setInitialData((prev) => ({...prev, totalRooms: res.totalElements}));
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -69,7 +74,10 @@ function Analytics(props) {
 		})
 			.then((response) => {
 				console.log(response, "calles");
-				setInitialData((prev) => ({ ...prev, reportedUsers: response.totalElements }));
+				setInitialData((prev) => ({
+					...prev,
+					reportedUsers: response.totalElements,
+				}));
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -86,6 +94,9 @@ function Analytics(props) {
 				<ChipComponent totalData={initialData} />
 			</Grid>
 			<Grid item xs={12}>
+				<DashboardTrial />
+			</Grid>
+			{/* <Grid item xs={12}>
 				<Grid item container xs={12} spacing={2}>
 					<Grid item xs={12} sm={6} md={6} lg={6} xl={4}>
 						<ChartComp data={initialData.userData} />
@@ -107,7 +118,7 @@ function Analytics(props) {
 					showData={isLoad}
 					dataType={type}
 				/>
-			</Grid>
+			</Grid> */}
 		</Grid>
 	);
 }

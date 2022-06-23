@@ -21,21 +21,23 @@ import {
 	Report,
 } from "@mui/icons-material";
 import moment from "moment";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import {AdapterDateFns} from "@mui/x-date-pickers/AdapterDateFns";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 
-import { filterSocialFeeds } from "./services/ApiServices";
+import {filterSocialFeeds} from "./services/ApiServices";
 
 import FullScreenImageModal from "./Components/FullScreenImageModal";
 import DetailsModal from "./Components/DetailsModal";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import "./SocialFeed.css";
 
 // Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
+import {Swiper, SwiperSlide} from "swiper/react";
 
 // import required modules
-import { Pagination } from "swiper";
+import {Pagination} from "swiper";
+
 import DeleteFeedSnackBar from "./Components/SnackBar";
 import DeleteFeedModal from "./Components/DeleteFeedModal";
 
@@ -43,7 +45,7 @@ export default function SocialFeed(props) {
 	const navigate = useNavigate();
 
 	const [data, setData] = React.useState([]);
-	const [modal, setModal] = React.useState({ open: false });
+	const [modal, setModal] = React.useState({open: false});
 	//delete menu ------
 	const [openDModal, setOpenDModal] = React.useState(false);
 	const [dFeedData, setDFeedData] = React.useState({
@@ -60,37 +62,46 @@ export default function SocialFeed(props) {
 
 	console.log("delete modal data", dFeedData);
 
-	const [startDate, setStartDate] = React.useState(new Date(2022, 1, 1, 1, 33, 30, 0));
+	const [startDate, setStartDate] = React.useState(
+		new Date(2022, 1, 1, 1, 33, 30, 0)
+	);
 	const [endDate, setEndDate] = React.useState(new Date());
+	const [cNumber, setCNumber] = React.useState(0);
 
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
 	});
 
+	console.log("startDate", startDate);
+	console.log("endDate", endDate);
+
 	const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
-	const filterSocialFeedsApiCall = React.useCallback((page, pageSize, startDate, endDate) => {
-		// setData();
-		filterSocialFeeds({
-			deleted: null,
-			domain: null,
-			fields: null,
-			finishDate: endDate && moment(endDate).format(),
-			inactive: null,
-			keywords: null,
-			page: page,
-			pageSize: pageSize,
-			sortBy: null,
-			startDate: startDate && moment(startDate).format(),
-		})
-			.then((res) => {
-				setData(res);
-				setTotalEle(res.totalElements);
+	const filterSocialFeedsApiCall = React.useCallback(
+		(page, pageSize, startDate, endDate) => {
+			// setData();
+			filterSocialFeeds({
+				deleted: null,
+				domain: null,
+				fields: null,
+				finishDate: endDate && moment(endDate).format(),
+				inactive: null,
+				keywords: null,
+				page: page,
+				pageSize: pageSize,
+				sortBy: null,
+				startDate: startDate && moment(startDate).format(),
 			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}, []);
+				.then((res) => {
+					setData(res);
+					setTotalEle(res.totalElements);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		},
+		[startDate, endDate]
+	);
 
 	React.useEffect(() => {
 		filterSocialFeedsApiCall(0, 12, startDate, endDate);
@@ -106,7 +117,7 @@ export default function SocialFeed(props) {
 
 	if (data) {
 		return (
-			<Container sx={{ p: "0px !important", margin: "auto" }} maxWidth='xl'>
+			<Container sx={{p: "0px !important", margin: "auto"}} maxWidth="xl">
 				<Card
 					sx={{
 						p: 2,
@@ -114,35 +125,45 @@ export default function SocialFeed(props) {
 						display: "flex",
 						justifyContent: "space-between",
 						alignItems: "center",
-						flexDirection: { xs: "column", sm: "row" },
-					}}>
-					<Box sx={{ mb: { xs: 2, sm: 0 } }}>
+						flexDirection: {xs: "column", sm: "row"},
+					}}
+				>
+					<Box sx={{mb: {xs: 2, sm: 0}}}>
 						<Typography
-							sx={{ color: "#6b778c", fontSize: "20px", fontWeight: "500", textAlign: "left" }}>
+							sx={{
+								color: "#6b778c",
+								fontSize: "20px",
+								fontWeight: "500",
+								textAlign: "left",
+							}}
+						>
 							Feeds({totalEle})
 						</Typography>
 					</Box>
-					<Box sx={{ display: "flex", alignItems: "center" }}>
+					<Box sx={{display: "flex", alignItems: "center"}}>
 						<Box>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
-									name='startDate'
-									label='Start Date'
+									name="startDate"
+									label="Start Date"
 									value={startDate}
 									onChange={(newValue) => {
 										setStartDate(newValue);
 									}}
 									renderInput={(params) => (
-										<TextField helperText={params?.InputProps?.placeholder} {...params} />
+										<TextField
+											helperText={params?.InputProps?.placeholder}
+											{...params}
+										/>
 									)}
 								/>
 							</LocalizationProvider>
 						</Box>
-						<Box sx={{ px: 2 }}>
+						<Box sx={{px: 2}}>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
-									name='endDate'
-									label='End Date'
+									name="endDate"
+									label="End Date"
 									value={endDate}
 									onChange={(newValue) => {
 										setEndDate(newValue);
@@ -151,8 +172,8 @@ export default function SocialFeed(props) {
 								/>
 							</LocalizationProvider>
 						</Box>
-						<Box sx={{ px: 1 }}>
-							<Tooltip title='Search'>
+						<Box sx={{px: 1}}>
+							<Tooltip title="Search">
 								<IconButton
 									style={{
 										borderRadius: "50px",
@@ -162,13 +183,14 @@ export default function SocialFeed(props) {
 									}}
 									onClick={() => {
 										filterSocialFeedsApiCall(0, 12, startDate, endDate);
-									}}>
+									}}
+								>
 									<Search />
 								</IconButton>
 							</Tooltip>
 						</Box>
-						<Box sx={{ ml: 1 }}>
-							<Tooltip title='Reported Feeds'>
+						<Box sx={{ml: 1}}>
+							<Tooltip title="Reported Feeds">
 								<IconButton
 									onClick={() => navigate("reported-feeds")}
 									style={{
@@ -176,7 +198,8 @@ export default function SocialFeed(props) {
 										background: "#1976D2",
 										padding: window.innerWidth < 501 ? "5px" : "10px",
 										color: "white",
-									}}>
+									}}
+								>
 									<Report />
 								</IconButton>
 							</Tooltip>
@@ -202,20 +225,23 @@ export default function SocialFeed(props) {
 										"&:hover": {
 											background: "#E0E0e0",
 										},
-									}}>
+									}}
+								>
 									<Box
 										style={{
 											display: "flex",
 											justifyContent: "space-between",
 											alignItems: "center",
-										}}>
+										}}
+									>
 										<Box
-											onClick={() => setModal({ open: true, data: ele })}
+											onClick={() => setModal({open: true, data: ele})}
 											style={{
 												display: "flex",
 												alignItems: "center",
 												paddingLeft: "10px",
-											}}>
+											}}
+										>
 											<Avatar
 												alt={ele?.author?.userName}
 												src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${ele?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
@@ -231,21 +257,25 @@ export default function SocialFeed(props) {
 													padding: "10px 10px",
 													display: "flex",
 													flexDirection: "column",
-												}}>
+												}}
+											>
 												<span>{`${
-													ele?.author?.username || ele?.author?.userName || "userName"
+													ele?.author?.username ||
+													ele?.author?.userName ||
+													"userName"
 												}`}</span>
-												<span style={{ fontSize: "12px" }}>
+												<span style={{fontSize: "12px"}}>
 													{moment(ele?.createdOn).format("lll")}
 												</span>
 											</Typography>
 										</Box>
 										<IconButton
 											onClick={() => {
-												setDFeedData({ feedId: ele.id });
+												setDFeedData({feedId: ele.id});
 												setOpenDModal(true);
 											}}
-											style={{ width: "40px", height: "40px" }}>
+											style={{width: "40px", height: "40px"}}
+										>
 											<Delete />
 										</IconButton>
 										<DeleteFeedModal
@@ -258,21 +288,47 @@ export default function SocialFeed(props) {
 									</Box>
 
 									<Box
-										sx={{ my: 1, height: "200px" }}
+										sx={{my: 1, height: "200px", position: "relative"}}
 										// onClick={() => setModal({ open: true, data: ele })}
 									>
+										{/* {ele?.mediaContent?.length > 1 && (
+											<Box
+												sx={{
+													position: "absolute",
+													top: 2,
+													right: 2,
+													fontSize: "14px",
+													background: "black",
+													color: "white",
+													borderRadius: "5px",
+													zIndex: 100000,
+													px: 0.5,
+												}}
+											>
+												{cNumber + "/" + ele?.mediaContent?.length}
+											</Box>
+										)} */}
 										<Swiper
-											onClick={() => setModal({ open: true, data: ele })}
-											pagination={true}
+											onClick={() => setModal({open: true, data: ele})}
+											pagination={
+												ele?.mediaContent?.length > 1
+													? {
+															type: "fraction",
+													  }
+													: false
+											}
 											modules={[Pagination]}
-											className='mySwiper'>
+											className="mySwiper"
+										>
 											{ele?.mediaContent?.length > 0 ? (
 												ele?.mediaContent?.map((item, iIndex) => {
 													if (item?.mimeType === "video/mp4") {
 														return (
 															<SwiperSlide>
 																<Box
-																	onClick={() => setModal({ open: true, data: ele })}
+																	onClick={() =>
+																		setModal({open: true, data: ele})
+																	}
 																	key={iIndex}
 																	sx={{
 																		height: "200px",
@@ -280,11 +336,37 @@ export default function SocialFeed(props) {
 																		display: "flex",
 																		justifyContent: "center",
 																		alignItems: "center",
-																	}}>
-																	<video width='100%' height='200px' id={`video${index}`} controls>
+																		position: "relative",
+																	}}
+																>
+																	<Box
+																		variant="filled"
+																		sx={{
+																			position: "absolute",
+																			top: 2,
+																			right: 2,
+																			fontSize: "14px",
+																			background: "black",
+																			color: "white",
+																			borderRadius: "5px",
+																			px: 0.5,
+																		}}
+																	>
+																		{ele?.mediaContent?.length > 1 &&
+																			iIndex +
+																				1 +
+																				"/" +
+																				ele?.mediaContent?.length}
+																	</Box>
+																	<video
+																		width="100%"
+																		height="200px"
+																		id={`video${index}`}
+																		controls
+																	>
 																		<source
 																			src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}
-																			type='video/mp4'
+																			type="video/mp4"
 																		/>
 																		Your browser does not support HTML video.
 																	</video>
@@ -295,18 +377,46 @@ export default function SocialFeed(props) {
 														return (
 															<SwiperSlide>
 																<Box
-																	onClick={() => setModal({ open: true, data: ele })}
+																	onClick={() =>
+																		setModal({open: true, data: ele})
+																	}
 																	key={iIndex}
 																	sx={{
 																		height: "200px",
 																		display: "flex",
 																		justifyContent: "center",
 																		alignItems: "center",
-																	}}>
-																	<audio width='100%' height='200px' id={`video${index}`} controls>
+																		position: "relative",
+																	}}
+																>
+																	<Box
+																		variant="filled"
+																		sx={{
+																			position: "absolute",
+																			top: 2,
+																			right: 2,
+																			fontSize: "14px",
+																			background: "black",
+																			color: "white",
+																			borderRadius: "5px",
+																			px: 0.5,
+																		}}
+																	>
+																		{ele?.mediaContent?.length > 1 &&
+																			iIndex +
+																				1 +
+																				"/" +
+																				ele?.mediaContent?.length}
+																	</Box>
+																	<audio
+																		width="100%"
+																		height="200px"
+																		id={`video${index}`}
+																		controls
+																	>
 																		<source
 																			src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}
-																			type='video/mp4'
+																			type="video/mp4"
 																		/>
 																		Your browser does not support HTML video.
 																	</audio>
@@ -315,59 +425,68 @@ export default function SocialFeed(props) {
 														);
 													} else if (item?.mimeType === "image/jpg") {
 														return (
-															<SwiperSlide>
-																<Box
-																	onClick={() =>
-																		ele?.mediaContent?.length === 0 &&
-																		setModal({ open: true, data: ele })
-																	}
-																	sx={{
-																		position: "relative",
-																		height: "200px",
-																		width: "100%",
-																		display: "flex",
-																		justifyContent: "center",
-																		alignItems: "center",
-																		"&:hover": {
-																			"& > .btnFullScreen": {
-																				display: "block",
-																				position: "absolute",
-																				left: "93%",
-																				top: "85%",
-																				transform: "translate(-50%, -50%)",
-																			},
-																		},
-																		"& > .btnFullScreen": {
-																			display: "none",
-																		},
-																	}}
-																	key={iIndex}>
-																	<img
-																		alt=''
-																		src={
-																			item?.src &&
-																			`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.webp`
+															<Box>
+																<SwiperSlide>
+																	<Box
+																		onClick={() =>
+																			ele?.mediaContent?.length === 0 &&
+																			setModal({open: true, data: ele})
 																		}
-																		style={{
-																			height: "100%",
+																		sx={{
+																			position: "relative",
+																			height: "200px",
 																			width: "100%",
-																			objectFit: "contain",
+																			display: "flex",
+																			justifyContent: "center",
+																			alignItems: "center",
+																			"&:hover": {
+																				"& > .btnFullScreen": {
+																					display: "block",
+																					position: "absolute",
+																					left: "93%",
+																					top: "85%",
+																					transform: "translate(-50%, -50%)",
+																				},
+																			},
+																			"& > .btnFullScreen": {
+																				display: "none",
+																			},
 																		}}
-																	/>
-																	<IconButton
-																		className='btnFullScreen'
-																		onClick={() => {
-																			setFullScreenState({
-																				imageModal: true,
-																				src:
-																					item?.src &&
-																					`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.webp`,
-																			});
-																		}}>
-																		<Fullscreen style={{ color: "#000", fontSize: "30px" }} />
-																	</IconButton>
-																</Box>
-															</SwiperSlide>
+																		key={iIndex}
+																	>
+																		<img
+																			alt=""
+																			src={
+																				item?.src &&
+																				`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.webp`
+																			}
+																			style={{
+																				height: "100%",
+																				width: "100%",
+																				objectFit: "contain",
+																			}}
+																		/>
+																		<IconButton
+																			className="btnFullScreen"
+																			onClick={() => {
+																				setFullScreenState({
+																					imageModal: true,
+																					src:
+																						item?.src &&
+																						`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.webp`,
+																				});
+																			}}
+																		>
+																			<Fullscreen
+																				style={{
+																					color: "#000",
+																					fontSize: "30px",
+																				}}
+																			/>
+																		</IconButton>
+																	</Box>
+																</SwiperSlide>
+															</Box>
 														);
 													} else {
 														return (
@@ -380,7 +499,28 @@ export default function SocialFeed(props) {
 																		display: "flex",
 																		justifyContent: "center",
 																		alignItems: "center",
-																	}}>
+																		position: "relative",
+																	}}
+																>
+																	<Box
+																		variant="filled"
+																		sx={{
+																			position: "absolute",
+																			top: 2,
+																			right: 2,
+																			fontSize: "14px",
+																			background: "black",
+																			color: "white",
+																			borderRadius: "5px",
+																			px: 0.5,
+																		}}
+																	>
+																		{ele?.mediaContent?.length > 1 &&
+																			iIndex +
+																				1 +
+																				"/" +
+																				ele?.mediaContent?.length}
+																	</Box>
 																	<Typography>{ele?.text}</Typography>
 																</Box>
 															</SwiperSlide>
@@ -396,8 +536,20 @@ export default function SocialFeed(props) {
 															display: "flex",
 															justifyContent: "center",
 															alignItems: "center",
-														}}>
-														<Typography>{ele?.text}</Typography>
+														}}
+													>
+														{ele?.text?.length > 200 ? (
+															<Typography>
+																{ele?.text?.slice(0, 200) + "... "}
+																<a
+																	style={{textTransform: "none", color: "blue"}}
+																>
+																	more
+																</a>
+															</Typography>
+														) : (
+															<Typography>{ele?.text}</Typography>
+														)}
 													</Box>
 												</SwiperSlide>
 											)}
@@ -410,18 +562,19 @@ export default function SocialFeed(props) {
 											display: "flex",
 											flexDirection: "column",
 										}}
-										onClick={() => setModal({ open: true, data: ele })}>
+										onClick={() => setModal({open: true, data: ele})}
+									>
 										{ele?.text && ele?.mediaContent?.length > 0 ? (
 											<Typography noWrap={true}>
-												{ele?.text || <p style={{ height: "16px" }}> </p>}
+												{ele?.text || <p style={{height: "16px"}}> </p>}
 											</Typography>
 										) : (
-											<Box style={{ height: "24px" }}></Box>
+											<Box style={{height: "24px"}}></Box>
 										)}
-										<Box sx={{ display: "flex", pt: 2, pb: 1 }}>
-											<Box style={{ display: "flex", alignItems: "center" }}>
+										<Box sx={{display: "flex", pt: 2, pb: 1}}>
+											<Box style={{display: "flex", alignItems: "center"}}>
 												<FavoriteBorder />
-												<span style={{ marginLeft: "5px" }}>
+												<span style={{marginLeft: "5px"}}>
 													{ele?.totalReactions || ele?.reactions?.length || 0}
 												</span>
 											</Box>
@@ -430,9 +583,12 @@ export default function SocialFeed(props) {
 													display: "flex",
 													alignItems: "center",
 													ml: "20px",
-												}}>
+												}}
+											>
 												<ChatBubbleOutline />
-												<span style={{ marginLeft: "5px" }}>{ele?.totalComments || 0}</span>
+												<span style={{marginLeft: "5px"}}>
+													{ele?.totalComments || 0}
+												</span>
 											</Box>
 										</Box>
 									</Box>
@@ -442,15 +598,16 @@ export default function SocialFeed(props) {
 						<Grid item xs={12}>
 							{/* <Card> */}
 							<Box
-								className='root'
+								className="root"
 								sx={{
 									"& > div > div": {
 										display: "flex",
 										alignItems: "baseline !important",
 									},
-								}}>
+								}}
+							>
 								<TablePagination
-									component='div'
+									component="div"
 									count={totalEle}
 									page={pagination.page}
 									rowsPerPage={pagination.pageSize}
@@ -461,7 +618,12 @@ export default function SocialFeed(props) {
 											...prev,
 											page: data,
 										}));
-										filterSocialFeedsApiCall(data, pagination.pageSize);
+										filterSocialFeedsApiCall(
+											data,
+											pagination.pageSize,
+											startDate,
+											endDate
+										);
 									}}
 									onRowsPerPageChange={(event) => {
 										console.log("pagesizedfddv", event, data);
@@ -469,7 +631,12 @@ export default function SocialFeed(props) {
 											...prev,
 											pageSize: event.target.value,
 										}));
-										filterSocialFeedsApiCall(pagination.page, event.target.value);
+										filterSocialFeedsApiCall(
+											pagination.page,
+											event.target.value,
+											startDate,
+											endDate
+										);
 									}}
 								/>
 							</Box>
@@ -484,7 +651,8 @@ export default function SocialFeed(props) {
 							display: "flex",
 							justifyContent: "center",
 							alignItems: " center",
-						}}>
+						}}
+					>
 						<CircularProgress />
 					</Box>
 				)}
@@ -492,17 +660,20 @@ export default function SocialFeed(props) {
 				{fullScreenState.imageModal && (
 					<FullScreenImageModal
 						state={fullScreenState}
-						handleClose={() => setFullScreenState({ imageModal: false })}
+						handleClose={() => setFullScreenState({imageModal: false})}
 					/>
 				)}
 				{modal.open && (
 					<DetailsModal
 						state={modal}
-						handleClose={() => setModal({ open: false })}
+						handleClose={() => setModal({open: false})}
 						filterApi={filterSocialFeedsApiCall}
 					/>
 				)}
-				<DeleteFeedSnackBar open={openSnackBar} openFun={(e) => setOpenSnackBar(e)} />
+				<DeleteFeedSnackBar
+					open={openSnackBar}
+					openFun={(e) => setOpenSnackBar(e)}
+				/>
 			</Container>
 		);
 	} else {
@@ -514,7 +685,8 @@ export default function SocialFeed(props) {
 					display: "flex",
 					justifyContent: "center",
 					alignItems: " center",
-				}}>
+				}}
+			>
 				<CircularProgress />
 			</Box>
 		);

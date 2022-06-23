@@ -1,8 +1,23 @@
 import * as React from "react";
-import { Modal, Typography, Box, Grid, Tab, Tabs, IconButton, Card, Avatar } from "@mui/material";
+import {
+	Modal,
+	Typography,
+	Box,
+	Grid,
+	Tab,
+	Tabs,
+	IconButton,
+	Card,
+	Avatar,
+} from "@mui/material";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { getSocialFeedsComments, getSocialFeedsReactions } from "../services/ApiServices";
+import {
+	getSocialFeedsComments,
+	getSocialFeedsReactions,
+} from "../services/ApiServices";
+
+import "../SocialFeed.css";
 
 import AngryEmoji from "../../../assets/emojis/Angry.svg";
 import LaughEmoji from "../../../assets/emojis/Laugh.svg";
@@ -12,12 +27,12 @@ import SadEmoji from "../../../assets/emojis/Sad.svg";
 import WowEmoji from "../../../assets/emojis/Wow.svg";
 
 // Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Delete } from "@mui/icons-material";
+import {Swiper, SwiperSlide} from "swiper/react";
+import {Delete} from "@mui/icons-material";
 import DeleteFeedModal from "./DeleteFeedModal";
 
 // // import required modules
-// import { EffectCube, Pagination } from "swiper";
+import {EffectCube, Pagination} from "swiper";
 
 const style = {
 	position: "absolute",
@@ -30,17 +45,18 @@ const style = {
 	borderRadius: "12px",
 };
 function TabPanel(props) {
-	const { children, value, index, ...other } = props;
+	const {children, value, index, ...other} = props;
 
 	return (
 		<div
-			role='tabpanel'
+			role="tabpanel"
 			hidden={value !== index}
 			id={`simple-tabpanel-${index}`}
 			aria-labelledby={`simple-tab-${index}`}
-			{...other}>
+			{...other}
+		>
 			{value === index && (
-				<Box sx={{ p: 3 }}>
+				<Box sx={{p: 3}}>
 					<Typography>{children}</Typography>
 				</Box>
 			)}
@@ -62,7 +78,7 @@ function a11yProps(index) {
 }
 export default function CommentsModal(props) {
 	const {
-		state: { open, data },
+		state: {open, data},
 		handleClose,
 		filterApi,
 	} = props;
@@ -134,13 +150,14 @@ export default function CommentsModal(props) {
 		<Modal
 			open={open}
 			onClose={handleClose}
-			aria-labelledby='modal-modal-title'
-			aria-describedby='modal-modal-description'>
+			aria-labelledby="modal-modal-title"
+			aria-describedby="modal-modal-description"
+		>
 			<Box sx={style}>
-				<Grid container sx={{ position: "relative" }}>
+				<Grid container sx={{position: "relative"}}>
 					<Grid item container xs={12} md={6} spacing={2}>
 						<Grid item xs={12}>
-							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+							<Box sx={{display: "flex", justifyContent: "space-between"}}>
 								<Box
 									style={{
 										width: "100%",
@@ -148,9 +165,10 @@ export default function CommentsModal(props) {
 										alignItems: "center",
 										paddingLeft: "10px",
 										marginBottom: "20px",
-									}}>
+									}}
+								>
 									<Avatar
-										alt='#'
+										alt="#"
 										src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${data?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 										style={{
 											height: "60px",
@@ -165,11 +183,14 @@ export default function CommentsModal(props) {
 											display: "flex",
 											flexDirection: "column",
 											fontSize: "18px",
-										}}>
+										}}
+									>
 										<span>{`${
-											data?.author?.username || data?.author?.userName || "userName"
+											data?.author?.username ||
+											data?.author?.userName ||
+											"userName"
 										}`}</span>
-										<span style={{ fontSize: "14px" }}>
+										<span style={{fontSize: "14px"}}>
 											{moment(data?.createdOn).format("lll")}
 										</span>
 									</Typography>
@@ -177,10 +198,11 @@ export default function CommentsModal(props) {
 								<Box>
 									<IconButton
 										onClick={() => {
-											setDFeedData({ feedId: data?.id });
+											setDFeedData({feedId: data?.id});
 											setOpenDModal(true);
 										}}
-										style={{ width: "40px", height: "40px" }}>
+										style={{width: "40px", height: "40px"}}
+									>
 										<Delete />
 									</IconButton>
 								</Box>
@@ -193,8 +215,15 @@ export default function CommentsModal(props) {
 									socialFilterApi={() => filterApi()}
 								/>
 							</Box>
-							<Box>
+							<Box sx={{maxWidth: "400px"}}>
 								<Swiper
+									pagination={
+										data?.mediaContent?.length > 1
+											? {
+													type: "fraction",
+											  }
+											: false
+									}
 									grabCursor={true}
 									cubeEffect={{
 										shadow: true,
@@ -202,9 +231,9 @@ export default function CommentsModal(props) {
 										shadowOffset: 20,
 										shadowScale: 0.94,
 									}}
-									// pagination={true}
-									// modules={[Pagination]}
-									className='mySwiper'>
+									modules={[Pagination]}
+									className="mySwiper"
+								>
 									{data?.mediaContent?.length > 0 ? (
 										data?.mediaContent?.map((item, iIndex) => {
 											if (item?.mimeType === "video/mp4") {
@@ -218,11 +247,12 @@ export default function CommentsModal(props) {
 																display: "flex",
 																justifyContent: "center",
 																alignItems: "center",
-															}}>
-															<video width='100%' height='200px' controls>
+															}}
+														>
+															<video width="100%" height="200px" controls>
 																<source
 																	src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}
-																	type='video/mp4'
+																	type="video/mp4"
 																/>
 																Your browser does not support HTML video.
 															</video>
@@ -239,11 +269,12 @@ export default function CommentsModal(props) {
 																display: "flex",
 																justifyContent: "center",
 																alignItems: "center",
-															}}>
-															<audio width='100%' height='200px' controls>
+															}}
+														>
+															<audio width="100%" height="200px" controls>
 																<source
 																	src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}
-																	type='video/mp4'
+																	type="video/mp4"
 																/>
 																Your browser does not support HTML video.
 															</audio>
@@ -261,9 +292,10 @@ export default function CommentsModal(props) {
 																display: "flex",
 																justifyContent: "center",
 																alignItems: "center",
-															}}>
+															}}
+														>
 															<img
-																alt=''
+																alt=""
 																src={
 																	item?.src &&
 																	`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.webp`
@@ -288,7 +320,8 @@ export default function CommentsModal(props) {
 																display: "flex",
 																justifyContent: "center",
 																alignItems: "center",
-															}}>
+															}}
+														>
 															<Typography>{data?.text}</Typography>
 														</Box>
 													</SwiperSlide>
@@ -304,7 +337,8 @@ export default function CommentsModal(props) {
 													display: "flex",
 													justifyContent: "center",
 													alignItems: "center",
-												}}>
+												}}
+											>
 												<Typography>{data?.text}</Typography>
 											</Box>
 										</SwiperSlide>
@@ -317,7 +351,8 @@ export default function CommentsModal(props) {
 									padding: "0 10px",
 									display: "flex",
 									flexDirection: "column",
-								}}>
+								}}
+							>
 								{data?.text && data?.mediaContent?.length > 0 && (
 									<Typography>{data?.text}</Typography>
 								)}
@@ -325,18 +360,19 @@ export default function CommentsModal(props) {
 						</Grid>
 					</Grid>
 					<Grid item container xs={12} md={6}>
-						<Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
+						<Box sx={{borderBottom: 1, borderColor: "divider", width: "100%"}}>
 							<Tabs
 								value={value}
 								onChange={handleChange}
-								indicatorColor='primary'
-								textColor='primary'
-								aria-label='basic tabs example'>
-								<Tab label='Reactions' {...a11yProps(0)} />
-								<Tab label='Comments' {...a11yProps(0)} />
+								indicatorColor="primary"
+								textColor="primary"
+								aria-label="basic tabs example"
+							>
+								<Tab label="Reactions" {...a11yProps(0)} />
+								<Tab label="Comments" {...a11yProps(0)} />
 							</Tabs>
 						</Box>
-						<TabPanel value={value} index={0} style={{ width: "100%" }}>
+						<TabPanel value={value} index={0} style={{width: "100%"}}>
 							<Box
 								style={{
 									height: "310px",
@@ -344,7 +380,8 @@ export default function CommentsModal(props) {
 									// minWidth: "440px",
 									overflowY: data?.reactions?.length > 5 && "scroll",
 									overflowX: "hidden",
-								}}>
+								}}
+							>
 								<Grid item container xs={12} spacing={2}>
 									{reaction?.length > 0 ? (
 										reaction?.map((ele, index) => {
@@ -358,7 +395,8 @@ export default function CommentsModal(props) {
 																width: "100%",
 																display: "flex",
 																alignItems: "center",
-															}}>
+															}}
+														>
 															{userLength > 15
 																? ele?.user?.username.slice(0, 15) + " ..."
 																: ele?.user?.username}
@@ -367,10 +405,10 @@ export default function CommentsModal(props) {
 													<Grid item xs={6}>
 														<img
 															src={getEmoji(ele?.reactionType)}
-															alt=''
+															alt=""
 															style={{
-																height: "35px",
-																width: "35px",
+																height: "25px",
+																width: "25px",
 																objectFit: "contain",
 															}}
 														/>
@@ -386,7 +424,7 @@ export default function CommentsModal(props) {
 								</Grid>
 							</Box>
 						</TabPanel>
-						<TabPanel value={value} index={1} style={{ width: "100%" }}>
+						<TabPanel value={value} index={1} style={{width: "100%"}}>
 							<Box
 								style={{
 									height: "310px",
@@ -394,7 +432,8 @@ export default function CommentsModal(props) {
 									// minWidth: "440px",
 									overflowY: data?.reactions?.length > 5 && "scroll",
 									overflowX: "hidden",
-								}}>
+								}}
+							>
 								<Grid item container xs={12} spacing={1}>
 									{result?.length > 0 ? (
 										result?.map((ele, index) => {
@@ -404,11 +443,21 @@ export default function CommentsModal(props) {
 												<React.Fragment key={index}>
 													<Grid item xs={12}>
 														{/* <span>{ele?.createdByUser?.username}</span> */}
-														<Card sx={{ width: "100%", p: 1, background: "#f2eeee", boxShadow: 0 }}>
-															<Box sx={{ width: "100%" }}>
-																<Typography sx={{ fontSize: "12px" }}>
+														<Card
+															sx={{
+																width: "100%",
+																p: 1,
+																background: "#f2eeee",
+																boxShadow: 0,
+															}}
+														>
+															<Box sx={{width: "100%"}}>
+																<Typography sx={{fontSize: "12px"}}>
 																	{userLength > 20
-																		? ele?.createdByUser?.username.slice(0, 20) + "... :"
+																		? ele?.createdByUser?.username.slice(
+																				0,
+																				20
+																		  ) + "... :"
 																		: ele?.createdByUser?.username}
 																</Typography>
 																<Typography>{ele?.text}</Typography>
