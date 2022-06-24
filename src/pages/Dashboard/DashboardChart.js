@@ -10,7 +10,7 @@ const DashboardTrial = () => {
 		<div className="App">
 			{/* <h1 className="title">MongoDB Charts</h1> */}
 			<Grid container xs={12} spacing={2}>
-				<Grid item xs={12} sm={2.4}>
+				<Grid item xs={12} sm={2}>
 					<Chart
 						height={"200px"}
 						width={"100%"}
@@ -18,7 +18,7 @@ const DashboardTrial = () => {
 						chartId={"62b4000c-2b11-4994-8ed1-6d176cf7594e"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={2.4}>
+				<Grid item xs={12} sm={2}>
 					<Chart
 						height={"200px"}
 						width={"100%"}
@@ -26,7 +26,7 @@ const DashboardTrial = () => {
 						chartId={"62b40d62-6664-47ee-8234-11ce073ea022"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={2.4}>
+				<Grid item xs={12} sm={2}>
 					<Chart
 						height={"200px"}
 						width={"100%"}
@@ -34,7 +34,7 @@ const DashboardTrial = () => {
 						chartId={"62b4220e-7fbe-419e-8e56-f88e65493b91"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={2.4}>
+				<Grid item xs={12} sm={2}>
 					<Chart
 						height={"200px"}
 						width={"100%"}
@@ -42,12 +42,20 @@ const DashboardTrial = () => {
 						chartId={"62b422f3-cbdc-42d0-8702-ad1b8a19fe70"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={2.4}>
+				<Grid item xs={12} sm={2}>
 					<Chart
 						height={"200px"}
 						width={"100%"}
 						// filter={filterCountry}
 						chartId={"62b42c5d-5876-476c-83e4-9d8f2cddf29e"}
+					/>
+				</Grid>
+				<Grid item xs={12} sm={2}>
+					<Chart
+						height={"200px"}
+						width={"100%"}
+						// filter={filterCountry}
+						chartId={"62b4307c-cbdc-4916-82d6-ad1b8a2009bd"}
 					/>
 				</Grid>
 				<Grid item xs={12} sm={4}>
