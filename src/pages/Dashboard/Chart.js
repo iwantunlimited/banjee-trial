@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import {Box, IconButton} from "@mui/material";
 import {Filter1Outlined, Refresh} from "@mui/icons-material";
+import "./Dashboard.css";
 
 const Chart = ({filter, chartId, height, width}) => {
 	const sdk = new ChartsEmbedSDK({
@@ -16,6 +17,8 @@ const Chart = ({filter, chartId, height, width}) => {
 			width: width,
 			theme: "dark",
 			showAttribution: false,
+			// filter: {gender: {$eq: "Male"}},
+			// filter={{createdOn: {$gte: "2022-05-03T07:06:18.579+00:00"}}}
 		})
 	);
 
@@ -26,18 +29,25 @@ const Chart = ({filter, chartId, height, width}) => {
 			.catch((err) => console.log("Error during Charts rendering.", err));
 	}, [chart]);
 
-	// useEffect(() => {
-	// 	if (rendered) {
-	// 		chart
-	// 			.setFilter(filter)
-	// 			.catch((err) => console.log("Error while filtering.", err));
-	// 	}
-	// }, [chart, filter, rendered]);
+	useEffect(() => {
+		console.log("filtered data from chart.js", filter);
+		// if (rendered) {
+		chart
+			.setFilter(filter ? filter : {})
+			.catch((err) => console.log("Error while filtering.", err));
+		// }
+	}, [chart, filter, rendered]);
 
 	return (
 		<Box sx={{position: "relative"}}>
 			{/* <div ref={chartDiv} /> */}
-			<div style={{position: "relative"}} ref={chartDiv}></div>
+			<div
+				className="custom-chart"
+				style={{
+					position: "relative",
+				}}
+				ref={chartDiv}
+			></div>
 			<IconButton
 				onClick={() => chart.refresh()}
 				sx={{
