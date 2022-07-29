@@ -10,6 +10,7 @@ const Chart = ({filter, chartId, height, width}) => {
 	});
 	const chartDiv = useRef(null);
 	const [rendered, setRendered] = useState(false);
+	const [data, setData] = React.useState(null);
 	const [chart] = useState(
 		sdk.createChart({
 			chartId: chartId,
@@ -17,6 +18,7 @@ const Chart = ({filter, chartId, height, width}) => {
 			width: width,
 			theme: "dark",
 			showAttribution: false,
+
 			// filter: {gender: {$eq: "Male"}},
 			// filter={{createdOn: {$gte: "2022-05-03T07:06:18.579+00:00"}}}
 		})
@@ -36,6 +38,10 @@ const Chart = ({filter, chartId, height, width}) => {
 			.setFilter(filter ? filter : {})
 			.catch((err) => console.log("Error while filtering.", err));
 		// }
+		chart.getData().then((data) => {
+			setData(data);
+			console.log("data", data);
+		});
 	}, [chart, filter, rendered]);
 
 	return (
@@ -48,16 +54,18 @@ const Chart = ({filter, chartId, height, width}) => {
 				}}
 				ref={chartDiv}
 			></div>
-			<IconButton
-				onClick={() => chart.refresh()}
-				sx={{
-					position: "absolute",
-					top: "1px",
-					right: "1px",
-				}}
-			>
-				<Refresh style={{color: "white"}} />
-			</IconButton>
+			{data && (
+				<IconButton
+					onClick={() => chart.refresh()}
+					sx={{
+						position: "absolute",
+						top: "1px",
+						right: "1px",
+					}}
+				>
+					<Refresh style={{color: "white"}} />
+				</IconButton>
+			)}
 		</Box>
 	);
 };

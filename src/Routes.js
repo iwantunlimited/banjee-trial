@@ -16,6 +16,9 @@ import ReportedFeed from "./pages/Social_Feeds/Components/Reported_Feed/Reported
 import ViewRFeed from "./pages/Social_Feeds/Components/Reported_Feed/ViewRFeed";
 import DashboardTrial from "./pages/Dashboard/DashboardChart";
 import Chart from "./pages/Dashboard/Chart";
+import Reports from "./pages/Report/Report";
+import RoomsReport from "./pages/Report/RoomsReport";
+import UsersReport from "./pages/Report/UsersReport";
 
 const Routes = () => {
 	return useRoutes([
@@ -67,6 +70,18 @@ const Routes = () => {
 				{
 					path: "/social-feeds/reported-feeds/:id",
 					element: <ViewRFeed />,
+				},
+				{
+					path: "/report",
+					element: <UsersReport />,
+				},
+				{
+					path: "/report/users",
+					element: <UsersReport />,
+				},
+				{
+					path: "/report/rooms",
+					element: <RoomsReport />,
 				},
 				// {
 				//     path: '/account',

@@ -41,7 +41,7 @@ const DashboardTrial = () => {
 				<Grid item xs={12} sm={1.71428}>
 					<Box sx={{position: "relative"}}>
 						<Chart
-							height={"160px"}
+							height={window?.innerWidth < 426 ? "120px" : "160px"}
 							width={"100%"}
 							// filter={{
 							// 	createdOn: {$gte: new Date("2022-06-23T07:06:18.579+00:00")},
@@ -53,7 +53,7 @@ const DashboardTrial = () => {
 				</Grid>
 				<Grid item xs={12} sm={1.71428}>
 					<Chart
-						height={"160px"}
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
 						filter={filterDate !== null ? filterDate : null}
 						chartId={"62b40d62-6664-47ee-8234-11ce073ea022"}
@@ -61,7 +61,7 @@ const DashboardTrial = () => {
 				</Grid>
 				<Grid item xs={12} sm={1.71428}>
 					<Chart
-						height={"160px"}
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
 						filter={filterDate !== null ? filterDate : null}
 						chartId={"62b4220e-7fbe-419e-8e56-f88e65493b91"}
@@ -69,7 +69,7 @@ const DashboardTrial = () => {
 				</Grid>
 				<Grid item xs={12} sm={1.71428}>
 					<Chart
-						height={"160px"}
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
 						filter={filterDate !== null ? filterDate : null}
 						chartId={"62b422f3-cbdc-42d0-8702-ad1b8a19fe70"}
@@ -77,7 +77,7 @@ const DashboardTrial = () => {
 				</Grid>
 				<Grid item xs={12} sm={1.71428}>
 					<Chart
-						height={"160px"}
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
 						filter={filterDate !== null ? filterDate : null}
 						chartId={"62b42c5d-5876-476c-83e4-9d8f2cddf29e"}
@@ -85,14 +85,14 @@ const DashboardTrial = () => {
 				</Grid>
 				<Grid item xs={12} sm={1.71428}>
 					<Chart
-						height={"160px"}
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
 						chartId={"62b567a0-2b11-484e-8773-6d176c8ba08e"}
 					/>
 				</Grid>
 				<Grid item xs={12} sm={1.71428}>
 					<Chart
-						height={"160px"}
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
 						chartId={"62b4307c-cbdc-4916-82d6-ad1b8a2009bd"}
 					/>
@@ -126,17 +126,27 @@ const DashboardTrial = () => {
 						chartId={"62b4115d-2b11-4538-8827-6d176cfe0ac4"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				<Grid item xs={12} sm={8}>
 					<Box sx={{position: "relative"}}>
 						<Chart
 							height={"400px"}
 							width={"100%"}
 							filter={filterDate !== null ? filterDate : null}
 							chartId={"62b427e2-852c-47cd-8b42-6e0624ccccda"}
+							chartname="userChart"
 						/>
 					</Box>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				<Grid item xs={12} sm={4}>
+					<Chart
+						height={"400px"}
+						width={"100%"}
+						filter={filterDate !== null ? filterDate : null}
+						chartId={"62b42db3-2c44-4eda-857c-fdb03c1e0db1"}
+						chartname="feed"
+					/>
+				</Grid>
+				<Grid item xs={12} sm={8}>
 					<Chart
 						height={"400px"}
 						width={"100%"}
@@ -147,20 +157,12 @@ const DashboardTrial = () => {
 						chartId={"62b414bc-cbdc-4b4b-83e9-ad1b8a12fcb5"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				<Grid item xs={12} sm={4}>
 					<Chart
 						height={"400px"}
 						width={"100%"}
 						filter={filterDate !== null ? filterDate : null}
 						chartId={"62b4131d-3cb9-494b-853b-411e3c6a2409"}
-					/>
-				</Grid>
-				<Grid item xs={12} sm={6}>
-					<Chart
-						height={"400px"}
-						width={"100%"}
-						filter={filterDate !== null ? filterDate : null}
-						chartId={"62b42db3-2c44-4eda-857c-fdb03c1e0db1"}
 					/>
 				</Grid>
 				<Grid item xs={12} sm={12}>
@@ -172,7 +174,14 @@ const DashboardTrial = () => {
 				</Grid>
 			</Grid>
 			<Box sx={{position: "fixed", bottom: "5px", right: "5px"}}>
-				<IconButton sx={{background: "#21313C"}}>
+				<IconButton
+					sx={{
+						background: "#21313C",
+						"&:hover": {
+							background: "#21313c",
+						},
+					}}
+				>
 					<FilterAlt
 						fontSize="large"
 						sx={{color: "white"}}
