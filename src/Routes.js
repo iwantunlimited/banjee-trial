@@ -2,7 +2,7 @@ import Dashboard from "./pages/Dashboard/dashboard";
 import User from "./pages/Users/Users";
 // import Account from "./pages/Account/Account";
 import Navbar from "./pages/navbar/navbar";
-import {useRoutes} from "react-router-dom";
+import { useRoutes } from "react-router-dom";
 import Login from "./pages/Login/login";
 import Category from "./pages/Category/Category";
 import CustomerView from "./pages/Users/components/userView";
@@ -19,6 +19,7 @@ import Chart from "./pages/Dashboard/Chart";
 import Reports from "./pages/Report/Report";
 import RoomsReport from "./pages/Report/RoomsReport";
 import UsersReport from "./pages/Report/UsersReport";
+import Neighbourhood from "./pages/Neighbourhoods/Neighbourhood";
 
 const Routes = () => {
 	return useRoutes([
@@ -82,6 +83,10 @@ const Routes = () => {
 				{
 					path: "/report/rooms",
 					element: <RoomsReport />,
+				},
+				{
+					path: "/neighbourhood",
+					element: <Neighbourhood />,
 				},
 				// {
 				//     path: '/account',

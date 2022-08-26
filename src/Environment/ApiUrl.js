@@ -375,7 +375,9 @@ export const urls = {
 	LOCALE: services.TEMPLOCATION + "commons/locale",
 	TIMEZONE: services.TEMPLOCATION + "commons/timezone",
 
-	COUNTRY_LIST: services.LIST_OF_TOWN + "system/country/findAll",
+	COUNTRY_LIST: services.LIST_OF_TOWN + "system/country/findAll/",
+	STATE_LIST: services.LIST_OF_TOWN + "system/states/filter",
+	CITY_LIST: services.LOCATION + "system/city/filter",
 	DISTIC_LIST: services.LIST_OF_TOWN + "system/states/bycountry/",
 	TAX: services.PRODUCT + "tax/filter",
 	USER_HISTORY: services.PRODUCT + "user-interactions/filter",

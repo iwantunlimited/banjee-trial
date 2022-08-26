@@ -16,65 +16,73 @@ import SocialFeed from "../Social_Feeds/Social_Feed";
 import Reports from "../Report/Report";
 import UsersReport from "../Report/UsersReport";
 import RoomsReport from "../Report/RoomsReport";
+import Neighbourhood from "../Neighbourhoods/Neighbourhood";
 
 const routing = [
 	{
 		id: 1,
 		path: "/",
 		name: "Dashboard",
-		icon: <Dashboard fontSize="medium" />,
+		icon: <Dashboard fontSize='medium' />,
 		component: <DashboardComp />,
 	},
 	{
 		id: 2,
 		path: "/category",
 		name: "Category",
-		icon: <CategoryIcon fontSize="medium" />,
+		icon: <CategoryIcon fontSize='medium' />,
 		component: <Category />,
 	},
 	{
 		id: 3,
 		path: "/user",
 		name: "Users",
-		icon: <PeopleAlt fontSize="medium" />,
+		icon: <PeopleAlt fontSize='medium' />,
 		component: <User />,
 	},
 	{
 		id: 4,
 		path: "/rooms",
 		name: "Rooms",
-		icon: <Groups fontSize="medium" />,
+		icon: <Groups fontSize='medium' />,
 		component: <Room />,
 	},
 	{
 		id: 5,
 		path: "/social-feeds",
 		name: "Social Feeds",
-		icon: <ConnectWithoutContact fontSize="medium" />,
+		icon: <ConnectWithoutContact fontSize='medium' />,
 		component: <SocialFeed />,
 	},
 	{
 		id: 6,
 		path: "/report",
 		name: "Report",
-		icon: <Report fontSize="medium" />,
+		icon: <Report fontSize='medium' />,
 		component: <UsersReport />,
 		children: [
 			{
 				id: 7,
 				path: "/report",
 				name: "Users",
-				icon: <PeopleAlt fontSize="medium" />,
+				icon: <PeopleAlt fontSize='medium' />,
 				component: <UsersReport />,
 			},
 			{
 				id: 8,
 				path: "/report/rooms",
 				name: "Rooms",
-				icon: <Groups fontSize="medium" />,
+				icon: <Groups fontSize='medium' />,
 				component: <RoomsReport />,
 			},
 		],
+	},
+	{
+		id: 7,
+		path: "/neighbourhood",
+		name: "Neighbourhood",
+		icon: <ConnectWithoutContact fontSize='medium' />,
+		component: <Neighbourhood />,
 	},
 	// {
 	//     id:3,
