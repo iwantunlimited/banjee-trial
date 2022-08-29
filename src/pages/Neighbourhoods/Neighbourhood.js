@@ -15,22 +15,26 @@ import axios from "axios";
 import React from "react";
 import { Helmet } from "react-helmet";
 import ChipComp from "./CardChipComp";
+import { MyMapComponent } from "./Map/MAp";
+import Autocomplete from "react-google-autocomplete";
+import LocationComp from "./Map/MapComp";
 import "./neighbourhood.css";
-import { findCity, findCountry, findState } from "./services/apiServices";
+import { createNeighbourhood, findCity, findCountry, findState } from "./services/apiServices";
+import Map from "./Trial/MeraComp";
 
 function Neighbourhood() {
 	const [data, setData] = React.useState({
-		neighbourhoodName: "",
+		name: "",
 		approvalType: "",
 		bannerImageUrls: [],
 		cityId: "",
-		country: "",
-		state: "",
+		countryId: "",
 		lat: "",
 		lon: "",
 		description: "",
 		imageUrl: "",
-		neighbourhoodType: "",
+		type: "",
+		approvalType: "BY_ADMIN",
 	});
 
 	console.log("form data", data);
@@ -38,6 +42,32 @@ function Neighbourhood() {
 	const [country, setCountry] = React.useState();
 	const [state, setState] = React.useState();
 	const [city, setCity] = React.useState();
+	const [sState, setSState] = React.useState();
+	const [defaultLocation, setDefaultLocation] = React.useState();
+	const [finalLocation, setFinalLocation] = React.useState();
+
+	const [loc, setLoc] = React.useState({
+		lat: -34.59,
+		lng: 150.66,
+	});
+	console.log("====================================");
+	console.log("data", data);
+	console.log("====================================");
+
+	const handleLocation = (lat, lon) => {
+		console.log(lat, lon, "---------------->");
+		setFinalLocation(() => ({
+			lat: lat,
+			lng: lon,
+		}));
+		setData((prev) => ({
+			...prev,
+			lat: lat,
+			lon: lon,
+		}));
+	};
+
+	console.log("finalLocation", finalLocation);
 
 	const CityApi = React.useCallback((id) => {
 		findCity({ cityId: id })
@@ -63,7 +93,7 @@ function Neighbourhood() {
 				setCountry(res);
 				setData((prev) => ({
 					...prev,
-					country: res.length > 0 ? res?.[0]?.id : false,
+					countryId: res.length > 0 ? res?.[0]?.id : false,
 				}));
 				StateApi(res?.[0]?.id || "");
 				console.log("COuntry", res);
@@ -71,7 +101,7 @@ function Neighbourhood() {
 			.catch((err) => console.log(err));
 	}, []);
 
-	console.log(data.country.name);
+	console.log("defaultLocation", defaultLocation);
 
 	React.useEffect(() => {
 		CountryApi();
@@ -79,6 +109,7 @@ function Neighbourhood() {
 
 	function handleChange(event) {
 		const { name, value } = event.target;
+
 		setData((prevData) => {
 			return {
 				...prevData,
@@ -87,18 +118,18 @@ function Neighbourhood() {
 		});
 	}
 
-	function handleSubmit() {
-		const formData = new FormData();
+	const createApiCall = React.useCallback((data) => {
+		createNeighbourhood(data)
+			.then((res) => {
+				console.log("api response", res);
+			})
+			.catch((err) => console.log(err));
+	}, []);
 
-		formData.append("type", data?.neighbourhoodType);
-		formData.append("lat", data?.lat);
-		formData.append("lon", data?.lon);
-		formData.append("name", data?.neighbourhoodName);
-		formData.append("description", data?.description);
-		formData.append("cityId", data?.cityId);
-		formData.append("countryId", data?.country);
-
-		console.log("final data-------", formData);
+	function handleSubmit(event) {
+		console.log("final data-------", data);
+		createApiCall(data);
+		event.preventDefault();
 	}
 
 	return (
@@ -116,8 +147,8 @@ function Neighbourhood() {
 							<Grid item container xs={12} spacing={2}>
 								<Grid item xs={6}>
 									<TextField
-										value={data.neighbourhoodName}
-										name='neighbourhoodName'
+										value={data.name}
+										name='name'
 										className='neighbourhood-form-textField'
 										fullWidth
 										label='Enter Neighbourhood Name'
@@ -131,25 +162,25 @@ function Neighbourhood() {
 										<Select
 											labelId='demo-simple-select-label'
 											id='demo-simple-select'
-											name='neighbourhoodType'
+											name='type'
 											label='Neighbourhood Type'
-											value={data?.neighbourhoodType}
+											value={data?.type}
 											onChange={handleChange}>
-											<MenuItem value={"private"}>Private</MenuItem>
-											<MenuItem value={"public"}>Public</MenuItem>
+											<MenuItem value={"PRIVATE"}>Private</MenuItem>
+											<MenuItem value={"PUBLIC"}>Public</MenuItem>
 										</Select>
 									</FormControl>
 								</Grid>
-								{data.country && (
-									<Grid item xs={6}>
+								{data.countryId && (
+									<Grid item xs={4}>
 										<FormControl fullWidth>
 											<InputLabel id='demo-simple-select-label'>Country</InputLabel>
 											<Select
 												labelId='demo-simple-select-label'
 												id='demo-simple-select'
-												name='country'
+												name='countryId'
 												label='Country'
-												value={data?.country}
+												value={data?.countryId}
 												onChange={handleChange}>
 												{country?.map((item, index) => (
 													<MenuItem value={item.id} key={index}>
@@ -160,8 +191,8 @@ function Neighbourhood() {
 										</FormControl>
 									</Grid>
 								)}
-								{data.country && (
-									<Grid item xs={6}>
+								{data.countryId && (
+									<Grid item xs={4}>
 										<FormControl fullWidth>
 											<InputLabel id='demo-simple-select-label'>State</InputLabel>
 											<Select
@@ -169,14 +200,15 @@ function Neighbourhood() {
 												id='demo-simple-select'
 												name='state'
 												label='State'
-												value={data?.state}
+												value={sState}
 												onChange={(event) => {
-													setData((prevData) => {
-														return {
-															...prevData,
-															state: event.target.value,
-														};
-													});
+													setSState(event.target.value);
+													// setData((prevData) => {
+													// 	return {
+													// 		...prevData,
+													// 		state: event.target.value,
+													// 	};
+													// });
 													CityApi(event.target.value);
 												}}>
 												{state?.length > 0 &&
@@ -189,20 +221,42 @@ function Neighbourhood() {
 										</FormControl>
 									</Grid>
 								)}
-								{data?.state && (
-									<Grid item xs={6}>
+								{sState && (
+									<Grid item xs={4}>
 										<FormControl fullWidth>
 											<InputLabel id='demo-simple-select-label'>City</InputLabel>
 											<Select
 												labelId='demo-simple-select-label'
 												id='demo-simple-select'
-												name='city'
+												name='cityId'
 												label='City'
-												value={data?.city}
-												onChange={handleChange}>
+												value={data?.cityId}
+												onChange={(event) => {
+													console.log("event", event.target);
+													const defaultLatLon = city.filter((item) => {
+														if (item.id === event.target.value) {
+															console.log("cities", item);
+															setDefaultLocation({
+																...item?.gpsLocation,
+																lng: item?.gpsLocation?.lon,
+															});
+															setLoc({
+																...item?.gpsLocation,
+																lng: item?.gpsLocation?.lon,
+															});
+														} else return null;
+													});
+													console.log("defaultLatLon", defaultLatLon);
+													setData((prevData) => {
+														return {
+															...prevData,
+															cityId: event.target.value,
+														};
+													});
+												}}>
 												{city?.length > 0 &&
 													city?.map((item, index) => (
-														<MenuItem value={item.id} key={index}>
+														<MenuItem value={item.id} lat={item?.gpsLocation} key={index}>
 															{item.name}
 														</MenuItem>
 													))}
@@ -210,26 +264,7 @@ function Neighbourhood() {
 										</FormControl>
 									</Grid>
 								)}
-								<Grid item xs={3}>
-									<TextField
-										fullWidth
-										placeholder='lat'
-										label='lat'
-										value={data.lat}
-										name='lat'
-										onChange={handleChange}
-									/>
-								</Grid>
-								<Grid item xs={3}>
-									<TextField
-										fullWidth
-										placeholder='lon'
-										label='lon'
-										value={data.lon}
-										name='lon'
-										onChange={handleChange}
-									/>
-								</Grid>
+
 								<Grid item xs={6}>
 									<TextField
 										className='neighbourhood-form-textField'
@@ -244,10 +279,53 @@ function Neighbourhood() {
 										onChange={handleChange}
 									/>
 								</Grid>
+								<Grid item xs={12}>
+									<Map
+										handleLocation={handleLocation}
+										zoom={12}
+										height={"400px"}
+										center={{
+											lat: -34.59,
+											lng: 150.66,
+										}}
+									/>
+								</Grid>
+								{/* <Grid item xs={6}>
+									<Box sx={{ my: 2, width: "100%" }}>
+										<Autocomplete
+											style={{ width: "100%", padding: "5px" }}
+											apiKey={"AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk"}
+											onPlaceSelected={(place) => {
+												setLoc();
+												console.log(
+													"place---------",
+													place?.geometry?.location?.lat(),
+													place?.geometry?.location?.lng()
+												);
+												setLoc((prev) => ({
+													lat: place?.geometry?.location?.lat(),
+													lng: place?.geometry?.location?.lng(),
+												}));
+												setData((prev) => ({
+													...prev,
+													lat: place?.geometry?.location?.lat(),
+													lon: place?.geometry?.location?.lng(),
+												}));
+											}}
+										/>
+									</Box>
+									<Box>
+										<MyMapComponent data={loc} handleLocation={handleLocation} />
+									</Box>
+								</Grid> */}
+								<Grid item xs={12}>
+									<Box sx={{ my: 1 }}>
+										<Button variant='contained' type='submit'>
+											Submit
+										</Button>
+									</Box>
+								</Grid>
 							</Grid>
-							<Button variant='contained' type='submit'>
-								Submit
-							</Button>
 						</form>
 					</Card>
 				</Grid>

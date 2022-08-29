@@ -1,19 +1,56 @@
-import React from "react";
-import { Wrapper, Status } from "@googlemaps/react-wrapper";
+import React, { useEffect } from "react";
 import { Box } from "@mui/material";
-import CustomMap from "./customMap";
+import { compose, withProps } from "recompose";
+import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 
-function Map() {
-	const render = (Status) => {
-		return <h1>{Status}</h1>;
-	};
+export const MyMapComponent = compose(
+	withProps({
+		/**
+		 * Note: create and replace your own key in the Google console.
+		 * https://console.developers.google.com/apis/dashboard
+		 * The key "AIzaSyBkNaAGLEVq0YLQMi-PYEMabFeREadYe1Q" can be ONLY used in this sandbox (no forked).
+		 */
+		googleMapURL:
+			"https://maps.googleapis.com/maps/api/js?key=AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk&v=3.exp&libraries=geometry,drawing,places",
+		loadingElement: <div style={{ height: `100%` }} />,
+		containerElement: <div style={{ height: `400px` }} />,
+		mapElement: <div style={{ height: `100%` }} />,
+	}),
+	withScriptjs,
+	withGoogleMap
+)((props) => {
+	const [data, setData] = React.useState({
+		lat: -34.59,
+		lng: 150.66,
+	});
+	const { finalLocation } = props;
+	console.log("====================================");
+	console.log("data", data, props);
+	console.log("====================================");
+
+	useEffect(() => {
+		if (finalLocation) {
+			setData(finalLocation);
+		}
+	}, [finalLocation]);
 	return (
-		<Box>
-			<Wrapper apiKey={"YOUR_API_KEY"} render={render}>
-				<CustomMap></CustomMap>
-			</Wrapper>
+		<Box sx={{ positoin: "relative" }}>
+			<GoogleMap
+				onClick={(e) => {
+					setData(() => ({
+						lat: e.latLng.lat(),
+						lng: e.latLng.lng(),
+					}));
+					props.handleLocation(e.latLng.lat(), e.latLng.lng());
+					console.log(e);
+					console.log(e.latLng.lat());
+					console.log(e.latLng.lng());
+				}}
+				defaultZoom={8}
+				position={data}
+				defaultCenter={data}>
+				{props.isMarkerShown && <Marker position={data} />}
+			</GoogleMap>
 		</Box>
 	);
-}
-
-export default Map;
+});
