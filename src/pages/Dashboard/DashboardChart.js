@@ -1,6 +1,6 @@
 import "./Dashboard.css";
 import React from "react";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Chart from "./Chart";
 import {
@@ -13,12 +13,12 @@ import {
 	Typography,
 	Divider,
 } from "@mui/material";
-import {FilterAlt} from "@mui/icons-material";
+import { FilterAlt } from "@mui/icons-material";
 
-import {LocalizationProvider} from "@mui/x-date-pickers-pro";
-import {AdapterDateFns} from "@mui/x-date-pickers-pro/AdapterDateFns";
-import {MobileDateRangePicker} from "@mui/x-date-pickers-pro/MobileDateRangePicker";
-import {DateRange} from "@mui/x-date-pickers-pro/DateRangePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers-pro";
+import { AdapterDateFns } from "@mui/x-date-pickers-pro/AdapterDateFns";
+import { MobileDateRangePicker } from "@mui/x-date-pickers-pro/MobileDateRangePicker";
+import { DateRange } from "@mui/x-date-pickers-pro/DateRangePicker";
 
 const DashboardTrial = () => {
 	const [open, setOpen] = React.useState(false);
@@ -34,12 +34,12 @@ const DashboardTrial = () => {
 
 	console.log("sdtate------------date", state);
 	return (
-		<div className="App" style={{position: "relative"}}>
+		<div className='App' style={{ position: "relative" }}>
 			{/* <h1 className="title">MongoDB Charts</h1> */}
 			<Grid container xs={12} spacing={1}>
 				{/* Total User */}
-				<Grid item xs={12} sm={1.71428}>
-					<Box sx={{position: "relative"}}>
+				<Grid item xs={12} sm={2.4}>
+					<Box sx={{ position: "relative" }}>
 						<Chart
 							height={window?.innerWidth < 426 ? "120px" : "160px"}
 							width={"100%"}
@@ -51,31 +51,7 @@ const DashboardTrial = () => {
 						/>
 					</Box>
 				</Grid>
-				<Grid item xs={12} sm={1.71428}>
-					<Chart
-						height={window?.innerWidth < 426 ? "120px" : "160px"}
-						width={"100%"}
-						filter={filterDate !== null ? filterDate : null}
-						chartId={"62b40d62-6664-47ee-8234-11ce073ea022"}
-					/>
-				</Grid>
-				<Grid item xs={12} sm={1.71428}>
-					<Chart
-						height={window?.innerWidth < 426 ? "120px" : "160px"}
-						width={"100%"}
-						filter={filterDate !== null ? filterDate : null}
-						chartId={"62b4220e-7fbe-419e-8e56-f88e65493b91"}
-					/>
-				</Grid>
-				<Grid item xs={12} sm={1.71428}>
-					<Chart
-						height={window?.innerWidth < 426 ? "120px" : "160px"}
-						width={"100%"}
-						filter={filterDate !== null ? filterDate : null}
-						chartId={"62b422f3-cbdc-42d0-8702-ad1b8a19fe70"}
-					/>
-				</Grid>
-				<Grid item xs={12} sm={1.71428}>
+				<Grid item xs={12} sm={2.4}>
 					<Chart
 						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
@@ -83,22 +59,29 @@ const DashboardTrial = () => {
 						chartId={"62b42c5d-5876-476c-83e4-9d8f2cddf29e"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={1.71428}>
+				<Grid item xs={12} sm={2.4}>
 					<Chart
 						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
-						chartId={"62b567a0-2b11-484e-8773-6d176c8ba08e"}
+						chartId={"63118227-acdd-4bc8-8d7e-64b97216c5ab"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={1.71428}>
+				<Grid item xs={12} sm={2.4}>
 					<Chart
 						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
-						chartId={"62b4307c-cbdc-4916-82d6-ad1b8a2009bd"}
+						chartId={"63118421-e4c6-4de3-82b9-da1bc3db7866"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={4}>
-					<Box sx={{position: "relative"}}>
+				<Grid item xs={12} sm={2.4}>
+					<Chart
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
+						width={"100%"}
+						chartId={"631182b2-5381-4cdc-87d4-5f38f430a48d"}
+					/>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<Box sx={{ position: "relative" }}>
 						<Chart
 							height={"400px"}
 							width={"100%"}
@@ -110,7 +93,7 @@ const DashboardTrial = () => {
 						/>
 					</Box>
 				</Grid>
-				<Grid item xs={12} sm={4}>
+				<Grid item xs={12} sm={6}>
 					<Chart
 						height={"400px"}
 						width={"100%"}
@@ -118,85 +101,53 @@ const DashboardTrial = () => {
 						chartId={"62b400d4-2b11-415f-8a77-6d176cf7aa3c"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={4}>
-					<Chart
-						height={"400px"}
-						width={"100%"}
-						filter={filterDate !== null ? filterDate : null}
-						chartId={"62b4115d-2b11-4538-8827-6d176cfe0ac4"}
-					/>
-				</Grid>
-				<Grid item xs={12} sm={8}>
-					<Box sx={{position: "relative"}}>
-						<Chart
-							height={"400px"}
-							width={"100%"}
-							filter={filterDate !== null ? filterDate : null}
-							chartId={"62b427e2-852c-47cd-8b42-6e0624ccccda"}
-							chartname="userChart"
-						/>
-					</Box>
-				</Grid>
-				<Grid item xs={12} sm={4}>
+				<Grid item xs={12} sm={6}>
 					<Chart
 						height={"400px"}
 						width={"100%"}
 						filter={filterDate !== null ? filterDate : null}
 						chartId={"62b42db3-2c44-4eda-857c-fdb03c1e0db1"}
-						chartname="feed"
+						chartname='feed'
 					/>
 				</Grid>
-				<Grid item xs={12} sm={8}>
-					<Chart
-						height={"400px"}
-						width={"100%"}
-						// filter={{
-						// 	createdOn: {$gte: new Date("2022-05-23T07:06:18.579+00:00")},
-						// }}
-						filter={filterDate !== null ? filterDate : null}
-						chartId={"62b414bc-cbdc-4b4b-83e9-ad1b8a12fcb5"}
-					/>
+				<Grid item xs={12} sm={6}>
+					<Box sx={{ position: "relative" }}>
+						<Chart
+							height={"400px"}
+							width={"100%"}
+							filter={filterDate !== null ? filterDate : null}
+							chartId={"62b427e2-852c-47cd-8b42-6e0624ccccda"}
+							chartname='userChart'
+						/>
+					</Box>
 				</Grid>
-				<Grid item xs={12} sm={4}>
-					<Chart
-						height={"400px"}
-						width={"100%"}
-						filter={filterDate !== null ? filterDate : null}
-						chartId={"62b4131d-3cb9-494b-853b-411e3c6a2409"}
-					/>
-				</Grid>
+
 				<Grid item xs={12} sm={12}>
-					<Chart
-						height={"600px"}
-						width={"100%"}
-						chartId={"62b4105b-b622-4303-8a85-e9ffab6f9fe7"}
-					/>
+					<Chart height={"600px"} width={"100%"} chartId={"62b4105b-b622-4303-8a85-e9ffab6f9fe7"} />
 				</Grid>
 			</Grid>
-			<Box sx={{position: "fixed", bottom: "5px", right: "5px"}}>
+			<Box sx={{ position: "fixed", bottom: "5px", right: "5px" }}>
 				<IconButton
 					sx={{
 						background: "#21313C",
 						"&:hover": {
 							background: "#21313c",
 						},
-					}}
-				>
+					}}>
 					<FilterAlt
-						fontSize="large"
-						sx={{color: "white"}}
-						id="basic-button"
+						fontSize='large'
+						sx={{ color: "white" }}
+						id='basic-button'
 						aria-controls={open ? "basic-menu" : undefined}
-						aria-haspopup="true"
+						aria-haspopup='true'
 						aria-expanded={open ? "true" : undefined}
 						onClick={() => setOpen(true)}
 					/>
 					<Modal
 						open={open}
 						onClose={() => setOpen(false)}
-						aria-labelledby="modal-modal-title"
-						aria-describedby="modal-modal-description"
-					>
+						aria-labelledby='modal-modal-title'
+						aria-describedby='modal-modal-description'>
 						<Box
 							sx={{
 								position: "absolute",
@@ -207,17 +158,15 @@ const DashboardTrial = () => {
 								bgcolor: "background.paper",
 								boxShadow: 24,
 								p: 4,
-							}}
-						>
+							}}>
 							<Box>
-								<Typography sx={{fontWeight: "600"}}>Select Date</Typography>
+								<Typography sx={{ fontWeight: "600" }}>Select Date</Typography>
 							</Box>
-							<Divider sx={{mb: 1}} />
-							<Box sx={{display: "flex", justifyContent: "center"}}>
+							<Divider sx={{ mb: 1 }} />
+							<Box sx={{ display: "flex", justifyContent: "center" }}>
 								<LocalizationProvider
 									dateAdapter={AdapterDateFns}
-									localeText={{start: "From Date", end: "To Date"}}
-								>
+									localeText={{ start: "From Date", end: "To Date" }}>
 									<MobileDateRangePicker
 										value={state}
 										onChange={(newValue) => {
@@ -225,23 +174,22 @@ const DashboardTrial = () => {
 										}}
 										renderInput={(startProps, endProps) => (
 											<React.Fragment>
-												<Box sx={{display: "flex", flexDirection: "column"}}>
+												<Box sx={{ display: "flex", flexDirection: "column" }}>
 													<TextField {...startProps} />
-													<Box sx={{textAlign: "center"}}> to </Box>
-													<TextField sx={{my: 1}} {...endProps} />
+													<Box sx={{ textAlign: "center" }}> to </Box>
+													<TextField sx={{ my: 1 }} {...endProps} />
 												</Box>
 											</React.Fragment>
 										)}
 									/>
 								</LocalizationProvider>
 							</Box>
-							<Box sx={{display: "flex", justifyContent: "space-between"}}>
+							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 								<Button
 									onClick={() => {
 										setFilterDate(null);
 										setOpen(false);
-									}}
-								>
+									}}>
 									Reset
 								</Button>
 								<Button
@@ -253,8 +201,7 @@ const DashboardTrial = () => {
 											},
 										});
 										setOpen(false);
-									}}
-								>
+									}}>
 									Filter
 								</Button>
 							</Box>

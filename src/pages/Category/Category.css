@@ -1,22 +1,25 @@
-.modalTextField > div > .css-1d3z3hw-MuiOutlinedInput-notchedOutline > .css-nnbavb{
-    float: left !important;
+.modalTextField > div > .css-1d3z3hw-MuiOutlinedInput-notchedOutline > .css-nnbavb {
+	float: left !important;
 }
-.parent-btn{
-    border-top-right-radius: 0px !important;
-    border-bottom-right-radius: 0px !important;
-    border-top-left-radius: 20px !important;
-    border-bottom-left-radius: 20px !important;
+.modalSelectField > .MuiOutlinedInput-notchedOutline > .css-nnbavb {
+	float: left !important;
 }
-.child-btn{
-    border-top-left-radius: 0px !important;
-    border-bottom-left-radius: 0px !important;
-    border-top-right-radius: 20px !important;
-    border-bottom-right-radius: 20px !important;
+.parent-btn {
+	border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
+	border-top-left-radius: 20px !important;
+	border-bottom-left-radius: 20px !important;
 }
-.go1878736221{
-    display: flex;
-    align-items: initial !important;
+.child-btn {
+	border-top-left-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+	border-top-right-radius: 20px !important;
+	border-bottom-right-radius: 20px !important;
 }
-.treeview-css > div > .MuiTreeItem-label{
-    font-size: 1.3rem !important;
+.go1878736221 {
+	display: flex;
+	align-items: initial !important;
+}
+.treeview-css > div > .MuiTreeItem-label {
+	font-size: 1.3rem !important;
 }

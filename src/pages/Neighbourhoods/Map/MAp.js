@@ -23,33 +23,33 @@ export const MyMapComponent = compose(
 		lat: -34.59,
 		lng: 150.66,
 	});
-	const { finalLocation } = props;
+	const { finalLocation, handleFinalLocation } = props;
 	console.log("====================================");
 	console.log("data", data, props);
 	console.log("====================================");
 
-	useEffect(() => {
-		if (finalLocation) {
-			setData(finalLocation);
-		}
-	}, [finalLocation]);
+	// useEffect(() => {
+	// 	if (finalLocation) {
+	// 		setData(finalLocation);
+	// 	}
+	// }, [finalLocation]);
 	return (
 		<Box sx={{ positoin: "relative" }}>
 			<GoogleMap
-				onClick={(e) => {
-					setData(() => ({
-						lat: e.latLng.lat(),
-						lng: e.latLng.lng(),
-					}));
-					props.handleLocation(e.latLng.lat(), e.latLng.lng());
-					console.log(e);
-					console.log(e.latLng.lat());
-					console.log(e.latLng.lng());
-				}}
+				// onClick={(e) => {
+				// 	setData(() => ({
+				// 		lat: e.latLng.lat(),
+				// 		lng: e.latLng.lng(),
+				// 	}));
+				// 	props.handleLocation(e.latLng.lat(), e.latLng.lng());
+				// 	console.log(e);
+				// 	console.log(e.latLng.lat());
+				// 	console.log(e.latLng.lng());
+				// }}
 				defaultZoom={8}
-				position={data}
-				defaultCenter={data}>
-				{props.isMarkerShown && <Marker position={data} />}
+				position={finalLocation}
+				defaultCenter={finalLocation ? finalLocation : { lat: -34.68, lng: 159.66 }}>
+				{props.isMarkerShown && <Marker position={finalLocation} />}
 			</GoogleMap>
 		</Box>
 	);

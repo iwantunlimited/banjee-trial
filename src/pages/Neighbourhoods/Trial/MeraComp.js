@@ -250,6 +250,7 @@ class Map extends Component {
 			map = (
 				<div>
 					<Autocomplete
+						// placeholder='Search Place'
 						style={{
 							width: "100%",
 							height: "40px",

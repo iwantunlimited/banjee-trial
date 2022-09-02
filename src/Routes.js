@@ -20,6 +20,12 @@ import Reports from "./pages/Report/Report";
 import RoomsReport from "./pages/Report/RoomsReport";
 import UsersReport from "./pages/Report/UsersReport";
 import Neighbourhood from "./pages/Neighbourhoods/Neighbourhood";
+import DetailPage from "./pages/Neighbourhoods/Components/Detail Page/Details";
+import { MainCategoryComp } from "./pages/Category/MainCategoryPage";
+import Explore from "./pages/Explore/Explore";
+import BusinessDetail from "./pages/Explore/Components/BusinessDetail";
+import ExploreBlogs from "./pages/Explore/Components/Blogs";
+import BlogDetail from "./pages/Explore/Components/BlogDetail";
 
 const Routes = () => {
 	return useRoutes([
@@ -34,7 +40,7 @@ const Routes = () => {
 				},
 				{
 					path: "/category",
-					element: <Category />,
+					element: <MainCategoryComp />,
 				},
 				{
 					path: "/user",
@@ -87,6 +93,26 @@ const Routes = () => {
 				{
 					path: "/neighbourhood",
 					element: <Neighbourhood />,
+				},
+				{
+					path: "/neighbourhood/detail/:id",
+					element: <DetailPage />,
+				},
+				{
+					path: "/explore",
+					element: <Explore />,
+				},
+				{
+					path: "/explore/blogs",
+					element: <ExploreBlogs />,
+				},
+				{
+					path: "/explore/blogs/detail/:id",
+					element: <BlogDetail />,
+				},
+				{
+					path: "/explore/detail/:id",
+					element: <BusinessDetail />,
 				},
 				// {
 				//     path: '/account',

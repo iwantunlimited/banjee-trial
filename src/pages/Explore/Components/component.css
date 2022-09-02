@@ -1,0 +1,21 @@
+.badge-css > .css-106c1u2-MuiBadge-badge {
+	position: absolute;
+	top: 6 !important;
+	right: 4 !important;
+	border: 1px solid white !important;
+	/* background: #42ba96 !important; */
+	/* color: #42ba96 !important; */
+	padding: 2px;
+}
+
+.mySwiper > .swiper-pagination {
+	position: absolute;
+	top: 1px !important;
+	right: 1px !important;
+	background-color: black;
+	color: white;
+	border-radius: 5px;
+	font-size: 12px;
+	padding: 2px 4px;
+	z-index: 2;
+}

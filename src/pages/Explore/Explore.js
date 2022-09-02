@@ -2,11 +2,11 @@ import { Container, Box, Grid, Tabs, Tab, Card } from "@mui/material";
 import React from "react";
 import { Helmet } from "react-helmet";
 import PropTypes from "prop-types";
+import { BusinessApprovalList } from "./Components/ApprovalList";
+import BusinessList from "./Components/BusinessList";
 import ChipComp from "./Components/CardChipComp";
-import "./neighbourhood.css";
-import NeighbourList from "./Components/NeighbourList";
-import { ApprovalList } from "./Components/ApprovalList";
-import { filterNeighbourhood } from "./services/apiServices";
+import ExploreBlogs from "./Components/Blogs";
+import { filterBusiness } from "./services/ApiServices";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -36,7 +36,7 @@ function a11yProps(index) {
 	};
 }
 
-function Neighbourhood() {
+function Explore() {
 	const [value, setValue] = React.useState(0);
 
 	const [listData, setListData] = React.useState("");
@@ -60,12 +60,16 @@ function Neighbourhood() {
 	};
 
 	const listApiCAll = React.useCallback((page, pageSize) => {
-		filterNeighbourhood({ page: page, pageSize: pageSize, online: true })
+		filterBusiness({ page: page, pageSize: pageSize, approved: true })
 			.then((res) => {
 				const resp = res.content.map((ele) => {
 					return {
 						routingId: ele.id,
+						userFName: ele?.userObject?.firstName
+							? ele?.userObject?.firstName + " " + ele?.userObject?.lastName
+							: "-",
 						...ele,
+						// ...ele?.userObject,
 						// ...ele?.name,
 						// ...ele?.createdOn,
 					};
@@ -82,11 +86,11 @@ function Neighbourhood() {
 						pageSize: res?.pageable?.pageSize,
 					},
 				}));
-				console.log("====================================");
-				console.log("filter res", res);
-				console.log("====================================");
+				// console.log("====================================");
+				// console.log("filter res", res);
+				// console.log("====================================");
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	React.useEffect(() => {
@@ -96,36 +100,37 @@ function Neighbourhood() {
 	return (
 		<Container maxWidth='xl' style={{ padding: "0px", margin: "auto" }}>
 			<Helmet>
-				<title>Neighbourhood | Banjee Admin</title>
+				<title>Explore | Banjee Admin</title>
 			</Helmet>
 			<Grid item container xs={12} spacing={2}>
 				<Grid item xs={12}>
-					<ChipComp listApiCAll={listApiCAll} />
+					<ChipComp listApiCall={listApiCAll} />
 				</Grid>
 				<Grid item xs={12}>
 					<Card sx={{ p: 2 }}>
 						<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 							<Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
-								<Tab label='Neighbourhood List' {...a11yProps(0)} />
-								<Tab label='Pending List' {...a11yProps(1)} />
+								<Tab label='Business' {...a11yProps(0)} />
+								<Tab label='Pending Request' {...a11yProps(1)} />
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
-							<NeighbourList
-								listApiCAll={listApiCAll}
-								data={listData}
-								pagination={state}
+							<BusinessList
 								handlePagination={handlePagination}
+								data={listData}
+								paginationState={state}
+								listApiCall={listApiCAll}
 							/>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<ApprovalList />
+							<BusinessApprovalList />
 						</TabPanel>
 					</Card>
 				</Grid>
+				<Grid item xs={8}></Grid>
 			</Grid>
 		</Container>
 	);
 }
 
-export default Neighbourhood;
+export default Explore;

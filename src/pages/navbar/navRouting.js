@@ -8,6 +8,7 @@ import {
 	ConnectWithoutContact,
 	Groups,
 	Report,
+	TravelExplore,
 } from "@mui/icons-material";
 // import Account from "../Account/Account";
 import Category from "../Category/Category";
@@ -17,6 +18,9 @@ import Reports from "../Report/Report";
 import UsersReport from "../Report/UsersReport";
 import RoomsReport from "../Report/RoomsReport";
 import Neighbourhood from "../Neighbourhoods/Neighbourhood";
+import { MainCategoryComp } from "../Category/MainCategoryPage";
+import Explore from "../Explore/Explore";
+import ExploreBlogs from "../Explore/Components/Blogs";
 
 const routing = [
 	{
@@ -31,7 +35,7 @@ const routing = [
 		path: "/category",
 		name: "Category",
 		icon: <CategoryIcon fontSize='medium' />,
-		component: <Category />,
+		component: <MainCategoryComp />,
 	},
 	{
 		id: 3,
@@ -78,11 +82,34 @@ const routing = [
 		],
 	},
 	{
-		id: 7,
+		id: 9,
 		path: "/neighbourhood",
 		name: "Neighbourhood",
 		icon: <ConnectWithoutContact fontSize='medium' />,
 		component: <Neighbourhood />,
+	},
+	{
+		id: 10,
+		path: "/explore",
+		name: "Explore",
+		icon: <TravelExplore fontSize='medium' />,
+		component: <Explore />,
+		children: [
+			{
+				id: 11,
+				path: "/explore",
+				name: "Business",
+				icon: <TravelExplore fontSize='medium' />,
+				component: <Explore />,
+			},
+			{
+				id: 12,
+				path: "/explore/blogs",
+				name: "Blogs",
+				icon: <TravelExplore fontSize='medium' />,
+				component: <ExploreBlogs />,
+			},
+		],
 	},
 	// {
 	//     id:3,

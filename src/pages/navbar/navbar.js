@@ -2,28 +2,22 @@ import React from "react";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
-import {
-	Drawer,
-	Hidden,
-	Toolbar,
-	List,
-	Typography,
-	IconButton,
-} from "@mui/material";
+import { Drawer, Hidden, Toolbar, List, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../assets/LogoWhite.svg";
-import {styled} from "@mui/material/styles";
-import Tooltip, {tooltipClasses} from "@mui/material/Tooltip";
+import { styled } from "@mui/material/styles";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import routing from "./navRouting";
 import LogoutIcon from "@mui/icons-material/Logout";
-import {Link, Outlet, useNavigate} from "react-router-dom";
-import {Helmet} from "react-helmet";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import Sidebar from "./sidebar";
 import SidebarList from "./newSideBar";
+import GmailTreeView from "./TrialSideBar";
 
-const LightTooltip = styled(({className, ...props}) => (
-	<Tooltip {...props} classes={{popper: className}} />
-))(({theme}) => ({
+const LightTooltip = styled(({ className, ...props }) => (
+	<Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
 	[`& .${tooltipClasses.tooltip}`]: {
 		backgroundColor: theme.palette.common.white,
 		color: "rgba(0, 0, 0, 0.87)",
@@ -53,25 +47,21 @@ function Navbar(props) {
 
 	const desktop = (
 		<Drawer
-			variant="permanent"
+			variant='permanent'
 			sx={{
 				width: drawerWidth,
 				flexShrink: 0,
-				[`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: "border-box"},
+				[`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
 				"& > div": {
 					// background: "#1976D2",
 					// background: "#2787bd",
 					background: "white",
 				},
-			}}
-		>
+			}}>
 			<Toolbar />
-			<Box sx={{overflow: "auto"}}>
-				<List sx={{paddingTop: "4px !important"}}>
-					<SidebarList
-						handleId={handleIdFun}
-						handleClick={handleDrawerToggle}
-					/>
+			<Box sx={{ overflow: "auto" }}>
+				<List sx={{ paddingTop: "4px !important" }}>
+					<SidebarList handleId={handleIdFun} handleClick={handleDrawerToggle} />
 					{/* <Sidebar handleId={handleIdFun} handleClick={handleDrawerToggle} /> */}
 				</List>
 			</Box>
@@ -81,8 +71,8 @@ function Navbar(props) {
 	const mobile = (
 		<Drawer
 			//   container={container}
-			anchor="top"
-			variant="temporary"
+			anchor='top'
+			variant='temporary'
 			open={mobileOpen}
 			onClose={handleDrawerToggle}
 			ModalProps={{
@@ -95,15 +85,11 @@ function Navbar(props) {
 					// width: drawerWidth,
 					width: "100%",
 				},
-			}}
-		>
+			}}>
 			<Toolbar />
-			<Box sx={{overflow: "auto"}}>
+			<Box sx={{ overflow: "auto" }}>
 				<List>
-					<SidebarList
-						handleId={handleIdFun}
-						handleClick={handleDrawerToggle}
-					/>
+					<SidebarList handleId={handleIdFun} handleClick={handleDrawerToggle} />
 					{/* <Sidebar handleId={handleIdFun} handleClick={handleDrawerToggle} /> */}
 				</List>
 			</Box>
@@ -113,7 +99,7 @@ function Navbar(props) {
 	React.useEffect(() => {
 		console.log("aaaa");
 		if (!localStorage.getItem("token")) {
-			navigate("/login", {replace: true});
+			navigate("/login", { replace: true });
 		}
 	}, [navigate]);
 
@@ -122,21 +108,17 @@ function Navbar(props) {
 			<Helmet>
 				<title>Banjee Admin</title>
 			</Helmet>
-			<Box sx={{display: "flex"}}>
+			<Box sx={{ display: "flex" }}>
 				<CssBaseline />
-				<AppBar
-					position="fixed"
-					sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}
-				>
+				<AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
 					<Toolbar>
 						<Hidden mdUp>
 							<IconButton
-								color="inherit"
-								aria-label="open drawer"
-								edge="start"
+								color='inherit'
+								aria-label='open drawer'
+								edge='start'
 								onClick={handleDrawerToggle}
-								sx={{mr: 2, display: {lg: "none"}}}
-							>
+								sx={{ mr: 2, display: { lg: "none" } }}>
 								<MenuIcon />
 							</IconButton>
 						</Hidden>
@@ -145,20 +127,18 @@ function Navbar(props) {
 								display: "flex",
 								width: "100%",
 								justifyContent: "space-between",
-							}}
-						>
+							}}>
 							<div
 								onClick={() => navigate("/")}
 								style={{
 									display: "flex",
 									alignItems: "center",
 									cursor: "pointer",
-								}}
-							>
+								}}>
 								<img
 									src={Logo}
-									style={{width: window.innerWidth < 520 ? "80px" : "110px"}}
-									alt="BanjeeLogo"
+									style={{ width: window.innerWidth < 520 ? "80px" : "110px" }}
+									alt='BanjeeLogo'
 								/>
 								<Hidden mdDown>
 									{routing.map((ele) => {
@@ -171,8 +151,7 @@ function Navbar(props) {
 														fontFamily: "inherit",
 													}}
 													noWrap
-													component="div"
-												>
+													component='div'>
 													{ele.name}
 												</Typography>
 											);
@@ -182,14 +161,13 @@ function Navbar(props) {
 									})}
 								</Hidden>
 							</div>
-							<div style={{display: "flex", justifyContent: "flex-end"}}>
-								<LightTooltip title="Logout">
+							<div style={{ display: "flex", justifyContent: "flex-end" }}>
+								<LightTooltip title='Logout'>
 									<IconButton
 										onClick={() => localStorage.clear()}
-										style={{paddingTop: "3px", paddingBottom: "3px"}}
-									>
-										<Link to="/login">
-											<LogoutIcon style={{color: "white"}} />
+										style={{ paddingTop: "3px", paddingBottom: "3px" }}>
+										<Link to='/login'>
+											<LogoutIcon style={{ color: "white" }} />
 										</Link>
 									</IconButton>
 								</LightTooltip>
@@ -200,15 +178,14 @@ function Navbar(props) {
 				<Hidden mdDown>{desktop}</Hidden>
 				<Hidden mdUp>{mobile}</Hidden>
 				<Box
-					component="main"
+					component='main'
 					style={{
 						width: "100%",
 						height: "100%",
 						minHeight: "100vh",
 						background: "#EFF1F4",
 					}}
-					sx={{p: 2}}
-				>
+					sx={{ p: 2 }}>
 					<Toolbar />
 					<Outlet />
 				</Box>

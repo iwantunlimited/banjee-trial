@@ -24,4 +24,5 @@ export const services = {
 	USER_SERVICE: host + "/services/user-service/api/",
 	SNS_SERVICE: host + "/services/sns-service/api/",
 	WIDGET_GROUP: host + "/services/big-data/api/",
+	LOCAL_DISCOVERY: host + "/services/local-discovery/api/",
 };

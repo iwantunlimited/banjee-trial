@@ -43,7 +43,22 @@ export const urls = {
 	},
 
 	GEO_CLOUD: {
-		CREATE: services.GEO_CLOUD + "social-cloud",
+		CREATE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud",
+		FILTER_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/filter",
+		PENDING_APPROVAL: services.GEO_CLOUD + "social-cloud/pending-approvals",
+		APPROVE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/approve",
+		REJECT_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/reject",
+		FIND_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/findById/",
+		FILTER_MEMBERS: services.GEO_CLOUD + "social-cloud/members/filter",
+	},
+
+	LOCAL_DISCOVERY: {
+		FILTER_BUSINESS: services.LOCAL_DISCOVERY + "business/filter",
+		APPROVE_BUSINESS: services.LOCAL_DISCOVERY + "business/approve",
+		CREATE_BUSINESS: services.LOCAL_DISCOVERY + "business",
+		FIND_BUSINESS_BYID: services.LOCAL_DISCOVERY + "business/findById/",
+		GET_ALL_BLOGS: services.LOCAL_DISCOVERY + "blogs/filter/",
+		FIND_BLOGS_BYID: services.LOCAL_DISCOVERY + "blogs/",
 	},
 
 	CDN: {

@@ -2,12 +2,66 @@ import { urls } from "../../../Environment/ApiUrl";
 import { executeGet } from "../../../Services/iwant-rest-generic";
 import { executePost } from "../../../Services/iwant-rest-http-post";
 
+export const imageUpload = (requestLoad) => {
+	let url = "https://gateway.banjee.org/services/media-service/api/resources/bulk";
+	let actionCode = "ACTION_UPLOAD_RESOURCE";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
 export const createNeighbourhood = (requestLoad) => {
-	let url = urls.GEO_CLOUD.CREATE;
+	let url = urls.GEO_CLOUD.CREATE_NEIGHBOURHOOD;
 	let actionCode = "";
 	let payload = requestLoad;
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
+};
+
+export const filterNeighbourhood = (requestLoad) => {
+	let url = urls.GEO_CLOUD.FILTER_NEIGHBOURHOOD;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
+export const filterMembers = (requestLoad) => {
+	let url = urls.GEO_CLOUD.FILTER_MEMBERS;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
+export const pendingApproval = (requestLoad) => {
+	let url = urls.GEO_CLOUD.PENDING_APPROVAL;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export const approveRequest = (requestLoad) => {
+	let url = urls.GEO_CLOUD.APPROVE_NEIGHBOURHOOD;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export const rejectRequest = (requestLoad) => {
+	let url = urls.GEO_CLOUD.REJECT_NEIGHBOURHOOD;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
+export const findNeighbourhood = (requestLoad) => {
+	let url = urls.GEO_CLOUD.FIND_NEIGHBOURHOOD + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
 };
 
 export const findCountry = (requestLoad) => {
