@@ -1,11 +1,13 @@
-import { Box, Card, Container, Grid, Typography } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
+import { Box, Card, Container, Grid, IconButton, Typography } from "@mui/material";
 import moment from "moment";
 import React from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { findByIdBlog } from "../services/ApiServices";
 
 function BlogDetail() {
 	const params = useParams();
+	const navigate = useNavigate();
 
 	const [data, setData] = React.useState("");
 
@@ -28,6 +30,9 @@ function BlogDetail() {
 
 	return (
 		<Container style={{ margin: "auto" }} maxWidth='md'>
+			<IconButton onClick={() => navigate(-1)}>
+				<ArrowBack style={{ color: "#1976d2" }} />
+			</IconButton>
 			<Card sx={{ borderRadius: "0px", boxShadow: "none", py: 2, px: 4 }}>
 				<Grid item container xs={12} spacing={2}>
 					<Grid item xs={12}>

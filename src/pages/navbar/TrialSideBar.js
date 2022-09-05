@@ -13,7 +13,7 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import routing from "./navRouting";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
 	color: theme.palette.text.secondary,
@@ -80,12 +80,11 @@ StyledTreeItem.propTypes = {
 };
 
 export default function GmailTreeView({ handleId, handleClick }) {
-	const navigate = useNavigate();
 	const { pathname } = useLocation();
-	const path1 = pathname?.split("/")?.[1];
+	// const path1 = pathname?.split("/")?.[1];
 
-	const path2 = pathname?.split("/")?.[2];
-	const [open, setOpen] = React.useState(false);
+	// const path2 = pathname?.split("/")?.[2];
+	// const [open, setOpen] = React.useState(false);
 	return (
 		<TreeView
 			aria-label='gmail'

@@ -17,14 +17,7 @@ import axios from "axios";
 import React from "react";
 import MyGoogleMap from "../Map/GoogleMap";
 import "../neighbourhood.css";
-import {
-	createNeighbourhood,
-	findCity,
-	findCountry,
-	findState,
-	imageUpload,
-} from "../services/apiServices";
-import Map from "../Trial/MeraComp";
+import { createNeighbourhood, findCity, findCountry, findState } from "../services/apiServices";
 import { SnackBarComp } from "./SnackBar";
 
 function CreateNeighbour(props) {
@@ -50,18 +43,11 @@ function CreateNeighbour(props) {
 
 	console.log("form data", data);
 
-	const [gLocation, setGLocation] = React.useState({
-		lat: "",
-		lon: "",
-		address: "",
-	});
-
 	const [country, setCountry] = React.useState();
 	const [state, setState] = React.useState();
 	const [city, setCity] = React.useState();
 	const [sState, setSState] = React.useState();
 	const [defaultLocation, setDefaultLocation] = React.useState();
-	const [finalLocation, setFinalLocation] = React.useState();
 
 	const [images, setImages] = React.useState("");
 	const [imgShow, setImgShow] = React.useState("");

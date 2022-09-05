@@ -11,9 +11,7 @@ import routing from "./navRouting";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import Sidebar from "./sidebar";
 import SidebarList from "./newSideBar";
-import GmailTreeView from "./TrialSideBar";
 
 const LightTooltip = styled(({ className, ...props }) => (
 	<Tooltip {...props} classes={{ popper: className }} />

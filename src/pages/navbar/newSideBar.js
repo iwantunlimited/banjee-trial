@@ -1,13 +1,7 @@
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
 import {
-	Dashboard,
-	PeopleAlt,
 	// ViewHeadline,
-	Category as CategoryIcon,
-	ConnectWithoutContact,
-	Groups,
-	Report,
 	ExpandLess,
 	ExpandMore,
 } from "@mui/icons-material";

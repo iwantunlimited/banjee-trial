@@ -57,7 +57,7 @@ export function MainCategoryComp() {
 									label='Local Bussinees'
 									{...a11yProps(1)}
 								/>
-								<Tab onClick={() => setState("BUYANDSALE")} label='For sale' {...a11yProps(2)} />
+								<Tab onClick={() => setState("BUYANDSELL")} label='For sale' {...a11yProps(2)} />
 								<Tab onClick={() => setState("BLOG")} label='Blogs' {...a11yProps(3)} />
 							</Tabs>
 						</Box>

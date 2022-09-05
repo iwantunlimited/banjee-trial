@@ -23,7 +23,7 @@ class MyGoogleMap extends Component {
 			"https://maps.googleapis.com/maps/api/js?key=AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk&libraries=places",
 		geoCoder: null,
 		places: [],
-		center: [],
+		center: [-24.6587, 25.9161],
 		zoom: 9,
 		address: "",
 		draggable: true,

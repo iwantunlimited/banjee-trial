@@ -43,6 +43,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		},
 		description: "",
 		logoURL: "",
+		sponsored: false,
 		approvalType: "BY_ADMIN",
 	});
 
@@ -147,6 +148,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 				setData({
 					name: "",
 					address: "",
+					sponsored: false,
 					approvalType: "",
 					categoryId: "",
 					categoryName: "",

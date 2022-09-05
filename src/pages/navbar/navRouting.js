@@ -11,10 +11,8 @@ import {
 	TravelExplore,
 } from "@mui/icons-material";
 // import Account from "../Account/Account";
-import Category from "../Category/Category";
 import Room from "../Rooms/Rooms";
 import SocialFeed from "../Social_Feeds/Social_Feed";
-import Reports from "../Report/Report";
 import UsersReport from "../Report/UsersReport";
 import RoomsReport from "../Report/RoomsReport";
 import Neighbourhood from "../Neighbourhoods/Neighbourhood";
