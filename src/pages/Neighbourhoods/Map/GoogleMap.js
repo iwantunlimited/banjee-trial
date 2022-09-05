@@ -152,6 +152,7 @@ class MyGoogleMap extends Component {
 					<GoogleMapReact
 						style={{ width: "100%", height: "500px" }}
 						center={this.state.center}
+						defaultCenter={{ lat: this?.state?.center[0], lng: this?.state?.center[1] }}
 						zoom={this.state.zoom}
 						draggable={this.state.draggable}
 						onChange={this._onChange}

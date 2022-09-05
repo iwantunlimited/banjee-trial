@@ -209,7 +209,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 										required
 										value={data.name}
 										name='name'
-										className='neighbourhood-form-textField'
+										className='neighbourhood-form-textField2'
 										fullWidth
 										// label='Enter Business Name'
 										placeholder='Enter Business Name'
