@@ -119,7 +119,7 @@ function Neighbourhood() {
 							/>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<ApprovalList />
+							<ApprovalList handleTabChange={handleChange} />
 						</TabPanel>
 					</Card>
 				</Grid>

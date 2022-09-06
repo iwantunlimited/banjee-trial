@@ -26,6 +26,14 @@ export const filterNeighbourhood = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 
+export const updateNeighbourhood = (requestLoad) => {
+	let url = urls.GEO_CLOUD.CREATE_NEIGHBOURHOOD;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "PUT";
+	return executePost(url, actionCode, payload, method);
+};
+
 export const filterMembers = (requestLoad) => {
 	let url = urls.GEO_CLOUD.FILTER_MEMBERS;
 	let actionCode = "";

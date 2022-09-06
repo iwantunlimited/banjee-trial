@@ -113,6 +113,7 @@ function BusinessList(props) {
 							}}>
 							<DataGrid
 								autoHeight
+								disableSelectionOnClick
 								getRowClassName={(params) => `app-header-${params.row.status}`}
 								page={paginationState?.pagination?.page}
 								pageSize={paginationState?.pagination?.pageSize}

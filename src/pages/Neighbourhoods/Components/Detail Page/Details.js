@@ -6,27 +6,39 @@ import {
 	Box,
 	Grid,
 	Divider,
+	TextField,
+	Select,
 	Avatar,
 	IconButton,
+	Button,
 	Modal,
+	MenuItem,
+	InputLabel,
+	FormControl,
 } from "@mui/material";
-import { filterMembers, filterNeighbourhood, findNeighbourhood } from "../../services/apiServices";
+import {
+	filterMembers,
+	filterNeighbourhood,
+	findNeighbourhood,
+	updateNeighbourhood,
+} from "../../services/apiServices";
 import { useNavigate, useParams } from "react-router";
 import MyGoogleMap from "../../Map/GoogleMap";
 import UserLocation from "../../../Users/components/UserLocation";
 import moment from "moment";
 import { ArrowBack, Cancel, Visibility } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
+import axios from "axios";
 
 function DetailPage() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const [state, setState] = React.useState();
+
 	const [modalData, setModalData] = React.useState({
 		open: false,
 		data: "",
 	});
-
 	const [members, setMembers] = React.useState({
 		data: [],
 		pagination: {
@@ -185,9 +197,18 @@ function DetailPage() {
 
 	return (
 		<Container maxWidth='lg' style={{ padding: "0px", margin: "auto" }}>
-			<IconButton onClick={() => navigate(-1)}>
-				<ArrowBack style={{ color: "#1976d2" }} />
-			</IconButton>
+			<Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+				<IconButton onClick={() => navigate(-1)}>
+					<ArrowBack style={{ color: "#1976d2" }} />
+				</IconButton>
+				<Button
+					variant='contained'
+					onClick={() => {
+						navigate("/neighbourhood/update/" + params.id);
+					}}>
+					Edit
+				</Button>
+			</Box>
 			<Card sx={{ p: 2 }}>
 				<Grid item container xs={12}>
 					<Grid item xs={12} sm={12}>

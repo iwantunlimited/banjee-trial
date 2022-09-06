@@ -265,21 +265,23 @@ function Category(props) {
 														<span style={{ color: "grey", fontSize: "20px", fontWeight: "500" }}>
 															{toggleBtn === "parent" ? "Create Category" : "Create Sub-Category"}
 														</span>
-														<div style={{ width: 150, height: 35, display: "flex" }}>
-															<SwitchSelector
-																onChange={(e) => {
-																	setToggleBtn(e);
-																}}
-																options={[
-																	{ label: "Parent", value: "parent" },
-																	{ label: "Child", value: "child" },
-																]}
-																initialSelectedIndex={0}
-																backgroundColor={"#999"}
-																fontColor={"#fff"}
-																selectedBackgroundColor='#1976D2'
-															/>
-														</div>
+														{props.categoryName === "ROOMS" && (
+															<div style={{ width: 150, height: 35, display: "flex" }}>
+																<SwitchSelector
+																	onChange={(e) => {
+																		setToggleBtn(e);
+																	}}
+																	options={[
+																		{ label: "Parent", value: "parent" },
+																		{ label: "Child", value: "child" },
+																	]}
+																	initialSelectedIndex={0}
+																	backgroundColor={"#999"}
+																	fontColor={"#fff"}
+																	selectedBackgroundColor='#1976D2'
+																/>
+															</div>
+														)}
 													</Box>
 													<hr />
 												</Grid>

@@ -56,6 +56,9 @@ function Explore() {
 	};
 
 	const handleChange = (event, newValue) => {
+		console.log("====================================");
+		console.log("tabs value---------", newValue);
+		console.log("====================================");
 		setValue(newValue);
 	};
 
@@ -123,7 +126,7 @@ function Explore() {
 							/>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<BusinessApprovalList />
+							<BusinessApprovalList handleTabChange={handleChange} />
 						</TabPanel>
 					</Card>
 				</Grid>

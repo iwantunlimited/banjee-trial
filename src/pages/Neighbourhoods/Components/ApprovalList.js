@@ -1,11 +1,14 @@
-import { Check, Clear, JoinRight } from "@mui/icons-material";
+import { Check, Clear, JoinRight, Visibility } from "@mui/icons-material";
 import { Box, Chip, CircularProgress, IconButton, Stack } from "@mui/material";
 import React from "react";
 import { approveRequest, pendingApproval, rejectRequest } from "../services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
+import { useNavigate } from "react-router";
 
-export function ApprovalList() {
+export function ApprovalList({ handleTabChange }) {
+	const navigate = useNavigate();
+
 	const [data, setData] = React.useState();
 
 	const [state, setState] = React.useState({
@@ -44,8 +47,9 @@ export function ApprovalList() {
 			// align: "center",
 			flex: 0.3,
 		},
+
 		{
-			id: "3",
+			id: "4",
 			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
@@ -62,6 +66,28 @@ export function ApprovalList() {
 		},
 		{
 			id: "5",
+			field: "routingId",
+			headerClassName: "app-header-rejected",
+			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+			headerName: "View",
+			align: "center",
+			flex: 0.2,
+			renderCell: (params) => {
+				return (
+					<strong>
+						<IconButton
+							onClick={() => {
+								navigate("/neighbourhood/detail/" + params.row.objectId);
+								console.log("params", params);
+							}}>
+							<Visibility />
+						</IconButton>
+					</strong>
+				);
+			},
+		},
+		{
+			id: "6",
 			field: "id",
 			headerClassName: "app-header",
 			headerName: "Status",
@@ -74,21 +100,23 @@ export function ApprovalList() {
 							<Chip
 								label='Approve'
 								style={{ background: "green", color: "white" }}
-								onClick={() => {
+								onClick={(event) => {
 									// navigate("/rooms/view/" + params.row.routingId);
 									ApproveApiCAll(params?.row?.routingId);
 									pendingAPiCAll(0, 10);
 									console.log(params);
+									handleTabChange(event, 0);
 								}}
 							/>
 							<Chip
 								label='Reject'
 								style={{ background: "red", color: "white" }}
-								onClick={() => {
+								onClick={(event) => {
 									// navigate("/rooms/view/" + params.row.routingId);
 									RejectApiCAll(params?.row?.routingId);
 									pendingAPiCAll(0, 10);
 									console.log(params);
+									handleTabChange(event, 0);
 								}}
 							/>
 						</Stack>
@@ -166,6 +194,7 @@ export function ApprovalList() {
 							}}>
 							<DataGrid
 								autoHeight
+								disableSelectionOnClick
 								getRowClassName={(params) => `app-header-${params.row.status}`}
 								page={state?.pagination?.page}
 								pageSize={state?.pagination?.pageSize}

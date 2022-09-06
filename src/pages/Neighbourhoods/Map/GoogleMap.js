@@ -68,11 +68,21 @@ class MyGoogleMap extends Component {
 	};
 
 	apiHasLoaded = (map, maps) => {
-		this.setState({
-			mapApiLoaded: true,
-			mapInstance: map,
-			mapApi: maps,
-		});
+		if (this?.props?.prevLocation) {
+			this.setState({
+				mapApiLoaded: true,
+				mapInstance: map,
+				mapApi: maps,
+				lat: this?.props?.prevLocation?.lat,
+				lng: this?.props?.prevLocation?.lng,
+			});
+		} else {
+			this.setState({
+				mapApiLoaded: true,
+				mapInstance: map,
+				mapApi: maps,
+			});
+		}
 
 		this._generateAddress();
 	};

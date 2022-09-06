@@ -1,11 +1,13 @@
-import { Check, Clear, JoinRight } from "@mui/icons-material";
+import { AccessTimeSharp, Check, Clear, JoinRight, Visibility } from "@mui/icons-material";
 import { Box, Chip, CircularProgress, IconButton, Stack } from "@mui/material";
 import React from "react";
 import { approveRequest, filterBusiness } from "../services/ApiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
+import { useNavigate } from "react-router";
 
-export function BusinessApprovalList() {
+export function BusinessApprovalList({ handleTabChange }) {
+	const navigate = useNavigate();
 	const [data, setData] = React.useState();
 
 	const [state, setState] = React.useState({
@@ -25,13 +27,13 @@ export function BusinessApprovalList() {
 			headerClassName: "app-header",
 			headerName: "Business Name",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			flex: 0.5,
+			flex: 0.4,
 		},
 		{
 			id: "2",
 			field: "categoryName",
 			headerClassName: "app-header",
-			headerName: "CAaegory",
+			headerName: "Category",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.3,
 		},
@@ -42,7 +44,7 @@ export function BusinessApprovalList() {
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "Created By",
 			// align: "center",
-			flex: 0.3,
+			flex: 0.4,
 			renderCell: (params) => {
 				const firstName = params?.row?.mfirstName;
 				const lastName = params?.row?.mlastName;
@@ -51,7 +53,7 @@ export function BusinessApprovalList() {
 			},
 		},
 		{
-			id: "3",
+			id: "4",
 			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
@@ -68,11 +70,33 @@ export function BusinessApprovalList() {
 		},
 		{
 			id: "5",
+			field: "routingId",
+			headerClassName: "app-header-rejected",
+			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+			headerName: "View",
+			align: "center",
+			flex: 0.2,
+			renderCell: (params) => {
+				return (
+					<strong>
+						<IconButton
+							onClick={() => {
+								navigate("/explore/detail/" + params.row.routingId);
+								console.log("params", params);
+							}}>
+							<Visibility />
+						</IconButton>
+					</strong>
+				);
+			},
+		},
+		{
+			id: "6",
 			field: "id",
 			headerClassName: "app-header",
 			headerName: "Status",
 			align: "center",
-			flex: 0.4,
+			flex: 0.3,
 			renderCell: (params) => {
 				return (
 					<strong>
@@ -89,10 +113,11 @@ export function BusinessApprovalList() {
 						<Chip
 							label='Approve'
 							style={{ background: "green", color: "white" }}
-							onClick={() => {
+							onClick={(event) => {
 								// navigate("/rooms/view/" + params.row.routingId);
 								ApproveApiCAll(params?.row?.routingId);
 								pendingAPiCAll(0, 10);
+								handleTabChange(event, 0);
 							}}
 						/>
 						{/* <Chip
@@ -170,6 +195,7 @@ export function BusinessApprovalList() {
 							}}>
 							<DataGrid
 								autoHeight
+								disableSelectionOnClick
 								getRowClassName={(params) => `app-header-${params.row.status}`}
 								page={state?.pagination?.page}
 								pageSize={state?.pagination?.pageSize}
