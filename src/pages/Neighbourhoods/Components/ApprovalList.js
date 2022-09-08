@@ -1,15 +1,36 @@
 import { Check, Clear, JoinRight, Visibility } from "@mui/icons-material";
-import { Box, Chip, CircularProgress, IconButton, Stack } from "@mui/material";
+import {
+	Box,
+	Button,
+	Chip,
+	CircularProgress,
+	IconButton,
+	Modal,
+	Stack,
+	Typography,
+} from "@mui/material";
 import React from "react";
 import { approveRequest, pendingApproval, rejectRequest } from "../services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { useNavigate } from "react-router";
+import { SnackBarComp } from "./SnackBar";
 
 export function ApprovalList({ handleTabChange }) {
 	const navigate = useNavigate();
 
 	const [data, setData] = React.useState();
+
+	const [snackbar, setSnackbar] = React.useState({
+		open: false,
+		message: "",
+	});
+
+	const [modal, setModal] = React.useState({
+		open: false,
+		data: "",
+		event: "",
+	});
 
 	const [state, setState] = React.useState({
 		totalElement: 0,
@@ -18,6 +39,13 @@ export function ApprovalList({ handleTabChange }) {
 			pageSize: 10,
 		},
 	});
+
+	const handleSnackbar = (data) => {
+		setSnackbar((prev) => ({
+			...prev,
+			open: data,
+		}));
+	};
 
 	let rows = data ? data : [];
 
@@ -102,6 +130,7 @@ export function ApprovalList({ handleTabChange }) {
 								style={{ background: "green", color: "white" }}
 								onClick={(event) => {
 									// navigate("/rooms/view/" + params.row.routingId);
+
 									ApproveApiCAll(params?.row?.routingId);
 									pendingAPiCAll(0, 10);
 									console.log(params);
@@ -113,10 +142,11 @@ export function ApprovalList({ handleTabChange }) {
 								style={{ background: "red", color: "white" }}
 								onClick={(event) => {
 									// navigate("/rooms/view/" + params.row.routingId);
-									RejectApiCAll(params?.row?.routingId);
-									pendingAPiCAll(0, 10);
-									console.log(params);
-									handleTabChange(event, 0);
+									setModal({
+										open: true,
+										data: params?.row?.routingId,
+										event: event,
+									});
 								}}
 							/>
 						</Stack>
@@ -240,6 +270,45 @@ export function ApprovalList({ handleTabChange }) {
 					<CircularProgress />
 				</div>
 			)}
+			<Modal
+				open={modal.open}
+				onClose={() => setModal((prev) => ({ ...prev, open: false }))}
+				aria-labelledby='modal-modal-title'
+				aria-describedby='modal-modal-description'>
+				<Box
+					sx={{
+						position: "absolute",
+						top: "50%",
+						left: "50%",
+						transform: "translate(-50%, -50%)",
+						width: 400,
+						bgcolor: "background.paper",
+						// border: "2px solid #000",
+						boxShadow: 24,
+						p: 4,
+					}}>
+					<Box sx={{ position: "relative" }}>
+						<Typography>Are You Sure To Delete The Neighbourhood ?</Typography>
+						<Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+							<Button
+								variant='outlined'
+								onClick={() => setModal((prev) => ({ ...prev, open: false }))}>
+								cancel
+							</Button>
+							<Button
+								variant='contained'
+								onClick={() => {
+									RejectApiCAll(modal?.data);
+									pendingAPiCAll(0, 10);
+									handleTabChange(modal?.event, 0);
+								}}>
+								Reject
+							</Button>
+						</Box>
+					</Box>
+				</Box>
+			</Modal>
+			<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 		</Box>
 	);
 }

@@ -34,7 +34,7 @@ function ChipComp({ listApiCall }) {
 						alignItems: "center",
 						flexDirection: { xs: "column", sm: "row" },
 					}}> */}
-				<Box sx={{ mb: { xs: 2, sm: 0 }, p: 2 }}>
+				<Box sx={{ p: 2 }}>
 					<Typography
 						sx={{
 							color: "#6b778c",

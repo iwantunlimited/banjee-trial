@@ -27,6 +27,7 @@ import BusinessDetail from "./pages/Explore/Components/BusinessDetail";
 import ExploreBlogs from "./pages/Explore/Components/Blogs";
 import BlogDetail from "./pages/Explore/Components/BlogDetail";
 import EditNeighbourhood from "./pages/Neighbourhoods/Components/EditNeighbourhood";
+import EditBusiness from "./pages/Explore/Components/EditBusiness";
 
 const Routes = () => {
 	return useRoutes([
@@ -118,6 +119,10 @@ const Routes = () => {
 				{
 					path: "/explore/detail/:id",
 					element: <BusinessDetail />,
+				},
+				{
+					path: "/explore/detail/update/:id",
+					element: <EditBusiness />,
 				},
 				// {
 				//     path: '/account',

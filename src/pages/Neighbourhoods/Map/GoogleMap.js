@@ -173,10 +173,13 @@ class MyGoogleMap extends Component {
 						onClick={this._onClick}
 						bootstrapURLKeys={{
 							key: "AIzaSyAM9uE4Sy2nWFfP-Ha6H8ZC6ghAMKJEKps",
-							libraries: ["places", "geometry"],
+							libraries: ["places", "geometry", "drawing", "visualization"],
 						}}
 						yesIWantToUseGoogleMapApiInternals
 						onGoogleApiLoaded={({ map, maps }) => this.apiHasLoaded(map, maps)}>
+						{/* <Box sx={{ p: 2, maxWidth: "200px", background: "grey" }}>
+							<p>{this.state.address}</p>
+						</Box> */}
 						<Marker text={this.state.address} lat={this.state.lat} lng={this.state.lng} />
 					</GoogleMapReact>
 				</Box>

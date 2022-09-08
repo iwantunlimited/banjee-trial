@@ -3,7 +3,7 @@ import { executeGet } from "../../../Services/iwant-rest-generic";
 import { executePost } from "../../../Services/iwant-rest-http-post";
 
 export const imageUpload = (requestLoad) => {
-	let url = "https://gateway.banjee.org/services/media-service/api/resources/bulk";
+	let url = urls.CDN.UPLOAD_IMAGE;
 	let actionCode = "ACTION_UPLOAD_RESOURCE";
 	let payload = requestLoad;
 	let method = "POST";

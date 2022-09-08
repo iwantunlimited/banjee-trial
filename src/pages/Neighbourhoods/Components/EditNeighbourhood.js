@@ -177,6 +177,7 @@ function EditNeighbourhood() {
 					type: res?.cloudType ? res?.cloudType : "",
 					approvalType: "BY_ADMIN",
 				}));
+				setImgShow(res?.imageUrl);
 				console.log("====================================");
 				console.log("find neighbour api call", res);
 				console.log("====================================");
@@ -203,14 +204,12 @@ function EditNeighbourhood() {
 	const EditApiCall = React.useCallback((data) => {
 		updateNeighbourhood(data)
 			.then((res) => {
-				console.log("api response", res);
 				setSnackbar({
 					open: true,
 					message: "Neighbourhood updated successfully",
 				});
 				setImages("");
 				setImgShow("");
-
 				setData({
 					name: "",
 					approvalType: "",

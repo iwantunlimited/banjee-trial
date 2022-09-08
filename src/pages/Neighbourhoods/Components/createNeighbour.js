@@ -223,7 +223,7 @@ function CreateNeighbour(props) {
 				<Box sx={{ p: 2 }}>
 					<form onSubmit={handleSubmit}>
 						<Grid item container xs={12} spacing={2}>
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={6}>
 								<TextField
 									required
 									value={data.name}
@@ -235,7 +235,7 @@ function CreateNeighbour(props) {
 									onChange={handleChange}
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={6}>
 								<FormControl fullWidth>
 									<InputLabel id='demo-simple-select-label'>Neighbourhood Type</InputLabel>
 									<Select
@@ -252,7 +252,7 @@ function CreateNeighbour(props) {
 								</FormControl>
 							</Grid>
 							{data.countryId && (
-								<Grid item xs={4}>
+								<Grid item xs={12} sm={4}>
 									<FormControl fullWidth>
 										<InputLabel id='demo-simple-select-label'>Country</InputLabel>
 										<Select
@@ -273,7 +273,7 @@ function CreateNeighbour(props) {
 								</Grid>
 							)}
 							{data.countryId && (
-								<Grid item xs={4}>
+								<Grid item xs={12} sm={4}>
 									<FormControl fullWidth>
 										<InputLabel id='demo-simple-select-label'>State</InputLabel>
 										<Select
@@ -304,7 +304,7 @@ function CreateNeighbour(props) {
 								</Grid>
 							)}
 							{sState && (
-								<Grid item xs={4}>
+								<Grid item xs={12} sm={4}>
 									<FormControl fullWidth>
 										<InputLabel id='demo-simple-select-label'>City</InputLabel>
 										<Select
@@ -347,7 +347,7 @@ function CreateNeighbour(props) {
 								</Grid>
 							)}
 
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={6}>
 								<TextField
 									required
 									className='neighbourhood-form-textField'
@@ -362,7 +362,7 @@ function CreateNeighbour(props) {
 									onChange={handleChange}
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={6}>
 								<Box
 									sx={{
 										display: "flex",

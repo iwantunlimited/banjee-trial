@@ -12,7 +12,7 @@ const UserLocation = compose(
 		googleMapURL:
 			"https://maps.googleapis.com/maps/api/js?key=AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk&v=3.exp&libraries=geometry,drawing,places",
 		loadingElement: <div style={{ height: `100%` }} />,
-		containerElement: <div style={{ height: `400px` }} />,
+		containerElement: <div style={{ height: window.innerWidth < 500 ? `250px` : `400px` }} />,
 		mapElement: <div style={{ height: `100%` }} />,
 	}),
 	withScriptjs,

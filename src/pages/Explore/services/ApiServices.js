@@ -26,6 +26,22 @@ export const createBusiness = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 
+export const deleteBusiness = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.CREATE_BUSINESS + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "DELETE";
+	return executeGet(url, actionCode, payload, method);
+};
+
+export const updateBusiness = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.CREATE_BUSINESS;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "PUT";
+	return executePost(url, actionCode, payload, method);
+};
+
 export const approveRequest = (requestLoad) => {
 	let url = urls.LOCAL_DISCOVERY.APPROVE_BUSINESS;
 	let actionCode = "";
@@ -33,7 +49,6 @@ export const approveRequest = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
-
 
 export const findByIdBusiness = (requestLoad) => {
 	let url = urls.LOCAL_DISCOVERY.FIND_BUSINESS_BYID + requestLoad;

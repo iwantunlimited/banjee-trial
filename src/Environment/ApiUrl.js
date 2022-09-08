@@ -28,9 +28,19 @@ export const urls = {
 		},
 	},
 
+	ASSETS_SERVICES: {
+		FILTER_CATEGORY: services.ASSETS_SERVICES + "category/filter",
+		CREATE_CATEGORY: services.ASSETS_SERVICES + "category",
+		CREATE_SUB_CATEGORY: services.ASSETS_SERVICES + "sub-category",
+		DELETE_CATEGORY: services.ASSETS_SERVICES + "category/delete/",
+		DELETE_SUB_CATEGORY: services.ASSETS_SERVICES + "sub-category/delete/",
+	},
+
 	SOCIAL_CONNECTION: {
 		FILTER: services.SOCIAL_CONNECTIONS + "social-connection/group/filter",
 		FIND_BY_ID: services.SOCIAL_CONNECTIONS + "social-connection/group/findById/",
+		FIND_REPORTED_CUSTOMER_BY_ID: services.SOCIAL_CONNECTIONS + "secured/report/findById/",
+		FILTER_REPORTED_CUSTOMER: services.SOCIAL_CONNECTIONS + "secured/report/filter",
 	},
 
 	SOCIAL_FEEDS: {
@@ -55,7 +65,7 @@ export const urls = {
 	LOCAL_DISCOVERY: {
 		FILTER_BUSINESS: services.LOCAL_DISCOVERY + "business/filter",
 		APPROVE_BUSINESS: services.LOCAL_DISCOVERY + "business/approve",
-		CREATE_BUSINESS: services.LOCAL_DISCOVERY + "business",
+		CREATE_BUSINESS: services.LOCAL_DISCOVERY + "business/",
 		FIND_BUSINESS_BYID: services.LOCAL_DISCOVERY + "business/findById/",
 		GET_ALL_BLOGS: services.LOCAL_DISCOVERY + "blogs/filter/",
 		FIND_BLOGS_BYID: services.LOCAL_DISCOVERY + "blogs/",
@@ -87,30 +97,14 @@ export const urls = {
 	},
 
 	USERPROFILE: {
-		// ADD: services.MERCHANT + "merchant",
-		// FILTERLIST: services.MERCHANT + "merchant/filter",
+		CUSTOMER_LIST: services.USER_PROFILE + "admin/registry/filter",
+		CUSTOMER_FIND_BY_ID: services.USER_PROFILE + "admin/findById/",
+		FIND_USER_CONNECTION_BY_ID: services.USER_PROFILE + "admin/userConnection/",
+		FIND_USER_BLOCK_LIST: services.USER_PROFILE + "admin/userBlockList/",
+		DASHBOARD_LIST_CUSTOMER: services.USER_PROFILE + "admin/registry/report",
 		FIND_BY_ID: services.USER_PROFILE + "profile/findById/",
-		// FIND_BLOCK: services.MERCHANT + "merchant/block/",
-		// FIND_ACTIVATE: services.MERCHANT + "merchant/activate/",
-		// FIND_DELETE: services.MERCHANT + "merchant/delete/",
 		FILTER: services.USER_PROFILE + "profile/filter",
 		UPDATE: services.USER_PROFILE + "profile",
-	},
-
-	FEATURED: {
-		ADD: services.PRODUCT + "store-front/collection",
-		FILTERLIST: services.PRODUCT + "store-front/collection/filter",
-		FIND_BY_ID: services.PRODUCT + "store-front/findById/",
-		FIND_BLOCK: services.PRODUCT + "store-front/block/",
-		FIND_ACTIVATE: services.PRODUCT + "store-front/activate/",
-		FIND_DELETE: services.PRODUCT + "store-front/delete/",
-	},
-
-	TAX_CONFIG: {
-		ADD: services.PRODUCT + "tax",
-		FILTER: services.PRODUCT + "tax/filter",
-		FIND_BY_ID: services.PRODUCT + "tax/findById/",
-		FIND_DELETE: services.PRODUCT + "tax/delete/",
 	},
 
 	COUNTRY: {

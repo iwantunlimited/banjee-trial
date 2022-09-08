@@ -202,7 +202,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 				<Box sx={{ p: 2 }}>
 					<form onSubmit={handleSubmit}>
 						<Grid item container xs={12} spacing={2}>
-							<Grid item xs={4}>
+							<Grid item xs={12} sm={4}>
 								<Box>
 									{/* <Typography sx={{ mb: 0.5, ml: 0.2 }}>Business Name :</Typography> */}
 									<TextField
@@ -211,14 +211,14 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 										name='name'
 										className='neighbourhood-form-textField2'
 										fullWidth
-										// label='Enter Business Name'
+										label='Enter Business Name'
 										placeholder='Enter Business Name'
 										onChange={handleChange}
 									/>
 								</Box>
 							</Grid>
 
-							<Grid item xs={4}>
+							<Grid item xs={12} sm={4}>
 								<FormControl fullWidth>
 									<InputLabel id='demo-simple-select-label'>Category Type</InputLabel>
 									<Select
@@ -246,7 +246,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 									</Select>
 								</FormControl>
 							</Grid>
-							<Grid item xs={4}>
+							<Grid item xs={12} sm={4}>
 								<FormControl fullWidth>
 									<InputLabel id='demo-simple-select-label'>Cloud Type</InputLabel>
 									<Select
@@ -274,7 +274,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 									</Select>
 								</FormControl>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={6}>
 								<TextField
 									required
 									className='neighbourhood-form-textField'
@@ -289,7 +289,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 									onChange={handleChange}
 								/>
 							</Grid>
-							<Grid item xs={6}>
+							<Grid item xs={12} sm={6}>
 								<TextField
 									required
 									className='neighbourhood-form-textField'
@@ -299,7 +299,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 									maxRows={5}
 									placeholder='Description'
 									name='description'
-									value={data.desciption}
+									value={data.description}
 									multiline
 									onChange={handleChange}
 								/>
