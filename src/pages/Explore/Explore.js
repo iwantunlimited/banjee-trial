@@ -78,9 +78,6 @@ function Explore() {
 					};
 				});
 				setListData(resp);
-				// console.log("====================================");
-				// console.log("resp-----------------", resp);
-				// console.log("====================================");
 				setState((prev) => ({
 					...prev,
 					totalElement: res.totalElements,
@@ -89,9 +86,6 @@ function Explore() {
 						pageSize: res?.pageable?.pageSize,
 					},
 				}));
-				// console.log("====================================");
-				// console.log("filter res", res);
-				// console.log("====================================");
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -110,9 +104,14 @@ function Explore() {
 					<ChipComp listApiCall={listApiCAll} />
 				</Grid>
 				<Grid item xs={12}>
-					<Card sx={{ p: 2 }}>
-						<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-							<Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
+					<Card sx={{ padding: "20px" }}>
+						<Box sx={{ borderBottom: "10px", borderColor: "divider" }}>
+							<Tabs
+								indicatorColor='primary'
+								textColor='primary'
+								value={value}
+								onChange={handleChange}
+								aria-label='basic tabs example'>
 								<Tab label='Business' {...a11yProps(0)} />
 								<Tab label='Pending Request' {...a11yProps(1)} />
 							</Tabs>

@@ -1,15 +1,12 @@
-import { Cancel, Upload } from "@mui/icons-material";
+import { Cancel } from "@mui/icons-material";
 import {
-	Container,
 	Box,
 	Grid,
-	Card,
 	TextField,
 	FormControl,
 	InputLabel,
 	MenuItem,
 	Select,
-	Input,
 	Button,
 	IconButton,
 } from "@mui/material";
@@ -18,13 +15,15 @@ import React from "react";
 import MyGoogleMap from "../Map/GoogleMap";
 import "../neighbourhood.css";
 import { createNeighbourhood, findCity, findCountry, findState } from "../services/apiServices";
-import { SnackBarComp } from "./SnackBar";
+import SnackBarComp from "../../../CustomComponents/SnackBarComp";
 
 function CreateNeighbour(props) {
 	const { listApiCAll, handleExpanded } = props;
 	const [snackbar, setSnackbar] = React.useState({
 		open: false,
 		message: "",
+		duration: 3000,
+		severity: "",
 	});
 
 	const [data, setData] = React.useState({
@@ -173,6 +172,8 @@ function CreateNeighbour(props) {
 				console.log("api response", res);
 				setSnackbar({
 					open: true,
+					duration: 3000,
+					severity: "success",
 					message: "Neighbourhood created successfully",
 				});
 				setImages("");
@@ -220,7 +221,7 @@ function CreateNeighbour(props) {
 	return (
 		<Grid item container xs={12} spacing={2}>
 			<Grid item xs={12}>
-				<Box sx={{ p: 2 }}>
+				<Box sx={{ padding: "20px" }}>
 					<form onSubmit={handleSubmit}>
 						<Grid item container xs={12} spacing={2}>
 							<Grid item xs={12} sm={6}>
@@ -371,7 +372,7 @@ function CreateNeighbour(props) {
 										width: "80%",
 										height: "100%",
 										border: "0.5px solid lightgrey",
-										p: 1,
+										padding: "10px",
 										borderRadius: "5px",
 									}}>
 									<input
@@ -442,8 +443,8 @@ function CreateNeighbour(props) {
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<Box sx={{ my: 1, display: "flex", justifyContent: "flex-end" }}>
-									<Button variant='contained' type='submit'>
+								<Box sx={{ marginY: "10px", display: "flex", justifyContent: "flex-end" }}>
+									<Button variant='contained' type='submit' color='primary'>
 										Submit
 									</Button>
 								</Box>

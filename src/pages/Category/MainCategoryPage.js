@@ -1,5 +1,6 @@
 import { Container, Box, Grid, Tabs, Tab, Card } from "@mui/material";
 import React from "react";
+import { useTheme } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import PropTypes from "prop-types";
 import Category from "./Category";
@@ -33,6 +34,7 @@ function a11yProps(index) {
 }
 
 export function MainCategoryComp() {
+	const theme = useTheme();
 	const [value, setValue] = React.useState(0);
 
 	const [state, setState] = React.useState("ROOMS");
@@ -48,9 +50,14 @@ export function MainCategoryComp() {
 			</Helmet>
 			<Grid item container xs={12} spacing={2}>
 				<Grid item xs={12}>
-					<Card sx={{ p: 2 }}>
-						<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-							<Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
+					<Card sx={{ padding: "20px" }}>
+						<Box sx={{ borderBottom: "10px", borderColor: "divider" }}>
+							<Tabs
+								indicatorColor='primary'
+								textColor='primary'
+								value={value}
+								onChange={handleChange}
+								aria-label='basic tabs example'>
 								<Tab onClick={() => setState("ROOMS")} label='Rooms' {...a11yProps(0)} />
 								<Tab
 									onClick={() => setState("LOCALBUSINESS")}

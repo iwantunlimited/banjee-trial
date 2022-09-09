@@ -21,10 +21,13 @@ import {
 	findBlockedCustomers,
 	penddingConnectionsList,
 } from "../User_Services/UserApiService";
-import { Male, Female, Transgender } from "@mui/icons-material";
+import { Male, Female, Transgender, PanoramaSharp } from "@mui/icons-material";
 import "../users.css";
 import { useNavigate, useParams } from "react-router-dom";
 import UserLocation from "./UserLocation";
+import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
+import NeighrbourhoodList from "./NeighbourhoodList";
+import BusinessList from "./BusinessList";
 
 function CustomerView(props) {
 	console.log(props);
@@ -36,6 +39,8 @@ function CustomerView(props) {
 	const theme = useTheme();
 
 	const [value, setValue] = React.useState(0);
+
+	const [neighbourhood, setNeighbourhood] = React.useState("");
 
 	const [conData, setConData] = React.useState();
 
@@ -158,8 +163,8 @@ function CustomerView(props) {
 					variant='contained'
 					onClick={() => navigate(-1)}
 					sx={{
-						mt: "1em",
-						ml: "1em",
+						marginTop: "1em",
+						marginLeft: "1em",
 						width: "8em",
 						height: "2em",
 						textTransform: "none",
@@ -253,7 +258,6 @@ function CustomerView(props) {
 													Deactivate
 												</Button>
 											)}
-											{/* <Button size="small" color='secondary' variant="outlined">View</Button> */}
 										</Box>
 									</Box>
 								</Box>
@@ -283,7 +287,7 @@ function CustomerView(props) {
 									aria-label='full width tabs example'
 									style={{ height: "10px!important" }}>
 									{/* <Tab label="Profile" {...a11yProps(0)} /> */}
-									<Tab label='Connection' {...a11yProps(0)} />
+									<Tab label='Neighbourhood' {...a11yProps(0)} />
 									<Tab label='Pending Connection' {...a11yProps(1)} />
 									<Tab label='Blocked' {...a11yProps(2)} />
 								</Tabs>
@@ -295,7 +299,10 @@ function CustomerView(props) {
 									style={{ overflowY: "scroll", height: "355px" }}>
 									{/* ------------------------- connections ---------------------------- */}
 									<TabPanel value={value} index={0} dir={theme.direction}>
-										<Grid container spacing={2}>
+										<Grid item xs={12} sx={{ padding: "10px" }}>
+											<NeighrbourhoodList data={id} />
+										</Grid>
+										{/* <Grid container spacing={2}>
 											{conData?.content?.length > 0 ? (
 												conData?.content.map((ele, index) => (
 													<Grid
@@ -316,7 +323,6 @@ function CustomerView(props) {
 															alignItems: "center",
 															flexDirection: "column",
 														}}>
-														{/* <Grid item xs={2} sm={2} md={2} lg={2}> */}
 														<Badge
 															badgeContent={
 																ele?.connections?.length > 0 ? ele?.connections?.length : 0
@@ -334,68 +340,26 @@ function CustomerView(props) {
 																sx={{ width: 50, height: 50 }}
 															/>
 														</Badge>
-														{/* </Grid> */}
-														{/* <Grid item xs={10} sm={10} md={10} lg={10} > */}
 														<Typography
 															style={{ textAlign: "left", marginTop: "5px", fontSize: "15px" }}>
 															{ele?.name?.slice(0, 20)}
 														</Typography>
-														{/* </Grid> */}
 													</Grid>
 												))
 											) : (
 												<div>User is not Connected to Anyone</div>
 											)}
-										</Grid>
+										</Grid> */}
 									</TabPanel>
 									{/* ------------------------- pendding connections ---------------------------- */}
 									<TabPanel value={value} index={1} dir={theme.direction}>
-										<Grid container spacing={2}>
-											{penddingData?.content?.length > 0 ? (
-												penddingData?.content.map((ele, index) => (
-													<Grid
-														key={index}
-														onClick={() => {
-															navigate("/user/view/" + ele?.systemUserId);
-															window.location.reload();
-														}}
-														item
-														xs={4}
-														sm={4}
-														md={2}
-														lg={2}
-														style={{
-															display: "flex",
-															justifyContent: "center",
-															alignItems: "center",
-															flexDirection: "column",
-														}}>
-														{/* <Grid item xs={4} sm={4} md={4} lg={4}>/ */}
-														<Avatar
-															alt={ele?.name?.length > 0 ? ele?.name?.slice(0, 1) : "avatar"}
-															src={
-																"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
-																ele?.avtarUrl
-															}
-															sx={{ width: 50, height: 50 }}
-														/>
-														{/* </Grid>/ */}
-														{/* <Grid item xs={8} sm={8} md={8} lg={8} >/ */}
-														<Typography
-															style={{ textAlign: "left", marginTop: "5px", fontSize: "15px" }}>
-															{ele?.name}
-														</Typography>
-														{/* </Grid> */}
-													</Grid>
-												))
-											) : (
-												<div style={{ fontSize: "20px" }}>There is no pendding Connections</div>
-											)}
+										<Grid iitem xs={12} sx={{ padding: "10px" }}>
+											<BusinessList data={id} />
 										</Grid>
 									</TabPanel>
 									{/* ------------------------- blocked list ---------------------------- */}
 									<TabPanel value={value} index={2} dir={theme.direction}>
-										<Grid container spacing={2}>
+										<Grid item container spacing={2}>
 											{blockCon?.content?.length > 0 ? (
 												blockCon?.content.map((ele, index) => (
 													<Grid
@@ -430,7 +394,9 @@ function CustomerView(props) {
 													</Grid>
 												))
 											) : (
-												<div style={{ fontSize: "20px" }}>There is no blocked user's</div>
+												<Grid item xs={12}>
+													<div style={{ fontSize: "20px" }}>There is no blocked user's</div>
+												</Grid>
 											)}
 										</Grid>
 									</TabPanel>

@@ -30,10 +30,14 @@ import moment from "moment";
 import { ArrowBack, Cancel, Visibility } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
+import ModalComp from "../../../../CustomComponents/ModalComp";
+import { useTheme } from "@mui/material/styles";
 
 function DetailPage() {
 	const params = useParams();
 	const navigate = useNavigate();
+	const theme = useTheme();
+
 	const [state, setState] = React.useState();
 
 	const [modalData, setModalData] = React.useState({
@@ -49,9 +53,12 @@ function DetailPage() {
 		totalMembers: 0,
 	});
 
-	console.log("====================================");
-	console.log("members ------", members);
-	console.log("====================================");
+	const handleModal = (data) => {
+		setModalData((prev) => ({
+			...prev,
+			open: data,
+		}));
+	};
 
 	let rows = members?.data ? members?.data : [];
 
@@ -201,7 +208,7 @@ function DetailPage() {
 			<Container maxWidth='lg' style={{ padding: "0px", margin: "auto" }}>
 				<Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
 					<IconButton onClick={() => navigate(-1)}>
-						<ArrowBack style={{ color: "#1976d2" }} />
+						<ArrowBack style={{ color: theme.palette.primary.main }} />
 					</IconButton>
 					<Button
 						variant='contained'
@@ -211,10 +218,10 @@ function DetailPage() {
 						Edit
 					</Button>
 				</Box>
-				<Card sx={{ p: 2 }}>
+				<Card sx={{ padding: "20px" }}>
 					<Grid item container xs={12}>
 						<Grid item xs={12} sm={12}>
-							<Box sx={{ display: "flex", alignItems: "center", py: 2 }}>
+							<Box sx={{ display: "flex", alignItems: "center", paddingY: "20px" }}>
 								<Box>
 									<Avatar
 										src={state?.imageUrl}
@@ -225,7 +232,7 @@ function DetailPage() {
 										}}
 									/>
 								</Box>
-								<Box sx={{ ml: 4 }}>
+								<Box sx={{ marginLeft: "40px" }}>
 									<Typography sx={{ fontSize: { xs: "22px", md: "26px" } }}>
 										{state?.name}
 									</Typography>
@@ -239,8 +246,8 @@ function DetailPage() {
 							</Box>
 						</Grid>
 						<Grid item xs={12} sm={12}>
-							<Card sx={{ p: 2, borderRadius: "0px" }}>
-								<Box sx={{ pb: 1 }}>
+							<Card sx={{ padding: "20px", borderRadius: "0px" }}>
+								<Box sx={{ paddingBottom: "10px" }}>
 									<Typography sx={{ fontSize: "20px", color: "gray", fontWeight: "600" }}>
 										Total Members({state?.totalMembers})
 									</Typography>
@@ -297,7 +304,7 @@ function DetailPage() {
 						<Grid item xs={12}>
 							<Card
 								sx={{
-									p: 1,
+									padding: "10px",
 									borderRadius: "0px",
 								}}>
 								<Box sx={{ p: 1 }}>
@@ -323,100 +330,70 @@ function DetailPage() {
 						</Grid>
 					</Grid>
 				</Card>
-				<Modal
-					open={modalData?.open}
-					onClose={() => setModalData({ open: false, data: "" })}
-					aria-labelledby='modal-modal-title'
-					aria-describedby='modal-modal-description'>
+				<ModalComp handleModal={handleModal} data={modalData}>
+					<IconButton
+						onClick={() => handleModal(false)}
+						style={{ position: "absolute", top: "0px", right: "0px" }}>
+						<Cancel sx={{ color: "brown" }} />
+					</IconButton>
 					<Box
-						sx={{
-							position: "absolute",
-							top: "50%",
-							left: "50%",
-							transform: "translate(-50%, -50%)",
-							width: 400,
-							bgcolor: "background.paper",
-							// border: "2px solid #000",
-							boxShadow: 24,
-							p: 4,
+						elevation={1}
+						style={{
+							boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
+							padding: "40px 10px 40px 10px",
+							background: "white ",
+							minHeight: "420px",
 						}}>
-						<Box sx={{ position: "relative" }}>
-							<IconButton
-								onClick={() => setModalData({ open: false, data: "" })}
-								style={{ position: "absolute", top: "0px", right: "0px" }}>
-								<Cancel sx={{ color: "brown" }} />
-							</IconButton>
-							<Box
-								elevation={1}
+						<Box
+							style={{
+								display: "flex",
+								justifyContent: "center",
+								alignItems: "center",
+								flexDirection: "column",
+								padding: "0 10px 0 10px",
+							}}>
+							<Avatar
+								alt={
+									modalData?.data?.mfirstName?.length > 0
+										? modalData?.data?.mfirstName?.slice(0, 1)
+										: "A"
+								}
+								src={
+									"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
+									modalData?.data?.mavtarUrl
+								}
+								sx={{ width: "150px", height: "150px" }}
+							/>
+							<div
 								style={{
-									boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
-									padding: "40px 10px 40px 10px",
-									background: "white ",
-									minHeight: "420px",
+									display: "flex",
+									alignItems: "center",
+									marginTop: "10px",
+									fontSize: "10px",
+									fontWeight: "400",
 								}}>
-								<Box
-									style={{
-										display: "flex",
-										justifyContent: "center",
-										alignItems: "center",
-										flexDirection: "column",
-										padding: "0 10px 0 10px",
-									}}>
-									<Avatar
-										alt={
-											modalData?.data?.mfirstName?.length > 0
-												? modalData?.data?.mfirstName?.slice(0, 1)
-												: "A"
-										}
-										src={
-											"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
-											modalData?.data?.mavtarUrl
-										}
-										sx={{ width: 150, height: 150 }}
-									/>
-									<div
-										style={{
-											display: "flex",
-											alignItems: "center",
-											marginTop: "10px",
-											fontSize: "10px",
-											fontWeight: "400",
-										}}>
-										<Typography variant='h6' style={{ marginRight: "5px" }}>
-											{modalData?.data?.mfirstName + " " + modalData?.data?.mlastName}
-										</Typography>
-										{/* {state?.gender && (
-									<div>
-										{state?.gender.toLowerCase() === "male" ? (
-											<Male style={{ color: "blue" }} />
-										) : state?.gender.toLowerCase() === "female" ? (
-											<Female style={{ color: "#B73BA4" }} />
-										) : (
-											<Transgender style={{ color: "rgb(246,191,188)" }} />
-										)}
-									</div>
-								)} */}
-									</div>
-									<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-										{window.innerWidth > 1282
-											? modalData?.data?.memail
-											: modalData?.data?.memail && modalData?.data?.memail.slice(0, 20)}
-									</Typography>
-									{window.innerWidth < 1282 && modalData && modalData?.data?.memail?.length > 10 && (
-										<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-											{modalData?.data?.memail?.slice(20, modalData?.data?.memail?.length + 1)}
-										</Typography>
-									)}
-									<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-										{modalData?.data?.mmcc
-											? +modalData?.data?.mmcc + " " + modalData?.data?.mmobile
-											: modalData?.data?.mmobile}
-									</Typography>
-								</Box>
-							</Box>
+								<Typography variant='h6' style={{ marginRight: "5px" }}>
+									{modalData?.data?.mfirstName + " " + modalData?.data?.mlastName}
+								</Typography>
+							</div>
+							<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
+								{window.innerWidth > 1282
+									? modalData?.data?.memail
+									: modalData?.data?.memail && modalData?.data?.memail.slice(0, 20)}
+							</Typography>
+							{window.innerWidth < 1282 && modalData && modalData?.data?.memail?.length > 10 && (
+								<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
+									{modalData?.data?.memail?.slice(20, modalData?.data?.memail?.length + 1)}
+								</Typography>
+							)}
+							<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
+								{modalData?.data?.mmcc
+									? +modalData?.data?.mmcc + " " + modalData?.data?.mmobile
+									: modalData?.data?.mmobile}
+							</Typography>
 						</Box>
 					</Box>
-				</Modal>
+				</ModalComp>
 			</Container>
 		);
 	} else {
@@ -429,7 +406,7 @@ function DetailPage() {
 					height: "100vh",
 					width: "100%",
 				}}>
-				<CircularProgress />
+				<CircularProgress color='primary' />
 			</Box>
 		);
 	}

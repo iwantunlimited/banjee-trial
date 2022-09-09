@@ -5,6 +5,7 @@ import { approveRequest, filterBusiness } from "../services/ApiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { useNavigate } from "react-router";
+import SnackBarComp from "../../../CustomComponents/SnackBarComp";
 
 export function BusinessApprovalList({ handleTabChange }) {
 	const navigate = useNavigate();
@@ -17,6 +18,20 @@ export function BusinessApprovalList({ handleTabChange }) {
 			pageSize: 10,
 		},
 	});
+
+	const [snackbar, setSnackbar] = React.useState({
+		open: false,
+		message: "",
+		duration: 3000,
+		severity: "",
+	});
+
+	const handleSnackbar = (data) => {
+		setSnackbar((prev) => ({
+			...prev,
+			open: data,
+		}));
+	};
 
 	let rows = data ? data : [];
 
@@ -100,16 +115,6 @@ export function BusinessApprovalList({ handleTabChange }) {
 			renderCell: (params) => {
 				return (
 					<strong>
-						{/* <IconButton
-							onClick={() => {
-								// navigate("/rooms/view/" + params.row.routingId);
-								ApproveApiCAll(params?.row?.routingId);
-								pendingAPiCAll(0, 10);
-								console.log(params);
-							}}>
-							<Check style={{ color: "green" }} />
-						</IconButton> */}
-						{/* <Stack direction='row' spacing={2}> */}
 						<Chip
 							label='Approve'
 							style={{ background: "green", color: "white" }}
@@ -120,17 +125,6 @@ export function BusinessApprovalList({ handleTabChange }) {
 								handleTabChange(event, 0);
 							}}
 						/>
-						{/* <Chip
-								label='Reject'
-								style={{ background: "red", color: "white" }}
-								onClick={() => {
-									// navigate("/rooms/view/" + params.row.routingId);
-									RejectApiCAll(params?.row?.routingId);
-									pendingAPiCAll(0, 10);
-									console.log(params);
-								}}
-							/> */}
-						{/* </Stack> */}
 					</strong>
 				);
 			},
@@ -166,6 +160,12 @@ export function BusinessApprovalList({ handleTabChange }) {
 	const ApproveApiCAll = React.useCallback((data) => {
 		approveRequest({ id: data, approved: true })
 			.then((res) => {
+				setSnackbar({
+					open: true,
+					duration: 3000,
+					severity: "success",
+					message: "Business Approved",
+				});
 				console.log("====================================");
 				console.log("approve response", res);
 				console.log("====================================");
@@ -229,6 +229,7 @@ export function BusinessApprovalList({ handleTabChange }) {
 							/>
 						</Box>
 					</div>
+					<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 				</div>
 			) : (
 				<div

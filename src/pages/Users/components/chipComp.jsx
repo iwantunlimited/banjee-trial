@@ -3,10 +3,11 @@ import { Refresh, Report } from "@mui/icons-material";
 import { Card, IconButton, TextField, Tooltip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../users.css";
+import { useTheme } from "@mui/material/styles";
 
 function ChipComp({ refreshApi, keyword, handleKey }) {
 	const navigate = useNavigate();
-
+	const theme = useTheme();
 	return (
 		<Card className='main-card space-css'>
 			<div style={{ display: "flex", alignItems: "center" }}>
@@ -15,9 +16,9 @@ function ChipComp({ refreshApi, keyword, handleKey }) {
 					style={{
 						borderRadius: "50px",
 						marginRight: window.innerWidth < 501 ? "10px" : "30px",
-						background: "#1976D2",
+						background: theme.palette.primary.main,
 						padding: window.innerWidth < 501 ? "5px" : "10px",
-						color: "white",
+						color: theme.palette.primary.contrastText,
 					}}>
 					<Refresh fontSize='small' />
 				</IconButton>
@@ -36,9 +37,9 @@ function ChipComp({ refreshApi, keyword, handleKey }) {
 						onClick={() => navigate("/user/reporteduser")}
 						style={{
 							borderRadius: "50px",
-							background: "#1976D2",
+							background: theme.palette.primary.main,
 							padding: window.innerWidth < 501 ? "5px" : "10px",
-							color: "white",
+							color: theme.palette.primary.contrastText,
 						}}>
 						<Report />
 					</IconButton>

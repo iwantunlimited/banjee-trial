@@ -26,7 +26,7 @@ import {
 	findState,
 	updateNeighbourhood,
 } from "../services/apiServices";
-import { SnackBarComp } from "./SnackBar";
+import SnackBarComp from "../../../CustomComponents/SnackBarComp";
 import { useNavigate, useParams } from "react-router";
 
 function EditNeighbourhood() {
@@ -35,6 +35,8 @@ function EditNeighbourhood() {
 	const [snackbar, setSnackbar] = React.useState({
 		open: false,
 		message: "",
+		duration: 3000,
+		severity: "success,",
 	});
 
 	const [data, setData] = React.useState({
@@ -61,18 +63,6 @@ function EditNeighbourhood() {
 
 	const [images, setImages] = React.useState("");
 	const [imgShow, setImgShow] = React.useState("");
-
-	console.log("====================================");
-	console.log("images", images);
-	console.log("====================================");
-
-	const [loc, setLoc] = React.useState({
-		lat: -34.59,
-		lng: 150.66,
-	});
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
 
 	const handleGLocation = (lat, lng, address) => {
 		setData((prev) => ({
@@ -126,17 +116,14 @@ function EditNeighbourhood() {
 
 	const ImageApiCAll = React.useCallback((data) => {
 		const mime = "image";
-		console.log("====================================");
-		console.log("image api data", data);
-		console.log("====================================");
+		// console.log("====================================");
+		// console.log("image api data", data);
+		// console.log("====================================");
 		const formData = new FormData();
-
-		// formData.append("directoryId", "root");
 
 		formData.append("cloud_name", "banjee");
 		formData.append("upload_preset", "business_images");
 		formData.append("file", data);
-		// { headers: { "Content-Type": "multipart/form-data" }
 
 		const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
 
@@ -148,9 +135,6 @@ function EditNeighbourhood() {
 		axios
 			.post(url, formData)
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("image upload response", res);
-				// console.log("====================================");
 				setData((prev) => ({
 					...prev,
 					// imageUrl: res?.data?.data[0]?.data?.id,
@@ -206,6 +190,8 @@ function EditNeighbourhood() {
 			.then((res) => {
 				setSnackbar({
 					open: true,
+					duration: 3000,
+					severity: "success",
 					message: "Neighbourhood updated successfully",
 				});
 				setImages("");
@@ -241,7 +227,7 @@ function EditNeighbourhood() {
 					<IconButton onClick={() => navigate(-1)}>
 						<ArrowBack />
 					</IconButton>
-					<Card sx={{ p: 3 }}>
+					<Card sx={{ padding: "30px" }}>
 						<Typography
 							sx={{ color: "#6b778c", fontSize: "20px", fontWeight: "500", textAlign: "left" }}>
 							Edit Neighbourhood
@@ -249,7 +235,7 @@ function EditNeighbourhood() {
 					</Card>
 				</Grid>
 				<Grid item xs={12}>
-					<Card sx={{ p: 3 }}>
+					<Card sx={{ padding: "30px" }}>
 						<form onSubmit={handleSubmit}>
 							<Grid item container xs={12} spacing={2}>
 								<Grid item xs={6}>
@@ -400,7 +386,7 @@ function EditNeighbourhood() {
 											width: "80%",
 											height: "100%",
 											border: "0.5px solid lightgrey",
-											p: 1,
+											padding: "10px",
 											borderRadius: "5px",
 										}}>
 										<input
@@ -463,7 +449,7 @@ function EditNeighbourhood() {
 									</Box>
 								</Grid>
 								<Grid item xs={12}>
-									<Box sx={{ my: 1, display: "flex", justifyContent: "flex-end" }}>
+									<Box sx={{ marginY: "10px", display: "flex", justifyContent: "flex-end" }}>
 										<Button variant='contained' type='submit'>
 											Submit
 										</Button>

@@ -1,22 +1,14 @@
 import { Check, Clear, JoinRight, Visibility } from "@mui/icons-material";
-import {
-	Box,
-	Button,
-	Chip,
-	CircularProgress,
-	IconButton,
-	Modal,
-	Stack,
-	Typography,
-} from "@mui/material";
+import { Box, Button, Chip, CircularProgress, IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
 import { approveRequest, pendingApproval, rejectRequest } from "../services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { useNavigate } from "react-router";
-import { SnackBarComp } from "./SnackBar";
+import SnackBarComp from "../../../CustomComponents/SnackBarComp";
+import ModalComp from "../../../CustomComponents/ModalComp";
 
-export function ApprovalList({ handleTabChange }) {
+export function ApprovalList({ handleTabChange, listApiCAll }) {
 	const navigate = useNavigate();
 
 	const [data, setData] = React.useState();
@@ -24,6 +16,8 @@ export function ApprovalList({ handleTabChange }) {
 	const [snackbar, setSnackbar] = React.useState({
 		open: false,
 		message: "",
+		duration: 3000,
+		severity: "",
 	});
 
 	const [modal, setModal] = React.useState({
@@ -42,6 +36,13 @@ export function ApprovalList({ handleTabChange }) {
 
 	const handleSnackbar = (data) => {
 		setSnackbar((prev) => ({
+			...prev,
+			open: data,
+		}));
+	};
+
+	const handleModal = (data) => {
+		setModal((prev) => ({
 			...prev,
 			open: data,
 		}));
@@ -132,9 +133,10 @@ export function ApprovalList({ handleTabChange }) {
 									// navigate("/rooms/view/" + params.row.routingId);
 
 									ApproveApiCAll(params?.row?.routingId);
-									pendingAPiCAll(0, 10);
-									console.log(params);
 									handleTabChange(event, 0);
+									pendingAPiCAll(0, 10);
+									listApiCAll(0, 10);
+									console.log(params);
 								}}
 							/>
 							<Chip
@@ -185,6 +187,12 @@ export function ApprovalList({ handleTabChange }) {
 	const ApproveApiCAll = React.useCallback((data) => {
 		approveRequest({ id: data })
 			.then((res) => {
+				setSnackbar({
+					open: true,
+					duration: 3000,
+					severity: "success",
+					message: "Neighbourhood approved",
+				});
 				console.log("====================================");
 				console.log("approve response", res);
 				console.log("====================================");
@@ -195,6 +203,12 @@ export function ApprovalList({ handleTabChange }) {
 	const RejectApiCAll = React.useCallback((data) => {
 		rejectRequest({ id: data })
 			.then((res) => {
+				setSnackbar({
+					open: true,
+					duration: 3000,
+					severity: "warning",
+					message: "Neighbourhood Rejected",
+				});
 				console.log("====================================");
 				console.log("reject response", res);
 				console.log("====================================");
@@ -270,44 +284,27 @@ export function ApprovalList({ handleTabChange }) {
 					<CircularProgress />
 				</div>
 			)}
-			<Modal
-				open={modal.open}
-				onClose={() => setModal((prev) => ({ ...prev, open: false }))}
-				aria-labelledby='modal-modal-title'
-				aria-describedby='modal-modal-description'>
-				<Box
-					sx={{
-						position: "absolute",
-						top: "50%",
-						left: "50%",
-						transform: "translate(-50%, -50%)",
-						width: 400,
-						bgcolor: "background.paper",
-						// border: "2px solid #000",
-						boxShadow: 24,
-						p: 4,
-					}}>
-					<Box sx={{ position: "relative" }}>
-						<Typography>Are You Sure To Delete The Neighbourhood ?</Typography>
-						<Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-							<Button
-								variant='outlined'
-								onClick={() => setModal((prev) => ({ ...prev, open: false }))}>
-								cancel
-							</Button>
-							<Button
-								variant='contained'
-								onClick={() => {
-									RejectApiCAll(modal?.data);
-									pendingAPiCAll(0, 10);
-									handleTabChange(modal?.event, 0);
-								}}>
-								Reject
-							</Button>
-						</Box>
-					</Box>
+			<ModalComp handleModal={handleModal} data={modal} width={500}>
+				<Typography sx={{ fontSize: { xs: "16px", sm: "20px", fontWeight: 500 } }}>
+					Are You Sure To Delete The Neighbourhood ?
+				</Typography>
+				<Box sx={{ display: "flex", justifyContent: "center", marginTop: "30px" }}>
+					<Button variant='outlined' onClick={() => handleModal(false)}>
+						cancel
+					</Button>
+					<Button
+						sx={{ marginLeft: "20px" }}
+						variant='contained'
+						onClick={() => {
+							RejectApiCAll(modal?.data);
+							pendingAPiCAll(0, 10);
+							handleTabChange(modal?.event, 0);
+							listApiCAll(0, 10);
+						}}>
+						Reject
+					</Button>
 				</Box>
-			</Modal>
+			</ModalComp>
 			<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 		</Box>
 	);

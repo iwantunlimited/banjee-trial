@@ -67,6 +67,7 @@ export const urls = {
 		APPROVE_BUSINESS: services.LOCAL_DISCOVERY + "business/approve",
 		CREATE_BUSINESS: services.LOCAL_DISCOVERY + "business/",
 		FIND_BUSINESS_BYID: services.LOCAL_DISCOVERY + "business/findById/",
+		FIND_BUSINESS_BY_USER_ID: services.LOCAL_DISCOVERY + "business/byUserId/",
 		GET_ALL_BLOGS: services.LOCAL_DISCOVERY + "blogs/filter/",
 		FIND_BLOGS_BYID: services.LOCAL_DISCOVERY + "blogs/",
 	},

@@ -18,7 +18,7 @@ import axios from "axios";
 import React from "react";
 import MyGoogleMap from "../../Neighbourhoods/Map/GoogleMap";
 import "../business.css";
-import { SnackBarComp } from "../../Neighbourhoods/Components/SnackBar";
+import SnackBarComp from "../../../CustomComponents/SnackBarComp";
 import { createBusiness } from "../services/ApiServices";
 import { CategoryList } from "../../Users/User_Services/UserApiService";
 import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
@@ -26,6 +26,8 @@ import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
 function CreateBusiness({ listApiCall, handleExpanded }) {
 	const [snackbar, setSnackbar] = React.useState({
 		open: false,
+		duration: 3000,
+		severity: "",
 		message: "",
 	});
 
@@ -74,17 +76,11 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 
 	const ImageApiCAll = React.useCallback((data) => {
 		const mime = "image";
-		// console.log("====================================");
-		// console.log("image api data", data);
-		// console.log("====================================");
 		const formData = new FormData();
-
-		// formData.append("directoryId", "root");
 
 		formData.append("cloud_name", "banjee");
 		formData.append("upload_preset", "business_images");
 		formData.append("file", data);
-		// { headers: { "Content-Type": "multipart/form-data" }
 
 		const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
 
@@ -96,9 +92,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		axios
 			.post(url, formData)
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("image upload response", res);
-				// console.log("====================================");
 				setData((prev) => ({
 					...prev,
 					logoURL: res?.data?.public_id,
@@ -142,6 +135,8 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 			.then((res) => {
 				setSnackbar({
 					open: true,
+					duration: 3000,
+					severity: "success",
 					message: "Business created successfully",
 				});
 				handleExpanded();
@@ -189,8 +184,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		console.log(base64);
 	};
 
-	// console.log("category list ", cloudList);
-
 	React.useEffect(() => {
 		CategoryListApiCall();
 		NeighbourhoodListApiCall();
@@ -199,7 +192,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 	return (
 		<Grid item container xs={12} spacing={2}>
 			<Grid item xs={12}>
-				<Box sx={{ p: 2 }}>
+				<Box sx={{ padding: "20px" }}>
 					<form onSubmit={handleSubmit}>
 						<Grid item container xs={12} spacing={2}>
 							<Grid item xs={12} sm={4}>
@@ -306,7 +299,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 							</Grid>
 							<Grid item xs={12}>
 								<Box>
-									<Typography sx={{ ml: 0.3 }}>Choose Logo</Typography>
+									<Typography sx={{ marginLeft: "0.3px" }}>Choose Logo</Typography>
 									<Box
 										sx={{
 											display: "flex",
@@ -315,7 +308,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 											width: "100%",
 											height: "100%",
 											border: "0.5px solid lightgrey",
-											p: 1,
+											padding: "10px",
 											borderRadius: "5px",
 										}}>
 										<input
@@ -370,24 +363,13 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 									</Box>
 								</Box>
 							</Grid>
-							{/* <Grid item xs={12}>
-								<Map
-									handleLocation={handleLocation}
-									zoom={8}
-									height={"400px"}
-									center={{
-										lat: -22.1999,
-										lng: 23.9989,
-									}}
-								/>
-							</Grid> */}
 							<Grid item xs={12}>
 								<Box sx={{ position: "relative" }}>
 									<MyGoogleMap handleGLocation={handleGLocation} />
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<Box sx={{ my: 1, display: "flex", justifyContent: "flex-end" }}>
+								<Box sx={{ marginY: "10px", display: "flex", justifyContent: "flex-end" }}>
 									<Button variant='contained' type='submit'>
 										Submit
 									</Button>

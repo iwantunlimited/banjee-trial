@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 		marginTop: "30px",
 	},
 	container: {
-		maxHeight: 440,
+		maxHeight: "440px",
 	},
 	dataGridFooter: {
 		"& > div > .MuiDataGrid-footerContainer > .MuiTablePagination-root > .MuiTablePagination-toolbar":

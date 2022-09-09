@@ -34,7 +34,9 @@ const DashboardTrial = () => {
 
 	console.log("sdtate------------date", state);
 	return (
-		<div className='App' style={{ position: "relative" }}>
+		<div
+			className='App'
+			style={{ position: "relative", display: "flex", justifyContent: "center" }}>
 			{/* <h1 className="title">MongoDB Charts</h1> */}
 			<Grid container xs={12} spacing={1}>
 				{/* Total User */}

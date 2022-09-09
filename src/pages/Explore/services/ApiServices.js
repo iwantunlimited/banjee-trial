@@ -58,6 +58,14 @@ export const findByIdBusiness = (requestLoad) => {
 	return executeGet(url, actionCode, payload, method);
 };
 
+export const findBusinessByUserId = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.FIND_BUSINESS_BY_USER_ID + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
+
 export const blogsList = (requestLoad) => {
 	let url = urls.LOCAL_DISCOVERY.GET_ALL_BLOGS;
 	let actionCode = "";

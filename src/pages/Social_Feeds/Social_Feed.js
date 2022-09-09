@@ -40,10 +40,11 @@ import { Pagination } from "swiper";
 
 import DeleteFeedSnackBar from "./Components/SnackBar";
 import DeleteFeedModal from "./Components/DeleteFeedModal";
+import { useTheme } from "@mui/material/styles";
 
 export default function SocialFeed(props) {
 	const navigate = useNavigate();
-
+	const theme = useTheme();
 	const [data, setData] = React.useState([]);
 	const [modal, setModal] = React.useState({ open: false });
 	//delete menu ------
@@ -114,17 +115,17 @@ export default function SocialFeed(props) {
 
 	if (data) {
 		return (
-			<Container sx={{ p: "0px !important", margin: "auto" }} maxWidth='xl'>
+			<Container sx={{ padding: "0px !important", margin: "auto" }} maxWidth='xl'>
 				<Card
 					sx={{
-						p: 2,
-						mb: 2,
+						padding: "20px",
+						marginBottom: "20px",
 						display: "flex",
 						justifyContent: "space-between",
 						alignItems: "center",
 						flexDirection: { xs: "column", sm: "row" },
 					}}>
-					<Box sx={{ mb: { xs: 2, sm: 0 } }}>
+					<Box sx={{ marginBottom: { xs: "20px", sm: "0px" } }}>
 						<Typography
 							sx={{
 								color: "#6b778c",
@@ -151,7 +152,7 @@ export default function SocialFeed(props) {
 								/>
 							</LocalizationProvider>
 						</Box>
-						<Box sx={{ px: 2 }}>
+						<Box sx={{ paddingX: "20px" }}>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
 									name='endDate'
@@ -164,14 +165,14 @@ export default function SocialFeed(props) {
 								/>
 							</LocalizationProvider>
 						</Box>
-						<Box sx={{ px: 1 }}>
+						<Box sx={{ paddingX: "10px" }}>
 							<Tooltip title='Search'>
 								<IconButton
 									style={{
 										borderRadius: "50px",
-										background: "#1976D2",
+										background: theme.palette.primary.main,
 										padding: window.innerWidth < 501 ? "5px" : "10px",
-										color: "white",
+										color: theme.palette.primary.contrastText,
 									}}
 									onClick={() => {
 										filterSocialFeedsApiCall(0, 12, startDate, endDate);
@@ -180,15 +181,15 @@ export default function SocialFeed(props) {
 								</IconButton>
 							</Tooltip>
 						</Box>
-						<Box sx={{ ml: 1 }}>
+						<Box sx={{ marginLeft: "10px" }}>
 							<Tooltip title='Reported Feeds'>
 								<IconButton
 									onClick={() => navigate("reported-feeds")}
 									style={{
 										borderRadius: "50px",
-										background: "#1976D2",
+										background: theme.palette.primary.main,
 										padding: window.innerWidth < 501 ? "5px" : "10px",
-										color: "white",
+										color: theme.palette.primary.contrastText,
 									}}>
 									<Report />
 								</IconButton>
@@ -271,7 +272,7 @@ export default function SocialFeed(props) {
 									</Box>
 
 									<Box
-										sx={{ my: 1, height: "200px", position: "relative" }}
+										sx={{ marginY: "10px", height: "200px", position: "relative" }}
 										// onClick={() => setModal({ open: true, data: ele })}
 									>
 										{/* {ele?.mediaContent?.length > 1 && (
@@ -322,13 +323,13 @@ export default function SocialFeed(props) {
 																		variant='filled'
 																		sx={{
 																			position: "absolute",
-																			top: 2,
-																			right: 2,
+																			top: "20px",
+																			right: "20px",
 																			fontSize: "14px",
 																			background: "black",
 																			color: "white",
 																			borderRadius: "5px",
-																			px: 0.5,
+																			paddingX: "0.5px",
 																		}}>
 																		{ele?.mediaContent?.length > 1 &&
 																			iIndex + 1 + "/" + ele?.mediaContent?.length}
@@ -360,13 +361,13 @@ export default function SocialFeed(props) {
 																		variant='filled'
 																		sx={{
 																			position: "absolute",
-																			top: 2,
-																			right: 2,
+																			top: "20px",
+																			right: "20px",
 																			fontSize: "14px",
 																			background: "black",
 																			color: "white",
 																			borderRadius: "5px",
-																			px: 0.5,
+																			paddingX: "0.5px",
 																		}}>
 																		{ele?.mediaContent?.length > 1 &&
 																			iIndex + 1 + "/" + ele?.mediaContent?.length}
@@ -461,13 +462,13 @@ export default function SocialFeed(props) {
 																		variant='filled'
 																		sx={{
 																			position: "absolute",
-																			top: 2,
-																			right: 2,
+																			top: "20px",
+																			right: "20px",
 																			fontSize: "14px",
 																			background: "black",
 																			color: "white",
 																			borderRadius: "5px",
-																			px: 0.5,
+																			paddingX: "0.5px",
 																		}}>
 																		{ele?.mediaContent?.length > 1 &&
 																			iIndex + 1 + "/" + ele?.mediaContent?.length}
@@ -516,7 +517,7 @@ export default function SocialFeed(props) {
 										) : (
 											<Box style={{ height: "24px" }}></Box>
 										)}
-										<Box sx={{ display: "flex", pt: 2, pb: 1 }}>
+										<Box sx={{ display: "flex", paddingTop: "20px", paddingBottom: "10px" }}>
 											<Box style={{ display: "flex", alignItems: "center" }}>
 												<FavoriteBorder />
 												<span style={{ marginLeft: "5px" }}>
@@ -527,7 +528,7 @@ export default function SocialFeed(props) {
 												sx={{
 													display: "flex",
 													alignItems: "center",
-													ml: "20px",
+													marginLeft: "20px",
 												}}>
 												<ChatBubbleOutline />
 												<span style={{ marginLeft: "5px" }}>{ele?.totalComments || 0}</span>

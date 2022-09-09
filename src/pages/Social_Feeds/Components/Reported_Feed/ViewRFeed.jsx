@@ -1,10 +1,5 @@
 import React from "react";
-import {
-	ChatBubbleOutline,
-	Delete,
-	FavoriteBorder,
-	Fullscreen,
-} from "@mui/icons-material";
+import { ChatBubbleOutline, Delete, FavoriteBorder, Fullscreen } from "@mui/icons-material";
 import {
 	Container,
 	Grid,
@@ -17,24 +12,21 @@ import {
 	Button,
 } from "@mui/material";
 import moment from "moment";
-import {DataGrid} from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FullScreenImageModal from "../FullScreenImageModal";
-import {findCustomer} from "../../../Users/User_Services/UserApiService";
-import {makeStyles} from "@mui/styles";
+import { findCustomer } from "../../../Users/User_Services/UserApiService";
+import { makeStyles } from "@mui/styles";
 // Import Swiper React components
-import {Swiper, SwiperSlide} from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // import required modules
-import {Pagination} from "swiper";
+import { Pagination } from "swiper";
 import DeleteFeedSnackBar from "../SnackBar";
 import DeleteFeedModal from "../DeleteFeedModal";
-import {useNavigate, useParams} from "react-router";
-import {
-	getReportedFeedDetail,
-	getSocialFeedDetails,
-} from "../../services/ApiServices";
+import { useNavigate, useParams } from "react-router";
+import { getReportedFeedDetail, getSocialFeedDetails } from "../../services/ApiServices";
 
 const useStyles = makeStyles({
 	root: {
@@ -42,7 +34,7 @@ const useStyles = makeStyles({
 		marginTop: "30px",
 	},
 	container: {
-		maxHeight: 440,
+		maxHeight: "440px",
 	},
 	dataGridFooter: {
 		"& > div > .MuiDataGrid-footerContainer > .MuiTablePagination-root > .MuiTablePagination-toolbar":
@@ -76,7 +68,7 @@ function ViewRFeed() {
 	const [openSnackBar, setOpenSnackBar] = React.useState(false);
 	const [pRData, setPRData] = React.useState([]);
 
-	const {id} = useParams();
+	const { id } = useParams();
 
 	console.log("data", data);
 
@@ -178,8 +170,7 @@ function ViewRFeed() {
 						onClick={() => {
 							console.log("params datagrid", params);
 							navigate("/user/view/" + params.row.id);
-						}}
-					>
+						}}>
 						<VisibilityIcon />
 					</IconButton>
 				</strong>
@@ -191,22 +182,21 @@ function ViewRFeed() {
 		return (
 			<>
 				<Button
-					variant="contained"
+					variant='contained'
 					onClick={() => navigate(-1)}
 					sx={{
-						mt: "1em",
-						ml: "1em",
+						marginTop: "1em",
+						marginLeft: "1em",
 						width: "8em",
 						height: "2em",
 						textTransform: "none",
-					}}
-				>
+					}}>
 					Go Back
 				</Button>
-				<Container maxWidth="xl">
+				<Container maxWidth='xl'>
 					<Grid container xs={12} spacing={2}>
 						<Grid item xs={12}>
-							<Container maxWidth="sm">
+							<Container maxWidth='sm'>
 								{/* <Card> */}
 								<Box
 									sx={{
@@ -221,24 +211,21 @@ function ViewRFeed() {
 										"&:hover": {
 											background: "#E0E0e0",
 										},
-									}}
-								>
+									}}>
 									<Box
 										style={{
 											display: "flex",
 											justifyContent: "space-between",
 											alignItems: "center",
-										}}
-									>
+										}}>
 										<Box
 											style={{
 												display: "flex",
 												alignItems: "center",
 												paddingLeft: "10px",
-											}}
-										>
+											}}>
 											<Avatar
-												alt="#"
+												alt='#'
 												src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${data?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 												style={{
 													height: "40px",
@@ -252,14 +239,11 @@ function ViewRFeed() {
 													padding: "10px 10px",
 													display: "flex",
 													flexDirection: "column",
-												}}
-											>
+												}}>
 												<span>{`${
-													data?.author?.username ||
-													data?.author?.userName ||
-													"userName"
+													data?.author?.username || data?.author?.userName || "userName"
 												}`}</span>
-												<span style={{fontSize: "12px"}}>
+												<span style={{ fontSize: "12px" }}>
 													{moment(data?.createdOn).format("lll")}
 												</span>
 											</Typography>
@@ -267,11 +251,10 @@ function ViewRFeed() {
 										`
 										<IconButton
 											onClick={() => {
-												setDFeedData({feedId: data.id});
+												setDFeedData({ feedId: data.id });
 												setOpenDModal(true);
 											}}
-											style={{width: "40px", height: "40px"}}
-										>
+											style={{ width: "40px", height: "40px" }}>
 											<Delete />
 										</IconButton>
 										<DeleteFeedModal
@@ -283,12 +266,8 @@ function ViewRFeed() {
 										/>
 									</Box>
 
-									<Box sx={{my: 1, height: "200px"}}>
-										<Swiper
-											pagination={true}
-											modules={[Pagination]}
-											className="mySwiper"
-										>
+									<Box sx={{ marginY: "10px", height: "200px" }}>
+										<Swiper pagination={true} modules={[Pagination]} className='mySwiper'>
 											{data?.mediaContent?.length > 0 ? (
 												data?.mediaContent?.map((item, iIndex) => {
 													if (item?.mimeType === "video/mp4") {
@@ -302,17 +281,11 @@ function ViewRFeed() {
 																		display: "flex",
 																		justifyContent: "center",
 																		alignItems: "center",
-																	}}
-																>
-																	<video
-																		width="100%"
-																		height="200px"
-																		id={`video${0}`}
-																		controls
-																	>
+																	}}>
+																	<video width='100%' height='200px' id={`video${0}`} controls>
 																		<source
 																			src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}
-																			type="video/mp4"
+																			type='video/mp4'
 																		/>
 																		Your browser does not support HTML video.
 																	</video>
@@ -329,17 +302,11 @@ function ViewRFeed() {
 																		display: "flex",
 																		justifyContent: "center",
 																		alignItems: "center",
-																	}}
-																>
-																	<audio
-																		width="100%"
-																		height="200px"
-																		id={`video${0}`}
-																		controls
-																	>
+																	}}>
+																	<audio width='100%' height='200px' id={`video${0}`} controls>
 																		<source
 																			src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}
-																			type="video/mp4"
+																			type='video/mp4'
 																		/>
 																		Your browser does not support HTML video.
 																	</audio>
@@ -370,10 +337,9 @@ function ViewRFeed() {
 																			display: "none",
 																		},
 																	}}
-																	key={iIndex}
-																>
+																	key={iIndex}>
 																	<img
-																		alt=""
+																		alt=''
 																		src={
 																			item?.src &&
 																			`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.webp`
@@ -385,7 +351,7 @@ function ViewRFeed() {
 																		}}
 																	/>
 																	<IconButton
-																		className="btnFullScreen"
+																		className='btnFullScreen'
 																		onClick={() => {
 																			setFullScreenState({
 																				imageModal: true,
@@ -393,11 +359,8 @@ function ViewRFeed() {
 																					item?.src &&
 																					`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.webp`,
 																			});
-																		}}
-																	>
-																		<Fullscreen
-																			style={{color: "#000", fontSize: "30px"}}
-																		/>
+																		}}>
+																		<Fullscreen style={{ color: "#000", fontSize: "30px" }} />
 																	</IconButton>
 																</Box>
 															</SwiperSlide>
@@ -413,8 +376,7 @@ function ViewRFeed() {
 																		display: "flex",
 																		justifyContent: "center",
 																		alignItems: "center",
-																	}}
-																>
+																	}}>
 																	<Typography>{data?.text}</Typography>
 																</Box>
 															</SwiperSlide>
@@ -430,8 +392,7 @@ function ViewRFeed() {
 															display: "flex",
 															justifyContent: "center",
 															alignItems: "center",
-														}}
-													>
+														}}>
 														<Typography>{data?.text}</Typography>
 													</Box>
 												</SwiperSlide>
@@ -444,19 +405,18 @@ function ViewRFeed() {
 											padding: "0 10px",
 											display: "flex",
 											flexDirection: "column",
-										}}
-									>
+										}}>
 										{data?.text && data?.mediaContent?.length > 0 ? (
 											<Typography noWrap={true}>
-												{data?.text || <p style={{height: "16px"}}> </p>}
+												{data?.text || <p style={{ height: "16px" }}> </p>}
 											</Typography>
 										) : (
-											<Box style={{height: "24px"}}></Box>
+											<Box style={{ height: "24px" }}></Box>
 										)}
-										<Box sx={{display: "flex", pt: 2, pb: 1}}>
-											<Box style={{display: "flex", alignItems: "center"}}>
+										<Box sx={{ display: "flex", paddingTop: "20px", paddingBottom: "10px" }}>
+											<Box style={{ display: "flex", alignItems: "center" }}>
 												<FavoriteBorder />
-												<span style={{marginLeft: "5px"}}>
+												<span style={{ marginLeft: "5px" }}>
 													{data?.totalReactions || data?.reactions?.length || 0}
 												</span>
 											</Box>
@@ -464,13 +424,10 @@ function ViewRFeed() {
 												sx={{
 													display: "flex",
 													alignItems: "center",
-													ml: "20px",
-												}}
-											>
+													marginLeft: "20px",
+												}}>
 												<ChatBubbleOutline />
-												<span style={{marginLeft: "5px"}}>
-													{data?.totalComments || 0}
-												</span>
+												<span style={{ marginLeft: "5px" }}>{data?.totalComments || 0}</span>
 											</Box>
 										</Box>
 									</Box>
@@ -479,17 +436,14 @@ function ViewRFeed() {
 								{fullScreenState.imageModal && (
 									<FullScreenImageModal
 										state={fullScreenState}
-										handleClose={() => setFullScreenState({imageModal: false})}
+										handleClose={() => setFullScreenState({ imageModal: false })}
 									/>
 								)}
-								<DeleteFeedSnackBar
-									open={openSnackBar}
-									openFun={(e) => setOpenSnackBar(e)}
-								/>
+								<DeleteFeedSnackBar open={openSnackBar} openFun={(e) => setOpenSnackBar(e)} />
 							</Container>
 						</Grid>
 						<Grid item xs={12}>
-							<Card sx={{p: 2}}>
+							<Card sx={{ p: 2 }}>
 								<Grid item container xs={12}>
 									<Grid item xs={12}>
 										<Typography
@@ -497,14 +451,13 @@ function ViewRFeed() {
 												color: "#6b778c",
 												fontSize: "20px",
 												fontWeight: "500",
-											}}
-										>
+											}}>
 											Reported By
 										</Typography>
 										<hr />
 									</Grid>
 									<Grid item xs={12}>
-										<div style={{width: "100%"}}>
+										<div style={{ width: "100%" }}>
 											<div className={classes.DataGridBackground}>
 												<DataGrid
 													autoHeight
@@ -555,8 +508,7 @@ function ViewRFeed() {
 					alignItems: "center",
 					width: "100%",
 					height: "100vh",
-				}}
-			>
+				}}>
 				<CircularProgress />
 			</Box>
 		);

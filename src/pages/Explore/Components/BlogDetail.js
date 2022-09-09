@@ -1,15 +1,27 @@
 import { ArrowBack } from "@mui/icons-material";
-import { Box, Card, Container, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Button, Card, Container, Grid, IconButton, Typography } from "@mui/material";
 import moment from "moment";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
-import { findByIdBlog } from "../services/ApiServices";
+import { deleteBlog, findByIdBlog } from "../services/ApiServices";
+import { useTheme } from "@mui/material/styles";
 
 function BlogDetail() {
 	const params = useParams();
 	const navigate = useNavigate();
+	const theme = useTheme();
 
 	const [data, setData] = React.useState("");
+
+	const DeleteBlogApiCall = React.useCallback((data) => {
+		deleteBlog(data)
+			.then((res) => {
+				// console.log("====================================");
+				// console.log("delete response", res);
+				// console.log("====================================");
+			})
+			.catch((err) => console.log(err));
+	}, []);
 
 	const ApiCall = React.useCallback(() => {
 		findByIdBlog(params?.id)
@@ -30,10 +42,21 @@ function BlogDetail() {
 
 	return (
 		<Container style={{ margin: "auto" }} maxWidth='md'>
-			<IconButton onClick={() => navigate(-1)}>
-				<ArrowBack style={{ color: "#1976d2" }} />
-			</IconButton>
-			<Card sx={{ borderRadius: "0px", boxShadow: "none", py: 2, px: 4 }}>
+			<Box sx={{ marginBottom: 2, display: "flex", justifyContent: "space-between" }}>
+				<IconButton onClick={() => navigate(-1)}>
+					<ArrowBack color='primary' />
+				</IconButton>
+				<Button
+					onClick={() => {
+						DeleteBlogApiCall(params?.id);
+						navigate("/blogs");
+					}}
+					color='primary'
+					variant='contained'>
+					Delete
+				</Button>
+			</Box>
+			<Card sx={{ borderRadius: "0px", boxShadow: "none", paddingY: "20px", paddingX: "40px" }}>
 				<Grid item container xs={12} spacing={2}>
 					<Grid item xs={12}>
 						<Typography sx={{ textAlign: "center", fontSize: "24px", fontWeight: 600 }}>

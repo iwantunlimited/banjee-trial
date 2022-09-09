@@ -12,11 +12,10 @@ function DashboardComp() {
 			<Box
 				sx={{
 					minHeight: "100%",
-					// py: 2
 				}}>
-				<Grid container spacing={2}>
-					<Analytics />
-				</Grid>
+				{/* <Grid container spacing={2}> */}
+				<Analytics />
+				{/* </Grid> */}
 			</Box>
 		</Container>
 	);

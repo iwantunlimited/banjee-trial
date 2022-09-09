@@ -10,7 +10,6 @@ import {
 	IconButton,
 	Button,
 	Stack,
-	Modal,
 	CircularProgress,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
@@ -26,17 +25,26 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper";
 
 import "./component.css";
-import { SnackBarComp } from "../../Neighbourhoods/Components/SnackBar";
+import SnackBarComp from "../../../CustomComponents/SnackBarComp";
+import ModalComp from "../../../CustomComponents/ModalComp";
+import { useTheme } from "@mui/material/styles";
 
 function BusinessDetail() {
 	const params = useParams();
 	const navigate = useNavigate();
+	const theme = useTheme();
+
 	const [snackbar, setSnackbar] = React.useState({
 		open: false,
 		message: "",
+		duration: 3000,
+		severity: "",
 	});
 
-	const [modal, setModal] = useState(false);
+	const [modal, setModal] = useState({
+		open: false,
+		data: "",
+	});
 
 	const [dExpand, setDExpand] = React.useState(false);
 
@@ -44,6 +52,13 @@ function BusinessDetail() {
 
 	const handleSnackbar = (data) => {
 		setSnackbar((prev) => ({
+			...prev,
+			open: data,
+		}));
+	};
+
+	const handleModal = (data) => {
+		setModal((prev) => ({
 			...prev,
 			open: data,
 		}));
@@ -65,6 +80,8 @@ function BusinessDetail() {
 			.then((res) => {
 				setSnackbar({
 					open: true,
+					duration: 3000,
+					severity: "success",
 					message: "Business Deleted Successfully",
 				});
 				navigate("/explore");
@@ -72,41 +89,33 @@ function BusinessDetail() {
 			.catch((err) => console.error(err));
 	}, []);
 
-	// const filterUserApiCall = React.useCallback((data) => {
-	// 	filterNeighbourhood({ userId: data })
-	// 		.then((res) => {
-	// 			console.log("====================================");
-	// 			console.log("filter user by id response", res);
-	// 			console.log("====================================");
-	// 		})
-	// 		.catch((err) => console.log(err));
-	// }, []);
-
 	React.useEffect(() => {
 		ApiCall();
-		// filterUserApiCall("62f0aadec22b4848ffc9df16");
 	}, [ApiCall]);
 
 	if (state) {
 		return (
 			<Container maxWidth='lg' style={{ padding: "0px", margin: "auto" }}>
-				<Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+				<Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
 					<IconButton onClick={() => navigate("/explore")}>
-						<ArrowBack style={{ color: "#1976d2" }} />
+						<ArrowBack color='primary' />
 					</IconButton>
 					<Box style={{ display: "flex", flexDirection: "row" }}>
 						<Button
-							sx={{ mr: 2 }}
+							color='primary'
+							sx={{ marginRight: "20px" }}
 							variant='contained'
 							onClick={() => navigate("/explore/detail/update/" + params?.id)}>
 							Edit
 						</Button>
-						<Button variant='contained' onClick={() => setModal(true)}>
+						<Button
+							variant='contained'
+							onClick={() => setModal((prev) => ({ ...prev, open: true }))}>
 							delete
 						</Button>
 					</Box>
 				</Box>
-				<Card sx={{ p: 2 }}>
+				<Card sx={{ padding: "20px" }}>
 					<Grid item container xs={12}>
 						<Grid item xs={12} sm={6}>
 							<Box sx={{ display: "flex", alignItems: "center" }}>
@@ -120,8 +129,8 @@ function BusinessDetail() {
 										}}
 									/>
 								</Box>
-								<Box sx={{ ml: 2 }}>
-									<Box sx={{ mb: 2 }}>
+								<Box sx={{ marginLeft: "20px" }}>
+									<Box sx={{ marginBottom: "20px" }}>
 										<Typography sx={{ fontSize: "24px" }}>{state?.name}</Typography>
 										<Typography sx={{ fontSize: "12px" }}>
 											{moment(state?.createdOn).format("lll")}
@@ -129,15 +138,19 @@ function BusinessDetail() {
 									</Box>
 									<Box sx={{ display: "flex", alignItems: "center" }}>
 										<Typography>Cloud : </Typography>
-										<Typography sx={{ fontSize: "18px", ml: 1 }}>{state?.cloudName}</Typography>
+										<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
+											{state?.cloudName}
+										</Typography>
 									</Box>
 									<Box sx={{ display: "flex", alignItems: "center" }}>
 										<Typography>Category : </Typography>
-										<Typography sx={{ fontSize: "18px", ml: 1 }}>{state?.categoryName}</Typography>
+										<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
+											{state?.categoryName}
+										</Typography>
 									</Box>
 									<Box sx={{ display: "flex", alignItems: "center" }}>
 										<Typography>Created By : </Typography>
-										<Typography sx={{ fontSize: "18px", ml: 1 }}>
+										<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
 											{state?.userObject?.firstName + " " + state?.userObject?.lastName}
 										</Typography>
 									</Box>
@@ -227,9 +240,9 @@ function BusinessDetail() {
 						<Grid item xs={12}>
 							<Box
 								sx={{
-									p: 1,
+									padding: "10px",
 								}}>
-								<Box sx={{ p: 1 }}>
+								<Box sx={{ padding: "10px" }}>
 									<Typography sx={{ fontSize: "20px", fontWeight: 500, color: "gray" }}>
 										Business Location
 									</Typography>
@@ -252,36 +265,17 @@ function BusinessDetail() {
 						</Grid>
 					</Grid>
 				</Card>
-				<Modal
-					open={modal}
-					onClose={() => setModal(false)}
-					aria-labelledby='modal-modal-title'
-					aria-describedby='modal-modal-description'>
-					<Box
-						sx={{
-							position: "absolute",
-							top: "50%",
-							left: "50%",
-							transform: "translate(-50%, -50%)",
-							width: 400,
-							bgcolor: "background.paper",
-							// border: "2px solid #000",
-							boxShadow: 24,
-							p: 4,
-						}}>
-						<Box sx={{ position: "relative" }}>
-							<Typography>Are you sure to delete the business ?</Typography>
-							<Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
-								<Button variant='outlined' onClick={() => setModal(false)}>
-									cancel
-								</Button>
-								<Button variant='contained' onClick={() => DeleteBusinessApiCall()}>
-									Confirm
-								</Button>
-							</Box>
-						</Box>
+				<ModalComp data={modal} handleModal={handleModal}>
+					<Typography>Are you sure to delete the business ?</Typography>
+					<Box sx={{ display: "flex", justifyContent: "space-between", marginTop: "30px" }}>
+						<Button variant='outlined' onClick={() => handleModal(false)}>
+							cancel
+						</Button>
+						<Button color='primary' variant='contained' onClick={() => DeleteBusinessApiCall()}>
+							Confirm
+						</Button>
 					</Box>
-				</Modal>
+				</ModalComp>
 				<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 			</Container>
 		);
@@ -295,7 +289,7 @@ function BusinessDetail() {
 					height: "100vh",
 					width: "100%",
 				}}>
-				<CircularProgress />
+				<CircularProgress color='primary' />
 			</Box>
 		);
 	}

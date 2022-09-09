@@ -15,6 +15,7 @@ import {
 	InputLabel,
 	Select,
 	MenuItem,
+	useTheme,
 } from "@mui/material";
 import TreeView from "@mui/lab/TreeView";
 import { ExpandMore, ChevronRight, Refresh, Add, Delete, Cancel } from "@mui/icons-material";
@@ -43,6 +44,8 @@ const style = {
 };
 
 function Category(props) {
+	const theme = useTheme();
+
 	const token = localStorage?.getItem("token");
 	const [showId, setShowId] = React.useState();
 	const [openModal, setOpenModal] = React.useState(false);
@@ -226,7 +229,7 @@ function Category(props) {
 								<IconButton
 									style={{
 										borderRadius: "50px",
-										background: "#1976D2",
+										background: theme.palette.primary.main,
 										padding: "10px",
 										fontSize: "20px",
 										color: "white",
@@ -239,7 +242,7 @@ function Category(props) {
 								<IconButton
 									style={{
 										borderRadius: "50px",
-										background: "#1976D2",
+										background: theme.palette.primary.main,
 										padding: "10px",
 										fontSize: "20px",
 										color: "white",

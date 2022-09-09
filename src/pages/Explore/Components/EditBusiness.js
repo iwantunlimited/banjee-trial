@@ -18,7 +18,7 @@ import axios from "axios";
 import React from "react";
 import MyGoogleMap from "../../Neighbourhoods/Map/GoogleMap";
 import "../business.css";
-import { SnackBarComp } from "../../Neighbourhoods/Components/SnackBar";
+import SnackBarComp from "../../../CustomComponents/SnackBarComp";
 import { findByIdBusiness, updateBusiness } from "../services/ApiServices";
 import { CategoryList } from "../../Users/User_Services/UserApiService";
 import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
@@ -31,6 +31,8 @@ function EditBusiness() {
 	const [snackbar, setSnackbar] = React.useState({
 		open: false,
 		message: "",
+		duration: 3000,
+		severity: "",
 	});
 	const [businessData, setBusinessData] = React.useState("");
 	const [data, setData] = React.useState({
@@ -78,17 +80,11 @@ function EditBusiness() {
 
 	const ImageApiCAll = React.useCallback((data) => {
 		const mime = "image";
-		// console.log("====================================");
-		// console.log("image api data", data);
-		// console.log("====================================");
 		const formData = new FormData();
-
-		// formData.append("directoryId", "root");
 
 		formData.append("cloud_name", "banjee");
 		formData.append("upload_preset", "business_images");
 		formData.append("file", data);
-		// { headers: { "Content-Type": "multipart/form-data" }
 
 		const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
 
@@ -100,9 +96,6 @@ function EditBusiness() {
 		axios
 			.post(url, formData)
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("image upload response", res);
-				// console.log("====================================");
 				setData((prev) => ({
 					...prev,
 					logoURL: res?.data?.public_id,
@@ -183,6 +176,8 @@ function EditBusiness() {
 			.then((res) => {
 				setSnackbar({
 					open: true,
+					duration: 3000,
+					severity: "success",
 					message: "Business updated successfully",
 				});
 				setImages("");
@@ -222,10 +217,10 @@ function EditBusiness() {
 		<Container maxWidth='xl'>
 			<Grid item container xs={12} spacing={2}>
 				<Grid item xs={12}>
-					<IconButton onClick={() => navigate('/explore/detail/' + params.id)}>
+					<IconButton onClick={() => navigate("/explore/detail/" + params.id)}>
 						<ArrowBack />
 					</IconButton>
-					<Card sx={{ p: 3 }}>
+					<Card sx={{ padding: "30px" }}>
 						<Typography
 							sx={{ color: "#6b778c", fontSize: "20px", fontWeight: "500", textAlign: "left" }}>
 							Edit Business
@@ -233,7 +228,7 @@ function EditBusiness() {
 					</Card>
 				</Grid>
 				<Grid item xs={12}>
-					<Card sx={{ p: 3 }}>
+					<Card sx={{ padding: "30px" }}>
 						<form onSubmit={handleSubmit}>
 							<Grid item container xs={12} spacing={2}>
 								<Grid item xs={4}>
@@ -340,7 +335,7 @@ function EditBusiness() {
 								</Grid>
 								<Grid item xs={12}>
 									<Box>
-										<Typography sx={{ ml: 0.3 }}>Choose Logo</Typography>
+										<Typography sx={{ marginLeft: "0.3px" }}>Choose Logo</Typography>
 										<Box
 											sx={{
 												display: "flex",
@@ -415,7 +410,7 @@ function EditBusiness() {
 									</Box>
 								</Grid>
 								<Grid item xs={12}>
-									<Box sx={{ my: 1, display: "flex", justifyContent: "flex-end" }}>
+									<Box sx={{ marginY: "10px", display: "flex", justifyContent: "flex-end" }}>
 										<Button variant='contained' type='submit'>
 											Submit
 										</Button>

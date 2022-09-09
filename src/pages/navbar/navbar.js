@@ -11,6 +11,7 @@ import routing from "./navRouting";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { useTheme } from "@mui/material/styles";
 import SidebarList from "./newSideBar";
 
 const LightTooltip = styled(({ className, ...props }) => (
@@ -26,6 +27,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 function Navbar(props) {
 	let navigate = useNavigate();
+	const theme = useTheme();
 
 	const [id, setId] = React.useState("");
 
@@ -41,7 +43,7 @@ function Navbar(props) {
 		setId(event);
 	}
 
-	const drawerWidth = window.innerWidth < 700 ? 190 : 230;
+	const drawerWidth = window.innerWidth < 700 ? "190px" : "230px";
 
 	const desktop = (
 		<Drawer
@@ -53,12 +55,12 @@ function Navbar(props) {
 				"& > div": {
 					// background: "#1976D2",
 					// background: "#2787bd",
-					background: "white",
+					background: theme.palette.common.white,
 				},
 			}}>
 			<Toolbar />
 			<Box sx={{ overflow: "auto" }}>
-				<List sx={{ paddingTop: "4px !important" }}>
+				<List sx={{ paddingTop: "3px !important" }}>
 					<SidebarList handleId={handleIdFun} handleClick={handleDrawerToggle} />
 					{/* <Sidebar handleId={handleIdFun} handleClick={handleDrawerToggle} /> */}
 				</List>
@@ -108,7 +110,13 @@ function Navbar(props) {
 			</Helmet>
 			<Box sx={{ display: "flex" }}>
 				<CssBaseline />
-				<AppBar position='fixed' sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+				<AppBar
+					position='fixed'
+					sx={{
+						zIndex: (theme) => theme.zIndex.drawer + 1,
+						background: theme.palette.primary.main,
+						color: theme.palette.common.white,
+					}}>
 					<Toolbar>
 						<Hidden mdUp>
 							<IconButton
@@ -116,7 +124,7 @@ function Navbar(props) {
 								aria-label='open drawer'
 								edge='start'
 								onClick={handleDrawerToggle}
-								sx={{ mr: 2, display: { lg: "none" } }}>
+								sx={{ marginRight: "20px", display: { lg: "none" } }}>
 								<MenuIcon />
 							</IconButton>
 						</Hidden>
@@ -165,7 +173,7 @@ function Navbar(props) {
 										onClick={() => localStorage.clear()}
 										style={{ paddingTop: "3px", paddingBottom: "3px" }}>
 										<Link to='/login'>
-											<LogoutIcon style={{ color: "white" }} />
+											<LogoutIcon style={{ color: theme.palette.primary.contrastText }} />
 										</Link>
 									</IconButton>
 								</LightTooltip>
@@ -181,9 +189,9 @@ function Navbar(props) {
 						width: "100%",
 						height: "100%",
 						minHeight: "100vh",
-						background: "#EFF1F4",
-					}}
-					sx={{ p: 2 }}>
+						background: theme.palette.grey.A700,
+						padding: "20px",
+					}}>
 					<Toolbar />
 					<Outlet />
 				</Box>

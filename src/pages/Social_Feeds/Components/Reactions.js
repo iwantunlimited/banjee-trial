@@ -16,8 +16,8 @@ const style = {
 	transform: "translate(-50%, -50%)",
 	bgcolor: "background.paper",
 	border: "2px solid #999",
-	boxShadow: 24,
-	p: 2,
+	boxShadow: "24px",
+	padding: "20px",
 };
 
 export default function ReactionsModal(props) {

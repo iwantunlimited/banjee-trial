@@ -130,7 +130,7 @@ function ViewRooms() {
 				/>
 			);
 		} else {
-			return <Avatar sx={{ width: 68, height: 68 }} alt='P' />;
+			return <Avatar sx={{ width: "68px", height: "68px" }} alt='P' />;
 		}
 	}
 

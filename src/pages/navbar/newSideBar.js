@@ -1,22 +1,27 @@
 import { Collapse, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
+
+import { useTheme } from "@mui/material/styles";
 import {
 	// ViewHeadline,
 	ExpandLess,
 	ExpandMore,
 } from "@mui/icons-material";
 import routing from "./navRouting";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 
 function SidebarList({ handleId, handleClick }) {
 	const navigate = useNavigate();
+	const params = useParams();
+	const theme = useTheme();
+
 	const { pathname } = useLocation();
 	const path1 = pathname?.split("/")?.[1];
 
 	const path2 = pathname?.split("/")?.[2];
 	const path3 = pathname?.split("/")?.[3];
 
-	console.log("path----3", path3);
+	// console.log("path----3", "/" + path1 + "/" + path2 + "/" + path3);
 	const [open, setOpen] = React.useState(false);
 	const [id, setId] = React.useState("");
 	return (
@@ -41,13 +46,23 @@ function SidebarList({ handleId, handleClick }) {
 									setId(item.id);
 								}}
 								sx={{
-									color: `/${path1}` === item.path ? "white" : "white",
+									color:
+										`/${path1}` === item.path
+											? theme.palette.common.white
+											: theme.palette.common.white,
 									// padding: "5px 10px",
-									background: `/${path1}` === item.path ? "rgb(42,149,15)" : "#1976D2",
+									background:
+										`/${path1}` === item.path
+											? theme.palette.secondary.main
+											: theme.palette.primary.main,
 									borderRadius: "10px",
-									margin: "2.5px",
+									marginY: "2.5px",
+									marginX: "5px",
 									":hover": {
-										background: `/${path1}` === item.path ? "rgb(42,149,15)" : "#1976D2",
+										background:
+											`/${path1}` === item.path
+												? theme.palette.secondary.main
+												: theme.palette.primary.main,
 										opacity: "0.8",
 									},
 								}}>
@@ -56,7 +71,10 @@ function SidebarList({ handleId, handleClick }) {
 										display: "flex",
 										justifyContent: "center",
 										alignItems: "center",
-										color: `/${path1}` === item.path ? "white" : "white",
+										color:
+											`/${path1}` === item.path
+												? theme.palette.primary.contrastText
+												: theme.palette.primary.contrastText,
 										"& > svg": {
 											fontSize: { xl: "1.8rem", lg: "1.5rem" },
 										},
@@ -81,6 +99,11 @@ function SidebarList({ handleId, handleClick }) {
 							<Collapse in={open && item?.id === id}>
 								<List sx={{ paddingTop: "0px", paddingBottom: "0px" }}>
 									{item?.children?.map((text, index) => {
+										{
+											/* console.log("====================================");
+										console.log("pathname", text.path + `/${params?.id}`);
+										console.log("===================================="); */
+										}
 										return (
 											<ListItemButton
 												onClick={() => {
@@ -88,14 +111,24 @@ function SidebarList({ handleId, handleClick }) {
 													handleClick();
 												}}
 												sx={{
-													color: `/${path2}` === text.path ? "white" : "white",
+													color:
+														`/${path2}` === text.path
+															? theme.palette.primary.contrastText
+															: theme.palette.primary.contrastText,
 													// padding: "5px 10px",
-													background: pathname === text.path ? "rgb(42,149,15)" : "#1976D2",
+													background:
+														pathname === text.path ||
+														pathname === text.path + `/detail/${params?.id}`
+															? theme.palette.secondary.main
+															: theme.palette.primary.main,
 													borderRadius: "10px",
 													margin: "5px",
 													ml: 8,
 													":hover": {
-														background: pathname === text.path ? "rgb(42,149,15)" : "#1976D2",
+														background:
+															pathname === text.path
+																? theme.palette.secondary.main
+																: theme.palette.primary.main,
 														opacity: "0.8",
 													},
 												}}>
@@ -104,7 +137,10 @@ function SidebarList({ handleId, handleClick }) {
 														display: "flex",
 														justifyContent: "center",
 														alignItems: "center",
-														color: `/${path1}` === item.path ? "white" : "white",
+														color:
+															`/${path1}` === item.path
+																? theme.palette.primary.contrastText
+																: theme.palette.primary.contrastText,
 														"& > svg": {
 															fontSize: { xl: "1.8rem", lg: "1.5rem" },
 														},
@@ -142,13 +178,22 @@ function SidebarList({ handleId, handleClick }) {
 								handleClick();
 							}}
 							sx={{
-								color: `/${path1}` === item.path ? "white" : "white",
+								color:
+									`/${path1}` === item.path
+										? theme.palette.primary.contrastText
+										: theme.palette.primary.contrastText,
 								// padding: "5px 10px",
-								background: `/${path1}` === item.path ? "rgb(42,149,15)" : "#1976D2",
+								background:
+									pathname === item.path
+										? theme.palette.secondary.main
+										: theme.palette.primary.main,
 								borderRadius: "10px",
 								margin: "5px",
 								":hover": {
-									background: `/${path1}` === item.path ? "rgb(42,149,15)" : "#1976D2",
+									background:
+										pathname === item.path
+											? theme.palette.secondary.main
+											: theme.palette.primary.main,
 									opacity: "0.8",
 								},
 							}}>
@@ -157,7 +202,10 @@ function SidebarList({ handleId, handleClick }) {
 									display: "flex",
 									justifyContent: "center",
 									alignItems: "center",
-									color: `/${path1}` === item.path ? "white" : "white",
+									color:
+										`/${path1}` === item.path
+											? theme.palette.primary.contrastText
+											: theme.palette.primary.contrastText,
 									"& > svg": {
 										fontSize: { xl: "1.8rem", lg: "1.5rem" },
 									},

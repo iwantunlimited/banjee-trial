@@ -22,9 +22,7 @@ function ChipComp({ listApiCall }) {
 
 	return (
 		<Accordion expanded={expanded}>
-			<AccordionSummary
-				onClick={handleExpanded}
-				expandIcon={<AddCircle style={{ color: "#1976d2" }} />}>
+			<AccordionSummary onClick={handleExpanded} expandIcon={<AddCircle color='primary' />}>
 				{/* <Card
 					sx={{
 						p: 2,
@@ -34,7 +32,7 @@ function ChipComp({ listApiCall }) {
 						alignItems: "center",
 						flexDirection: { xs: "column", sm: "row" },
 					}}> */}
-				<Box sx={{ p: 2 }}>
+				<Box sx={{ padding: "20px" }}>
 					<Typography
 						sx={{
 							color: "#6b778c",

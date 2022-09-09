@@ -8,6 +8,8 @@ import NeighbourList from "./Components/NeighbourList";
 import { ApprovalList } from "./Components/ApprovalList";
 import { filterNeighbourhood } from "./services/apiServices";
 
+import { useTheme } from "@mui/material/styles";
+
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
 
@@ -38,6 +40,7 @@ function a11yProps(index) {
 
 function Neighbourhood() {
 	const [value, setValue] = React.useState(0);
+	const theme = useTheme();
 
 	const [listData, setListData] = React.useState("");
 	const [state, setState] = React.useState({
@@ -103,23 +106,32 @@ function Neighbourhood() {
 					<ChipComp listApiCAll={listApiCAll} />
 				</Grid>
 				<Grid item xs={12}>
-					<Card sx={{ p: 2 }}>
+					<Card sx={{ padding: { xs: "10px", sm: "20px" } }}>
 						<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-							<Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
+							<Tabs
+								indicatorColor='primary'
+								textColor='primary'
+								value={value}
+								onChange={handleChange}
+								aria-label='basic tabs example'>
 								<Tab label='Neighbourhood List' {...a11yProps(0)} />
 								<Tab label='Pending List' {...a11yProps(1)} />
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
-							<NeighbourList
-								listApiCAll={listApiCAll}
-								data={listData}
-								pagination={state}
-								handlePagination={handlePagination}
-							/>
+							<Box sx={{ padding: { xs: "10px", sm: "10px" } }}>
+								<NeighbourList
+									listApiCAll={listApiCAll}
+									data={listData}
+									pagination={state}
+									handlePagination={handlePagination}
+								/>
+							</Box>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<ApprovalList handleTabChange={handleChange} />
+							<Box sx={{ padding: "10px" }}>
+								<ApprovalList listApiCAll={listApiCAll} handleTabChange={handleChange} />
+							</Box>
 						</TabPanel>
 					</Card>
 				</Grid>
