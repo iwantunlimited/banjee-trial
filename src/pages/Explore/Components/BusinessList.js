@@ -59,7 +59,7 @@ function BusinessList(props) {
 					const date = moment(params.row.createdOn).format("L");
 					return date;
 				} else {
-					return 0;
+					return "-";
 				}
 			},
 		},
@@ -77,7 +77,6 @@ function BusinessList(props) {
 						<IconButton
 							onClick={() => {
 								navigate("/explore/detail/" + params.row.routingId);
-								console.log("params", params);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -131,7 +130,6 @@ function BusinessList(props) {
 								// autoPageSize
 								pagination
 								onPageChange={(event) => {
-									// console.log("event--------", event);
 									handlePagination({
 										page: event,
 										pageSize: paginationState?.pagination?.page,

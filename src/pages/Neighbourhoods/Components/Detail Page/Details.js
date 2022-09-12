@@ -88,7 +88,11 @@ function DetailPage() {
 			flex: 0.3,
 			renderCell: (params) => {
 				const fullName = params?.row?.mfirstName + " " + params?.row?.mlastName;
-				return fullName;
+				if (params?.row?.mfirstName && params?.row?.mlastName) {
+					return fullName;
+				} else {
+					return "-";
+				}
 			},
 		},
 		{
@@ -148,7 +152,6 @@ function DetailPage() {
 							onClick={() => {
 								setModalData({ open: true, data: params?.row });
 								// navigate("/neighbourhood/detail/" + params?.row?.routingId);
-								console.log(params);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -162,9 +165,6 @@ function DetailPage() {
 		findNeighbourhood(params?.id)
 			.then((res) => {
 				setState(res);
-				console.log("====================================");
-				console.log("find neighbour api call", res);
-				console.log("====================================");
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -191,9 +191,6 @@ function DetailPage() {
 						pageSize: res?.pageable?.pageSize,
 					},
 				}));
-				// console.log("====================================");
-				// console.log("members response", res);
-				// console.log("====================================");
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -236,11 +233,15 @@ function DetailPage() {
 									<Typography sx={{ fontSize: { xs: "22px", md: "26px" } }}>
 										{state?.name}
 									</Typography>
-									<Typography sx={{ fontSize: "12px" }}>
-										{moment(state?.createdOn).format("lll")}
-									</Typography>
-									<Typography>{state?.countryName}</Typography>
-									<Typography>{"Total Members: " + state?.totalMembers}</Typography>
+									{state?.createdOn && (
+										<Typography sx={{ fontSize: "12px" }}>
+											{moment(state?.createdOn).format("lll")}
+										</Typography>
+									)}
+									{state?.countryName && <Typography>{state?.countryName}</Typography>}
+									{state?.totalMembers && (
+										<Typography>{"Total Members: " + state?.totalMembers}</Typography>
+									)}
 									<Typography>{state?.description}</Typography>
 								</Box>
 							</Box>

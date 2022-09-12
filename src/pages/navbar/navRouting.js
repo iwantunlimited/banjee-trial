@@ -42,13 +42,13 @@ const routing = [
 		icon: <PeopleAlt fontSize='medium' />,
 		component: <User />,
 	},
-	{
-		id: 4,
-		path: "/rooms",
-		name: "Rooms",
-		icon: <Groups fontSize='medium' />,
-		component: <Room />,
-	},
+	// {
+	// 	id: 4,
+	// 	path: "/rooms",
+	// 	name: "Rooms",
+	// 	icon: <Groups fontSize='medium' />,
+	// 	component: <Room />,
+	// },
 	{
 		id: 5,
 		path: "/social-feeds",

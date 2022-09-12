@@ -13,8 +13,6 @@ function Sidebar(props) {
 	const { pathname } = useLocation();
 	const path1 = pathname?.split("/")?.[1];
 
-	// console.log("path1-------", `/${path1}`);
-
 	const { handleId } = props;
 
 	return (

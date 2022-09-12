@@ -70,12 +70,9 @@ function ViewRFeed() {
 
 	const { id } = useParams();
 
-	console.log("data", data);
-
 	const reportedProfile = React.useCallback((item) => {
 		findCustomer(item)
 			.then((res) => {
-				console.log("mapping data", res);
 				setPRData((prev) => [...prev, res.userObject]);
 			})
 			.catch((err) => {
@@ -86,7 +83,6 @@ function ViewRFeed() {
 	const apiCall = React.useCallback(() => {
 		getReportedFeedDetail(id)
 			.then((res) => {
-				console.log("res------------", res);
 				// setReportedId(() => {
 				// 	const data = res.map((item) => {
 				// 		return item?.reportedBy;
@@ -107,7 +103,6 @@ function ViewRFeed() {
 	const filterFeedApiCall = React.useCallback(() => {
 		getSocialFeedDetails(id)
 			.then((res) => {
-				console.log("feed response", res);
 				setData(res);
 			})
 			.catch((err) => console.log(err));
@@ -117,9 +112,6 @@ function ViewRFeed() {
 		apiCall();
 		filterFeedApiCall();
 	}, [apiCall, filterFeedApiCall]);
-
-	console.log("reported IDs-----", reportedId);
-	console.log("prdata -----userProfile", pRData);
 
 	const rows = pRData ? pRData : [];
 
@@ -168,7 +160,6 @@ function ViewRFeed() {
 				<strong>
 					<IconButton
 						onClick={() => {
-							console.log("params datagrid", params);
 							navigate("/user/view/" + params.row.id);
 						}}>
 						<VisibilityIcon />

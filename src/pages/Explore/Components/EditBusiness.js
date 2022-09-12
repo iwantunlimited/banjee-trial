@@ -53,8 +53,6 @@ function EditBusiness() {
 		approvalType: "BY_ADMIN",
 	});
 
-	console.log("form data", data);
-
 	const [categoryList, setCategoryList] = React.useState([]);
 	const [cloudList, setCloudList] = React.useState([]);
 
@@ -150,7 +148,6 @@ function EditBusiness() {
 		CategoryList({ type: "LOCALBUSINESS" })
 			.then((response) => {
 				setCategoryList(response?.content);
-				// console.log(response);
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -162,8 +159,6 @@ function EditBusiness() {
 			})
 			.catch((err) => console.error(err));
 	}, []);
-
-	// console.log("category list ", cloudList);
 
 	React.useEffect(() => {
 		CategoryListApiCall();
@@ -208,7 +203,6 @@ function EditBusiness() {
 	}, []);
 
 	function handleSubmit(event) {
-		console.log("final data-------", data);
 		EditApiCall(data);
 		event.preventDefault();
 	}

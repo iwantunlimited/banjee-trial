@@ -68,9 +68,6 @@ function BusinessDetail() {
 		findByIdBusiness(params?.id)
 			.then((res) => {
 				setState(res);
-				console.log("====================================");
-				console.log("find neighbour api call", res);
-				console.log("====================================");
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -132,28 +129,36 @@ function BusinessDetail() {
 								<Box sx={{ marginLeft: "20px" }}>
 									<Box sx={{ marginBottom: "20px" }}>
 										<Typography sx={{ fontSize: "24px" }}>{state?.name}</Typography>
-										<Typography sx={{ fontSize: "12px" }}>
-											{moment(state?.createdOn).format("lll")}
-										</Typography>
+										{state?.createdOn && (
+											<Typography sx={{ fontSize: "12px" }}>
+												{moment(state?.createdOn).format("lll")}
+											</Typography>
+										)}
 									</Box>
-									<Box sx={{ display: "flex", alignItems: "center" }}>
-										<Typography>Cloud : </Typography>
-										<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
-											{state?.cloudName}
-										</Typography>
-									</Box>
-									<Box sx={{ display: "flex", alignItems: "center" }}>
-										<Typography>Category : </Typography>
-										<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
-											{state?.categoryName}
-										</Typography>
-									</Box>
-									<Box sx={{ display: "flex", alignItems: "center" }}>
-										<Typography>Created By : </Typography>
-										<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
-											{state?.userObject?.firstName + " " + state?.userObject?.lastName}
-										</Typography>
-									</Box>
+									{state?.cloudName && (
+										<Box sx={{ display: "flex", alignItems: "center" }}>
+											<Typography>Cloud : </Typography>
+											<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
+												{state?.cloudName}
+											</Typography>
+										</Box>
+									)}
+									{state?.categoryName && (
+										<Box sx={{ display: "flex", alignItems: "center" }}>
+											<Typography>Category : </Typography>
+											<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
+												{state?.categoryName}
+											</Typography>
+										</Box>
+									)}
+									{state?.userObject?.firstName && state?.userObject?.lastName && (
+										<Box sx={{ display: "flex", alignItems: "center" }}>
+											<Typography>Created By : </Typography>
+											<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
+												{state?.userObject?.firstName + " " + state?.userObject?.lastName}
+											</Typography>
+										</Box>
+									)}
 									{state?.description?.length > 200 ? (
 										<Box>
 											{dExpand ? (

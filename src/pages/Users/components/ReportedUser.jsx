@@ -107,7 +107,6 @@ function ReportedUser1(props) {
 	];
 
 	const listApiCall = React.useCallback((page, pageSize) => {
-		// console.log("data ---------", data);
 		ReportedUserList({ page: page, pageSize: pageSize })
 			.then((response) => {
 				const resp = response.content.map((ele) => {
@@ -117,8 +116,6 @@ function ReportedUser1(props) {
 						reports: ele.reports ? (ele.reports.length > 0 ? ele.reports.length : 0) : null,
 					};
 				});
-				console.log(resp, "report");
-				console.log(response);
 				setReportList(() => resp);
 				setPagination(() => ({
 					page: response.pageable.pageNumber,

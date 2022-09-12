@@ -49,8 +49,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		approvalType: "BY_ADMIN",
 	});
 
-	console.log("form data", data);
-
 	const [categoryList, setCategoryList] = React.useState([]);
 	const [cloudList, setCloudList] = React.useState([]);
 
@@ -166,7 +164,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 	}, []);
 
 	function handleSubmit(event) {
-		console.log("final data-------", data);
 		createApiCall(data);
 		event.preventDefault();
 	}
@@ -181,7 +178,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 
 	const newImageFunc = async (data) => {
 		const base64 = await blobToBase64(data);
-		console.log(base64);
+		// console.log(base64);
 	};
 
 	React.useEffect(() => {

@@ -107,7 +107,6 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 						<IconButton
 							onClick={() => {
 								navigate("/neighbourhood/detail/" + params.row.objectId);
-								console.log("params", params);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -136,7 +135,6 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 									handleTabChange(event, 0);
 									pendingAPiCAll(0, 10);
 									listApiCAll(0, 10);
-									console.log(params);
 								}}
 							/>
 							<Chip
@@ -161,7 +159,6 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 	const pendingAPiCAll = React.useCallback((page, pageSize) => {
 		pendingApproval({ page: page, pageSize: pageSize, processed: false })
 			.then((res) => {
-				// console.log("pending Approvals-----------", res);
 				const resp = res.content.map((ele) => {
 					return {
 						routingId: ele.id,
@@ -181,7 +178,7 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 					},
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const ApproveApiCAll = React.useCallback((data) => {
@@ -193,11 +190,8 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 					severity: "success",
 					message: "Neighbourhood approved",
 				});
-				console.log("====================================");
-				console.log("approve response", res);
-				console.log("====================================");
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const RejectApiCAll = React.useCallback((data) => {
@@ -209,9 +203,6 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 					severity: "warning",
 					message: "Neighbourhood Rejected",
 				});
-				console.log("====================================");
-				console.log("reject response", res);
-				console.log("====================================");
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -258,7 +249,6 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 								// autoPageSize
 								pagination
 								onPageChange={(event) => {
-									console.log("event--------", event);
 									setState((prev) => ({
 										...prev,
 										pagination: {

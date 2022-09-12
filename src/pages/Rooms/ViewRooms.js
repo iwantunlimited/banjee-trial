@@ -1,11 +1,21 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { Container, Card, Grid, Typography, Avatar, CircularProgress, Box } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+	Container,
+	Card,
+	Grid,
+	Typography,
+	Avatar,
+	CircularProgress,
+	Box,
+	IconButton,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { findRoomsById } from "./Services/ApiServices";
 import moment from "moment";
 import "../Users/users.css";
 import { DataGrid } from "@mui/x-data-grid";
+import { ArrowBack } from "@mui/icons-material";
 
 const useStyles = makeStyles((theme) => ({
 	typoColor: {
@@ -15,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ViewRooms() {
 	const params = useParams();
+	const navigate = useNavigate();
 
 	const classes = useStyles();
 
@@ -137,6 +148,11 @@ function ViewRooms() {
 	if (data) {
 		return (
 			<Container maxWidth='xl																							'>
+				<Box>
+					<IconButton onClick={() => navigate("/rooms")}>
+						<ArrowBack color='primary' />
+					</IconButton>
+				</Box>
 				<Grid container spacing={3} className='mt-1'>
 					<Grid item xs={12} className='d-flex justify-content-center'>
 						<Card

@@ -79,9 +79,6 @@ export default function CommentsModal(props) {
 	const [reaction, setReaction] = React.useState([]);
 	const [value, setValue] = React.useState(0);
 
-	console.log("result------", result);
-	console.log("reaction------", reaction);
-
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
@@ -108,7 +105,6 @@ export default function CommentsModal(props) {
 	const feedCommentApiCall = React.useCallback(() => {
 		getSocialFeedsComments(data?.id)
 			.then((res) => {
-				console.log(res);
 				setResult(res);
 			})
 			.catch((err) => {
@@ -119,7 +115,6 @@ export default function CommentsModal(props) {
 	const feedReactionApiCall = React.useCallback(() => {
 		getSocialFeedsReactions(data?.id)
 			.then((res) => {
-				console.log(res);
 				setReaction(res);
 			})
 			.catch((err) => {

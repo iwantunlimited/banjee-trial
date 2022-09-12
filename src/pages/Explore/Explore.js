@@ -56,9 +56,6 @@ function Explore() {
 	};
 
 	const handleChange = (event, newValue) => {
-		console.log("====================================");
-		console.log("tabs value---------", newValue);
-		console.log("====================================");
 		setValue(newValue);
 	};
 

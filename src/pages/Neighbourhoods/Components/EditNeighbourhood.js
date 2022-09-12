@@ -53,8 +53,6 @@ function EditNeighbourhood() {
 		approvalType: "BY_ADMIN",
 	});
 
-	console.log("form data", data);
-
 	const [country, setCountry] = React.useState();
 	const [state, setState] = React.useState();
 	const [city, setCity] = React.useState();
@@ -83,7 +81,6 @@ function EditNeighbourhood() {
 	const CityApi = React.useCallback((id) => {
 		findCity({ cityId: id })
 			.then((res) => {
-				console.log("city -----------", res);
 				setCity(res.content);
 			})
 			.catch((err) => console.log(err));
@@ -93,7 +90,6 @@ function EditNeighbourhood() {
 		findState({ countryId: countryId })
 			.then((res) => {
 				setState(res.content);
-				console.log("State", res);
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -107,18 +103,12 @@ function EditNeighbourhood() {
 					countryId: res.length > 0 ? res?.[0]?.id : false,
 				}));
 				StateApi(res?.[0]?.id || "");
-				console.log("COuntry", res);
 			})
 			.catch((err) => console.log(err));
 	}, []);
 
-	console.log("defaultLocation", defaultLocation);
-
 	const ImageApiCAll = React.useCallback((data) => {
 		const mime = "image";
-		// console.log("====================================");
-		// console.log("image api data", data);
-		// console.log("====================================");
 		const formData = new FormData();
 
 		formData.append("cloud_name", "banjee");
@@ -162,9 +152,6 @@ function EditNeighbourhood() {
 					approvalType: "BY_ADMIN",
 				}));
 				setImgShow(res?.imageUrl);
-				console.log("====================================");
-				console.log("find neighbour api call", res);
-				console.log("====================================");
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -215,7 +202,6 @@ function EditNeighbourhood() {
 	}, []);
 
 	function handleSubmit(event) {
-		console.log("final data-------", data);
 		EditApiCall(data);
 		event.preventDefault();
 	}
@@ -330,7 +316,6 @@ function EditNeighbourhood() {
 												label='City'
 												value={data?.cityId}
 												onChange={(event) => {
-													// console.log("event", event.target);
 													const defaultLatLon = city.filter((item) => {
 														if (item.id === event.target.value) {
 															setDefaultLocation({
@@ -343,7 +328,6 @@ function EditNeighbourhood() {
 															// });
 														} else return null;
 													});
-													console.log("defaultLatLon", defaultLatLon);
 													setData((prevData) => {
 														return {
 															...prevData,

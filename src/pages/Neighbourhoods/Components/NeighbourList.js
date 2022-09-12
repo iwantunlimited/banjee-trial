@@ -27,7 +27,7 @@ function NeighbourList(props) {
 			headerClassName: "app-header",
 			headerName: "Country",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			flex: 0.5,
+			flex: 0.3,
 		},
 		{
 			id: "3",
@@ -68,7 +68,6 @@ function NeighbourList(props) {
 						<IconButton
 							onClick={() => {
 								navigate("/neighbourhood/detail/" + params.row.routingId);
-								// console.log(params);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -121,7 +120,6 @@ function NeighbourList(props) {
 								// autoPageSize
 								pagination
 								onPageChange={(event) => {
-									console.log("event--------", event);
 									handlePagination({
 										page: event,
 										pageSize: pagination?.pagination?.page,

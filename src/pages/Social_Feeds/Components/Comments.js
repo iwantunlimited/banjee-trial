@@ -26,7 +26,6 @@ export default function CommentsModal(props) {
 	React.useEffect(() => {
 		getSocialFeedsComments(data?.id)
 			.then((res) => {
-				console.log(res);
 				setResult(res);
 			})
 			.catch((err) => {

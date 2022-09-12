@@ -15,11 +15,7 @@ function BlogDetail() {
 
 	const DeleteBlogApiCall = React.useCallback((data) => {
 		deleteBlog(data)
-			.then((res) => {
-				// console.log("====================================");
-				// console.log("delete response", res);
-				// console.log("====================================");
-			})
+			.then((res) => {})
 			.catch((err) => console.log(err));
 	}, []);
 
@@ -27,9 +23,6 @@ function BlogDetail() {
 		findByIdBlog(params?.id)
 			.then((res) => {
 				setData(res);
-				console.log("====================================");
-				console.log("find by id blog response", res);
-				console.log("====================================");
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -64,8 +57,7 @@ function BlogDetail() {
 						</Typography>
 					</Grid>
 					<Grid item xs={12}>
-						<Box
-							sx={{ position: "relative", width: "100%", minHeight: "200px", maxHeight: "100%" }}>
+						<Box sx={{ position: "relative", width: "100%", height: "100%" }}>
 							<img
 								style={{ height: "100%", width: "100%", objectFit: "contain" }}
 								src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${data?.bannerImageUrl}.png`}
@@ -75,7 +67,7 @@ function BlogDetail() {
 					</Grid>
 					<Grid item xs={12}>
 						<Box sx={{ position: "relative" }}>
-							<Typography sx={{ textAlign: "center", fontSize: "22px", fontWeight: 400 }}>
+							<Typography sx={{ textAlign: "left", fontSize: "22px", fontWeight: 400 }}>
 								{data?.shortDescription}
 							</Typography>
 						</Box>

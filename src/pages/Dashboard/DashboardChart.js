@@ -32,7 +32,7 @@ const DashboardTrial = () => {
 		setCustomDate(new Date(event.target.value));
 	}
 
-	console.log("sdtate------------date", state);
+	// console.log("sdtate------------date", state);
 	return (
 		<div
 			className='App'

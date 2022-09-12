@@ -29,9 +29,6 @@ function BusinessList(props) {
 					pageSize: res?.pageable?.pageSize,
 				});
 				setTotalEle(res?.totalElements);
-				console.log("====================================");
-				console.log("neighbourhood by userId", res);
-				console.log("====================================");
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -94,7 +91,6 @@ function BusinessList(props) {
 						<IconButton
 							onClick={() => {
 								navigate("/neighbourhood/detail/" + params.row.id);
-								// console.log(params);
 							}}>
 							<Visibility />
 						</IconButton>

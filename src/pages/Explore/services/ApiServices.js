@@ -89,3 +89,11 @@ export const deleteBlog = (requestLoad) => {
 	let method = "DELETE";
 	return executeGet(url, actionCode, payload, method);
 };
+
+export const createBlog = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.CREATE_BLOG;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};

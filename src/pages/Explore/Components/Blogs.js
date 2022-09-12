@@ -1,4 +1,4 @@
-import { Delete, RemoveRedEye } from "@mui/icons-material";
+import { Add, Delete, RemoveRedEye } from "@mui/icons-material";
 import {
 	Avatar,
 	Box,
@@ -44,9 +44,6 @@ function ExploreBlogs() {
 	const BlogsListApiCall = React.useCallback((page, pageSize) => {
 		blogsList({ page: page, pageSize: pageSize })
 			.then((res) => {
-				console.log("====================================");
-				console.log("blog api response", res);
-				console.log("====================================");
 				const resp = res?.content?.map((item, index) => ({
 					...item,
 					blogId: item.id,
@@ -54,9 +51,6 @@ function ExploreBlogs() {
 					muserName: item?.userObject?.username,
 				}));
 
-				console.log("====================================");
-				console.log("new response", resp);
-				console.log("====================================");
 				setData(resp);
 				setTotalEle(res.totalElements);
 				setPagination({
@@ -69,11 +63,7 @@ function ExploreBlogs() {
 
 	const DeleteBlogApiCall = React.useCallback((data) => {
 		deleteBlog(data)
-			.then((res) => {
-				// console.log("====================================");
-				// console.log("delete response", res);
-				// console.log("====================================");
-			})
+			.then((res) => {})
 			.catch((err) => console.log(err));
 	}, []);
 
@@ -86,10 +76,15 @@ function ExploreBlogs() {
 			<Container style={{ padding: "0px", margin: "auto" }} maxWidth='xl'>
 				<Grid item container xs={12} spacing={2}>
 					<Grid item xs={12}>
-						<Card sx={{ p: 2 }}>
-							<Typography sx={{ fontWeight: 600, color: "gray", fontSize: "25px" }}>
-								Blogs({totalEle})
-							</Typography>
+						<Card sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
+							<Box>
+								<Typography sx={{ fontWeight: 600, color: "gray", fontSize: "25px" }}>
+									Blogs({totalEle})
+								</Typography>
+							</Box>
+							<IconButton onClick={() => navigate("/explore/blogs/createblog")}>
+								<Add color='primary' />
+							</IconButton>
 						</Card>
 					</Grid>
 					{data?.map((item, index) => {
@@ -159,18 +154,27 @@ function ExploreBlogs() {
 													}}>
 													<b>Are you sure to delete this Blog ?</b>
 												</Typography>
-												<Box sx={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+												<Box
+													sx={{
+														display: "flex",
+														justifyContent: "center",
+														marginTop: "20px",
+														alignItems: "center",
+													}}>
 													<Button variant='outlined' onClick={() => handleModal(false)}>
 														Cancel
 													</Button>
 													<Button
-														sx={{ marginTop: "20px" }}
+														sx={{ marginLeft: "20px" }}
 														variant='contained'
 														type='submit'
 														onClick={() => {
 															DeleteBlogApiCall(modal?.data);
-															BlogsListApiCall(0, 10);
 															handleModal(false);
+															setTimeout(() => {
+																BlogsListApiCall(0, 10);
+																console.log("blog deleted");
+															}, [2000]);
 														}}
 														// onClick={() => {
 														// 	deleteFeedApiCall();
@@ -187,14 +191,15 @@ function ExploreBlogs() {
 											onClick={() => navigate("/explore/blogs/detail/" + item?.blogId)}
 											sx={{
 												width: "100%",
-												maxHeight: "300px",
-												height: "300px",
+												maxHeight: "260px",
+												height: "260px",
+												aspectRatio: "auto",
 												display: "flex",
 												justifyContent: "center",
 												alignItems: "center",
 											}}>
 											<img
-												style={{ height: "100%", width: "100%" }}
+												style={{ height: "100%", width: "100%", aspectRatio: "auto" }}
 												src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${item?.bannerImageUrl}.png`}
 												alt='image'
 											/>
@@ -207,8 +212,9 @@ function ExploreBlogs() {
 												// left: "0px",
 												background: "white",
 												backfaceVisibility: "hidden",
-												padingX: "20px",
-												paddingY: "0.5px",
+												paddingX: "12px",
+												paddingTop: "0.5px",
+												paddingBottom: "5px",
 												width: "100%",
 												height: "60px",
 												maxHeight: "60px",
@@ -247,7 +253,6 @@ function ExploreBlogs() {
 								rowsPerPage={pagination.pageSize}
 								rowsPerPageOptions={[12, 16, 20]}
 								onPageChange={(event, data) => {
-									// console.log("event--------", event);
 									setPagination((prev) => ({
 										...prev,
 										page: data,
@@ -255,7 +260,6 @@ function ExploreBlogs() {
 									BlogsListApiCall(data, pagination.pageSize);
 								}}
 								onRowsPerPageChange={(event) => {
-									// console.log("pagesizedfddv", event, data);
 									setPagination((prev) => ({
 										...prev,
 										pageSize: event.target.value,
@@ -278,7 +282,7 @@ function ExploreBlogs() {
 					justifyContent: "center",
 					alignItems: "center",
 				}}>
-				<CircularProgress color="primary" />
+				<CircularProgress color='primary' />
 			</Box>
 		);
 	}

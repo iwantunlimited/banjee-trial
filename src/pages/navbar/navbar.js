@@ -31,8 +31,6 @@ function Navbar(props) {
 
 	const [id, setId] = React.useState("");
 
-	console.log(id);
-
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
 	const handleDrawerToggle = () => {
@@ -97,7 +95,6 @@ function Navbar(props) {
 	);
 
 	React.useEffect(() => {
-		console.log("aaaa");
 		if (!localStorage.getItem("token")) {
 			navigate("/login", { replace: true });
 		}

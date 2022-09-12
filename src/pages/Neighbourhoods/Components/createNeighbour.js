@@ -40,8 +40,6 @@ function CreateNeighbour(props) {
 		approvalType: "BY_ADMIN",
 	});
 
-	console.log("form data", data);
-
 	const [country, setCountry] = React.useState();
 	const [state, setState] = React.useState();
 	const [city, setCity] = React.useState();
@@ -51,17 +49,10 @@ function CreateNeighbour(props) {
 	const [images, setImages] = React.useState("");
 	const [imgShow, setImgShow] = React.useState("");
 
-	console.log("====================================");
-	console.log("images", images);
-	console.log("====================================");
-
 	const [loc, setLoc] = React.useState({
 		lat: -34.59,
 		lng: 150.66,
 	});
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
 
 	const token = localStorage?.getItem("token");
 
@@ -84,7 +75,6 @@ function CreateNeighbour(props) {
 	const CityApi = React.useCallback((id) => {
 		findCity({ cityId: id })
 			.then((res) => {
-				console.log("city -----------", res);
 				setCity(res.content);
 			})
 			.catch((err) => console.log(err));
@@ -94,7 +84,6 @@ function CreateNeighbour(props) {
 		findState({ countryId: countryId })
 			.then((res) => {
 				setState(res.content);
-				console.log("State", res);
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -108,12 +97,9 @@ function CreateNeighbour(props) {
 					countryId: res.length > 0 ? res?.[0]?.id : false,
 				}));
 				StateApi(res?.[0]?.id || "");
-				console.log("COuntry", res);
 			})
 			.catch((err) => console.log(err));
 	}, []);
-
-	console.log("defaultLocation", defaultLocation);
 
 	const ImageApiCAll = React.useCallback((data) => {
 		const mime = "image";
@@ -169,7 +155,6 @@ function CreateNeighbour(props) {
 	const createApiCall = React.useCallback((data) => {
 		createNeighbourhood(data)
 			.then((res) => {
-				console.log("api response", res);
 				setSnackbar({
 					open: true,
 					duration: 3000,
@@ -200,7 +185,6 @@ function CreateNeighbour(props) {
 	}, []);
 
 	function handleSubmit(event) {
-		console.log("final data-------", data);
 		createApiCall(data);
 		event.preventDefault();
 	}
@@ -215,7 +199,7 @@ function CreateNeighbour(props) {
 
 	const newImageFunc = async (data) => {
 		const base64 = await blobToBase64(data);
-		console.log(base64);
+		// console.log(base64);
 	};
 
 	return (
@@ -316,7 +300,6 @@ function CreateNeighbour(props) {
 											label='City'
 											value={data?.cityId}
 											onChange={(event) => {
-												// console.log("event", event.target);
 												const defaultLatLon = city.filter((item) => {
 													if (item.id === event.target.value) {
 														setDefaultLocation({
@@ -329,7 +312,6 @@ function CreateNeighbour(props) {
 														});
 													} else return null;
 												});
-												console.log("defaultLatLon", defaultLatLon);
 												setData((prevData) => {
 													return {
 														...prevData,

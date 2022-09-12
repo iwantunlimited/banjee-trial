@@ -121,7 +121,6 @@ function ViewReportedUser(props) {
 		findReportedCustomer(UserId)
 			.then((response) => {
 				setData(response);
-				console.log(response);
 				const res = response.reports.map((ele) => {
 					return {
 						...ele,
@@ -138,8 +137,6 @@ function ViewReportedUser(props) {
 	React.useEffect(() => {
 		findReportedCustomerApiCall();
 	}, [findReportedCustomerApiCall]);
-
-	console.log(reportList);
 
 	if (data) {
 		return (

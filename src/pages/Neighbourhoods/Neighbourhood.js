@@ -74,9 +74,6 @@ function Neighbourhood() {
 					};
 				});
 				setListData(resp);
-				// console.log("====================================");
-				// console.log("resp-----------------", resp);
-				// console.log("====================================");
 				setState((prev) => ({
 					...prev,
 					totalElement: res.totalElements,
@@ -85,9 +82,6 @@ function Neighbourhood() {
 						pageSize: res?.pageable?.pageSize,
 					},
 				}));
-				console.log("====================================");
-				console.log("filter res", res);
-				console.log("====================================");
 			})
 			.catch((err) => console.log(err));
 	}, []);

@@ -70,6 +70,7 @@ export const urls = {
 		FIND_BUSINESS_BY_USER_ID: services.LOCAL_DISCOVERY + "business/byUserId/",
 		GET_ALL_BLOGS: services.LOCAL_DISCOVERY + "blogs/filter/",
 		FIND_BLOGS_BYID: services.LOCAL_DISCOVERY + "blogs/",
+		CREATE_BLOG: services.LOCAL_DISCOVERY + "blogs",
 	},
 
 	CDN: {

@@ -97,7 +97,6 @@ export function BusinessApprovalList({ handleTabChange }) {
 						<IconButton
 							onClick={() => {
 								navigate("/explore/detail/" + params.row.routingId);
-								console.log("params", params);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -166,9 +165,6 @@ export function BusinessApprovalList({ handleTabChange }) {
 					severity: "success",
 					message: "Business Approved",
 				});
-				console.log("====================================");
-				console.log("approve response", res);
-				console.log("====================================");
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -215,7 +211,6 @@ export function BusinessApprovalList({ handleTabChange }) {
 								// autoPageSize
 								pagination
 								onPageChange={(event) => {
-									console.log("event--------", event);
 									setState((prev) => ({
 										...prev,
 										pagination: {

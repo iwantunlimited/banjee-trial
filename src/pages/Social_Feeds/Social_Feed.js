@@ -61,8 +61,6 @@ export default function SocialFeed(props) {
 	});
 	const [totalEle, setTotalEle] = React.useState();
 
-	console.log("delete modal data", dFeedData);
-
 	const [startDate, setStartDate] = React.useState(new Date(2022, 1, 1, 1, 33, 30, 0));
 	const [endDate, setEndDate] = React.useState(new Date());
 
@@ -70,8 +68,8 @@ export default function SocialFeed(props) {
 		imageModal: false,
 	});
 
-	console.log("startDate", startDate);
-	console.log("endDate", endDate);
+	// console.log("startDate", startDate);
+	// console.log("endDate", endDate);
 
 	const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
@@ -104,8 +102,6 @@ export default function SocialFeed(props) {
 	React.useEffect(() => {
 		filterSocialFeedsApiCall(0, 12, startDate, endDate);
 	}, [filterSocialFeedsApiCall]);
-
-	console.log("data----------", data);
 
 	// function playPause(index) {
 	// 	if (document.getElementById(`video${index}`).paused)

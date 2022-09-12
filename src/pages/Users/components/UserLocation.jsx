@@ -22,7 +22,7 @@ const UserLocation = compose(
 		currentLocation: { lat, lon },
 		name,
 	} = props.data;
-	console.log("userLocation-------", lat, lon);
+	// console.log("userLocation-------", lat, lon);
 	return (
 		<GoogleMap defaultZoom={8} defaultCenter={{ lat: lat, lng: lon }}>
 			<Marker

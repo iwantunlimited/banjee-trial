@@ -12,10 +12,10 @@ import {
 	Autocomplete,
 	Slider,
 	FormControl,
-	InputLabel,
 	Select,
 	MenuItem,
 	useTheme,
+	Typography,
 } from "@mui/material";
 import TreeView from "@mui/lab/TreeView";
 import { ExpandMore, ChevronRight, Refresh, Add, Delete, Cancel } from "@mui/icons-material";
@@ -46,7 +46,6 @@ const style = {
 function Category(props) {
 	const theme = useTheme();
 
-	const token = localStorage?.getItem("token");
 	const [showId, setShowId] = React.useState();
 	const [openModal, setOpenModal] = React.useState(false);
 	const [toggleBtn, setToggleBtn] = React.useState("parent");
@@ -64,12 +63,11 @@ function Category(props) {
 
 	const [modalData, setModalData] = React.useState(intialValue);
 
-	const [images, setImages] = React.useState("");
 	const [imgShow, setImgShow] = React.useState("");
 
-	console.log("====================================");
-	console.log("images", images);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("images", images);
+	// console.log("====================================");
 
 	function handleChange(event) {
 		const { name, value } = event.target;
@@ -82,7 +80,6 @@ function Category(props) {
 	}
 
 	function handleSubmit(event) {
-		console.log("handle Submit", modalData);
 		if (toggleBtn === "parent") {
 			CreateCategoryApiCall();
 		} else {
@@ -95,7 +92,6 @@ function Category(props) {
 	}
 
 	function handleDelete(event) {
-		console.log(event);
 		DeleteCategoryApiCall(event);
 	}
 
@@ -104,7 +100,6 @@ function Category(props) {
 	}
 
 	const DeleteCategoryApiCall = (id) => {
-		console.log("Delete data", modalData);
 		deleteCategory(id)
 			.then(() => {
 				setModalData(intialValue);
@@ -127,7 +122,7 @@ function Category(props) {
 	};
 
 	const CreateCategoryApiCall = () => {
-		console.log("handle Submit", modalData);
+		// console.log("handle Submit", modalData);
 		CreateCategory({
 			name: modalData.name,
 			description: modalData.description,
@@ -145,11 +140,6 @@ function Category(props) {
 	};
 
 	const CreateSubCategoryApiCall = () => {
-		console.log("Create subcategory  ", {
-			name: modalData.name,
-			categoryId: modalData.category.id,
-			categoryName: modalData.category.name,
-		});
 		CreateSubCategory({
 			name: modalData.name,
 			categoryId: modalData.category.id,
@@ -164,24 +154,18 @@ function Category(props) {
 			});
 	};
 
-	console.log("handle Submit", modalData);
-
 	const CategoryListApiCall = React.useCallback(() => {
 		CategoryList({ type: props?.categoryName })
 			.then((response) => {
 				setCategoryList(response);
-				console.log(response);
 			})
 			.catch((err) => console.log(err));
-	}, []);
+	}, [props?.categoryName]);
 
 	// Image api call for image upload to get image id
 
 	const ImageApiCAll = React.useCallback((data) => {
 		const mime = "image";
-		console.log("====================================");
-		console.log("image api data", data);
-		console.log("====================================");
 		const formData = new FormData();
 
 		// formData.append("directoryId", "root");
@@ -196,9 +180,9 @@ function Category(props) {
 		axios
 			.post(url, formData)
 			.then((res) => {
-				console.log("====================================");
-				console.log("image upload response", res);
-				console.log("====================================");
+				// console.log("====================================");
+				// console.log("image upload response", res);
+				// console.log("====================================");
 				setModalData((prev) => ({
 					...prev,
 					// imageUrl: res?.data?.data[0]?.data?.id,
@@ -213,11 +197,10 @@ function Category(props) {
 	}, [CategoryListApiCall]);
 
 	function handleClick(id) {
-		console.log(id);
 		setShowId(id);
 	}
 
-	if (categoryList && categoryList.content && categoryList.content.length > 0) {
+	if (categoryList?.content) {
 		return (
 			<Container maxWidth='lg'>
 				<div style={{ marginTop: "50px", background: "white", fontSize: "33px" }}>
@@ -358,7 +341,6 @@ function Category(props) {
 																		accept='.jpg, .jpeg, .png'
 																		onChange={(event) => {
 																			// newImageFunc(event.target.files[0]);
-																			setImages(event?.target?.files[0]);
 																			setImgShow(URL.createObjectURL(event?.target?.files[0]));
 																			ImageApiCAll(event?.target?.files[0]);
 																			// setData((prev) => ({
@@ -380,7 +362,6 @@ function Category(props) {
 																			<IconButton
 																				onClick={() => {
 																					document.getElementById("img").value = "";
-																					setImages("");
 																					setImgShow("");
 																					setModalData((prev) => ({
 																						...prev,
@@ -519,152 +500,171 @@ function Category(props) {
 
 						<hr />
 
-						{/* ---------------------- Tree View start ------------------------- */}
-
-						<Grid container>
-							<Grid item container xs={12} spacing={4}>
-								<Grid item xs={12} sm={4} md={4} lg={4}>
-									<Box style={{ padding: "10px", borderRadius: "10px" }}>
-										<TreeView
-											aria-label='multi-select'
-											defaultCollapseIcon={<ExpandMore />}
-											defaultExpandIcon={<ChevronRight />}
-											multiSelect
-											sx={{
-												minHeight: 216,
-												height: "100%",
-												flexGrow: 1,
-												maxWidth: 400,
-												overflowY: "auto",
-											}}>
-											{categoryList &&
-												categoryList.content &&
-												categoryList.content.map((ele) => {
+						{categoryList?.content?.length > 0 ? (
+							<Grid container>
+								<Grid item container xs={12} spacing={4}>
+									<Grid item xs={12} sm={4} md={4} lg={4}>
+										<Box style={{ padding: "10px", borderRadius: "10px" }}>
+											<TreeView
+												aria-label='multi-select'
+												defaultCollapseIcon={<ExpandMore />}
+												defaultExpandIcon={<ChevronRight />}
+												multiSelect
+												sx={{
+													minHeight: 216,
+													height: "100%",
+													flexGrow: 1,
+													maxWidth: 400,
+													overflowY: "auto",
+												}}>
+												{categoryList &&
+													categoryList.content &&
+													categoryList.content.map((ele) => {
+														return (
+															<TreeItem
+																className='treeview-css'
+																onClick={() => {
+																	handleClick(ele.id);
+																}}
+																nodeId={ele.id}
+																label={ele.name}>
+																{ele &&
+																	ele.subCategories &&
+																	ele.subCategories
+																		.filter((ele) => ele.deleted === false)
+																		.map((ele) => {
+																			return (
+																				<React.Fragment>
+																					<TreeItem nodeId={ele.id} label={ele.name} />
+																				</React.Fragment>
+																			);
+																		})}
+															</TreeItem>
+														);
+													})}
+											</TreeView>
+										</Box>
+									</Grid>
+									<Grid item xs={12} sm={8} md={8} lg={8}>
+										{categoryList &&
+											categoryList.content &&
+											categoryList.content.map((ele) => {
+												if (ele.id === showId) {
 													return (
-														<TreeItem
-															className='treeview-css'
-															onClick={() => {
-																handleClick(ele.id);
-															}}
-															nodeId={ele.id}
-															label={ele.name}>
-															{ele &&
-																ele.subCategories &&
-																ele.subCategories
-																	.filter((ele) => ele.deleted === false)
-																	.map((ele) => {
-																		return (
-																			<React.Fragment>
-																				<TreeItem nodeId={ele.id} label={ele.name} />
-																			</React.Fragment>
-																		);
-																	})}
-														</TreeItem>
-													);
-												})}
-										</TreeView>
-									</Box>
-								</Grid>
-								<Grid item xs={12} sm={8} md={8} lg={8}>
-									{categoryList &&
-										categoryList.content &&
-										categoryList.content.map((ele) => {
-											if (ele.id === showId) {
-												return (
-													<React.Fragment>
-														<Card
-															style={{
-																width: "100%",
-																minHeight: "200px",
-																maxHeight: "auto",
-																padding: "20px",
-																flexDirection: "column",
-															}}>
-															<Box style={{ display: "flex", flexDirection: "column" }}>
-																<Box>
-																	<h4 style={{ textAlign: "center" }}>
-																		{ele.id === showId && ele.name}
-																	</h4>
-																</Box>
-																<Box
-																	style={{ display: "flex", fontSize: "20px", marginTop: "20px" }}>
-																	<div style={{ marginRight: "10px" }}>
-																		{ele && ele.description ? "Description:" : null}
-																	</div>
-																	<div style={{ color: "grey" }}>
-																		{ele.id === showId && ele.name}
-																	</div>
-																</Box>
-																<Box
-																	style={{ display: "flex", fontSize: "20px", marginTop: "10px" }}>
-																	<div style={{ marginRight: "10px" }}>
-																		{ele && ele.subCategories ? "Sub-Category: :" : null}
-																	</div>
-																	<div style={{ display: "flex", flexDirection: "column" }}>
-																		{ele &&
-																			ele.id === showId &&
-																			ele.subCategories &&
-																			ele.subCategories
-																				.filter((ele) => ele.deleted === false)
-																				.map((ele) => {
-																					return (
-																						<div style={{ display: "flex", alignItems: "center" }}>
-																							<span style={{ fontSize: "18px", color: "grey" }}>
-																								{ele.name + " "}
-																							</span>
-																							<IconButton
-																								style={{ fontSize: "20px" }}
-																								onClick={() => {
-																									handleSubCategoryDelete(ele.id);
-																								}}>
-																								<Delete
-																									fontSize='smaller'
-																									style={{ color: "grey" }}
-																								/>
-																							</IconButton>
-																						</div>
-																					);
-																				})}
-																	</div>
-																</Box>
-																<Box
-																	style={{
-																		marginTop: "10px",
-																		display: "flex",
-																		fontSize: "20px",
-																		justifyContent: "space-between",
-																	}}>
-																	<div style={{ display: "flex", fontSize: "20px" }}>
+														<React.Fragment>
+															<Card
+																style={{
+																	width: "100%",
+																	minHeight: "200px",
+																	maxHeight: "auto",
+																	padding: "20px",
+																	flexDirection: "column",
+																}}>
+																<Box style={{ display: "flex", flexDirection: "column" }}>
+																	<Box>
+																		<h4 style={{ textAlign: "center" }}>
+																			{ele.id === showId && ele.name}
+																		</h4>
+																	</Box>
+																	<Box
+																		style={{
+																			display: "flex",
+																			fontSize: "20px",
+																			marginTop: "20px",
+																		}}>
 																		<div style={{ marginRight: "10px" }}>
-																			{ele && ele.priority ? "Priority:" : null}
+																			{ele && ele.description ? "Description:" : null}
 																		</div>
 																		<div style={{ color: "grey" }}>
-																			{ele.id === showId && ele.priority}
+																			{ele.id === showId && ele.name}
 																		</div>
-																	</div>
-																	<div>
-																		<IconButton
-																			onClick={() => {
-																				handleDelete(ele.id);
-																			}}
-																			style={{ color: "#5664D2" }}>
-																			<Delete />
-																		</IconButton>
-																	</div>
+																	</Box>
+																	<Box
+																		style={{
+																			display: "flex",
+																			fontSize: "20px",
+																			marginTop: "10px",
+																		}}>
+																		<div style={{ marginRight: "10px" }}>
+																			{ele && ele.subCategories ? "Sub-Category: :" : null}
+																		</div>
+																		<div style={{ display: "flex", flexDirection: "column" }}>
+																			{ele &&
+																				ele.id === showId &&
+																				ele.subCategories &&
+																				ele.subCategories
+																					.filter((ele) => ele.deleted === false)
+																					.map((ele) => {
+																						return (
+																							<div
+																								style={{ display: "flex", alignItems: "center" }}>
+																								<span style={{ fontSize: "18px", color: "grey" }}>
+																									{ele.name + " "}
+																								</span>
+																								<IconButton
+																									style={{ fontSize: "20px" }}
+																									onClick={() => {
+																										handleSubCategoryDelete(ele.id);
+																									}}>
+																									<Delete
+																										fontSize='smaller'
+																										style={{ color: "grey" }}
+																									/>
+																								</IconButton>
+																							</div>
+																						);
+																					})}
+																		</div>
+																	</Box>
+																	<Box
+																		style={{
+																			marginTop: "10px",
+																			display: "flex",
+																			fontSize: "20px",
+																			justifyContent: "space-between",
+																		}}>
+																		<div style={{ display: "flex", fontSize: "20px" }}>
+																			<div style={{ marginRight: "10px" }}>
+																				{ele && ele.priority ? "Priority:" : null}
+																			</div>
+																			<div style={{ color: "grey" }}>
+																				{ele.id === showId && ele.priority}
+																			</div>
+																		</div>
+																		<div>
+																			<IconButton
+																				onClick={() => {
+																					handleDelete(ele.id);
+																				}}
+																				style={{ color: "#5664D2" }}>
+																				<Delete />
+																			</IconButton>
+																		</div>
+																	</Box>
 																</Box>
-															</Box>
-														</Card>
-													</React.Fragment>
-												);
-											} else {
-												return null;
-											}
-										})}
+															</Card>
+														</React.Fragment>
+													);
+												} else {
+													return null;
+												}
+											})}
+									</Grid>
 								</Grid>
 							</Grid>
-						</Grid>
-
-						{/* ---------------------- Tree View ends ------------------------- */}
+						) : (
+							<>
+								<Box
+									style={{
+										display: "flex",
+										justifyContent: "center",
+										alignItems: "center",
+										height: "80vh",
+									}}>
+									<Typography>No data found !</Typography>
+								</Box>
+							</>
+						)}
 					</Card>
 				</div>
 			</Container>

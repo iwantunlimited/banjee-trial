@@ -13,7 +13,7 @@ import {
 	Avatar,
 	Container,
 	Button,
-	Badge,
+	IconButton,
 } from "@mui/material";
 import {
 	findCustomer,
@@ -21,7 +21,7 @@ import {
 	findBlockedCustomers,
 	penddingConnectionsList,
 } from "../User_Services/UserApiService";
-import { Male, Female, Transgender, PanoramaSharp } from "@mui/icons-material";
+import { Male, Female, Transgender, PanoramaSharp, ArrowBack } from "@mui/icons-material";
 import "../users.css";
 import { useNavigate, useParams } from "react-router-dom";
 import UserLocation from "./UserLocation";
@@ -30,8 +30,6 @@ import NeighrbourhoodList from "./NeighbourhoodList";
 import BusinessList from "./BusinessList";
 
 function CustomerView(props) {
-	console.log(props);
-
 	const { id } = useParams();
 
 	let navigate = useNavigate();
@@ -48,10 +46,6 @@ function CustomerView(props) {
 
 	const [state, setState] = React.useState([]);
 	const [penddingConIds, setpenddingConIds] = React.useState();
-
-	// const { currentLocation } = state;
-
-	console.log("state data---------", state);
 
 	const [penddingData, setPenddingData] = React.useState();
 
@@ -101,7 +95,6 @@ function CustomerView(props) {
 		findCustomerConnection(id)
 			.then((response) => {
 				setConData(response);
-				console.log(response);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -114,7 +107,6 @@ function CustomerView(props) {
 		findBlockedCustomers(id)
 			.then((response) => {
 				setBlockCon(response);
-				console.log("bloecked list users", response);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -127,7 +119,6 @@ function CustomerView(props) {
 		penddingConnectionsList(data)
 			.then((response) => {
 				setPenddingData(response);
-				console.log("pending con res", response);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -142,7 +133,6 @@ function CustomerView(props) {
 				setState(response);
 				setpenddingConIds(response.pendingConnections);
 				penddingConnectionsListApiCall(response.pendingConnections);
-				// console.log(response);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -155,13 +145,10 @@ function CustomerView(props) {
 		findBlockedCustomerApiCall();
 	}, [findByUserApiCall, findCustomerConnectionApiCall, findBlockedCustomerApiCall, id]);
 
-	console.log(state);
 	if (state && conData) {
 		return (
 			<div>
-				<Button
-					variant='contained'
-					onClick={() => navigate(-1)}
+				<Box
 					sx={{
 						marginTop: "1em",
 						marginLeft: "1em",
@@ -169,8 +156,11 @@ function CustomerView(props) {
 						height: "2em",
 						textTransform: "none",
 					}}>
-					Go Back
-				</Button>
+					<IconButton onClick={() => navigate(-1)}>
+						<ArrowBack color='primary' />
+					</IconButton>
+				</Box>
+
 				<Container maxWidth='xl'>
 					{/* <ViewDetailGrid config='Hello'> */}
 					{/* ---------------------------------- This Paper is for Two fields  -------------------------------- */}
@@ -299,7 +289,7 @@ function CustomerView(props) {
 									style={{ overflowY: "scroll", height: "355px" }}>
 									{/* ------------------------- connections ---------------------------- */}
 									<TabPanel value={value} index={0} dir={theme.direction}>
-										<Grid item xs={12} sx={{ padding: "10px" }}>
+										<Grid item xs={12} sx={{ padding: { xs: "0px", sm: "10px" } }}>
 											<NeighrbourhoodList data={id} />
 										</Grid>
 										{/* <Grid container spacing={2}>

@@ -46,13 +46,12 @@ function User() {
 	});
 
 	const [keyword, setKeyword] = React.useState("");
-	console.log("keywordds---------", keyword);
 	function handleKeyword(event) {
 		setKeyword(event.target.value);
 	}
 
 	////-------------------------------------- Cusatomer Filter ----------------------------------
-	console.log(state);
+
 	const [CustomerFilter, setCustomerFilter] = React.useState({
 		...customerFilter,
 		inactive: "",
@@ -74,7 +73,6 @@ function User() {
 
 	const apiCall = React.useCallback(
 		(data) => {
-			console.log("user Data", data);
 			setState((prev) => ({ ...prev, componentLoad: "Load" }));
 			let customerCols = [
 				{
@@ -125,7 +123,6 @@ function User() {
 							{/* <Link to={"/user/view/" + params.row.userObject.id} replace={true}> */}
 							<IconButton
 								onClick={() => {
-									console.log(params);
 									// this.props.history.push(
 									// 	this.props.location.pathname +
 									// 		"/view/" +
@@ -141,7 +138,6 @@ function User() {
 				},
 			];
 			let customerRows = [];
-			console.log(urls.USERPROFILE.FILTER);
 			listCustomer({ ...CustomerFilter, keywords: data })
 				.then((response) => {
 					console.log("Response----->", response);
@@ -162,7 +158,6 @@ function User() {
 							totalElement: response.totalElements,
 						}));
 						customerRows = response.content.map((data) => {
-							console.log(data);
 							return (data = {
 								...data,
 								...data.userObject,
@@ -190,7 +185,6 @@ function User() {
 							componentLoad: "List",
 						}));
 					}
-					console.log(state.totalElement);
 					if (response.content.length === 0) {
 						setState((prev) => ({
 							...prev,
@@ -216,7 +210,6 @@ function User() {
 	}
 
 	// const FilterapiCall = (event) => {
-	// 	console.log(event.target.value);
 	// 	CustomerFilter.keywords = event.target.value;
 	// 	apiCall();
 	// };
@@ -265,7 +258,6 @@ function User() {
 								paginationMode='server'
 								autoHeight
 								onPageChange={(event) => {
-									console.log(event);
 									setCustomerFilter((prev) => ({
 										...prev,
 										page: event,

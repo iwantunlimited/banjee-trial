@@ -28,6 +28,7 @@ import ExploreBlogs from "./pages/Explore/Components/Blogs";
 import BlogDetail from "./pages/Explore/Components/BlogDetail";
 import EditNeighbourhood from "./pages/Neighbourhoods/Components/EditNeighbourhood";
 import EditBusiness from "./pages/Explore/Components/EditBusiness";
+import CreateBlog from "./pages/Explore/Components/CreateBlog";
 
 const Routes = () => {
 	return useRoutes([
@@ -111,6 +112,10 @@ const Routes = () => {
 				{
 					path: "/explore/blogs",
 					element: <ExploreBlogs />,
+				},
+				{
+					path: "/explore/blogs/createblog",
+					element: <CreateBlog />,
 				},
 				{
 					path: "/explore/blogs/detail/:id",
