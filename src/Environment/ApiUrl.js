@@ -44,6 +44,7 @@ export const urls = {
 	},
 
 	SOCIAL_FEEDS: {
+		CREATE_FEED: services.SOCIAL_FEEDS + "/feeds",
 		FILTER: services.SOCIAL_FEEDS + "api/feeds/admin/filter",
 		GET_FEED_DETAILS: services.SOCIAL_FEEDS + "feeds/findById/",
 		GET_COMMENTS: services.SOCIAL_FEEDS + "comments/byFeed/",
@@ -71,6 +72,9 @@ export const urls = {
 		GET_ALL_BLOGS: services.LOCAL_DISCOVERY + "blogs/filter/",
 		FIND_BLOGS_BYID: services.LOCAL_DISCOVERY + "blogs/",
 		CREATE_BLOG: services.LOCAL_DISCOVERY + "blogs",
+		CREATE_COMMENTS: services.LOCAL_DISCOVERY_V2 + "blog/comments",
+		GET_COMMENTS: services.LOCAL_DISCOVERY_V2 + "blog/comments/byPost/",
+		CREATE_REACTIONS: services.LOCAL_DISCOVERY_V2 + "user-reactions",
 	},
 
 	CDN: {

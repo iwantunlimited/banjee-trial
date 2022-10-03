@@ -19,6 +19,7 @@ import {
 	Search,
 	Delete,
 	Report,
+	Add,
 } from "@mui/icons-material";
 import moment from "moment";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -161,7 +162,7 @@ export default function SocialFeed(props) {
 								/>
 							</LocalizationProvider>
 						</Box>
-						<Box sx={{ paddingX: "10px" }}>
+						<Box>
 							<Tooltip title='Search'>
 								<IconButton
 									style={{
@@ -174,6 +175,20 @@ export default function SocialFeed(props) {
 										filterSocialFeedsApiCall(0, 12, startDate, endDate);
 									}}>
 									<Search />
+								</IconButton>
+							</Tooltip>
+						</Box>
+						<Box sx={{ marginLeft: "10px" }}>
+							<Tooltip title='Create Feed'>
+								<IconButton
+									onClick={() => navigate("/social-feeds/create")}
+									style={{
+										borderRadius: "50px",
+										background: theme.palette.primary.main,
+										padding: window.innerWidth < 501 ? "5px" : "10px",
+										color: theme.palette.primary.contrastText,
+									}}>
+									<Add />
 								</IconButton>
 							</Tooltip>
 						</Box>
@@ -197,7 +212,7 @@ export default function SocialFeed(props) {
 				{data?.content?.length > 0 ? (
 					<Grid container spacing={2}>
 						{data?.content?.map((ele, index) => (
-							<Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={index}>
+							<Grid item xs={12} sm={6} md={4} lg={3} xl={2.4} key={index}>
 								<Box
 									sx={{
 										padding: "7px 14px",
@@ -242,9 +257,15 @@ export default function SocialFeed(props) {
 													display: "flex",
 													flexDirection: "column",
 												}}>
-												<span>{`${
-													ele?.author?.username || ele?.author?.userName || "userName"
-												}`}</span>
+												{ele?.author?.firstName ? (
+													<span>{`${
+														ele?.author?.firstName +
+														" " +
+														(ele?.author?.lastName ? ele?.author?.lastName : "")
+													}`}</span>
+												) : (
+													<span>{`${ele?.author?.userName || "userName"}`}</span>
+												)}
 												<span style={{ fontSize: "12px" }}>
 													{moment(ele?.createdOn).format("lll")}
 												</span>
@@ -340,7 +361,10 @@ export default function SocialFeed(props) {
 																</Box>
 															</SwiperSlide>
 														);
-													} else if (item?.mimeType === "audio/mp3") {
+													} else if (
+														item?.mimeType === "audio/mp3" ||
+														item?.mimeType === "audio/mpeg"
+													) {
 														return (
 															<SwiperSlide>
 																<Box
@@ -378,7 +402,10 @@ export default function SocialFeed(props) {
 																</Box>
 															</SwiperSlide>
 														);
-													} else if (item?.mimeType === "image/jpg") {
+													} else if (
+														item?.mimeType === "image/jpg" ||
+														item?.mimeType === "image/png"
+													) {
 														return (
 															<Box>
 																<SwiperSlide>

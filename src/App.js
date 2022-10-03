@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import Routes from "./Routes";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./Theme/theme";
+import "./App.css";
 
 function App() {
 	return (

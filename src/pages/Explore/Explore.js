@@ -2,10 +2,10 @@ import { Container, Box, Grid, Tabs, Tab, Card } from "@mui/material";
 import React from "react";
 import { Helmet } from "react-helmet";
 import PropTypes from "prop-types";
-import { BusinessApprovalList } from "./Components/ApprovalList";
-import BusinessList from "./Components/BusinessList";
+import { BusinessApprovalList } from "./Components/Business/ApprovalList";
+import BusinessList from "./Components/Business/BusinessList";
 import ChipComp from "./Components/CardChipComp";
-import ExploreBlogs from "./Components/Blogs";
+import ExploreBlogs from "./Components/Blogs/Blogs";
 import { filterBusiness } from "./services/ApiServices";
 
 function TabPanel(props) {

@@ -163,9 +163,15 @@ export default function CommentsModal(props) {
 											flexDirection: "column",
 											fontSize: "18px",
 										}}>
-										<span>{`${
-											data?.author?.username || data?.author?.userName || "userName"
-										}`}</span>
+										{data?.author?.firstName ? (
+											<span>{`${
+												data?.author?.firstName +
+												" " +
+												(data?.author?.lastName ? data?.author?.lastName : "")
+											}`}</span>
+										) : (
+											<span>{`${data?.author?.userName || "userName"}`}</span>
+										)}
 										<span style={{ fontSize: "14px" }}>
 											{moment(data?.createdOn).format("lll")}
 										</span>

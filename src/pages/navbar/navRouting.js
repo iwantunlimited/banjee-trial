@@ -9,6 +9,7 @@ import {
 	Groups,
 	Report,
 	TravelExplore,
+	NotificationImportant,
 } from "@mui/icons-material";
 // import Account from "../Account/Account";
 import Room from "../Rooms/Rooms";
@@ -18,7 +19,8 @@ import RoomsReport from "../Report/RoomsReport";
 import Neighbourhood from "../Neighbourhoods/Neighbourhood";
 import { MainCategoryComp } from "../Category/MainCategoryPage";
 import Explore from "../Explore/Explore";
-import ExploreBlogs from "../Explore/Components/Blogs";
+import ExploreBlogs from "../Explore/Components/Blogs/Blogs";
+import BanjeeAlert from "../BanjeeAlert/BanjeeAlert";
 
 const routing = [
 	{
@@ -108,6 +110,14 @@ const routing = [
 				component: <ExploreBlogs />,
 			},
 		],
+	},
+
+	{
+		id: 13,
+		path: "/banjee-alert",
+		name: "Banjee Alert",
+		icon: <NotificationImportant fontSize='medium' />,
+		component: <BanjeeAlert />,
 	},
 	// {
 	//     id:3,

@@ -23,12 +23,14 @@ import Neighbourhood from "./pages/Neighbourhoods/Neighbourhood";
 import DetailPage from "./pages/Neighbourhoods/Components/Detail Page/Details";
 import { MainCategoryComp } from "./pages/Category/MainCategoryPage";
 import Explore from "./pages/Explore/Explore";
-import BusinessDetail from "./pages/Explore/Components/BusinessDetail";
-import ExploreBlogs from "./pages/Explore/Components/Blogs";
-import BlogDetail from "./pages/Explore/Components/BlogDetail";
+import BusinessDetail from "./pages/Explore/Components/Business/BusinessDetail";
+import ExploreBlogs from "./pages/Explore/Components/Blogs/Blogs";
+import BlogDetail from "./pages/Explore/Components/Blogs/BlogDetail";
 import EditNeighbourhood from "./pages/Neighbourhoods/Components/EditNeighbourhood";
-import EditBusiness from "./pages/Explore/Components/EditBusiness";
-import CreateBlog from "./pages/Explore/Components/CreateBlog";
+import EditBusiness from "./pages/Explore/Components/Business/EditBusiness";
+import CreateBlog from "./pages/Explore/Components/Blogs/CreateBlog";
+import CreateFeed from "./pages/Social_Feeds/Components/createFeed";
+import BanjeeAlert from "./pages/BanjeeAlert/BanjeeAlert";
 
 const Routes = () => {
 	return useRoutes([
@@ -72,6 +74,10 @@ const Routes = () => {
 				{
 					path: "social-feeds",
 					element: <SocialFeed />,
+				},
+				{
+					path: "social-feeds/create",
+					element: <CreateFeed />,
 				},
 				{
 					path: "/social-feeds/reported-feeds",
@@ -128,6 +134,10 @@ const Routes = () => {
 				{
 					path: "/explore/detail/update/:id",
 					element: <EditBusiness />,
+				},
+				{
+					path: "/banjee-alert",
+					element: <BanjeeAlert />,
 				},
 				// {
 				//     path: '/account',

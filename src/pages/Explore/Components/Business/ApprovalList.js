@@ -1,11 +1,11 @@
 import { AccessTimeSharp, Check, Clear, JoinRight, Visibility } from "@mui/icons-material";
 import { Box, Chip, CircularProgress, IconButton, Stack } from "@mui/material";
 import React from "react";
-import { approveRequest, filterBusiness } from "../services/ApiServices";
+import { approveRequest, filterBusiness } from "../../services/ApiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { useNavigate } from "react-router";
-import SnackBarComp from "../../../CustomComponents/SnackBarComp";
+import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
 
 export function BusinessApprovalList({ handleTabChange }) {
 	const navigate = useNavigate();

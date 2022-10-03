@@ -46,3 +46,10 @@
 .mySwiper > .swiper-pagination-horizontal {
 	display: none !important;
 } */
+
+.neighbourhood-form-textField > div > .css-1d3z3hw-MuiOutlinedInput-notchedOutline > .css-nnbavb {
+	width: auto;
+}
+.neighbourhood-form-textField2 > div > .MuiOutlinedInput-notchedOutline > .css-nnbavb {
+	width: auto;
+}

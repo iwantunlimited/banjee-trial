@@ -16,12 +16,12 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
-import MyGoogleMap from "../../Neighbourhoods/Map/GoogleMap";
-import "../business.css";
-import SnackBarComp from "../../../CustomComponents/SnackBarComp";
-import { createBusiness } from "../services/ApiServices";
-import { CategoryList } from "../../Users/User_Services/UserApiService";
-import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
+import MyGoogleMap from "../../../Neighbourhoods/Map/GoogleMap";
+import "../../business.css";
+import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
+import { createBusiness } from "../../services/ApiServices";
+import { CategoryList } from "../../../Users/User_Services/UserApiService";
+import { filterNeighbourhood } from "../../../Neighbourhoods/services/apiServices";
 
 function CreateBusiness({ listApiCall, handleExpanded }) {
 	const [snackbar, setSnackbar] = React.useState({

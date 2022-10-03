@@ -21,6 +21,7 @@ function ModalComp(props) {
 					// border: "2px solid #000",
 					boxShadow: 24,
 					p: 4,
+					m: 2,
 				}}>
 				<Box sx={{ position: "relative" }}>{props?.children}</Box>
 			</Box>

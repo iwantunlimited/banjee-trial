@@ -221,7 +221,7 @@ function DetailPage() {
 							<Box sx={{ display: "flex", alignItems: "center", paddingY: "20px" }}>
 								<Box>
 									<Avatar
-										src={state?.imageUrl}
+										src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${state?.imageUrl}.png`}
 										alt={state?.name}
 										style={{
 											width: window.innerWidth < 500 ? "70px" : "150px",
@@ -230,9 +230,11 @@ function DetailPage() {
 									/>
 								</Box>
 								<Box sx={{ marginLeft: "40px" }}>
-									<Typography sx={{ fontSize: { xs: "22px", md: "26px" } }}>
-										{state?.name}
-									</Typography>
+									{state?.name && (
+										<Typography sx={{ fontSize: { xs: "22px", md: "26px" } }}>
+											{state?.name}
+										</Typography>
+									)}
 									{state?.createdOn && (
 										<Typography sx={{ fontSize: "12px" }}>
 											{moment(state?.createdOn).format("lll")}
@@ -266,19 +268,19 @@ function DetailPage() {
 											<DataGrid
 												autoHeight
 												getRowClassName={(params) => `app-header-${params.row.status}`}
-												page={members?.data?.pagination?.page}
-												pageSize={members?.data?.pagination?.pageSize}
+												page={members?.pagination?.page}
+												pageSize={members?.pagination?.pageSize}
 												onPageSizeChange={(event) => {
 													setMembers((prev) => ({
 														...prev,
 														pagination: {
-															page: members?.data?.pagination?.page,
+															page: members?.pagination?.page,
 															pageSize: event,
 														},
 													}));
-													filterMemberApiCall(members?.data?.pagination?.page, event);
+													filterMemberApiCall(members?.pagination?.page, event);
 												}}
-												rowCount={members?.data?.pagination?.totalMembers}
+												rowCount={members?.pagination?.totalMembers}
 												rows={rows}
 												columns={columns}
 												paginationMode='server'
@@ -289,10 +291,10 @@ function DetailPage() {
 														...prev,
 														pagination: {
 															page: event,
-															pageSize: members?.data?.pagination?.page,
+															pageSize: members?.pagination?.page,
 														},
 													}));
-													filterMemberApiCall(event, members?.data?.pagination?.page);
+													filterMemberApiCall(event, members?.pagination?.page);
 												}}
 												rowsPerPageOptions={[5, 10, 20]}
 												className='dataGridFooter'
@@ -373,9 +375,11 @@ function DetailPage() {
 									fontSize: "10px",
 									fontWeight: "400",
 								}}>
-								<Typography variant='h6' style={{ marginRight: "5px" }}>
-									{modalData?.data?.mfirstName + " " + modalData?.data?.mlastName}
-								</Typography>
+								{modalData?.data?.firstName && (
+									<Typography variant='h6' style={{ marginRight: "5px" }}>
+										{modalData?.data?.mfirstName + " " + modalData?.data?.mlastName}
+									</Typography>
+								)}
 							</div>
 							<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
 								{window.innerWidth > 1282

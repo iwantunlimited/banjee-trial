@@ -11,7 +11,7 @@ import {
 	AccordionDetails,
 } from "@mui/material";
 import React from "react";
-import CreateBusiness from "./CreateBusiness";
+import CreateBusiness from "./Business/CreateBusiness";
 
 function ChipComp({ listApiCall }) {
 	const [expanded, setExpanded] = React.useState(false);

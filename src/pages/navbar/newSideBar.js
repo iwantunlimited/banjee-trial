@@ -192,7 +192,8 @@ function SidebarList({ handleId, handleClick }) {
 									pathname === item.path ||
 									pathname === item.path + `/detail/${params?.id}` ||
 									pathname === item.path + `/update/${params?.id}` ||
-									pathname === item.path + `/view/${params?.id}`
+									pathname === item.path + `/view/${params?.id}` ||
+									pathname === item.path + `/create`
 										? theme.palette.secondary.main
 										: theme.palette.primary.main,
 								borderRadius: "10px",

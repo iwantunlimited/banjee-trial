@@ -1,21 +1,45 @@
-import { ArrowBack } from "@mui/icons-material";
-import { Box, Button, Card, Container, Grid, IconButton, Typography } from "@mui/material";
+import { ArrowBack, ChatBubbleOutline, Delete, FavoriteBorderOutlined } from "@mui/icons-material";
+import {
+	Box,
+	Button,
+	Card,
+	Container,
+	Grid,
+	IconButton,
+	TextField,
+	Typography,
+} from "@mui/material";
 import moment from "moment";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
-import { deleteBlog, findByIdBlog } from "../services/ApiServices";
+import { createComments, deleteBlog, findByIdBlog, getComments } from "../../services/ApiServices";
 import { useTheme } from "@mui/material/styles";
+import BlogReaction from "./BlogReaction";
+import BlogComments from "./BlogComments";
+import ModalComp from "../../../../CustomComponents/ModalComp";
+import ReactionCommentTab from "./ReactionTab";
 
 function BlogDetail() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const theme = useTheme();
 
+	const [modal, setModal] = React.useState({
+		open: false,
+		type: "reation",
+	});
+
+	const handleModal = (data) => {
+		setModal(data);
+	};
+
 	const [data, setData] = React.useState("");
 
 	const DeleteBlogApiCall = React.useCallback((data) => {
 		deleteBlog(data)
-			.then((res) => {})
+			.then((res) => {
+				console.log(res);
+			})
 			.catch((err) => console.log(err));
 	}, []);
 
@@ -39,15 +63,35 @@ function BlogDetail() {
 				<IconButton onClick={() => navigate(-1)}>
 					<ArrowBack color='primary' />
 				</IconButton>
-				<Button
-					onClick={() => {
-						DeleteBlogApiCall(params?.id);
-						navigate("/blogs");
-					}}
-					color='primary'
-					variant='contained'>
-					Delete
-				</Button>
+				<Box>
+					{/* <IconButton
+						onClick={() =>
+							setModal({
+								open: true,
+								type: "reaction",
+							})
+						}>
+						<FavoriteBorderOutlined />
+					</IconButton>
+					<IconButton
+						onClick={() =>
+							setModal({
+								open: true,
+								type: "comment",
+							})
+						}>
+						<ChatBubbleOutline />
+					</IconButton> */}
+					<IconButton
+						onClick={() => {
+							DeleteBlogApiCall(params?.id);
+							navigate(-1);
+						}}
+						// color='primary'
+						variant='contained'>
+						<Delete />
+					</IconButton>
+				</Box>
 			</Box>
 			<Card sx={{ borderRadius: "0px", boxShadow: "none", paddingY: "20px", paddingX: "40px" }}>
 				<Grid item container xs={12} spacing={2}>
@@ -57,9 +101,14 @@ function BlogDetail() {
 						</Typography>
 					</Grid>
 					<Grid item xs={12}>
-						<Box sx={{ position: "relative", width: "100%", height: "100%" }}>
+						<Box
+							sx={{
+								position: "relative",
+								width: "100%",
+								height: "auto !important",
+							}}>
 							<img
-								style={{ height: "100%", width: "100%", objectFit: "contain" }}
+								style={{ height: "auto !important", width: "100%", objectFit: "contain" }}
 								src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${data?.bannerImageUrl}.png`}
 								alt='image'
 							/>
@@ -85,6 +134,20 @@ function BlogDetail() {
 							<Typography>{descriptionText}</Typography>
 						</Box>
 					</Grid>
+					<Grid item xs={12}>
+						<ReactionCommentTab blogData={data} />
+					</Grid>
+					{/* <ModalComp width={400} handleModal={handleModal} data={modal}>
+						{modal?.type === "reaction" ? (
+							<React.Fragment>
+								<BlogReaction blogData={data} />
+							</React.Fragment>
+						) : (
+							<React.Fragment>
+								<BlogComments blogData={data} />
+							</React.Fragment>
+						)}
+					</ModalComp> */}
 				</Grid>
 			</Card>
 		</Container>

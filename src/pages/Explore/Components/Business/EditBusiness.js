@@ -16,12 +16,12 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
-import MyGoogleMap from "../../Neighbourhoods/Map/GoogleMap";
-import "../business.css";
-import SnackBarComp from "../../../CustomComponents/SnackBarComp";
-import { findByIdBusiness, updateBusiness } from "../services/ApiServices";
-import { CategoryList } from "../../Users/User_Services/UserApiService";
-import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
+import MyGoogleMap from "../../../Neighbourhoods/Map/GoogleMap";
+import "../../business.css";
+import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
+import { findByIdBusiness, updateBusiness } from "../../services/ApiServices";
+import { CategoryList } from "../../../Users/User_Services/UserApiService";
+import { filterNeighbourhood } from "../../../Neighbourhoods/services/apiServices";
 
 import { useNavigate, useParams } from "react-router";
 
@@ -212,7 +212,7 @@ function EditBusiness() {
 			<Grid item container xs={12} spacing={2}>
 				<Grid item xs={12}>
 					<IconButton onClick={() => navigate("/explore/detail/" + params.id)}>
-						<ArrowBack />
+						<ArrowBack color='primary' />
 					</IconButton>
 					<Card sx={{ padding: "30px" }}>
 						<Typography

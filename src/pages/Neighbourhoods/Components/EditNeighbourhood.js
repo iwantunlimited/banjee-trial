@@ -151,7 +151,9 @@ function EditNeighbourhood() {
 					type: res?.cloudType ? res?.cloudType : "",
 					approvalType: "BY_ADMIN",
 				}));
-				setImgShow(res?.imageUrl);
+				setImgShow(
+					`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.imageUrl}.png`
+				);
 			})
 			.catch((err) => console.log(err));
 	}, []);

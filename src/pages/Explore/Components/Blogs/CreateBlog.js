@@ -1,3 +1,4 @@
+import React from "react";
 import {
 	Card,
 	Container,
@@ -12,19 +13,15 @@ import {
 	MenuItem,
 	IconButton,
 } from "@mui/material";
-import React from "react";
-import "../business.css";
-import { CKEditor, CKEditorContext } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CategoryList } from "../../Users/User_Services/UserApiService";
+import "../../business.css";
+import { CategoryList } from "../../../Users/User_Services/UserApiService";
 import axios from "axios";
-import { Cancel } from "@mui/icons-material";
-import { createBlog } from "../services/ApiServices";
+import { ArrowBack, Cancel } from "@mui/icons-material";
+import { createBlog } from "../../services/ApiServices";
 import { useNavigate } from "react-router";
-import SnackBarComp from "../../../CustomComponents/SnackBarComp";
-// import Context from "@ckeditor/ckeditor5-core/src/context";
-// import ImageInsert from "@ckeditor/ckeditor5-image/src/imageinsert";
-// import AutoImage from "@ckeditor/ckeditor5-image/src/autoimage";
+import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 function CreateBlog() {
 	const navigate = useNavigate();
@@ -39,6 +36,8 @@ function CreateBlog() {
 		slug: "",
 	});
 
+	const [state, setState] = React.useState("");
+
 	const [snackbar, setSnackbar] = React.useState({
 		open: false,
 		message: "",
@@ -47,6 +46,10 @@ function CreateBlog() {
 	});
 
 	const [finalData, setFinalData] = React.useState("");
+
+	console.log("====================================");
+	console.log("editor ", state);
+	console.log("====================================");
 
 	const [imgShow, setImgShow] = React.useState("");
 	const [categoryList, setCategoryList] = React.useState("");
@@ -127,9 +130,13 @@ function CreateBlog() {
 	};
 
 	const handleSubmit = (event) => {
-		setFinalData(data);
+		setData((prev) => ({
+			...prev,
+			description: state,
+		}));
+		// setFinalData(data);
 		setTimeout(() => {
-			CreateBlogApiCall(finalData);
+			CreateBlogApiCall(data);
 		}, [1000]);
 		event.preventDefault();
 	};
@@ -144,8 +151,15 @@ function CreateBlog() {
 		<Container maxWidth='xl'>
 			<Grid item container xs={12} spacing={2}>
 				<Grid item xs={12}>
+					<IconButton onClick={() => navigate(-1)}>
+						<ArrowBack color='primary' />
+					</IconButton>
+				</Grid>
+				<Grid item xs={12}>
 					<Card sx={{ padding: "20px" }}>
-						<Typography>Create Blog</Typography>
+						<Typography sx={{ fontSize: "22px", color: "#666", fontWeight: 500 }}>
+							Create Blog
+						</Typography>
 					</Card>
 				</Grid>
 				<Grid item xs={12}>
@@ -301,32 +315,47 @@ function CreateBlog() {
 									</Box>
 								</Grid>
 								<Grid item xs={12}>
-									<Box id='editor'>
-										<CKEditor
-											editor={ClassicEditor}
-											// config={{
-											// 	plugins: [ImageInsert],
-											// 	toolbar: ["imageInsert"],
-											// }}
-											data='<p></p>'
-											onReady={(editor) => {
-												// You can store the "editor" and use when it is needed.
-												console.log("Editor is ready to use!", editor);
+									<Box>
+										<ReactQuill
+											placeholder='Enter Description'
+											theme='snow'
+											formats={[
+												"header",
+												"font",
+												"size",
+												"bold",
+												"italic",
+												"underline",
+												"strike",
+												"blockquote",
+												"list",
+												"bullet",
+												"indent",
+												"link",
+												"image",
+												"video",
+											]}
+											modules={{
+												toolbar: [
+													[{ header: "1" }, { header: "2" }, { font: [] }],
+													[{ size: [] }],
+													["bold", "italic", "underline", "strike", "blockquote"],
+													[
+														{ list: "ordered" },
+														{ list: "bullet" },
+														{ indent: "-1" },
+														{ indent: "+1" },
+													],
+													["link", "image", "video"],
+													["clean"],
+												],
+												clipboard: {
+													// toggle to add extra line breaks when pasting HTML:
+													matchVisual: false,
+												},
 											}}
-											onChange={(event, editor) => {
-												const data = editor.getData();
-												console.log({ event, editor, data });
-												setData((prev) => ({
-													...prev,
-													description: data,
-												}));
-											}}
-											onBlur={(event, editor) => {
-												console.log("Blur.", editor);
-											}}
-											onFocus={(event, editor) => {
-												console.log("Focus.", editor);
-											}}
+											value={state}
+											onChange={setState}
 										/>
 									</Box>
 								</Grid>

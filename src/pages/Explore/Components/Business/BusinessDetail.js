@@ -13,10 +13,10 @@ import {
 	CircularProgress,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
-import UserLocation from "../../Users/components/UserLocation";
+import UserLocation from "../../../Users/components/UserLocation";
 import moment from "moment";
 import { ArrowBack } from "@mui/icons-material";
-import { deleteBusiness, findByIdBusiness } from "../services/ApiServices";
+import { deleteBusiness, findByIdBusiness } from "../../services/ApiServices";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -24,9 +24,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import required modules
 import { Pagination } from "swiper";
 
-import "./component.css";
-import SnackBarComp from "../../../CustomComponents/SnackBarComp";
-import ModalComp from "../../../CustomComponents/ModalComp";
+import ".././component.css";
+import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
+import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
 
 function BusinessDetail() {

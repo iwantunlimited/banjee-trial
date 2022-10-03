@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^35.1.0",
-    "@ckeditor/ckeditor5-react": "^5.0.2",
     "@date-io/date-fns": "^2.14.0",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
@@ -46,6 +44,8 @@
     "react-google-autocomplete": "^2.7.0",
     "react-google-maps": "^9.4.5",
     "react-helmet": "^6.1.0",
+    "react-quill": "^2.0.0",
+    "react-quill-emoji": "^0.1.9",
     "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",

@@ -97,3 +97,36 @@ export const createBlog = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+
+export const createReactions = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.CREATE_REACTIONS;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
+export const createComments = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.CREATE_COMMENTS;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
+export const getComments = (requestLoad) => {
+	console.log("api done");
+	let url = urls.LOCAL_DISCOVERY.GET_COMMENTS + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
+
+export const getReactions = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.CREATE_REACTIONS + `/${requestLoad}`;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
