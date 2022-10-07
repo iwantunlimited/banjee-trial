@@ -135,10 +135,10 @@ const Routes = () => {
 					path: "/explore/detail/update/:id",
 					element: <EditBusiness />,
 				},
-				{
-					path: "/banjee-alert",
-					element: <BanjeeAlert />,
-				},
+				// {
+				// 	path: "/banjee-alert",
+				// 	element: <BanjeeAlert />,
+				// },
 				// {
 				//     path: '/account',
 				//     element: <Account />

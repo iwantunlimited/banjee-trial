@@ -36,6 +36,10 @@ function CreateBlog() {
 		slug: "",
 	});
 
+	console.log("====================================");
+	console.log(data);
+	console.log("====================================");
+
 	const [state, setState] = React.useState("");
 
 	const [snackbar, setSnackbar] = React.useState({
@@ -177,12 +181,13 @@ function CreateBlog() {
 											setData((prev) => ({
 												...prev,
 												title: event.target.value,
+												slug: event.target.value.replace(/[ ,]+/g, "-"),
 											}));
 										}}
 										placeholder='Enter Title'
 									/>
 								</Grid>
-								<Grid item xs={12}>
+								{/* <Grid item xs={12}>
 									<TextField
 										required
 										fullWidth
@@ -197,7 +202,7 @@ function CreateBlog() {
 										}}
 										placeholder='Enter Slug'
 									/>
-								</Grid>
+								</Grid> */}
 								<Grid item xs={12}>
 									<FormControl fullWidth>
 										<InputLabel id='demo-simple-select-label'>Category Type</InputLabel>
@@ -248,7 +253,7 @@ function CreateBlog() {
 								</Grid>
 								<Grid item xs={12}>
 									<Box>
-										<Typography sx={{ marginLeft: "0.3px" }}>Choose Logo</Typography>
+										<Typography sx={{ marginLeft: "0.3px" }}>Select Image</Typography>
 										<Box
 											sx={{
 												display: "flex",

@@ -72,13 +72,13 @@ const routing = [
 				icon: <PeopleAlt fontSize='medium' />,
 				component: <UsersReport />,
 			},
-			{
-				id: 8,
-				path: "/report/rooms",
-				name: "Rooms",
-				icon: <Groups fontSize='medium' />,
-				component: <RoomsReport />,
-			},
+			// {
+			// 	id: 8,
+			// 	path: "/report/rooms",
+			// 	name: "Rooms",
+			// 	icon: <Groups fontSize='medium' />,
+			// 	component: <RoomsReport />,
+			// },
 		],
 	},
 	{
@@ -112,13 +112,13 @@ const routing = [
 		],
 	},
 
-	{
-		id: 13,
-		path: "/banjee-alert",
-		name: "Banjee Alert",
-		icon: <NotificationImportant fontSize='medium' />,
-		component: <BanjeeAlert />,
-	},
+	// {
+	// 	id: 13,
+	// 	path: "/banjee-alert",
+	// 	name: "Banjee Alert",
+	// 	icon: <NotificationImportant fontSize='medium' />,
+	// 	component: <BanjeeAlert />,
+	// },
 	// {
 	//     id:3,
 	//     path: '/account',
