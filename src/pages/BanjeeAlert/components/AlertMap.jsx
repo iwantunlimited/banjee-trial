@@ -2,15 +2,9 @@ import React from "react";
 import ".././alert.css";
 import { compose, withProps } from "recompose";
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps";
-import { Box, Card, CircularProgress, IconButton } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { Box, CircularProgress } from "@mui/material";
 const UserLocation = compose(
 	withProps({
-		/**
-		 * Note: create and replace your own key in the Google console.
-		 * https://console.developers.google.com/apis/dashboard
-		 * The key "AIzaSyBkNaAGLEVq0YLQMi-PYEMabFeREadYe1Q" can be ONLY used in this sandbox (no forked).
-		 */
 		googleMapURL:
 			"https://maps.googleapis.com/maps/api/js?key=AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk&v=3.exp&libraries=geometry,drawing,places",
 		loadingElement: <div style={{ height: `100%` }} />,
@@ -63,19 +57,6 @@ const UserLocation = compose(
 									scaledSize: new window.google.maps.Size(35, 35),
 								}}
 								position={{ lat: item?.lat, lng: item?.lon }}
-								options={{}}
-								// label={{
-								// 	text: item?.title,
-								// 	color: "black",
-								// 	backgroundColor: "white",
-								// 	className: "markerCssForAlert",
-								// }}
-								// labelStyle={{
-								// 	backgroundColor: "white",
-								// 	color: "black",
-								// 	fontSize: "14px",
-								// 	padding: "5px",
-								// }}
 							/>
 							{index === state && (
 								<InfoWindow

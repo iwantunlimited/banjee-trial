@@ -1,7 +1,10 @@
 import { Box, Modal } from "@mui/material";
 import React from "react";
+import { useTheme } from "@mui/material/styles";
+import "./style.css";
 
 function ModalComp(props) {
+	const theme = useTheme();
 	const { handleModal, data } = props;
 
 	return (
@@ -17,7 +20,8 @@ function ModalComp(props) {
 					left: "50%",
 					transform: "translate(-50%, -50%)",
 					width: props?.width ? props?.width : 400,
-					bgcolor: "background.paper",
+					bgcolor: theme.palette.background.paper,
+					// background: "white",
 					// border: "2px solid #000",
 					boxShadow: 24,
 					p: 4,

@@ -54,12 +54,16 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 
 	const [images, setImages] = React.useState("");
 	const [imgShow, setImgShow] = React.useState("");
+	const [businessImgShow, setBusinessImgShow] = React.useState([]);
+
+	console.log("businessImgShow", businessImgShow);
+	console.log("data", data);
 
 	const handleGLocation = (lat, lng, address) => {
 		setData((prev) => ({
 			...prev,
 			geoLocation: {
-				coordinates: [lat, lng],
+				coordinates: [lng, lat],
 			},
 			// address: address,
 		}));
@@ -72,7 +76,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		}));
 	};
 
-	const ImageApiCAll = React.useCallback((data) => {
+	const ImageApiCAll = React.useCallback((data, imageType) => {
 		const mime = "image";
 		const formData = new FormData();
 
@@ -87,15 +91,23 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		// 	Authorization: `Bearer ${token}`,
 		// };
 
+		console.log("imageType", imageType);
 		axios
 			.post(url, formData)
 			.then((res) => {
-				setData((prev) => ({
-					...prev,
-					logoURL: res?.data?.public_id,
-					// logoURL: res?.data?.data[0]?.data?.id,
-					// logoURL: `https://gateway.banjee.org/services/media-service/iwantcdn/resources/${res?.data?.data[0]?.data?.id}?actionCode=ACTION_GET_RESOURCE`,
-				}));
+				if (imageType === "logo") {
+					setData((prev) => ({
+						...prev,
+						logoURL: res?.data?.public_id,
+						// logoURL: res?.data?.data[0]?.data?.id,
+						// logoURL: `https://gateway.banjee.org/services/media-service/iwantcdn/resources/${res?.data?.data[0]?.data?.id}?actionCode=ACTION_GET_RESOURCE`,
+					}));
+				} else {
+					setData((prev) => ({
+						...prev,
+						bannerImageUrls: [...prev.bannerImageUrls, res?.data?.public_id],
+					}));
+				}
 			})
 			.catch((err) => console.log(err));
 	}, []);
@@ -318,7 +330,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 												// newImageFunc(event.target.files[0]);
 												setImages(event?.target?.files[0]);
 												setImgShow(URL.createObjectURL(event?.target?.files[0]));
-												ImageApiCAll(event?.target?.files[0]);
+												ImageApiCAll(event?.target?.files[0], "logo");
 												// setData((prev) => ({
 												// 	...prev,
 												// 	logoURL: event.target.files[0],
@@ -357,6 +369,93 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 												<img src={imgShow} alt='photo' style={{ width: "100%", height: "100%" }} />
 											</Box>
 										)}
+									</Box>
+								</Box>
+							</Grid>
+							<Grid item xs={12}>
+								<Box>
+									<Typography sx={{ marginLeft: "0.3px" }}>Choose Images</Typography>
+									<Box
+										sx={{
+											display: "flex",
+											alignItems: "center",
+											// justifyContent: "space-around",
+											width: "100%",
+											height: "100%",
+											border: "0.5px solid lightgrey",
+											padding: "10px",
+											borderRadius: "5px",
+										}}>
+										<input
+											className='neighbourhood-form-textField'
+											type='file'
+											name='logoURL'
+											multiple
+											id='businessImage'
+											accept='.jpg, .jpeg, .png'
+											onChange={(event) => {
+												// newImageFunc(event.target.files[0]);
+
+												if (event?.target?.files?.length > 0) {
+													for (let index = 0; index < event?.target?.files?.length; index++) {
+														const data = event?.target?.files[index].type.split("/")?.[0];
+														setBusinessImgShow((prev) => [
+															...prev,
+															URL.createObjectURL(event?.target?.files[index]),
+														]);
+														ImageApiCAll(
+															event?.target?.files[index],
+															"image"
+															// event?.target?.files[index].type,
+														);
+													}
+												} else {
+													setBusinessImgShow((prev) => [
+														...prev,
+														URL.createObjectURL(event?.target?.files[0]),
+													]);
+													ImageApiCAll(event?.target?.files[0], "image");
+												}
+											}}
+										/>
+										{businessImgShow?.length > 0 &&
+											businessImgShow?.map((item, index) => {
+												console.log("value", document.getElementById("businessImage").value);
+												return (
+													<Box
+														sx={{
+															position: "relative",
+															width: "150px",
+															height: "150px",
+															border: "0.5px solid lightgrey",
+															padding: "5px",
+															borderRadius: "5px",
+															marginRight: "5px",
+														}}>
+														<IconButton
+															onClick={() => {
+																if (businessImgShow?.length === 1) {
+																	document.getElementById("businessImage").value = "";
+																}
+																setBusinessImgShow((prev) => prev?.filter((data) => data !== item));
+															}}
+															sx={{
+																position: "absolute",
+																top: "0px",
+																right: "0px",
+																padding: "0px",
+																background: "white",
+															}}>
+															<Cancel fontSize='small' style={{ color: "brown" }} />
+														</IconButton>
+														<img
+															src={item}
+															alt='photo'
+															style={{ width: "100%", height: "100%", objectFit: "contain" }}
+														/>
+													</Box>
+												);
+											})}
 									</Box>
 								</Box>
 							</Grid>

@@ -57,7 +57,6 @@ class AutoComplete extends Component {
 		return (
 			<Wrapper>
 				<input
-					required
 					className='search-input'
 					ref={(ref) => {
 						this.searchInput = ref;

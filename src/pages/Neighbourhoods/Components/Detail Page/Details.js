@@ -322,9 +322,10 @@ function DetailPage() {
 											data={{
 												name: state?.name,
 												currentLocation: {
-													lat: state?.geoLocation?.coordinates[0],
-													lon: state?.geoLocation?.coordinates[1],
+													lat: state?.geoLocation?.coordinates[1],
+													lon: state?.geoLocation?.coordinates[0],
 												},
+												zoom: 15,
 											}}
 										/>
 									</Box>

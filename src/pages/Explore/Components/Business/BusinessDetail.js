@@ -271,7 +271,7 @@ function BusinessDetail() {
 					</Grid>
 				</Card>
 				<ModalComp data={modal} handleModal={handleModal}>
-					<Typography>Are you sure to delete the business ?</Typography>
+					<Typography>Are you sure to delete this business ?</Typography>
 					<Box sx={{ display: "flex", justifyContent: "space-between", marginTop: "30px" }}>
 						<Button variant='outlined' onClick={() => handleModal(false)}>
 							cancel

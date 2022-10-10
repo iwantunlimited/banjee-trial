@@ -155,7 +155,12 @@ class MyGoogleMap extends Component {
 			<Wrapper>
 				{mapApiLoaded && (
 					<div>
-						<AutoComplete map={mapInstance} mapApi={mapApi} addplace={this.addPlace} />
+						<AutoComplete
+							required={false}
+							map={mapInstance}
+							mapApi={mapApi}
+							addplace={this.addPlace}
+						/>
 					</div>
 				)}
 				<Box sx={{ position: "relative" }}>

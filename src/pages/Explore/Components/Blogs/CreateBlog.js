@@ -134,15 +134,10 @@ function CreateBlog() {
 	};
 
 	const handleSubmit = (event) => {
-		setData((prev) => ({
-			...prev,
-			description: state,
-		}));
-		// setFinalData(data);
-		setTimeout(() => {
-			CreateBlogApiCall(data);
-		}, [1000]);
 		event.preventDefault();
+
+		// setFinalData(data);
+		CreateBlogApiCall(data);
 	};
 
 	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
@@ -360,7 +355,13 @@ function CreateBlog() {
 												},
 											}}
 											value={state}
-											onChange={setState}
+											onChange={(value) => {
+												setState(value);
+												setData((prev) => ({
+													...prev,
+													description: value,
+												}));
+											}}
 										/>
 									</Box>
 								</Grid>
