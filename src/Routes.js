@@ -31,6 +31,7 @@ import EditBusiness from "./pages/Explore/Components/Business/EditBusiness";
 import CreateBlog from "./pages/Explore/Components/Blogs/CreateBlog";
 import CreateFeed from "./pages/Social_Feeds/Components/createFeed";
 import BanjeeAlert from "./pages/BanjeeAlert/BanjeeAlert";
+import ViewAlert from "./pages/BanjeeAlert/components/ViewAlert";
 
 const Routes = () => {
 	return useRoutes([
@@ -135,10 +136,14 @@ const Routes = () => {
 					path: "/explore/detail/update/:id",
 					element: <EditBusiness />,
 				},
-				// {
-				// 	path: "/banjee-alert",
-				// 	element: <BanjeeAlert />,
-				// },
+				{
+					path: "/banjee-alert",
+					element: <BanjeeAlert />,
+				},
+				{
+					path: "/banjee-alert/:id",
+					element: <ViewAlert />,
+				},
 				// {
 				//     path: '/account',
 				//     element: <Account />

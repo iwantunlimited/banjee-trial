@@ -16,7 +16,7 @@ import { ArrowBack, Cancel } from "@mui/icons-material";
 import { createSocialFeeds } from "../services/ApiServices";
 import { useNavigate } from "react-router";
 import SnackBarComp from "../../../CustomComponents/SnackBarComp";
-import ReactQuill from "react-quill";
+// import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-quill-emoji/dist/quill-emoji";
 
@@ -41,9 +41,6 @@ function CreateFeed() {
 		mediaSource: null,
 	});
 
-	const [state, setState] = React.useState("");
-	console.log("data", data);
-
 	const [snackbar, setSnackbar] = React.useState({
 		open: false,
 		message: "",
@@ -63,10 +60,6 @@ function CreateFeed() {
 		visibility: "PUBLIC",
 	});
 
-	console.log("====================================");
-	console.log("uploadData", finalPayload);
-	console.log("====================================");
-
 	const [imgShow, setImgShow] = React.useState([]);
 
 	const renderType = (type, src) => {
@@ -85,112 +78,107 @@ function CreateFeed() {
 		}
 	};
 
-	const ImageApiCAll = React.useCallback((imgData, mime) => {
-		const type = mime.split("/")?.[0];
-		// const mime = "image";
-		const formData = new FormData();
-		console.log("mime", mime);
+	const ImageApiCAll = React.useCallback(
+		(imgData, mime) => {
+			const type = mime.split("/")?.[0];
+			// const mime = "image";
+			const formData = new FormData();
+			// console.log("mime", mime);
 
-		// formData.append("directoryId", "root");
+			// formData.append("directoryId", "root");
 
-		formData.append("cloud_name", "banjee");
-		formData.append("upload_preset", "business_images");
-		formData.append("file", imgData);
-		// { headers: { "Content-Type": "multipart/form-data" }
+			formData.append("cloud_name", "banjee");
+			formData.append("upload_preset", "business_images");
+			formData.append("file", imgData);
+			// { headers: { "Content-Type": "multipart/form-data" }
 
-		if (type === "audio") {
-			const url = `https://api.cloudinary.com/v1_1/banjee/video/upload`;
-			console.log("--------------", url);
+			if (type === "audio") {
+				const url = `https://api.cloudinary.com/v1_1/banjee/video/upload`;
 
-			axios
-				.post(url, formData)
+				axios
+					.post(url, formData)
+					.then((res) => {
+						// setData((prev) => ({
+						// 	...prev,
+						// 	// imageUrl: res?.data?.data[0]?.data?.id,
+						// 	src: res?.data?.public_id,
+						// }));
+						setUploadData((prev) => [
+							...prev,
+							{
+								...data,
+								src: res?.data?.public_id,
+								// url: renderType(type, res?.data?.public_id),
+								type: type,
+								mimeType: mime,
+							},
+						]);
+						setImgShow((prev) => [
+							...prev,
+							{ url: renderType(type, res?.data?.public_id), type: type, mimeType: mime },
+						]);
+					})
+					.catch((err) => console.error(err));
+			} else {
+				const url = `https://api.cloudinary.com/v1_1/banjee/${type}/upload`;
+
+				axios
+					.post(url, formData)
+					.then((res) => {
+						setUploadData((prev) => [
+							...prev,
+							{
+								...data,
+								src: res?.data?.public_id,
+								type: type,
+								mimeType: mime,
+							},
+						]);
+						setImgShow((prev) => [
+							...prev,
+							{ url: renderType(type, res?.data?.public_id), type: type, mimeType: mime },
+						]);
+
+						// setData((prev) => ({
+						// 	...prev,
+						// 	// imageUrl: res?.data?.data[0]?.data?.id,
+						// 	src: res?.data?.public_id,
+						// }));
+					})
+					.catch((err) => console.error(err));
+			}
+		},
+		[data]
+	);
+
+	const CreateFeedApiCall = React.useCallback(
+		(data) => {
+			createSocialFeeds(data)
 				.then((res) => {
-					console.log("====================================");
-					console.log("image upload response", res);
-					console.log("====================================");
-					// setData((prev) => ({
-					// 	...prev,
-					// 	// imageUrl: res?.data?.data[0]?.data?.id,
-					// 	src: res?.data?.public_id,
-					// }));
-					setUploadData((prev) => [
-						...prev,
-						{
-							...data,
-							src: res?.data?.public_id,
-							// url: renderType(type, res?.data?.public_id),
-							type: type,
-							mimeType: mime,
-						},
-					]);
-					setImgShow((prev) => [
-						...prev,
-						{ url: renderType(type, res?.data?.public_id), type: type, mimeType: mime },
-					]);
+					setSnackbar({
+						open: true,
+						message: "Feed Created Successfully",
+						severity: "success",
+						duration: 3000,
+					});
+
+					navigate("/social-feeds");
+					// setData({
+					// 	title: "",
+					// 	bannerImageUrl: "",
+					// 	categoryId: "",
+					// 	categoryName: "",
+					// 	description: "",
+					// 	shortDescription: "",
+					// 	publishOnFeed: true,
+					// 	slug: "",
+					// });
+					setImgShow("");
 				})
-				.catch((err) => console.log(err));
-		} else {
-			const url = `https://api.cloudinary.com/v1_1/banjee/${type}/upload`;
-			console.log("--------------", url);
-
-			axios
-				.post(url, formData)
-				.then((res) => {
-					console.log("====================================");
-					console.log("image upload response", res);
-					console.log("====================================");
-					setUploadData((prev) => [
-						...prev,
-						{
-							...data,
-							src: res?.data?.public_id,
-							type: type,
-							mimeType: mime,
-						},
-					]);
-					setImgShow((prev) => [
-						...prev,
-						{ url: renderType(type, res?.data?.public_id), type: type, mimeType: mime },
-					]);
-
-					// setData((prev) => ({
-					// 	...prev,
-					// 	// imageUrl: res?.data?.data[0]?.data?.id,
-					// 	src: res?.data?.public_id,
-					// }));
-				})
-				.catch((err) => console.log(err));
-		}
-	}, []);
-
-	const CreateFeedApiCall = React.useCallback((data) => {
-		createSocialFeeds(data)
-			.then((res) => {
-				setSnackbar({
-					open: true,
-					message: "Feed Created Successfully",
-					severity: "success",
-					duration: 3000,
-				});
-
-				navigate("/social-feeds");
-				console.log("====================================");
-				console.log("create api response", res);
-				console.log("====================================");
-				// setData({
-				// 	title: "",
-				// 	bannerImageUrl: "",
-				// 	categoryId: "",
-				// 	categoryName: "",
-				// 	description: "",
-				// 	shortDescription: "",
-				// 	publishOnFeed: true,
-				// 	slug: "",
-				// });
-				setImgShow("");
-			})
-			.catch((err) => console.log(err));
-	}, []);
+				.catch((err) => console.error(err));
+		},
+		[navigate]
+	);
 
 	const handleSnackbar = (data) => {
 		setSnackbar((prev) => ({
@@ -258,10 +246,9 @@ function CreateFeed() {
 												id='img'
 												// accept='.jpg, .jpeg, .png'
 												onChange={(event) => {
-													console.log("event", event);
 													if (event?.target?.files?.length > 0) {
 														for (let index = 0; index < event?.target?.files?.length; index++) {
-															const data = event?.target?.files[index].type.split("/")?.[0];
+															// const data = event?.target?.files[index].type.split("/")?.[0];
 															ImageApiCAll(
 																event?.target?.files[index],
 																event?.target?.files[index].type

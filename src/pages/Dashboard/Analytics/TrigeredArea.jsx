@@ -25,7 +25,6 @@ function TrigeredArea(props){
     // const [age, setAge] = React.useState(' ');
 
     const handleChange = (event) => {
-        console.log(event.target.value);
         if(event.target.value){
             typeData(event.target.value);
             listApiCall()
@@ -55,11 +54,11 @@ function TrigeredArea(props){
 		return `${dateArr[2]}-${month[dateArr[0]]}-${dateArr[1]}`;
 	};
 
-    console.log(searchData);
+    // console.log(searchData);
     
-    console.log(data);
+    // console.log(data);
 
-    console.log(dataType);
+    // console.log(dataType);
 
     const listApiCall = React.useCallback(() => {
         DashboardlistCustomer({
@@ -67,10 +66,9 @@ function TrigeredArea(props){
             endDate: searchData[1].toISOString(),
             type: dataType                                                                                                                                                                                                                                           
         }).then((res) => {
-            console.log(res);
             handleAnalyticsData(res)
             setData(res)
-        }).catch((err) => {console.log(err)})
+        }).catch((err) => {console.error(err)})
     },[handleAnalyticsData,dataType, searchData])
 
     // React.useEffect(() => {
@@ -162,7 +160,6 @@ function TrigeredArea(props){
                         <Grid item xs={12}>
                             <Button
                                 variant="outlined"
-                                // onClick={() =>console.log(searchData.dateRange)}
                                 onClick={() => {listApiCall();handleIsLoad(true)}} 
                                 sx={{
                                     background: "#FFFFFF",

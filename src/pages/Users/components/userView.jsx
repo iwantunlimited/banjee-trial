@@ -21,11 +21,10 @@ import {
 	findBlockedCustomers,
 	penddingConnectionsList,
 } from "../User_Services/UserApiService";
-import { Male, Female, Transgender, PanoramaSharp, ArrowBack } from "@mui/icons-material";
+import { Male, Female, Transgender, ArrowBack } from "@mui/icons-material";
 import "../users.css";
 import { useNavigate, useParams } from "react-router-dom";
 import UserLocation from "./UserLocation";
-import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
 import NeighrbourhoodList from "./NeighbourhoodList";
 import BusinessList from "./BusinessList";
 
@@ -38,16 +37,14 @@ function CustomerView(props) {
 
 	const [value, setValue] = React.useState(0);
 
-	const [neighbourhood, setNeighbourhood] = React.useState("");
-
 	const [conData, setConData] = React.useState();
 
 	const [blockCon, setBlockCon] = React.useState();
 
 	const [state, setState] = React.useState([]);
-	const [penddingConIds, setpenddingConIds] = React.useState();
+	// const [penddingConIds, setpenddingConIds] = React.useState();
 
-	const [penddingData, setPenddingData] = React.useState();
+	// const [penddingData, setPenddingData] = React.useState();
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -97,7 +94,7 @@ function CustomerView(props) {
 				setConData(response);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, [id]);
 
@@ -109,7 +106,7 @@ function CustomerView(props) {
 				setBlockCon(response);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, [id]);
 
@@ -118,10 +115,10 @@ function CustomerView(props) {
 	const penddingConnectionsListApiCall = React.useCallback((data) => {
 		penddingConnectionsList(data)
 			.then((response) => {
-				setPenddingData(response);
+				// setPenddingData(response);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, []);
 
@@ -131,11 +128,11 @@ function CustomerView(props) {
 		findCustomer(id)
 			.then((response) => {
 				setState(response);
-				setpenddingConIds(response.pendingConnections);
+				// setpenddingConIds(response.pendingConnections);
 				penddingConnectionsListApiCall(response.pendingConnections);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, [id, penddingConnectionsListApiCall]);
 

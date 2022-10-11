@@ -36,9 +36,6 @@ function CreateBlog() {
 		slug: "",
 	});
 
-	console.log("====================================");
-	console.log(data);
-	console.log("====================================");
 
 	const [state, setState] = React.useState("");
 
@@ -50,10 +47,6 @@ function CreateBlog() {
 	});
 
 	const [finalData, setFinalData] = React.useState("");
-
-	console.log("====================================");
-	console.log("editor ", state);
-	console.log("====================================");
 
 	const [imgShow, setImgShow] = React.useState("");
 	const [categoryList, setCategoryList] = React.useState("");
@@ -74,27 +67,21 @@ function CreateBlog() {
 		axios
 			.post(url, formData)
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("image upload response", res);
-				// console.log("====================================");
 				setData((prev) => ({
 					...prev,
 					// imageUrl: res?.data?.data[0]?.data?.id,
 					bannerImageUrl: res?.data?.public_id,
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const CategoryApiCall = React.useCallback(() => {
 		CategoryList({ type: "BLOG" })
 			.then((res) => {
-				console.log("====================================");
-				console.log(res);
-				console.log("====================================");
 				setCategoryList(res?.content);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const CreateBlogApiCall = React.useCallback((data) => {
@@ -108,9 +95,6 @@ function CreateBlog() {
 				});
 
 				navigate("/explore/blogs");
-				console.log("====================================");
-				console.log("create api response", res);
-				console.log("====================================");
 				setData({
 					title: "",
 					bannerImageUrl: "",
@@ -123,7 +107,7 @@ function CreateBlog() {
 				});
 				setImgShow("");
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const handleSnackbar = (data) => {

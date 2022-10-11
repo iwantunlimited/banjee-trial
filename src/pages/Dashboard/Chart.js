@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
-import {Box, IconButton} from "@mui/material";
-import {Filter1Outlined, Refresh} from "@mui/icons-material";
+import { Box, IconButton } from "@mui/material";
+import { Filter1Outlined, Refresh } from "@mui/icons-material";
 import "./Dashboard.css";
 
-const Chart = ({filter, chartId, height, width}) => {
+const Chart = ({ filter, chartId, height, width }) => {
 	const sdk = new ChartsEmbedSDK({
 		baseUrl: "https://charts.mongodb.com/charts-banjee-wegnz",
 	});
@@ -28,32 +28,27 @@ const Chart = ({filter, chartId, height, width}) => {
 		chart
 			.render(chartDiv.current)
 			.then(() => setRendered(true))
-			.catch((err) => console.log("Error during Charts rendering.", err));
+			.catch((err) => console.error(err));
 	}, [chart]);
 
 	useEffect(() => {
-		console.log("filtered data from chart.js", filter);
 		// if (rendered) {
-		chart
-			.setFilter(filter ? filter : {})
-			.catch((err) => console.log("Error while filtering.", err));
+		chart.setFilter(filter ? filter : {}).catch((err) => console.error(err));
 		// }
 		chart.getData().then((data) => {
 			setData(data);
-			console.log("data", data);
 		});
 	}, [chart, filter, rendered]);
 
 	return (
-		<Box sx={{position: "relative"}}>
+		<Box sx={{ position: "relative" }}>
 			{/* <div ref={chartDiv} /> */}
 			<div
-				className="custom-chart"
+				className='custom-chart'
 				style={{
 					position: "relative",
 				}}
-				ref={chartDiv}
-			></div>
+				ref={chartDiv}></div>
 			{data && (
 				<IconButton
 					onClick={() => chart.refresh()}
@@ -61,9 +56,8 @@ const Chart = ({filter, chartId, height, width}) => {
 						position: "absolute",
 						top: "1px",
 						right: "1px",
-					}}
-				>
-					<Refresh style={{color: "white"}} />
+					}}>
+					<Refresh style={{ color: "white" }} />
 				</IconButton>
 			)}
 		</Box>

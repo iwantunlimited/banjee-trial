@@ -18,7 +18,7 @@ function Analytics(props) {
 		userData: [],
 	});
 
-	console.log(initialData.totalRooms);
+	// console.log(initialData.totalRooms);
 
 	const [analyticsData, setAnalyticsData] = React.useState([]);
 
@@ -44,17 +44,15 @@ function Analytics(props) {
 			pageSize: 1200,
 		})
 			.then((res) => {
-				console.log(res);
 				setInitialData((prev) => ({
 					...prev,
 					userData: res,
 					totalUsers: res.totalElements,
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
-	console.log(initialData.totalMale);
 
 	const totalRoomApiCall = React.useCallback(() => {
 		filterRooms({
@@ -64,7 +62,7 @@ function Analytics(props) {
 			.then((res) => {
 				setInitialData((prev) => ({...prev, totalRooms: res.totalElements}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const ReportedUsersApiCall = React.useCallback(() => {
@@ -73,13 +71,12 @@ function Analytics(props) {
 			pageSize: 100,
 		})
 			.then((response) => {
-				console.log(response, "calles");
 				setInitialData((prev) => ({
 					...prev,
 					reportedUsers: response.totalElements,
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	React.useEffect(() => {

@@ -29,7 +29,7 @@ export default function CommentsModal(props) {
 				setResult(res);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, []);
 

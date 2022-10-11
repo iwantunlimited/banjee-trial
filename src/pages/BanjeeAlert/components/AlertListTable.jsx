@@ -17,7 +17,7 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			headerClassName: "app-header",
 			headerName: "Cloud Name",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			flex: 0.4,
+			flex: 0.3,
 		},
 		{
 			id: "2",
@@ -29,20 +29,11 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 		},
 		{
 			id: "3",
-			field: "cloudType",
-			headerClassName: "app-header",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "Type",
-			// align: "center",
-			flex: 0.3,
-		},
-		{
-			id: "4",
 			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
 			// align: "center",
-			flex: 0.4,
+			flex: 0.2,
 			renderCell: (params) => {
 				if (params.row && params.row.createdOn) {
 					const date = moment(params.row.createdOn).format("L");
@@ -53,19 +44,29 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			},
 		},
 		{
+			id: "4",
+			field: "address",
+			headerClassName: "app-header",
+			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+			headerName: "Address",
+			// align: "center",
+			flex: 0.5,
+		},
+
+		{
 			id: "8",
 			field: "id",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "View",
 			// align: 'center',
-			flex: 0.3,
+			flex: 0.2,
 			renderCell: (params) => {
 				return (
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/neighbourhood/detail/" + params.row.id);
+								navigate("/banjee-alert/" + params.row.id);
 							}}>
 							<Visibility />
 						</IconButton>

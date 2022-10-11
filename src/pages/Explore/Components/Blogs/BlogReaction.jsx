@@ -29,8 +29,6 @@ function BlogReaction({ blogData }) {
 		reactionType: "",
 	});
 
-	console.log("blogData---", blogData);
-
 	const emojiData = [
 		{
 			name: "LIKE",
@@ -80,9 +78,6 @@ function BlogReaction({ blogData }) {
 	const GetReactionsApi = React.useCallback(() => {
 		getReactions(params?.id)
 			.then((res) => {
-				console.log("====================================");
-				console.log("reactions", res);
-				console.log("====================================");
 				setReaction(res);
 			})
 			.catch((err) => console.error(err));
@@ -91,7 +86,6 @@ function BlogReaction({ blogData }) {
 	const CreateReactionApiCall = React.useCallback((data) => {
 		createReactions(data)
 			.then((res) => {
-				console.log("create reaction", res);
 				GetReactionsApi();
 			})
 			.catch((err) => console.error(err));

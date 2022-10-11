@@ -56,8 +56,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 	const [imgShow, setImgShow] = React.useState("");
 	const [businessImgShow, setBusinessImgShow] = React.useState([]);
 
-	console.log("businessImgShow", businessImgShow);
-	console.log("data", data);
 
 	const handleGLocation = (lat, lng, address) => {
 		setData((prev) => ({
@@ -91,7 +89,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		// 	Authorization: `Bearer ${token}`,
 		// };
 
-		console.log("imageType", imageType);
 		axios
 			.post(url, formData)
 			.then((res) => {
@@ -109,7 +106,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 					}));
 				}
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	function handleChange(event) {
@@ -129,7 +126,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 				setCategoryList(response?.content);
 				// console.log(response);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const NeighbourhoodListApiCall = React.useCallback(() => {
@@ -172,7 +169,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 				document.getElementById("img").value = "";
 				listApiCall(0, 10);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	function handleSubmit(event) {
@@ -420,7 +417,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 										/>
 										{businessImgShow?.length > 0 &&
 											businessImgShow?.map((item, index) => {
-												console.log("value", document.getElementById("businessImage").value);
 												return (
 													<Box
 														sx={{

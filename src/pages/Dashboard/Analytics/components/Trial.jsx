@@ -3,10 +3,7 @@ import React from "react";
 import ReactApexChart from "react-apexcharts";
 
 function Trial(props) {
-	console.log(props);
 	const { chart, dataType } = props;
-
-	console.log(chart);
 
 	const monthData = {
 		Jan: 0,
@@ -24,8 +21,8 @@ function Trial(props) {
 	};
 
 	const { Female, Male } = chart;
-	console.log(chart);
-	console.log("data type for date", dataType);
+	// console.log(chart);
+	// console.log("data type for date", dataType);
 
 	// typeData === 'month' ? console.log('month done') : console.log('year,done');;
 

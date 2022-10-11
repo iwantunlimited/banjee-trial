@@ -5,6 +5,7 @@ import { filterReportList, listAlert } from "./api-services/apiServices";
 import AlertListTable from "./components/AlertListTable";
 import { useCallback } from "react";
 import PropTypes from "prop-types";
+import AlertLocation from "./components/AlertMap";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -78,22 +79,25 @@ function BanjeeAlert() {
 		setValue(newValue);
 	};
 
-	console.log("currentLocation", currentLocation);
+	// console.log("currentLocation", currentLocation);
 
 	const ListAlertApiCall = useCallback(
 		(page, pageSize) => {
 			if (currentLocation?.lat && currentLocation?.lon) {
 				listAlert({
-					latitude: currentLocation?.lat,
-					longitude: currentLocation?.lon,
+					// latitude: currentLocation?.lat,
+					// longitude: currentLocation?.lon,
 					page: page,
 					pageSize: pageSize,
 				})
 					.then((res) => {
-						console.log("====================================");
-						console.log("api response", res);
-						console.log("====================================");
-						setData(res);
+						const resp = res?.content?.map((item) => {
+							return {
+								address: item?.metaInfo?.address,
+								...item,
+							};
+						});
+						setData(resp);
 						setState((prev) => ({
 							...prev,
 							totalElement: res.totalElements,
@@ -125,10 +129,11 @@ function BanjeeAlert() {
 	const ReportedAlertListApiCall = React.useCallback((page, pageSize) => {
 		filterReportList({ page: page, pageSize: pageSize })
 			.then((res) => {
-				console.log("====================================");
-				console.log("reported list for alert", res);
-				console.log("====================================");
-				setReportedData(res.content);
+				// console.log("====================================");
+				// console.log("reported list for alert", res);
+				// console.log("====================================");
+
+				setReportedData(res);
 				setReportPagination((prev) => ({
 					...prev,
 					totalElement: res.totalElements,
@@ -161,7 +166,7 @@ function BanjeeAlert() {
 						<Box sx={{ marginY: "10px" }}>
 							<Divider />
 						</Box>
-						<AlertMap currentLocation={currentLocation} />
+						<AlertLocation currentLocation={currentLocation} data={data} type={"array"} />
 					</Card>
 				</Grid>
 				{/* <Grid item xs={12}>

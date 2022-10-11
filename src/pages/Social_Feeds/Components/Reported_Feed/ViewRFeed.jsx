@@ -76,7 +76,7 @@ function ViewRFeed() {
 				setPRData((prev) => [...prev, res.userObject]);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, []);
 
@@ -96,7 +96,7 @@ function ViewRFeed() {
 				setRData(res);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, [id, reportedProfile]);
 
@@ -105,7 +105,7 @@ function ViewRFeed() {
 			.then((res) => {
 				setData(res);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, [id]);
 
 	React.useEffect(() => {

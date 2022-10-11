@@ -69,9 +69,6 @@ export default function SocialFeed(props) {
 		imageModal: false,
 	});
 
-	// console.log("startDate", startDate);
-	// console.log("endDate", endDate);
-
 	const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
 	const filterSocialFeedsApiCall = React.useCallback(
@@ -94,7 +91,7 @@ export default function SocialFeed(props) {
 					setTotalEle(res.totalElements);
 				})
 				.catch((err) => {
-					console.log(err);
+					console.error(err);
 				});
 		},
 		[startDate, endDate]
@@ -436,7 +433,7 @@ export default function SocialFeed(props) {
 																		}}
 																		key={iIndex}>
 																		<img
-																			alt=''
+																			alt='#'
 																			src={
 																				item?.src &&
 																				`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.webp`
@@ -515,7 +512,9 @@ export default function SocialFeed(props) {
 														{ele?.text?.length > 200 ? (
 															<Typography>
 																{ele?.text?.slice(0, 200) + "... "}
-																<a style={{ textTransform: "none", color: "blue" }}>more</a>
+																<a href='#' style={{ textTransform: "none", color: "blue" }}>
+																	more
+																</a>
 															</Typography>
 														) : (
 															<Typography>{ele?.text}</Typography>
@@ -578,7 +577,6 @@ export default function SocialFeed(props) {
 									rowsPerPage={pagination.pageSize}
 									rowsPerPageOptions={[12, 16, 20]}
 									onPageChange={(event, data) => {
-										console.log("event--------", data);
 										setPagination((prev) => ({
 											...prev,
 											page: data,
@@ -586,7 +584,6 @@ export default function SocialFeed(props) {
 										filterSocialFeedsApiCall(data, pagination.pageSize, startDate, endDate);
 									}}
 									onRowsPerPageChange={(event) => {
-										console.log("pagesizedfddv", event, data);
 										setPagination((prev) => ({
 											...prev,
 											pageSize: event.target.value,

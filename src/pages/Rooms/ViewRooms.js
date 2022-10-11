@@ -35,15 +35,12 @@ function ViewRooms() {
 
 	const [gridData, setGridData] = React.useState();
 
-	console.log("gridData----", gridData);
-
 	const [pagination, setPagination] = React.useState({
 		page: 0,
 		pageSize: 10,
 	});
 
 	const [totalElement, setTotalElement] = React.useState();
-	console.log("totalElement", totalElement);
 
 	// ------------------------------------ find Groups By ID Api Call ---------------------------------------
 
@@ -58,10 +55,9 @@ function ViewRooms() {
 					};
 				});
 				setGridData(res);
-				console.log(response);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, [roomId]);
 
@@ -80,7 +76,6 @@ function ViewRooms() {
 			flex: 0.2,
 			align: "center",
 			renderCell: (params) => {
-				console.log("params----", params);
 				return (
 					<Avatar
 						src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${params.row.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}

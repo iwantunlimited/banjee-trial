@@ -20,7 +20,7 @@ export let nearByAlert = (requestLoad) => {
 };
 
 export let listMyAlert = (requestLoad) => {
-	let url = urls.GEO_CLOUD.GEO_ALERT + "/my-alerts";
+	let url = urls.GEO_CLOUD.GEO_ALERT + "/my-alerts/" + requestLoad;
 	let actionCode = "";
 	let payload = {};
 	let method = "GET";

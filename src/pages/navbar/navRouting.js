@@ -112,13 +112,13 @@ const routing = [
 		],
 	},
 
-	// {
-	// 	id: 13,
-	// 	path: "/banjee-alert",
-	// 	name: "Banjee Alert",
-	// 	icon: <NotificationImportant fontSize='medium' />,
-	// 	component: <BanjeeAlert />,
-	// },
+	{
+		id: 13,
+		path: "/banjee-alert",
+		name: "Banjee Alert",
+		icon: <NotificationImportant fontSize='medium' />,
+		component: <BanjeeAlert />,
+	},
 	// {
 	//     id:3,
 	//     path: '/account',

@@ -7,14 +7,6 @@ function DataGridCustom(porps){
 
     const { data } = porps;
 
-    console.log(data);
-
-    // const maleArr = Object.values(data.Male)
-    // const femaleArr = Object.values(data.Female)
-
-
-    // console.log(maleArr);
-    // console.log(femaleArr);
 
     return(
             <DataGrid

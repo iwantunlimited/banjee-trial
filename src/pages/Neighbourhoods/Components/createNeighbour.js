@@ -77,7 +77,7 @@ function CreateNeighbour(props) {
 			.then((res) => {
 				setCity(res.content);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	});
 
 	const StateApi = React.useCallback((countryId) => {
@@ -85,7 +85,7 @@ function CreateNeighbour(props) {
 			.then((res) => {
 				setState(res.content);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const CountryApi = React.useCallback(() => {
@@ -98,7 +98,7 @@ function CreateNeighbour(props) {
 				}));
 				StateApi(res?.[0]?.id || "");
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const ImageApiCAll = React.useCallback((data) => {
@@ -181,7 +181,7 @@ function CreateNeighbour(props) {
 
 				document.getElementById("img").value = "";
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	function handleSubmit(event) {

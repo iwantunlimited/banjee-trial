@@ -9,7 +9,6 @@ export default function AnalyticsArea(props) {
 	const { showData, analyticsValues, dataType, userData } = props;
 
 	const analyticsData = analyticsValues;
-	console.log(analyticsData);
 
 	const [state, setState] = React.useState({
 		series: series,

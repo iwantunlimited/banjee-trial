@@ -10,7 +10,6 @@ import { Search } from "@mui/icons-material";
 function UsersReport() {
 	const [dateValue, setDateValue] = React.useState([null, null]);
 	const [state, setState] = React.useState(null);
-	console.log("dateValue", dateValue);
 	return (
 		<Container maxWidth='xl'>
 			<Card

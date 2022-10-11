@@ -1,10 +1,9 @@
 import React from "react";
-import { Card, CircularProgress, Box, IconButton } from "@mui/material";
+import { CircularProgress, Box, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
 import { findBusinessByUserId } from "../../Explore/services/ApiServices";
 
 function BusinessList(props) {
@@ -30,8 +29,8 @@ function BusinessList(props) {
 				});
 				setTotalEle(res?.totalElements);
 			})
-			.catch((err) => console.log(err));
-	}, []);
+			.catch((err) => console.error(err));
+	}, [props?.data]);
 
 	let rows = state ? state : [];
 
@@ -140,7 +139,6 @@ function BusinessList(props) {
 									// autoPageSize
 									pagination
 									onPageChange={(event) => {
-										console.log("event--------", event);
 										setPagination({
 											page: event,
 											pageSize: pagination?.page,

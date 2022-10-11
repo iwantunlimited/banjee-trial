@@ -65,10 +65,6 @@ function Category(props) {
 
 	const [imgShow, setImgShow] = React.useState("");
 
-	// console.log("====================================");
-	// console.log("images", images);
-	// console.log("====================================");
-
 	function handleChange(event) {
 		const { name, value } = event.target;
 		setModalData((prevData) => {
@@ -106,7 +102,7 @@ function Category(props) {
 				CategoryListApiCall();
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	};
 
@@ -117,12 +113,11 @@ function Category(props) {
 				CategoryListApiCall();
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	};
 
 	const CreateCategoryApiCall = () => {
-		// console.log("handle Submit", modalData);
 		CreateCategory({
 			name: modalData.name,
 			description: modalData.description,
@@ -135,7 +130,7 @@ function Category(props) {
 				CategoryListApiCall();
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	};
 
@@ -150,7 +145,7 @@ function Category(props) {
 				CategoryListApiCall();
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	};
 
@@ -159,7 +154,7 @@ function Category(props) {
 			.then((response) => {
 				setCategoryList(response);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, [props?.categoryName]);
 
 	// Image api call for image upload to get image id
@@ -189,7 +184,7 @@ function Category(props) {
 					image: res?.data?.public_id,
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	React.useEffect(() => {

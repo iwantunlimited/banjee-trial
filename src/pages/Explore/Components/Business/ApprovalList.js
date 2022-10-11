@@ -7,7 +7,7 @@ import moment from "moment";
 import { useNavigate } from "react-router";
 import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
 
-export function BusinessApprovalList({ handleTabChange }) {
+export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 	const navigate = useNavigate();
 	const [data, setData] = React.useState();
 
@@ -122,6 +122,7 @@ export function BusinessApprovalList({ handleTabChange }) {
 								ApproveApiCAll(params?.row?.routingId);
 								pendingAPiCAll(0, 10);
 								handleTabChange(event, 0);
+								// listApiCall(0, 10);
 							}}
 						/>
 					</strong>
@@ -153,7 +154,7 @@ export function BusinessApprovalList({ handleTabChange }) {
 					},
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const ApproveApiCAll = React.useCallback((data) => {
@@ -166,7 +167,7 @@ export function BusinessApprovalList({ handleTabChange }) {
 					message: "Business Approved",
 				});
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	React.useEffect(() => {

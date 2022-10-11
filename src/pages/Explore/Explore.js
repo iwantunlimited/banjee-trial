@@ -57,6 +57,7 @@ function Explore() {
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
+		listApiCAll(0, 10);
 	};
 
 	const listApiCAll = React.useCallback((page, pageSize) => {
@@ -122,7 +123,7 @@ function Explore() {
 							/>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<BusinessApprovalList handleTabChange={handleChange} />
+							<BusinessApprovalList handleTabChange={handleChange} listApiCall={listApiCAll} />
 						</TabPanel>
 					</Card>
 				</Grid>

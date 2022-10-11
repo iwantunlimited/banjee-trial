@@ -19,7 +19,6 @@ function SidebarList({ handleId, handleClick }) {
 	const path1 = pathname?.split("/")?.[1];
 
 	const path2 = pathname?.split("/")?.[2];
-	const path3 = pathname?.split("/")?.[3];
 
 	// console.log("path----3", "/" + path1 + "/" + path2 + "/" + path3);
 	const [open, setOpen] = React.useState(false);
@@ -112,11 +111,9 @@ function SidebarList({ handleId, handleClick }) {
 							<Collapse in={open && item?.id === id}>
 								<List sx={{ paddingTop: "0px", paddingBottom: "0px" }}>
 									{item?.children?.map((text, index) => {
-										console.log("====================================");
-										console.log(text.path);
-										console.log("====================================");
 										return (
 											<ListItemButton
+												key={index}
 												onClick={() => {
 													navigate(text?.path);
 													handleClick();

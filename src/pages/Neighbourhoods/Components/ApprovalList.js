@@ -204,7 +204,7 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 					message: "Neighbourhood Rejected",
 				});
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	React.useEffect(() => {

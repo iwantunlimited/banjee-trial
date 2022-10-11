@@ -22,7 +22,6 @@ const UserLocation = compose(
 		currentLocation: { lat, lon },
 		name,
 	} = props.data;
-	// console.log("userLocation-------", lat, lon);
 	return (
 		<GoogleMap
 			defaultZoom={props?.data?.zoom ? props?.data?.zoom : 8}

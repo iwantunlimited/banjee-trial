@@ -36,7 +36,6 @@ function ReportedFeed(props) {
 
 	const [reportedFeed, setReportedFeed] = React.useState([]);
 
-	console.log("reportedFeed-------------", reportedFeed);
 
 	const [pagination, setPagination] = React.useState({
 		page: 0,
@@ -92,7 +91,6 @@ function ReportedFeed(props) {
 				<strong>
 					<IconButton
 						onClick={() => {
-							console.log("params datagrid", params);
 							navigate("/social-feeds/reported-feeds/" + params.row.mainId);
 						}}>
 						<VisibilityIcon />
@@ -106,7 +104,6 @@ function ReportedFeed(props) {
 		setReportedFeed();
 		filterSocialFeeds({ reported: true, page: page, pageSize: pageSize })
 			.then((res) => {
-				console.log("res", res);
 				const resp = res.content.map((ele) => {
 					return {
 						...ele,
@@ -124,7 +121,7 @@ function ReportedFeed(props) {
 				// }));
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, []);
 

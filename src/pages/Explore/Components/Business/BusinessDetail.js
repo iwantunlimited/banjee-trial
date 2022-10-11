@@ -69,7 +69,7 @@ function BusinessDetail() {
 			.then((res) => {
 				setState(res);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const DeleteBusinessApiCall = React.useCallback(() => {

@@ -3,6 +3,7 @@ import {
 	Box,
 	Button,
 	Card,
+	CircularProgress,
 	Container,
 	Grid,
 	IconButton,
@@ -38,9 +39,9 @@ function BlogDetail() {
 	const DeleteBlogApiCall = React.useCallback((data) => {
 		deleteBlog(data)
 			.then((res) => {
-				console.log(res);
+				// console.log(res);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const ApiCall = React.useCallback(() => {
@@ -48,7 +49,7 @@ function BlogDetail() {
 			.then((res) => {
 				setData(res);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
@@ -57,14 +58,15 @@ function BlogDetail() {
 		ApiCall();
 	}, [ApiCall]);
 
-	return (
-		<Container style={{ margin: "auto" }} maxWidth='md'>
-			<Box sx={{ marginBottom: 2, display: "flex", justifyContent: "space-between" }}>
-				<IconButton onClick={() => navigate(-1)}>
-					<ArrowBack color='primary' />
-				</IconButton>
-				<Box>
-					{/* <IconButton
+	if (data) {
+		return (
+			<Container style={{ margin: "auto" }} maxWidth='lg'>
+				<Box sx={{ marginBottom: 2, display: "flex", justifyContent: "space-between" }}>
+					<IconButton onClick={() => navigate(-1)}>
+						<ArrowBack color='primary' />
+					</IconButton>
+					<Box>
+						{/* <IconButton
 						onClick={() =>
 							setModal({
 								open: true,
@@ -82,62 +84,68 @@ function BlogDetail() {
 						}>
 						<ChatBubbleOutline />
 					</IconButton> */}
-					<IconButton
-						onClick={() => {
-							DeleteBlogApiCall(params?.id);
-							navigate(-1);
-						}}
-						// color='primary'
-						variant='contained'>
-						<Delete />
-					</IconButton>
+						<IconButton
+							onClick={() => {
+								DeleteBlogApiCall(params?.id);
+								navigate(-1);
+							}}
+							// color='primary'
+							variant='contained'>
+							<Delete />
+						</IconButton>
+					</Box>
 				</Box>
-			</Box>
-			<Card sx={{ borderRadius: "0px", boxShadow: "none", paddingY: "20px", paddingX: "40px" }}>
-				<Grid item container xs={12} spacing={2}>
-					<Grid item xs={12}>
-						<Typography sx={{ textAlign: "center", fontSize: "24px", fontWeight: 600 }}>
-							{data?.title}
-						</Typography>
-					</Grid>
-					<Grid item xs={12}>
-						<Box
-							sx={{
-								position: "relative",
-								width: "100%",
-								height: "auto !important",
-							}}>
-							<img
-								style={{ height: "auto !important", width: "100%", objectFit: "contain" }}
-								src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${data?.bannerImageUrl}.png`}
-								alt='image'
-							/>
-						</Box>
-					</Grid>
-					<Grid item xs={12}>
-						<Box sx={{ position: "relative" }}>
-							<Typography sx={{ textAlign: "left", fontSize: "22px", fontWeight: 400 }}>
-								{data?.shortDescription}
+				<Card sx={{ borderRadius: "0px", boxShadow: "none", paddingY: "20px", paddingX: "40px" }}>
+					<Grid item container xs={12} spacing={2}>
+						<Grid item xs={12}>
+							<Typography sx={{ textAlign: "center", fontSize: "24px", fontWeight: 600 }}>
+								{data?.title}
 							</Typography>
-						</Box>
-					</Grid>
-					<Grid item xs={12}>
-						<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-							<Typography sx={{ fontSize: "14px", fontWeight: 500 }}>{data?.authorName}</Typography>
-							<Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-								{moment(data?.createdOn).format("lll")}
-							</Typography>
-						</Box>
-					</Grid>
-					<Grid item xs={12}>
-						<Box>
-							<Typography>{descriptionText}</Typography>
-						</Box>
-					</Grid>
-					<Grid item xs={12}>
-						<ReactionCommentTab blogData={data} />
-					</Grid>
-					{/* <ModalComp width={400} handleModal={handleModal} data={modal}>
+						</Grid>
+						<Grid item xs={12}>
+							<Box
+								sx={{
+									position: "relative",
+									width: "100%",
+									height: "auto !important",
+								}}>
+								<img
+									style={{ height: "auto !important", width: "100%", objectFit: "contain" }}
+									src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${data?.bannerImageUrl}.png`}
+									alt='image'
+								/>
+							</Box>
+						</Grid>
+						<Grid item xs={12}>
+							<Box sx={{ position: "relative" }}>
+								<Typography sx={{ textAlign: "left", fontSize: "22px", fontWeight: 400 }}>
+									{data?.shortDescription}
+								</Typography>
+							</Box>
+						</Grid>
+						<Grid item xs={12}>
+							<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+								{data?.authorName !== null && (
+									<Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+										{data?.authorName ? data?.authorName : ""}
+									</Typography>
+								)}
+								{data?.createdOn && (
+									<Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+										{moment(data?.createdOn).format("lll")}
+									</Typography>
+								)}
+							</Box>
+						</Grid>
+						<Grid item xs={12}>
+							<Box>
+								<Typography>{descriptionText}</Typography>
+							</Box>
+						</Grid>
+						<Grid item xs={12}>
+							<ReactionCommentTab blogData={data} />
+						</Grid>
+						{/* <ModalComp width={400} handleModal={handleModal} data={modal}>
 						{modal?.type === "reaction" ? (
 							<React.Fragment>
 								<BlogReaction blogData={data} />
@@ -148,10 +156,24 @@ function BlogDetail() {
 							</React.Fragment>
 						)}
 					</ModalComp> */}
-				</Grid>
-			</Card>
-		</Container>
-	);
+					</Grid>
+				</Card>
+			</Container>
+		);
+	} else {
+		return (
+			<Box
+				sx={{
+					width: "100%",
+					height: "100vh",
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+				}}>
+				<CircularProgress />
+			</Box>
+		);
+	}
 }
 
 export default BlogDetail;

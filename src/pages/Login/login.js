@@ -34,12 +34,10 @@ function Login() {
 		const setting = new Setting();
 		let seedValue = time;
 		let rid = setting.lcrng(seedValue, 16);
-		console.log(rid);
+
 		let hash = setting.md5Hash(urls.headers["itpl-client-id"], rid);
 		return hash;
 	};
-
-	console.log(setSecurity);
 
 	const handleChange = (event) => {
 		const { name, value } = event.target;
@@ -77,7 +75,6 @@ function Login() {
 					},
 				})
 				.then((response) => {
-					console.log(response);
 					setSnackBar({
 						open: true,
 						severity: "success",
@@ -96,9 +93,9 @@ function Login() {
 					//   localStorage.setItem('lastName', lastName);
 					//   localStorage.setItem('mobile', mobile);
 					//   localStorage.setItem('email', email);
-					console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + response.data.externalReferenceId);
+					// console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + response.data.externalReferenceId);
 					const resCode = response.status;
-					console.log(resCode);
+					// console.log(resCode);
 					setState({
 						isLoggedIn: true,
 						token: access_token,
@@ -107,7 +104,7 @@ function Login() {
 					navigate("/");
 				})
 				.catch((error) => {
-					console.log(error);
+					console.error(error);
 					if (error.response.status === 400) {
 						setSnackBar({
 							open: true,

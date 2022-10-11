@@ -13,7 +13,6 @@ function Room() {
 
 	const [state, setState] = React.useState();
 
-	console.log("state-------", state);
 
 	const [pagination, setPagination] = React.useState({
 		page: 0,
@@ -39,7 +38,6 @@ function Room() {
 			keywords: keywords,
 		})
 			.then((res) => {
-				console.log(res);
 				const resp = res.content.map((ele) => {
 					return {
 						routingId: ele.id,
@@ -51,7 +49,7 @@ function Room() {
 				setState(resp);
 				setTotalEle(res.totalElements);
 			})
-			.catch((errr) => console.log(errr));
+			.catch((errr) => console.error(errr));
 	}, []);
 
 	let rows = state ? state : [];
@@ -146,7 +144,6 @@ function Room() {
 						<IconButton
 							onClick={() => {
 								navigate("/rooms/view/" + params.row.routingId);
-								console.log(params);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -212,7 +209,6 @@ function Room() {
 											// autoPageSize
 											pagination
 											onPageChange={(event) => {
-												console.log("event--------", event);
 												setPagination((prev) => ({
 													...prev,
 													page: event,

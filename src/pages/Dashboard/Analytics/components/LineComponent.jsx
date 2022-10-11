@@ -22,7 +22,6 @@ export default function LineComponent(props) {
 
     const { series } = data
 
-    console.log(chart);
 
     // const [state,setState] = React.useState({
     //     series: series,

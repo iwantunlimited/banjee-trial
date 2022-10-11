@@ -101,7 +101,7 @@ function EditBusiness() {
 					// logoURL: `https://gateway.banjee.org/services/media-service/iwantcdn/resources/${res?.data?.data[0]?.data?.id}?actionCode=ACTION_GET_RESOURCE`,
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	function handleChange(event) {
@@ -149,7 +149,7 @@ function EditBusiness() {
 			.then((response) => {
 				setCategoryList(response?.content);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const NeighbourhoodListApiCall = React.useCallback(() => {
@@ -199,7 +199,7 @@ function EditBusiness() {
 				navigate("/explore/detail/" + params.id);
 				document.getElementById("img").value = "";
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	function handleSubmit(event) {

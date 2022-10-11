@@ -6,8 +6,6 @@ import "../../Analytics.css";
 function ChartComp(props) {
 	const { data } = props;
 
-	console.log(data);
-
 	const [state, setState] = React.useState({
 		series: [0, 0, 0],
 		options: {
@@ -29,9 +27,6 @@ function ChartComp(props) {
 			],
 		}));
 	}, [data]);
-	console.log("hello");
-
-	console.log("State ", state);
 
 	return (
 		<Card

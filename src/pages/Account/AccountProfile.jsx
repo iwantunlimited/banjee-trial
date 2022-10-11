@@ -12,7 +12,7 @@ function AccountProfile(){
     const findApi = React.useCallback(() => {
         findAdmin(Id).then( response => {
             setUserData(response)
-            console.log(response)
+            // console.log(response)
           });
     },[])
     

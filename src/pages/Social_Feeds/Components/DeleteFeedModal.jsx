@@ -19,7 +19,7 @@ function DeleteFeedModal({
 				// setOpenSnackBar(true);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, [dFeedData.remark, dFeedData.feedId]);
 	return (

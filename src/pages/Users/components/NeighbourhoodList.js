@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CircularProgress, Box, IconButton } from "@mui/material";
+import { CircularProgress, Box, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { Visibility } from "@mui/icons-material";
@@ -19,18 +19,21 @@ function NeighrbourhoodList(props) {
 
 	//find neighbourhood by user id
 
-	const findNeighbourhoodApiCall = React.useCallback((page, pageSize) => {
-		filterNeighbourhood({ page: page, pageSize: pageSize, userId: props?.data, online: true })
-			.then((res) => {
-				setState(res.content);
-				setPagination({
-					page: res?.pageable?.pageNumber,
-					pageSize: res?.pageable?.pageSize,
-				});
-				setTotalEle(res?.totalElements);
-			})
-			.catch((err) => console.log(err));
-	}, []);
+	const findNeighbourhoodApiCall = React.useCallback(
+		(page, pageSize) => {
+			filterNeighbourhood({ page: page, pageSize: pageSize, userId: props?.data, online: true })
+				.then((res) => {
+					setState(res.content);
+					setPagination({
+						page: res?.pageable?.pageNumber,
+						pageSize: res?.pageable?.pageSize,
+					});
+					setTotalEle(res?.totalElements);
+				})
+				.catch((err) => console.error(err));
+		},
+		[props?.data]
+	);
 
 	let rows = state ? state : [];
 
@@ -139,7 +142,6 @@ function NeighrbourhoodList(props) {
 									// autoPageSize
 									pagination
 									onPageChange={(event) => {
-										console.log("event--------", event);
 										setPagination({
 											page: event,
 											pageSize: pagination?.page,

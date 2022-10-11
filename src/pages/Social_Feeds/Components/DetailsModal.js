@@ -108,7 +108,7 @@ export default function CommentsModal(props) {
 				setResult(res);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, [data?.id]);
 
@@ -118,7 +118,7 @@ export default function CommentsModal(props) {
 				setReaction(res);
 			})
 			.catch((err) => {
-				console.log(err);
+				console.error(err);
 			});
 	}, [data?.id]);
 

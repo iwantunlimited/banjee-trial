@@ -12,7 +12,6 @@ import { customerFilter } from "./User_Services/User_Payloads";
 import { listCustomer } from "./User_Services/UserApiService";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Moment from "moment";
-import { urls } from "../../Environment/ApiUrl";
 import "./users.css";
 
 function User() {
@@ -140,8 +139,6 @@ function User() {
 			let customerRows = [];
 			listCustomer({ ...CustomerFilter, keywords: data })
 				.then((response) => {
-					console.log("Response----->", response);
-
 					if (response === null) {
 						//load manage component
 						setState((prev) => ({ ...prev, componentLoad: "Manage" }));
@@ -196,10 +193,11 @@ function User() {
 					}
 				})
 				.catch((err) => {
-					console.log(err);
+					console.error(err);
 				});
 		},
-		[CustomerFilter, navigate, state.totalElement]
+		[CustomerFilter, navigate]
+		// delete dependecy state.totalElement
 	);
 
 	function sanckbarClose() {
@@ -228,7 +226,7 @@ function User() {
 					</div>
 				);
 			case "List":
-				console.log("LIST", state);
+				// console.log("LIST", state);
 				return (
 					<>
 						<div className='root' style={{ width: "100%" }}>

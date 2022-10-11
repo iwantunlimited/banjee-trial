@@ -12,15 +12,10 @@ function BlogComments({ blogData }) {
 
 	const [commentData, setCommentData] = React.useState([]);
 
-	console.log("commentData", commentData);
-
 	const GetCommentsApiCall = React.useCallback(() => {
 		if (params?.id) {
 			getComments(params?.id)
 				.then((res) => {
-					console.log("====================================");
-					console.log("all comments", res);
-					console.log("====================================");
 					if (res?.data !== null) {
 						setCommentData(res);
 					}
@@ -32,9 +27,6 @@ function BlogComments({ blogData }) {
 	const CreateCommentApi = React.useCallback((data) => {
 		createComments(data)
 			.then((res) => {
-				console.log("====================================");
-				console.log("comment created", res);
-				console.log("====================================");
 				setComment((prev) => ({
 					...prev,
 					text: "",
@@ -107,7 +99,6 @@ function BlogComments({ blogData }) {
 				<form
 					onSubmit={(event) => {
 						event.preventDefault();
-						console.log("submit done");
 						CreateCommentApi(comment);
 					}}>
 					<Box

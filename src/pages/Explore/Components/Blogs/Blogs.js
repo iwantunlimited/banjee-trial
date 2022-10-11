@@ -58,13 +58,13 @@ function ExploreBlogs() {
 					pageSize: res?.pageable?.pageSize,
 				});
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const DeleteBlogApiCall = React.useCallback((data) => {
 		deleteBlog(data)
 			.then((res) => {})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	React.useEffect(() => {
@@ -125,7 +125,22 @@ function ExploreBlogs() {
 															display: "flex",
 															flexDirection: "column",
 														}}>
-														<span>{`${item?.muserName || item?.muserName || "userName"}`}</span>
+														{item?.userObject?.firstName && item?.userObject?.lastName ? (
+															<Typography
+																// noWrap={true}
+																sx={{
+																	display: "-webkit-box",
+																	overflow: "hidden",
+																	WebkitBoxOrient: "vertical",
+																	WebkitLineClamp: 1,
+																}}>
+																{item?.userObject?.firstName + " " + item?.userObject?.lastName}
+															</Typography>
+														) : (
+															<Typography>{`${
+																item?.muserName || item?.muserName || "userName"
+															}`}</Typography>
+														)}
 														<span style={{ fontSize: "12px" }}>
 															{moment(item?.createdOn).format("lll")}
 														</span>
@@ -176,7 +191,6 @@ function ExploreBlogs() {
 																handleModal(false);
 																setTimeout(() => {
 																	BlogsListApiCall(0, 10);
-																	console.log("blog deleted");
 																}, [2000]);
 															}}
 															// onClick={() => {

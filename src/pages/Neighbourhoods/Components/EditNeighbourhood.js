@@ -83,7 +83,7 @@ function EditNeighbourhood() {
 			.then((res) => {
 				setCity(res.content);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	});
 
 	const StateApi = React.useCallback((countryId) => {
@@ -91,7 +91,7 @@ function EditNeighbourhood() {
 			.then((res) => {
 				setState(res.content);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const CountryApi = React.useCallback(() => {
@@ -104,7 +104,7 @@ function EditNeighbourhood() {
 				}));
 				StateApi(res?.[0]?.id || "");
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const ImageApiCAll = React.useCallback((data) => {
@@ -131,7 +131,7 @@ function EditNeighbourhood() {
 					imageUrl: res?.data?.public_id,
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const ApiCall = React.useCallback(() => {
@@ -155,7 +155,7 @@ function EditNeighbourhood() {
 					`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.imageUrl}.png`
 				);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	React.useEffect(() => {
@@ -200,7 +200,7 @@ function EditNeighbourhood() {
 
 				document.getElementById("img").value = "";
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	function handleSubmit(event) {
