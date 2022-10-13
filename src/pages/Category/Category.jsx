@@ -54,7 +54,7 @@ function Category(props) {
 
 	const intialValue = {
 		name: "",
-		type: "",
+		type: props?.categoryName,
 		description: "",
 		category: {},
 		priority: "",
@@ -123,7 +123,7 @@ function Category(props) {
 			description: modalData.description,
 			priority: 3,
 			image: modalData?.image,
-			type: modalData?.type,
+			type: props?.categoryName,
 		})
 			.then(() => {
 				setModalData(intialValue);
@@ -287,7 +287,7 @@ function Category(props) {
 																/>
 															</Box>
 														</Grid>
-														<Grid item xs={12}>
+														{/* <Grid item xs={12}>
 															<Box
 																style={{
 																	display: "flex",
@@ -309,7 +309,7 @@ function Category(props) {
 																	</Select>
 																</FormControl>
 															</Box>
-														</Grid>
+														</Grid> */}
 														<Grid item xs={12}>
 															<Box
 																style={{

@@ -69,7 +69,7 @@ function ExploreBlogs() {
 
 	React.useEffect(() => {
 		BlogsListApiCall(pagination?.page, pagination?.pageSize);
-	}, [BlogsListApiCall]);
+	}, [BlogsListApiCall, pagination]);
 
 	if (data) {
 		return (
@@ -218,7 +218,7 @@ function ExploreBlogs() {
 												<img
 													style={{ height: "100%", width: "100%", aspectRatio: "auto" }}
 													src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${item?.bannerImageUrl}.png`}
-													alt='image'
+													alt='blog-img'
 												/>
 											</Box>
 											{/* <Box

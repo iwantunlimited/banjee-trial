@@ -1,38 +1,22 @@
-import { ArrowBack, ChatBubbleOutline, Delete, FavoriteBorderOutlined } from "@mui/icons-material";
+import { ArrowBack, Delete } from "@mui/icons-material";
 import {
 	Box,
-	Button,
 	Card,
 	CircularProgress,
 	Container,
 	Grid,
 	IconButton,
-	TextField,
 	Typography,
 } from "@mui/material";
 import moment from "moment";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
-import { createComments, deleteBlog, findByIdBlog, getComments } from "../../services/ApiServices";
-import { useTheme } from "@mui/material/styles";
-import BlogReaction from "./BlogReaction";
-import BlogComments from "./BlogComments";
-import ModalComp from "../../../../CustomComponents/ModalComp";
+import { deleteBlog, findByIdBlog } from "../../services/ApiServices";
 import ReactionCommentTab from "./ReactionTab";
 
 function BlogDetail() {
 	const params = useParams();
 	const navigate = useNavigate();
-	const theme = useTheme();
-
-	const [modal, setModal] = React.useState({
-		open: false,
-		type: "reation",
-	});
-
-	const handleModal = (data) => {
-		setModal(data);
-	};
 
 	const [data, setData] = React.useState("");
 
@@ -50,7 +34,7 @@ function BlogDetail() {
 				setData(res);
 			})
 			.catch((err) => console.error(err));
-	}, []);
+	}, [params?.id]);
 
 	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
 
@@ -112,7 +96,7 @@ function BlogDetail() {
 								<img
 									style={{ height: "auto !important", width: "100%", objectFit: "contain" }}
 									src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${data?.bannerImageUrl}.png`}
-									alt='image'
+									alt='blog'
 								/>
 							</Box>
 						</Grid>

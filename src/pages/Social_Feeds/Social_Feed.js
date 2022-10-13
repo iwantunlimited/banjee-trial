@@ -94,12 +94,13 @@ export default function SocialFeed(props) {
 					console.error(err);
 				});
 		},
-		[startDate, endDate]
+		// remove dependecies startDate and endDate
+		[]
 	);
 
 	React.useEffect(() => {
 		filterSocialFeedsApiCall(0, 12, startDate, endDate);
-	}, [filterSocialFeedsApiCall]);
+	}, [filterSocialFeedsApiCall, startDate, endDate]);
 
 	// function playPause(index) {
 	// 	if (document.getElementById(`video${index}`).paused)
@@ -404,7 +405,7 @@ export default function SocialFeed(props) {
 														item?.mimeType === "image/png"
 													) {
 														return (
-															<Box>
+															<Box key={iIndex}>
 																<SwiperSlide>
 																	<Box
 																		onClick={() =>
@@ -512,9 +513,7 @@ export default function SocialFeed(props) {
 														{ele?.text?.length > 200 ? (
 															<Typography>
 																{ele?.text?.slice(0, 200) + "... "}
-																<a href='#' style={{ textTransform: "none", color: "blue" }}>
-																	more
-																</a>
+																<span style={{ textTransform: "none", color: "blue" }}>more</span>
 															</Typography>
 														) : (
 															<Typography>{ele?.text}</Typography>

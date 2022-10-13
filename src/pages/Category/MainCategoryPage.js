@@ -1,6 +1,5 @@
 import { Container, Box, Grid, Tabs, Tab, Card } from "@mui/material";
 import React from "react";
-import { useTheme } from "@mui/material/styles";
 import { Helmet } from "react-helmet";
 import PropTypes from "prop-types";
 import Category from "./Category";
@@ -34,7 +33,6 @@ function a11yProps(index) {
 }
 
 export function MainCategoryComp() {
-	const theme = useTheme();
 	const [value, setValue] = React.useState(0);
 
 	const [state, setState] = React.useState("ROOMS");
