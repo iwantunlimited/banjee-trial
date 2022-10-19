@@ -239,7 +239,7 @@ function ViewRFeed() {
 												</span>
 											</Typography>
 										</Box>
-										`
+
 										<IconButton
 											onClick={() => {
 												setDFeedData({ feedId: data.id });

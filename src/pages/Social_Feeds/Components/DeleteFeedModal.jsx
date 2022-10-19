@@ -1,6 +1,8 @@
 import React from "react";
 import { Modal, Typography, Box, Button, TextField } from "@mui/material";
 import { deleteSocialFeed } from "../services/ApiServices";
+import { MainContext } from "../../../context/Context";
+import { Navigate, useLocation, useNavigate } from "react-router";
 
 function DeleteFeedModal({
 	open,
@@ -10,13 +12,24 @@ function DeleteFeedModal({
 	socialFilterApi,
 	mainModal,
 }) {
+	const { setModalData, setModalOpen } = React.useContext(MainContext);
+	const { pathname } = useLocation();
+	const navigate = useNavigate();
+	const path1 = pathname?.split("/")?.[1];
+
 	const deleteFeedApiCall = React.useCallback(() => {
 		deleteSocialFeed({
 			feedId: dFeedData.feedId,
 			remark: dFeedData.remark,
 		})
 			.then((res) => {
+				setModalOpen(true);
+				setModalData("Feed Deleted", "success");
 				// setOpenSnackBar(true);
+				if (pathname === "/social-feeds/reported-feeds/" + dFeedData.feedId) {
+					navigate("/social-feeds/reported-feeds");
+				}
+				socialFilterApi(0, 12);
 			})
 			.catch((err) => {
 				console.error(err);
@@ -50,7 +63,6 @@ function DeleteFeedModal({
 				<form
 					onSubmit={() => {
 						deleteFeedApiCall();
-						socialFilterApi();
 						openModalfun(false);
 						mainModal();
 					}}>

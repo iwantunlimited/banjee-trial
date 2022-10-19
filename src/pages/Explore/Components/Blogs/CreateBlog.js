@@ -34,8 +34,8 @@ function CreateBlog() {
 		shortDescription: "",
 		publishOnFeed: true,
 		slug: "",
+		blogType: "BLOG",
 	});
-
 
 	const [state, setState] = React.useState("");
 

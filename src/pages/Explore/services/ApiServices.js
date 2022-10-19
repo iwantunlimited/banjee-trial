@@ -115,7 +115,6 @@ export const createComments = (requestLoad) => {
 };
 
 export const getComments = (requestLoad) => {
-	console.log("api done");
 	let url = urls.LOCAL_DISCOVERY.GET_COMMENTS + requestLoad;
 	let actionCode = "";
 	let payload = {};

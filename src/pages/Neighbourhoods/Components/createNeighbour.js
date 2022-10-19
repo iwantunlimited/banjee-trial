@@ -15,16 +15,12 @@ import React from "react";
 import MyGoogleMap from "../Map/GoogleMap";
 import "../neighbourhood.css";
 import { createNeighbourhood, findCity, findCountry, findState } from "../services/apiServices";
-import SnackBarComp from "../../../CustomComponents/SnackBarComp";
+import { MainContext } from "../../../context/Context";
 
 function CreateNeighbour(props) {
 	const { listApiCAll, handleExpanded } = props;
-	const [snackbar, setSnackbar] = React.useState({
-		open: false,
-		message: "",
-		duration: 3000,
-		severity: "",
-	});
+
+	const { setModalOpen, setModalData } = React.useContext(MainContext);
 
 	const [data, setData] = React.useState({
 		name: "",
@@ -62,13 +58,6 @@ function CreateNeighbour(props) {
 			lat: lat,
 			lon: lng,
 			address: address,
-		}));
-	};
-
-	const handleSnackbar = (data) => {
-		setSnackbar((prev) => ({
-			...prev,
-			open: data,
 		}));
 	};
 
@@ -155,12 +144,8 @@ function CreateNeighbour(props) {
 	const createApiCall = React.useCallback((data) => {
 		createNeighbourhood(data)
 			.then((res) => {
-				setSnackbar({
-					open: true,
-					duration: 3000,
-					severity: "success",
-					message: "Neighbourhood created successfully",
-				});
+				setModalOpen(true);
+				setModalData("Neighbourhood created successfully", "success");
 				setImages("");
 				setImgShow("");
 
@@ -435,7 +420,6 @@ function CreateNeighbour(props) {
 					</form>
 				</Box>
 			</Grid>
-			<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 		</Grid>
 	);
 }

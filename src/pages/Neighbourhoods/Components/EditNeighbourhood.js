@@ -26,18 +26,14 @@ import {
 	findState,
 	updateNeighbourhood,
 } from "../services/apiServices";
-import SnackBarComp from "../../../CustomComponents/SnackBarComp";
 import { useNavigate, useParams } from "react-router";
+import { MainContext } from "../../../context/Context";
 
 function EditNeighbourhood() {
 	const params = useParams();
 	const navigate = useNavigate();
-	const [snackbar, setSnackbar] = React.useState({
-		open: false,
-		message: "",
-		duration: 3000,
-		severity: "success,",
-	});
+
+	const { setModalOpen, setModalData } = React.useContext(MainContext);
 
 	const [data, setData] = React.useState({
 		name: "",
@@ -68,13 +64,6 @@ function EditNeighbourhood() {
 			lat: lat,
 			lon: lng,
 			address: address,
-		}));
-	};
-
-	const handleSnackbar = (data) => {
-		setSnackbar((prev) => ({
-			...prev,
-			open: data,
 		}));
 	};
 
@@ -177,12 +166,8 @@ function EditNeighbourhood() {
 	const EditApiCall = React.useCallback((data) => {
 		updateNeighbourhood(data)
 			.then((res) => {
-				setSnackbar({
-					open: true,
-					duration: 3000,
-					severity: "success",
-					message: "Neighbourhood updated successfully",
-				});
+				setModalOpen(true);
+				setModalData("Neighbourhood updated successfully", "success");
 				setImages("");
 				setImgShow("");
 				setData({
@@ -446,7 +431,6 @@ function EditNeighbourhood() {
 					</Card>
 				</Grid>
 			</Grid>
-			<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 		</Container>
 	);
 }

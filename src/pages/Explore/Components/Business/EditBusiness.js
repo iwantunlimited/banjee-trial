@@ -18,22 +18,18 @@ import axios from "axios";
 import React from "react";
 import MyGoogleMap from "../../../Neighbourhoods/Map/GoogleMap";
 import "../../business.css";
-import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
 import { findByIdBusiness, updateBusiness } from "../../services/ApiServices";
 import { CategoryList } from "../../../Users/User_Services/UserApiService";
 import { filterNeighbourhood } from "../../../Neighbourhoods/services/apiServices";
 
 import { useNavigate, useParams } from "react-router";
+import { MainContext } from "../../../../context/Context";
 
 function EditBusiness() {
+	const { setModalData, setModalOpen } = React.useContext(MainContext);
 	const params = useParams();
 	const navigate = useNavigate();
-	const [snackbar, setSnackbar] = React.useState({
-		open: false,
-		message: "",
-		duration: 3000,
-		severity: "",
-	});
+
 	const [businessData, setBusinessData] = React.useState("");
 	const [data, setData] = React.useState({
 		name: "",
@@ -66,13 +62,6 @@ function EditBusiness() {
 				coordinates: [lat, lng],
 			},
 			// address: address,
-		}));
-	};
-
-	const handleSnackbar = (data) => {
-		setSnackbar((prev) => ({
-			...prev,
-			open: data,
 		}));
 	};
 
@@ -169,12 +158,9 @@ function EditBusiness() {
 	const EditApiCall = React.useCallback((data) => {
 		updateBusiness({ ...businessData, ...data })
 			.then((res) => {
-				setSnackbar({
-					open: true,
-					duration: 3000,
-					severity: "success",
-					message: "Business updated successfully",
-				});
+				setModalOpen(true);
+				setModalData("Business updated");
+
 				setImages("");
 				setImgShow("");
 				setData({
@@ -415,7 +401,6 @@ function EditBusiness() {
 					</Card>
 				</Grid>
 			</Grid>
-			<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 		</Container>
 	);
 }

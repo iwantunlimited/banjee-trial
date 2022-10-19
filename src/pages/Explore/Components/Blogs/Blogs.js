@@ -42,7 +42,7 @@ function ExploreBlogs() {
 	};
 
 	const BlogsListApiCall = React.useCallback((page, pageSize) => {
-		blogsList({ page: page, pageSize: pageSize })
+		blogsList({ page: page, pageSize: pageSize, blogType: "BLOG" })
 			.then((res) => {
 				const resp = res?.content?.map((item, index) => ({
 					...item,
@@ -68,8 +68,8 @@ function ExploreBlogs() {
 	}, []);
 
 	React.useEffect(() => {
-		BlogsListApiCall(pagination?.page, pagination?.pageSize);
-	}, [BlogsListApiCall, pagination]);
+		BlogsListApiCall(0, 10);
+	}, [BlogsListApiCall]);
 
 	if (data) {
 		return (
@@ -164,7 +164,7 @@ function ExploreBlogs() {
 														</IconButton>
 													</Tooltip>
 												</Box>
-												<ModalComp data={modal} handleModal={handleModal} width={460}>
+												<ModalComp data={modal} handleModal={handleModal}>
 													<Typography
 														id='modal-modal-title'
 														style={{

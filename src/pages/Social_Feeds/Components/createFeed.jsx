@@ -19,6 +19,7 @@ import SnackBarComp from "../../../CustomComponents/SnackBarComp";
 // import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "react-quill-emoji/dist/quill-emoji";
+import { MainContext } from "../../../context/Context";
 
 function CreateFeed() {
 	const navigate = useNavigate();
@@ -41,12 +42,7 @@ function CreateFeed() {
 		mediaSource: null,
 	});
 
-	const [snackbar, setSnackbar] = React.useState({
-		open: false,
-		message: "",
-		duration: 3000,
-		severity: "",
-	});
+	const { setModalData, setModalOpen } = React.useContext(MainContext);
 
 	const [uploadData, setUploadData] = React.useState([]);
 	const [finalPayload, setFinalPayload] = React.useState({
@@ -155,13 +151,8 @@ function CreateFeed() {
 		(data) => {
 			createSocialFeeds(data)
 				.then((res) => {
-					setSnackbar({
-						open: true,
-						message: "Feed Created Successfully",
-						severity: "success",
-						duration: 3000,
-					});
-
+					setModalOpen(true);
+					setModalData("Feed Created Successfully", "success");
 					navigate("/social-feeds");
 					// setData({
 					// 	title: "",
@@ -179,13 +170,6 @@ function CreateFeed() {
 		},
 		[navigate]
 	);
-
-	const handleSnackbar = (data) => {
-		setSnackbar((prev) => ({
-			...prev,
-			open: data,
-		}));
-	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -422,7 +406,6 @@ function CreateFeed() {
 								</Grid>
 							</Grid>
 						</form>
-						<SnackBarComp data={snackbar} handleSnackbar={handleSnackbar} />
 					</Grid>
 				</Grid>
 			</Card>

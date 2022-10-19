@@ -1,14 +1,18 @@
 import { Visibility } from "@mui/icons-material";
 import { Box, Chip, CircularProgress, IconButton } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { approveRequest, filterBusiness } from "../../services/ApiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { useNavigate } from "react-router";
-import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
+import { MainContext } from "../../../../context/Context";
 
 export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 	const navigate = useNavigate();
+
+	const context = useContext(MainContext);
+	const { setModalOpen, setModalData } = context;
+
 	const [data, setData] = React.useState();
 
 	const [state, setState] = React.useState({
@@ -18,20 +22,6 @@ export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 			pageSize: 10,
 		},
 	});
-
-	const [snackbar, setSnackbar] = React.useState({
-		open: false,
-		message: "",
-		duration: 3000,
-		severity: "",
-	});
-
-	const handleSnackbar = (data) => {
-		setSnackbar((prev) => ({
-			...prev,
-			open: data,
-		}));
-	};
 
 	let rows = data ? data : [];
 
@@ -160,12 +150,8 @@ export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 	const ApproveApiCAll = React.useCallback((data) => {
 		approveRequest({ id: data, approved: true })
 			.then((res) => {
-				setSnackbar({
-					open: true,
-					duration: 3000,
-					severity: "success",
-					message: "Business Approved",
-				});
+				setModalOpen(true);
+				setModalData("Business Approved", "success");
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -225,7 +211,6 @@ export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 							/>
 						</Box>
 					</div>
-					<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 				</div>
 			) : (
 				<div

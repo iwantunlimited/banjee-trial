@@ -1,6 +1,7 @@
 import { ArrowBack, Delete } from "@mui/icons-material";
 import {
 	Box,
+	Button,
 	Card,
 	CircularProgress,
 	Container,
@@ -11,19 +12,36 @@ import {
 import moment from "moment";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
+import { MainContext } from "../../../../context/Context";
+import ModalComp from "../../../../CustomComponents/ModalComp";
 import { deleteBlog, findByIdBlog } from "../../services/ApiServices";
 import ReactionCommentTab from "./ReactionTab";
 
 function BlogDetail() {
 	const params = useParams();
 	const navigate = useNavigate();
+	const { setModalData, setModalOpen } = React.useContext(MainContext);
 
 	const [data, setData] = React.useState("");
+	const [modal, setModal] = React.useState({
+		open: false,
+		id: "",
+	});
+
+	const handleModal = (data) => {
+		setModal({
+			open: false,
+			id: "",
+		});
+	};
 
 	const DeleteBlogApiCall = React.useCallback((data) => {
 		deleteBlog(data)
 			.then((res) => {
 				// console.log(res);
+				navigate(-1);
+				setModalOpen(true);
+				setModalData("Blog Deleted", "success");
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -70,8 +88,7 @@ function BlogDetail() {
 					</IconButton> */}
 						<IconButton
 							onClick={() => {
-								DeleteBlogApiCall(params?.id);
-								navigate(-1);
+								setModal({ open: true, id: params?.id });
 							}}
 							// color='primary'
 							variant='contained'>
@@ -142,6 +159,36 @@ function BlogDetail() {
 					</ModalComp> */}
 					</Grid>
 				</Card>
+				<ModalComp data={modal} handleModal={handleModal}>
+					<Box
+						sx={{
+							width: "100%",
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+							flexDirection: "column",
+						}}>
+						<Typography sx={{ fontSize: "20px" }}>
+							<b>Are you sure to delete blog?</b>
+						</Typography>
+						<Box sx={{ marginTop: "20px" }}>
+							<Button
+								onClick={() => {
+									handleModal(false);
+								}}>
+								cancel
+							</Button>
+							<Button
+								sx={{ marginLeft: "10px" }}
+								onClick={() => {
+									DeleteBlogApiCall(modal?.id);
+									handleModal(false);
+								}}>
+								confirm
+							</Button>
+						</Box>
+					</Box>
+				</ModalComp>
 			</Container>
 		);
 	} else {

@@ -1,24 +1,19 @@
-import { Check, Clear, JoinRight, Visibility } from "@mui/icons-material";
+import { Visibility } from "@mui/icons-material";
 import { Box, Button, Chip, CircularProgress, IconButton, Stack, Typography } from "@mui/material";
 import React from "react";
 import { approveRequest, pendingApproval, rejectRequest } from "../services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { useNavigate } from "react-router";
-import SnackBarComp from "../../../CustomComponents/SnackBarComp";
 import ModalComp from "../../../CustomComponents/ModalComp";
+import { MainContext } from "../../../context/Context";
 
 export function ApprovalList({ handleTabChange, listApiCAll }) {
 	const navigate = useNavigate();
 
-	const [data, setData] = React.useState();
+	const { setModalData, setModalOpen } = React.useContext(MainContext);
 
-	const [snackbar, setSnackbar] = React.useState({
-		open: false,
-		message: "",
-		duration: 3000,
-		severity: "",
-	});
+	const [data, setData] = React.useState();
 
 	const [modal, setModal] = React.useState({
 		open: false,
@@ -33,13 +28,6 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 			pageSize: 10,
 		},
 	});
-
-	const handleSnackbar = (data) => {
-		setSnackbar((prev) => ({
-			...prev,
-			open: data,
-		}));
-	};
 
 	const handleModal = (data) => {
 		setModal((prev) => ({
@@ -184,12 +172,8 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 	const ApproveApiCAll = React.useCallback((data) => {
 		approveRequest({ id: data })
 			.then((res) => {
-				setSnackbar({
-					open: true,
-					duration: 3000,
-					severity: "success",
-					message: "Neighbourhood approved",
-				});
+				setModalOpen(true);
+				setModalData("Neighbourhood approved", "success");
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -197,12 +181,8 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 	const RejectApiCAll = React.useCallback((data) => {
 		rejectRequest({ id: data })
 			.then((res) => {
-				setSnackbar({
-					open: true,
-					duration: 3000,
-					severity: "warning",
-					message: "Neighbourhood Rejected",
-				});
+				setModalOpen(true);
+				setModalData("Neighbourhood Rejected", "warning");
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -295,7 +275,6 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 					</Button>
 				</Box>
 			</ModalComp>
-			<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 		</Box>
 	);
 }

@@ -18,18 +18,13 @@ import axios from "axios";
 import React from "react";
 import MyGoogleMap from "../../../Neighbourhoods/Map/GoogleMap";
 import "../../business.css";
-import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
 import { createBusiness } from "../../services/ApiServices";
 import { CategoryList } from "../../../Users/User_Services/UserApiService";
 import { filterNeighbourhood } from "../../../Neighbourhoods/services/apiServices";
+import { MainContext } from "../../../../context/Context";
 
 function CreateBusiness({ listApiCall, handleExpanded }) {
-	const [snackbar, setSnackbar] = React.useState({
-		open: false,
-		duration: 3000,
-		severity: "",
-		message: "",
-	});
+	const { setModalOpen, setModalData } = React.useContext(MainContext);
 
 	const [data, setData] = React.useState({
 		name: "",
@@ -56,7 +51,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 	const [imgShow, setImgShow] = React.useState("");
 	const [businessImgShow, setBusinessImgShow] = React.useState([]);
 
-
 	const handleGLocation = (lat, lng, address) => {
 		setData((prev) => ({
 			...prev,
@@ -64,13 +58,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 				coordinates: [lng, lat],
 			},
 			// address: address,
-		}));
-	};
-
-	const handleSnackbar = (data) => {
-		setSnackbar((prev) => ({
-			...prev,
-			open: data,
 		}));
 	};
 
@@ -140,12 +127,9 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 	const createApiCall = React.useCallback((data) => {
 		createBusiness(data)
 			.then((res) => {
-				setSnackbar({
-					open: true,
-					duration: 3000,
-					severity: "success",
-					message: "Business created successfully",
-				});
+				setModalOpen(true);
+				setModalData("Business created successfully", "success");
+
 				handleExpanded();
 				setData({
 					name: "",
@@ -471,7 +455,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 					</form>
 				</Box>
 			</Grid>
-			<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 		</Grid>
 	);
 }

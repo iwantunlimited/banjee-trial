@@ -30,6 +30,7 @@ import {
 	deleteSubCategory,
 } from "../Users/User_Services/UserApiService";
 import SwitchSelector from "react-switch-selector";
+import { MainContext } from "../../context/Context";
 
 const style = {
 	position: "absolute",
@@ -45,6 +46,8 @@ const style = {
 
 function Category(props) {
 	const theme = useTheme();
+
+	const context = React.useContext(MainContext);
 
 	const [showId, setShowId] = React.useState();
 	const [openModal, setOpenModal] = React.useState(false);
@@ -98,6 +101,8 @@ function Category(props) {
 	const DeleteCategoryApiCall = (id) => {
 		deleteCategory(id)
 			.then(() => {
+				context?.setModalOpen(true);
+				context?.setModalData("Category Deleted", "success");
 				setModalData(intialValue);
 				CategoryListApiCall();
 			})
@@ -109,6 +114,8 @@ function Category(props) {
 	const DeleteSubCategoryApiCall = (id) => {
 		deleteSubCategory(id)
 			.then(() => {
+				context?.setModalOpen(true);
+				context?.setModalData("Sub Category Deleted", "success");
 				setModalData(intialValue);
 				CategoryListApiCall();
 			})
@@ -126,6 +133,8 @@ function Category(props) {
 			type: props?.categoryName,
 		})
 			.then(() => {
+				context?.setModalOpen(true);
+				context?.setModalData("Category Created", "success");
 				setModalData(intialValue);
 				CategoryListApiCall();
 			})
@@ -141,6 +150,8 @@ function Category(props) {
 			categoryName: modalData.category.name,
 		})
 			.then(() => {
+				context?.setModalOpen(true);
+				context?.setModalData("Sub Category Deleted", "success");
 				setModalData(intialValue);
 				CategoryListApiCall();
 			})

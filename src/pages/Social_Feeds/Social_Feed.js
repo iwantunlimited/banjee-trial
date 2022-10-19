@@ -89,6 +89,10 @@ export default function SocialFeed(props) {
 				.then((res) => {
 					setData(res);
 					setTotalEle(res.totalElements);
+					setPagination({
+						page: res?.pageable?.pageNumber,
+						pageSize: res?.pageable?.pageSize,
+					});
 				})
 				.catch((err) => {
 					console.error(err);

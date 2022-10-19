@@ -19,7 +19,7 @@ function ModalComp(props) {
 					top: "50%",
 					left: "50%",
 					transform: "translate(-50%, -50%)",
-					width: props?.width ? props?.width : 400,
+					// width: props?.width ? props?.width : 400,
 					bgcolor: theme.palette.background.paper,
 					// background: "white",
 					// border: "2px solid #000",

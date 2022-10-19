@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	Card,
 	Container,
@@ -25,21 +25,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper";
 
 import ".././component.css";
-import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
+import { MainContext } from "../../../../context/Context";
 
 function BusinessDetail() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const theme = useTheme();
-
-	const [snackbar, setSnackbar] = React.useState({
-		open: false,
-		message: "",
-		duration: 3000,
-		severity: "",
-	});
+	const context = useContext(MainContext);
+	const { setModalOpen, setModalData } = context;
 
 	const [modal, setModal] = useState({
 		open: false,
@@ -49,13 +44,6 @@ function BusinessDetail() {
 	const [dExpand, setDExpand] = React.useState(false);
 
 	const [state, setState] = React.useState();
-
-	const handleSnackbar = (data) => {
-		setSnackbar((prev) => ({
-			...prev,
-			open: data,
-		}));
-	};
 
 	const handleModal = (data) => {
 		setModal((prev) => ({
@@ -75,12 +63,8 @@ function BusinessDetail() {
 	const DeleteBusinessApiCall = React.useCallback(() => {
 		deleteBusiness(params?.id)
 			.then((res) => {
-				setSnackbar({
-					open: true,
-					duration: 3000,
-					severity: "success",
-					message: "Business Deleted Successfully",
-				});
+				setModalOpen(true);
+				setModalData("Business Deleted Successfully", "success");
 				navigate("/explore");
 			})
 			.catch((err) => console.error(err));
@@ -281,7 +265,6 @@ function BusinessDetail() {
 						</Button>
 					</Box>
 				</ModalComp>
-				<SnackBarComp handleSnackbar={handleSnackbar} data={snackbar} />
 			</Container>
 		);
 	} else {

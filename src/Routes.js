@@ -1,4 +1,3 @@
-import Dashboard from "./pages/Dashboard/dashboard";
 import User from "./pages/Users/Users";
 // import Account from "./pages/Account/Account";
 import Navbar from "./pages/navbar/navbar";
@@ -32,6 +31,12 @@ import CreateBlog from "./pages/Explore/Components/Blogs/CreateBlog";
 import CreateFeed from "./pages/Social_Feeds/Components/createFeed";
 import BanjeeAlert from "./pages/BanjeeAlert/BanjeeAlert";
 import ViewAlert from "./pages/BanjeeAlert/components/ViewAlert";
+import CreateAnnouncement from "./pages/Notification/components/Announcement/CreateAnnouncement";
+import Announcement from "./pages/Notification/components/Announcement/Announcement";
+import CreatePushNotification from "./pages/Notification/components/Notification/CreatePushNotification";
+import Notification from "./pages/Notification/Notification";
+import NotificationDetail from "./pages/Notification/components/Notification/Detail";
+import AnnouncementDetail from "./pages/Notification/components/Announcement/Detail";
 
 const Routes = () => {
 	return useRoutes([
@@ -143,6 +148,30 @@ const Routes = () => {
 				{
 					path: "/banjee-alert/:id",
 					element: <ViewAlert />,
+				},
+				{
+					path: "notification",
+					element: <Notification />,
+				},
+				{
+					path: "notification/create-notification",
+					element: <CreatePushNotification />,
+				},
+				{
+					path: "notification/:id",
+					element: <NotificationDetail />,
+				},
+				{
+					path: "notification/template",
+					element: <Announcement />,
+				},
+				{
+					path: "notification/template/:id",
+					element: <AnnouncementDetail />,
+				},
+				{
+					path: "notification/template/create-template",
+					element: <CreateAnnouncement />,
 				},
 				// {
 				//     path: '/account',

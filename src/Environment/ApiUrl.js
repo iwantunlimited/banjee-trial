@@ -61,7 +61,7 @@ export const urls = {
 		REJECT_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/reject",
 		FIND_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/findById/",
 		FILTER_MEMBERS: services.GEO_CLOUD + "social-cloud/members/filter",
-		GEO_ALERT: services.GEO_CLOUD + "api/geo-alert",
+		GEO_ALERT: services.GEO_CLOUD + "api/geo-alert/",
 		FILTER_REPORTED_ALERT: services.GEO_CLOUD + "api/geo-alert/report/filter",
 	},
 

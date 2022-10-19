@@ -55,6 +55,11 @@ function SidebarList({ handleId, handleClick }) {
 										pathname === item.path ||
 										pathname === item.path + `/blogs/createblog` ||
 										pathname === item.path + `/detail/${params?.id}` ||
+										pathname === item.path + `/${params?.id}` ||
+										pathname === item.path + `/template` ||
+										pathname === item.path + `/template/${params?.id}` ||
+										pathname === item.path + `/template/create-template` ||
+										pathname === item.path + `/create-notification` ||
 										pathname === item.path + `/update/${params?.id}` ||
 										pathname === item.path + `/view/${params?.id}` ||
 										pathname === item.path + `/blogs/detail/${params?.id}` ||
@@ -70,6 +75,12 @@ function SidebarList({ handleId, handleClick }) {
 											pathname === item.path + `/detail/${params?.id}` ||
 											pathname === item.path + `/update/${params?.id}` ||
 											pathname === item.path + `/view/${params?.id}` ||
+											pathname === item.path + `/${params?.id}` ||
+											pathname === item.path + `template` ||
+											pathname === item.path + `/template/${params?.id}` ||
+											pathname === item.path + `/template/create-template` ||
+											pathname === item.path + `/create-template` ||
+											pathname === item.path + `/create-notification` ||
 											pathname === item.path + `/blogs/detail/${params?.id}` ||
 											pathname === item.path + `/blogs` ||
 											pathname === item.path + `/blogs/createblog`
@@ -127,12 +138,15 @@ function SidebarList({ handleId, handleClick }) {
 													background:
 														pathname === text.path ||
 														pathname === text.path + `/detail/${params?.id}` ||
-														pathname === text.path + `/createblog`
+														pathname === text.path + `/createblog` ||
+														pathname === text.path + `/${params?.id}` ||
+														pathname === text.path + `/create-template` ||
+														pathname === text.path + `/create-notification`
 															? theme.palette.secondary.main
 															: theme.palette.primary.main,
 													borderRadius: "10px",
 													margin: "5px",
-													ml: 8,
+													ml: 3,
 													":hover": {
 														background:
 															pathname === text.path ||
