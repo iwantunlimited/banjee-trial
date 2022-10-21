@@ -23,6 +23,7 @@ import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Compressor from "compressorjs";
+import { MainContext } from "../../../../context/Context";
 
 function CreateBlog() {
 	const navigate = useNavigate();
@@ -37,15 +38,9 @@ function CreateBlog() {
 		slug: "",
 		blogType: "BLOG",
 	});
+	const { setModalOpen, setModalData } = React.useContext(MainContext);
 
 	const [state, setState] = React.useState("");
-
-	const [snackbar, setSnackbar] = React.useState({
-		open: false,
-		message: "",
-		duration: 3000,
-		severity: "",
-	});
 
 	const [finalData, setFinalData] = React.useState("");
 
@@ -88,12 +83,8 @@ function CreateBlog() {
 	const CreateBlogApiCall = React.useCallback((data) => {
 		createBlog(data)
 			.then((res) => {
-				setSnackbar({
-					open: true,
-					message: "Blog Created Successfully",
-					severity: "success",
-					duration: 3000,
-				});
+				setModalOpen(true);
+				setModalData("Blog Created Successfully", "success");
 
 				navigate("/explore/blogs");
 				setData({
@@ -110,13 +101,6 @@ function CreateBlog() {
 			})
 			.catch((err) => console.error(err));
 	}, []);
-
-	const handleSnackbar = (data) => {
-		setSnackbar((prev) => ({
-			...prev,
-			open: data,
-		}));
-	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -372,7 +356,6 @@ function CreateBlog() {
 							</Grid>
 						</form>
 					</Card>
-					<SnackBarComp data={snackbar} handleSnackbar={handleSnackbar} />
 				</Grid>
 				{/* <Grid item xs={12}>
 					<Box>
