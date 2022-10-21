@@ -85,7 +85,13 @@ function CreateFeed() {
 			// formData.append("directoryId", "root");
 
 			formData.append("cloud_name", "banjee");
-			formData.append("upload_preset", "business_images");
+			if (type === "image") {
+				formData.append("upload_preset", "feed_image");
+			} else if (type === "audio") {
+				formData.append("upload_preset", "feed_audio");
+			} else if (type === "video") {
+				formData.append("upload_preset", "feed_video");
+			}
 			formData.append("file", imgData);
 			// { headers: { "Content-Type": "multipart/form-data" }
 
@@ -175,23 +181,27 @@ function CreateFeed() {
 	const handleImageChange = (event) => {
 		if (event?.target?.files?.length > 0) {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
-				// const data = event?.target?.files[index].type.split("/")?.[0];
+				const dataType = event?.target?.files[index].type.split("/")?.[0];
 				const image = event.target.files[index];
-				new Compressor(image, {
-					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-					convertTypes: ["image/png"],
-					success: (compressedResult) => {
-						// compressedResult has the compressed file.
-						// Use the compressed file to upload the images to your server.
-						ImageApiCAll(compressedResult, compressedResult.type);
-					},
-				});
+				// console.log("dataTYpe", dataType);
+				if (dataType === "image") {
+					new Compressor(image, {
+						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+						// convertTypes: ["image/png"],
+						success: (compressedResult) => {
+							// compressedResult has the compressed file.
+							// Use the compressed file to upload the images to your server.
+							ImageApiCAll(compressedResult, compressedResult.type);
+						},
+					});
+				} else {
+					ImageApiCAll(image, image.type);
+				}
 			}
 		} else {
 			const image = event.target.files[0];
 			new Compressor(image, {
 				quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-				convertTypes: ["image/png"],
 				success: (compressedResult) => {
 					// compressedResult has the compressed file.
 					// Use the compressed file to upload the images to your server.
@@ -261,6 +271,7 @@ function CreateFeed() {
 												// accept='.jpg, .jpeg, .png'
 												onChange={(event) => {
 													handleImageChange(event);
+
 													// newImageFunc(event.target.files[0]);
 													// setImgShow(URL.createObjectURL(event?.target?.files[0]));
 													// ImageApiCAll(event?.target?.files[0]);

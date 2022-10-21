@@ -92,36 +92,35 @@ function CreateNeighbour(props) {
 	}, []);
 
 	const ImageApiCAll = React.useCallback((data) => {
-		const mime = "image";
-		console.log("====================================");
-		console.log("image api data", data);
-		console.log("====================================");
+		const header = {
+			"Content-Type": "multipart/form-data",
+			Authorization: `Bearer ${token}`,
+		};
+
 		const formData = new FormData();
+		formData.append("directoryId", "root");
+		formData.append("domain", "banjee");
+		formData.append("actionCode", "ACTION_UPLOAD_RESOURCE");
+		formData.append("files", data, "[PROXY]");
 
-		// formData.append("directoryId", "root");
-
-		formData.append("cloud_name", "banjee");
-		formData.append("upload_preset", "business_images");
-		formData.append("file", data);
-		// { headers: { "Content-Type": "multipart/form-data" }
-
-		const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
-
-		// const header = {
-		// 	"Content-Type": "multipart/form-data",
-		// 	Authorization: `Bearer ${token}`,
+		const url = "https://gateway.banjee.org/services/media-service/api/resources/bulk";
+		// var requestOptions = {
+		// 	method: "POST",
+		// 	headers: myHeaders,
+		// 	body: formdata,
+		// 	redirect: "follow",
 		// };
 
 		axios
-			.post(url, formData)
+			.post(url, formData, { headers: header })
 			.then((res) => {
 				// console.log("====================================");
 				// console.log("image upload response", res);
 				// console.log("====================================");
 				setData((prev) => ({
 					...prev,
-					// imageUrl: res?.data?.data[0]?.data?.id,
-					imageUrl: res?.data?.public_id,
+					imageUrl: res?.data?.data[0]?.data?.id,
+					// imageUrl: res?.data[0].data.id,
 				}));
 			})
 			.catch((err) => console.log(err));

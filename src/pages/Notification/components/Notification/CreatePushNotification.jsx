@@ -122,7 +122,7 @@ function CreatePushNotification() {
 		// formData.append("directoryId", "root");
 
 		formData.append("cloud_name", "banjee");
-		formData.append("upload_preset", "alert_preset");
+		formData.append("upload_preset", "notification_image");
 		formData.append("file", data);
 		// { headers: { "Content-Type": "multipart/form-data" }
 

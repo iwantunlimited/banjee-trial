@@ -59,7 +59,7 @@ function CreateBlog() {
 		// formData.append("directoryId", "root");
 
 		formData.append("cloud_name", "banjee");
-		formData.append("upload_preset", "business_images");
+		formData.append("upload_preset", "blog_image");
 		formData.append("file", data);
 		// { headers: { "Content-Type": "multipart/form-data" }
 

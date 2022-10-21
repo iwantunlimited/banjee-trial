@@ -66,7 +66,7 @@ function UpdateBlog() {
 		const formData = new FormData();
 
 		formData.append("cloud_name", "banjee");
-		formData.append("upload_preset", "business_images");
+		formData.append("upload_preset", "blog_image");
 		formData.append("file", data);
 
 		const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;

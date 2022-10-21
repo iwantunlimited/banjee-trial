@@ -221,7 +221,8 @@ function DetailPage() {
 							<Box sx={{ display: "flex", alignItems: "center", paddingY: "20px" }}>
 								<Box>
 									<Avatar
-										src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${state?.imageUrl}.png`}
+										// src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${state?.imageUrl}.png`}
+										src={`https://gateway.banjee.org/services/media-service/iwantcdn/resources/${state?.imageUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 										alt={state?.name}
 										style={{
 											width: window.innerWidth < 500 ? "70px" : "150px",
@@ -357,17 +358,23 @@ function DetailPage() {
 								padding: "0 10px 0 10px",
 							}}>
 							<Avatar
+								src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modalData?.data?.mavtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+								alt={modalData?.data?.muserName}
+								sx={{ width: "150px", height: "150px" }}
+							/>
+							{/* <Avatar
 								alt={
 									modalData?.data?.mfirstName?.length > 0
 										? modalData?.data?.mfirstName?.slice(0, 1)
 										: "A"
 								}
-								src={
-									"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
-									modalData?.data?.mavtarUrl
-								}
+								// src={
+								// 	"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
+								// 	modalData?.data?.mavatarUrl
+								// }
+								src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modalData?.data?.mavatarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 								sx={{ width: "150px", height: "150px" }}
-							/>
+							/> */}
 							<div
 								style={{
 									display: "flex",
