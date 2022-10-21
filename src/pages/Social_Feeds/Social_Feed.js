@@ -260,13 +260,25 @@ export default function SocialFeed(props) {
 													flexDirection: "column",
 												}}>
 												{ele?.author?.firstName ? (
-													<span>{`${
+													<span
+														style={{
+															display: "-webkit-box",
+															overflow: "hidden",
+															WebkitBoxOrient: "vertical",
+															WebkitLineClamp: 1,
+														}}>{`${
 														ele?.author?.firstName +
 														" " +
 														(ele?.author?.lastName ? ele?.author?.lastName : "")
 													}`}</span>
 												) : (
-													<span>{`${ele?.author?.userName || "userName"}`}</span>
+													<span
+														style={{
+															display: "-webkit-box",
+															overflow: "hidden",
+															WebkitBoxOrient: "vertical",
+															WebkitLineClamp: 1,
+														}}>{`${ele?.author?.userName || "userName"}`}</span>
 												)}
 												<span style={{ fontSize: "12px" }}>
 													{moment(ele?.createdOn).format("lll")}
