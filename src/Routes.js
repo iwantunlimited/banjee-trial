@@ -37,6 +37,8 @@ import CreatePushNotification from "./pages/Notification/components/Notification
 import Notification from "./pages/Notification/Notification";
 import NotificationDetail from "./pages/Notification/components/Notification/Detail";
 import AnnouncementDetail from "./pages/Notification/components/Announcement/Detail";
+import UpdateBlog from "./pages/Explore/Components/Blogs/UpdateBlog";
+import UpdateAnnouncement from "./pages/Notification/components/Announcement/UpdateAnnouncement";
 
 const Routes = () => {
 	return useRoutes([
@@ -130,6 +132,10 @@ const Routes = () => {
 					element: <CreateBlog />,
 				},
 				{
+					path: "/explore/blogs/update/:id",
+					element: <UpdateBlog />,
+				},
+				{
 					path: "/explore/blogs/detail/:id",
 					element: <BlogDetail />,
 				},
@@ -172,6 +178,10 @@ const Routes = () => {
 				{
 					path: "notification/template/create-template",
 					element: <CreateAnnouncement />,
+				},
+				{
+					path: "/notification/template/update/:id",
+					element: <UpdateAnnouncement />,
 				},
 				// {
 				//     path: '/account',

@@ -182,7 +182,7 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 		rejectRequest({ id: data })
 			.then((res) => {
 				setModalOpen(true);
-				setModalData("Neighbourhood Rejected", "warning");
+				setModalData("Neighbourhood Rejected", "success");
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -271,7 +271,7 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 							handleTabChange(modal?.event, 0);
 							listApiCAll(0, 10);
 						}}>
-						Reject
+						confirm
 					</Button>
 				</Box>
 			</ModalComp>

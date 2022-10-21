@@ -35,7 +35,7 @@ function CreatePushNotification() {
 	const context = React.useContext(MainContext);
 
 	console.log("context", context);
-	const { modalOpen, modalData, setModalOpen, setModalData } = context;
+	const { setModalOpen, setModalData, setNotificationPopup } = context;
 	const navigate = useNavigate();
 	const [data, setData] = React.useState({
 		anonymous: false,
@@ -65,7 +65,7 @@ function CreatePushNotification() {
 	// console.log("====================================");
 
 	const NeighbourListApi = React.useCallback(() => {
-		filterNeighbourhood({ page: 0, pageSize: 100, online: true })
+		filterNeighbourhood({ page: 0, pageSize: 1000, online: true })
 			.then((res) => {
 				console.log("====================================");
 				console.log(res.content);
@@ -86,8 +86,9 @@ function CreatePushNotification() {
 	const CreateAlertApiCall = React.useCallback((data) => {
 		createAlert(data)
 			.then((res) => {
-				setModalOpen(true);
-				setModalData("Notification created successfully", "success");
+				// setModalOpen(true);
+				// setModalData("Notification created successfully", "success");
+				setNotificationPopup(true);
 				navigate("/notification");
 				setData({
 					anonymous: false,
@@ -107,6 +108,9 @@ function CreatePushNotification() {
 						type: "Point",
 					},
 				});
+				setTimeout(() => {
+					setNotificationPopup(false);
+				}, [2000]);
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -157,13 +161,6 @@ function CreatePushNotification() {
 						<IconButton onClick={() => navigate(-1)}>
 							<ArrowBack color='primary' />
 						</IconButton>
-						<Button
-							onClick={() => {
-								setModalOpen(true);
-								setModalData("success", "success");
-							}}>
-							ok
-						</Button>
 					</Grid>
 					<Grid item xs={12}>
 						<Card sx={{ padding: "20px" }}>

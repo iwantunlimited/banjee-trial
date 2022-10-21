@@ -76,7 +76,7 @@ const AlertLocation = compose(
 									}}>
 									<Box sx={{ display: "flex", flexDirection: "column" }}>
 										<span>{item.eventName}</span>
-										<a href='www.banjee.org'>view alert</a>
+										<a href={"/banjee-alert/" + item?.id}>view alert</a>
 									</Box>
 								</InfoWindow>
 							)}

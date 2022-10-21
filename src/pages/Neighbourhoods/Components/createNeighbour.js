@@ -16,6 +16,7 @@ import MyGoogleMap from "../Map/GoogleMap";
 import "../neighbourhood.css";
 import { createNeighbourhood, findCity, findCountry, findState } from "../services/apiServices";
 import { MainContext } from "../../../context/Context";
+import Compressor from "compressorjs";
 
 function CreateNeighbour(props) {
 	const { listApiCAll, handleExpanded } = props;
@@ -168,6 +169,21 @@ function CreateNeighbour(props) {
 			})
 			.catch((err) => console.error(err));
 	}, []);
+
+	function handleImageChange(event) {
+		const image = event.target.files[0];
+		new Compressor(image, {
+			quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+			convertTypes: ["image/png"],
+			success: (compressedResult) => {
+				// compressedResult has the compressed file.
+				// Use the compressed file to upload the images to your server.
+				setImages(compressedResult);
+				setImgShow(URL.createObjectURL(compressedResult));
+				ImageApiCAll(compressedResult);
+			},
+		});
+	}
 
 	function handleSubmit(event) {
 		createApiCall(data);
@@ -350,9 +366,8 @@ function CreateNeighbour(props) {
 										accept='.jpg, .jpeg, .png'
 										onChange={(event) => {
 											// newImageFunc(event.target.files[0]);
-											setImages(event?.target?.files[0]);
-											setImgShow(URL.createObjectURL(event?.target?.files[0]));
-											ImageApiCAll(event?.target?.files[0]);
+											handleImageChange(event);
+
 											// setData((prev) => ({
 											// 	...prev,
 											// 	imageUrl: event.target.files[0],

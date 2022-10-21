@@ -22,6 +22,7 @@ import { createBusiness } from "../../services/ApiServices";
 import { CategoryList } from "../../../Users/User_Services/UserApiService";
 import { filterNeighbourhood } from "../../../Neighbourhoods/services/apiServices";
 import { MainContext } from "../../../../context/Context";
+import Compressor from "compressorjs";
 
 function CreateBusiness({ listApiCall, handleExpanded }) {
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
@@ -34,7 +35,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		categoryName: "",
 		cloudId: "",
 		cloudName: "",
-		bannerImageUrls: [],
+		imageUrls: [],
 		geoLocation: {
 			coordinates: [0, 0],
 		},
@@ -59,6 +60,49 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 			},
 			// address: address,
 		}));
+	};
+
+	const handleImageChange = (event) => {
+		if (event?.target?.files?.length > 0) {
+			for (let index = 0; index < event?.target?.files?.length; index++) {
+				// const data = event?.target?.files[index].type.split("/")?.[0];
+				const image = event.target.files[index];
+				new Compressor(image, {
+					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+					convertTypes: ["image/png"],
+					success: (compressedResult) => {
+						// compressedResult has the compressed file.
+						// Use the compressed file to upload the images to your server.
+						// setImages(compressedResult);
+						// setImgShow(URL.createObjectURL(compressedResult));
+						setBusinessImgShow((prev) => [...prev, URL.createObjectURL(compressedResult)]);
+						ImageApiCAll(
+							compressedResult,
+							"image"
+							// event?.target?.files[index].type,
+						);
+					},
+				});
+			}
+		} else {
+			const image = event.target.files[0];
+			new Compressor(image, {
+				quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+				convertTypes: ["image/png"],
+				success: (compressedResult) => {
+					// compressedResult has the compressed file.
+					// Use the compressed file to upload the images to your server.
+					// setImages(compressedResult);
+					// setImgShow(URL.createObjectURL(compressedResult));
+					setBusinessImgShow((prev) => [...prev, URL.createObjectURL(compressedResult)]);
+					ImageApiCAll(
+						compressedResult,
+						"image"
+						// event?.target?.files[index].type,
+					);
+				},
+			});
+		}
 	};
 
 	const ImageApiCAll = React.useCallback((data, imageType) => {
@@ -89,7 +133,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 				} else {
 					setData((prev) => ({
 						...prev,
-						bannerImageUrls: [...prev.bannerImageUrls, res?.data?.public_id],
+						imageUrls: [...prev.imageUrls, res?.data?.public_id],
 					}));
 				}
 			})
@@ -140,7 +184,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 					categoryName: "",
 					cloudId: "",
 					cloudName: "",
-					bannerImageUrls: [],
+					imageUrls: [],
 					geoLocation: {
 						coordinates: [0, 0],
 					},
@@ -309,9 +353,21 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 											accept='.jpg, .jpeg, .png'
 											onChange={(event) => {
 												// newImageFunc(event.target.files[0]);
-												setImages(event?.target?.files[0]);
-												setImgShow(URL.createObjectURL(event?.target?.files[0]));
-												ImageApiCAll(event?.target?.files[0], "logo");
+												const image = event.target.files[0];
+												new Compressor(image, {
+													quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+													convertTypes: ["image/png"],
+													success: (compressedResult) => {
+														// compressedResult has the compressed file.
+														// Use the compressed file to upload the images to your server.
+														// setImages(compressedResult);
+														// setImgShow(URL.createObjectURL(compressedResult));
+
+														setImages(compressedResult);
+														setImgShow(URL.createObjectURL(compressedResult));
+														ImageApiCAll(compressedResult, "logo");
+													},
+												});
 												// setData((prev) => ({
 												// 	...prev,
 												// 	logoURL: event.target.files[0],
@@ -376,27 +432,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 											accept='.jpg, .jpeg, .png'
 											onChange={(event) => {
 												// newImageFunc(event.target.files[0]);
-
-												if (event?.target?.files?.length > 0) {
-													for (let index = 0; index < event?.target?.files?.length; index++) {
-														const data = event?.target?.files[index].type.split("/")?.[0];
-														setBusinessImgShow((prev) => [
-															...prev,
-															URL.createObjectURL(event?.target?.files[index]),
-														]);
-														ImageApiCAll(
-															event?.target?.files[index],
-															"image"
-															// event?.target?.files[index].type,
-														);
-													}
-												} else {
-													setBusinessImgShow((prev) => [
-														...prev,
-														URL.createObjectURL(event?.target?.files[0]),
-													]);
-													ImageApiCAll(event?.target?.files[0], "image");
-												}
+												handleImageChange(event);
 											}}
 										/>
 										{businessImgShow?.length > 0 &&

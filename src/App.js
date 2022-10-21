@@ -7,6 +7,7 @@ import { theme } from "./Theme/theme";
 import "./App.css";
 import { ContextProvider } from "./context/Context";
 import SnackbarContext from "./CustomComponents/SnackbarContext";
+import NotificationPopup from "./CustomComponents/NotificationPopup";
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 				<BrowserRouter>
 					<Routes />
 					<SnackbarContext />
+					<NotificationPopup />
 				</BrowserRouter>
 			</ThemeProvider>
 		</ContextProvider>

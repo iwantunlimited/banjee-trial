@@ -210,6 +210,9 @@ function SidebarList({ handleId, handleClick }) {
 								// padding: "5px 10px",
 								background:
 									pathname === item.path ||
+									pathname === item.path + `/reported-feeds` ||
+									pathname === item.path + `/reported-feeds/${params?.id}` ||
+									pathname === item.path + `/${params?.id}` ||
 									pathname === item.path + `/detail/${params?.id}` ||
 									pathname === item.path + `/update/${params?.id}` ||
 									pathname === item.path + `/view/${params?.id}` ||
@@ -220,7 +223,14 @@ function SidebarList({ handleId, handleClick }) {
 								margin: "5px",
 								":hover": {
 									background:
-										pathname === item.path
+										pathname === item.path ||
+										pathname === item.path + `/reported-feeds` ||
+										pathname === item.path + `/reported-feeds/${params?.id}` ||
+										pathname === item.path + `/${params?.id}` ||
+										pathname === item.path + `/detail/${params?.id}` ||
+										pathname === item.path + `/update/${params?.id}` ||
+										pathname === item.path + `/view/${params?.id}` ||
+										pathname === item.path + `/create`
 											? theme.palette.secondary.main
 											: theme.palette.primary.main,
 									opacity: "0.8",

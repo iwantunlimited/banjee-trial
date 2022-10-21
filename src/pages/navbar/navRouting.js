@@ -23,6 +23,7 @@ import ExploreBlogs from "../Explore/Components/Blogs/Blogs";
 import BanjeeAlert from "../BanjeeAlert/BanjeeAlert";
 import Notification from "../Notification/Notification";
 import Announcement from "../Notification/components/Announcement/Announcement";
+import { Notifications } from "@mui/icons-material";
 
 const routing = [
 	{
@@ -126,21 +127,21 @@ const routing = [
 		id: 14,
 		path: "/notification",
 		name: "Notification",
-		icon: <NotificationImportant fontSize='medium' />,
+		icon: <Notifications fontSize='medium' />,
 		component: <Notification />,
 		children: [
 			{
 				id: 15,
 				path: "/notification/template",
 				name: "Template",
-				icon: <NotificationImportant fontSize='medium' />,
+				icon: <Notifications fontSize='medium' />,
 				component: <Announcement />,
 			},
 			{
 				id: 16,
 				path: "/notification",
 				name: "Notification",
-				icon: <NotificationImportant fontSize='medium' />,
+				icon: <Notifications fontSize='medium' />,
 				component: <Notification />,
 			},
 		],

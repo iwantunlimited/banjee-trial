@@ -1,11 +1,22 @@
 import React from "react";
-import { Container, Typography, Grid, Card, Box, CircularProgress, Divider } from "@mui/material";
-import { useParams } from "react-router";
+import {
+	Container,
+	Typography,
+	Grid,
+	Card,
+	Box,
+	CircularProgress,
+	Divider,
+	IconButton,
+} from "@mui/material";
+import { useParams, useNavigate } from "react-router";
 import { listAlert, listMyAlert } from "../api-services/apiServices";
 import AlertLocation from "./AlertMap";
+import { ArrowBack } from "@mui/icons-material";
 
 function ViewAlert() {
 	const params = useParams();
+	const navigate = useNavigate();
 
 	const [data, setData] = React.useState("");
 	const [currentLocation, setCurrentLocation] = React.useState({
@@ -46,6 +57,11 @@ function ViewAlert() {
 		return (
 			<Container maxWidth='xl'>
 				<Grid item container xs={12} spacing={2}>
+					<Grid item xs={12}>
+						<IconButton onClick={() => navigate(-1)}>
+							<ArrowBack color='primary' />
+						</IconButton>
+					</Grid>
 					<Grid item xs={12}>
 						<Card sx={{ padding: "10px" }}>
 							<Typography sx={{ fontSize: "22px", fontWeight: 600, color: "gray" }}>

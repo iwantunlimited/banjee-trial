@@ -1,5 +1,14 @@
 import { ArrowBack } from "@mui/icons-material";
-import { Box, Card, CircularProgress, Divider, Grid, IconButton, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	Card,
+	CircularProgress,
+	Divider,
+	Grid,
+	IconButton,
+	Typography,
+} from "@mui/material";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
 import { findByIdBlog } from "../../ApiServices/apiServices";
@@ -34,9 +43,14 @@ function AnnouncementDetail() {
 					</Grid>
 					<Grid item xs={12}>
 						<Card sx={{ padding: "10px" }}>
-							<Typography sx={{ fontSize: "22px", fontWeight: 600, color: "gray" }}>
-								Template Information
-							</Typography>
+							<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+								<Typography sx={{ fontSize: "22px", fontWeight: 600, color: "gray" }}>
+									Template Information
+								</Typography>
+								<Button onClick={() => navigate("/notification/template/update/" + params?.id)}>
+									update
+								</Button>
+							</Box>
 							<Box sx={{ marginY: "5px" }}>
 								<Divider />
 							</Box>

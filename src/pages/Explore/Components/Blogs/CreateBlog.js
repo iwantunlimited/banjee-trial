@@ -22,6 +22,7 @@ import { useNavigate } from "react-router";
 import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import Compressor from "compressorjs";
 
 function CreateBlog() {
 	const navigate = useNavigate();
@@ -252,8 +253,20 @@ function CreateBlog() {
 												accept='.jpg, .jpeg, .png'
 												onChange={(event) => {
 													// newImageFunc(event.target.files[0]);
-													setImgShow(URL.createObjectURL(event?.target?.files[0]));
-													ImageApiCAll(event?.target?.files[0]);
+													const image = event.target.files[0];
+													new Compressor(image, {
+														quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+														convertTypes: ["image/png"],
+														success: (compressedResult) => {
+															// compressedResult has the compressed file.
+															// Use the compressed file to upload the images to your server.
+															// setImages(compressedResult);
+															// setImgShow(URL.createObjectURL(compressedResult));
+
+															setImgShow(URL.createObjectURL(compressedResult));
+															ImageApiCAll(compressedResult);
+														},
+													});
 													// setData((prev) => ({
 													// 	...prev,
 													// 	logoURL: event.target.files[0],

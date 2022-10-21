@@ -20,6 +20,7 @@ import SnackBarComp from "../../../CustomComponents/SnackBarComp";
 import "react-quill/dist/quill.snow.css";
 import "react-quill-emoji/dist/quill-emoji";
 import { MainContext } from "../../../context/Context";
+import Compressor from "compressorjs";
 
 function CreateFeed() {
 	const navigate = useNavigate();
@@ -171,6 +172,35 @@ function CreateFeed() {
 		[navigate]
 	);
 
+	const handleImageChange = (event) => {
+		if (event?.target?.files?.length > 0) {
+			for (let index = 0; index < event?.target?.files?.length; index++) {
+				// const data = event?.target?.files[index].type.split("/")?.[0];
+				const image = event.target.files[index];
+				new Compressor(image, {
+					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+					convertTypes: ["image/png"],
+					success: (compressedResult) => {
+						// compressedResult has the compressed file.
+						// Use the compressed file to upload the images to your server.
+						ImageApiCAll(compressedResult, compressedResult.type);
+					},
+				});
+			}
+		} else {
+			const image = event.target.files[0];
+			new Compressor(image, {
+				quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+				convertTypes: ["image/png"],
+				success: (compressedResult) => {
+					// compressedResult has the compressed file.
+					// Use the compressed file to upload the images to your server.
+					ImageApiCAll(compressedResult, compressedResult.type);
+				},
+			});
+		}
+	};
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		setFinalPayload((prev) => ({
@@ -230,17 +260,7 @@ function CreateFeed() {
 												id='img'
 												// accept='.jpg, .jpeg, .png'
 												onChange={(event) => {
-													if (event?.target?.files?.length > 0) {
-														for (let index = 0; index < event?.target?.files?.length; index++) {
-															// const data = event?.target?.files[index].type.split("/")?.[0];
-															ImageApiCAll(
-																event?.target?.files[index],
-																event?.target?.files[index].type
-															);
-														}
-													} else {
-														ImageApiCAll(event?.target?.files[0], event?.target?.files[0].type);
-													}
+													handleImageChange(event);
 													// newImageFunc(event.target.files[0]);
 													// setImgShow(URL.createObjectURL(event?.target?.files[0]));
 													// ImageApiCAll(event?.target?.files[0]);

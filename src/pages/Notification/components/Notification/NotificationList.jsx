@@ -24,7 +24,7 @@ import ModalComp from "../../../../CustomComponents/ModalComp";
 function NotificationList() {
 	const navigate = useNavigate();
 	const context = useContext(MainContext);
-	const { setModalOpen, setModalData } = context;
+	const { setModalOpen, setModalData, setNotificationPopup } = context;
 	const [data, setData] = React.useState("");
 
 	const [modal, setModal] = React.useState({
@@ -204,7 +204,7 @@ function NotificationList() {
 								</Typography>
 							</Box>
 							<Tooltip
-								title='Create Announcement'
+								title='Create Notification'
 								arrow
 								sx={{ bacground: "white", color: "black" }}>
 								<IconButton onClick={() => navigate("/notification/create-notification")}>

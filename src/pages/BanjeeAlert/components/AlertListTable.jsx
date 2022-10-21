@@ -45,10 +45,10 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 		},
 		{
 			id: "4",
-			field: "address",
+			field: "description",
 			headerClassName: "app-header",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "Address",
+			headerName: "Description",
 			// align: "center",
 			flex: 0.5,
 		},

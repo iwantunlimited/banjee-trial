@@ -5,10 +5,14 @@ const MainContext = React.createContext({
 	setModalData: () => {},
 	modalOpen: false,
 	setModalOpen: () => {},
+	notificationPopup: false,
+	setNotificationPopup: () => {},
 });
 
 function ContextProvider({ children }) {
 	const [modalOpen, setModalOpen] = React.useState(false);
+	const [notificationPopup, setNotificationPopup] = React.useState(false);
+
 	const [modalData, setModalData] = React.useState({
 		message: "",
 		severity: "",
@@ -19,6 +23,10 @@ function ContextProvider({ children }) {
 			message: message,
 			severity: severity,
 		});
+	};
+
+	const handleNotification = (data) => {
+		setNotificationPopup(data);
 	};
 
 	const handleSnackbar = (data) => {
@@ -32,6 +40,8 @@ function ContextProvider({ children }) {
 				setModalData: handleData,
 				modalOpen: modalOpen,
 				setModalOpen: handleSnackbar,
+				notificationPopup: notificationPopup,
+				setNotificationPopup: handleNotification,
 			}}>
 			{children}
 		</MainContext.Provider>

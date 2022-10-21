@@ -98,6 +98,14 @@ export const createBlog = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 
+export const updateBlog = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.CREATE_BLOG;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "PUT";
+	return executePost(url, actionCode, payload, method);
+};
+
 export const createReactions = (requestLoad) => {
 	let url = urls.LOCAL_DISCOVERY.CREATE_REACTIONS;
 	let actionCode = "";

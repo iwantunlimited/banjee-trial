@@ -14,10 +14,11 @@ function SnackbarContext(props) {
 	return (
 		<Snackbar
 			open={modalOpen}
-			autoHideDuration={3000}
+			autoHideDuration={5000}
 			onClose={handleClose}
 			anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
 			<Alert
+				variant='filled'
 				onClose={handleClose}
 				severity={modalData.severity ? modalData.severity : "success"}
 				sx={{ width: "100%" }}>

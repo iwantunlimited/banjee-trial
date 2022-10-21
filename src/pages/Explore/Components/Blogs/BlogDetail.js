@@ -86,6 +86,12 @@ function BlogDetail() {
 						}>
 						<ChatBubbleOutline />
 					</IconButton> */}
+						<Button
+							onClick={() => {
+								navigate("/explore/blogs/update/" + params?.id);
+							}}>
+							update
+						</Button>
 						<IconButton
 							onClick={() => {
 								setModal({ open: true, id: params?.id });

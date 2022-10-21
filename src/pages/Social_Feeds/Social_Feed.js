@@ -58,7 +58,7 @@ export default function SocialFeed(props) {
 	// pagination state
 	const [pagination, setPagination] = React.useState({
 		page: 0,
-		pageSize: 12,
+		pageSize: 10,
 	});
 	const [totalEle, setTotalEle] = React.useState();
 
@@ -103,7 +103,7 @@ export default function SocialFeed(props) {
 	);
 
 	React.useEffect(() => {
-		filterSocialFeedsApiCall(0, 12, startDate, endDate);
+		filterSocialFeedsApiCall(0, 10, startDate, endDate);
 	}, [filterSocialFeedsApiCall, startDate, endDate]);
 
 	// function playPause(index) {
@@ -174,7 +174,7 @@ export default function SocialFeed(props) {
 										color: theme.palette.primary.contrastText,
 									}}
 									onClick={() => {
-										filterSocialFeedsApiCall(0, 12, startDate, endDate);
+										filterSocialFeedsApiCall(0, 10, startDate, endDate);
 									}}>
 									<Search />
 								</IconButton>
@@ -578,7 +578,7 @@ export default function SocialFeed(props) {
 									count={totalEle}
 									page={pagination.page}
 									rowsPerPage={pagination.pageSize}
-									rowsPerPageOptions={[12, 16, 20]}
+									rowsPerPageOptions={[10, 15, 20]}
 									onPageChange={(event, data) => {
 										setPagination((prev) => ({
 											...prev,
@@ -612,7 +612,7 @@ export default function SocialFeed(props) {
 							justifyContent: "center",
 							alignItems: " center",
 						}}>
-						<CircularProgress />
+						<Typography>No Data Found !</Typography>
 					</Box>
 				)}
 

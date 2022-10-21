@@ -15,7 +15,7 @@ import {
 import { useNavigate, useParams } from "react-router";
 import UserLocation from "../../../Users/components/UserLocation";
 import moment from "moment";
-import { ArrowBack } from "@mui/icons-material";
+import { ArrowBack, Fullscreen } from "@mui/icons-material";
 import { deleteBusiness, findByIdBusiness } from "../../services/ApiServices";
 
 // Import Swiper React components
@@ -28,6 +28,7 @@ import ".././component.css";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
 import { MainContext } from "../../../../context/Context";
+import FullScreenImageModal from "../../../Social_Feeds/Components/FullScreenImageModal";
 
 function BusinessDetail() {
 	const params = useParams();
@@ -39,6 +40,10 @@ function BusinessDetail() {
 	const [modal, setModal] = useState({
 		open: false,
 		data: "",
+	});
+
+	const [fullScreenState, setFullScreenState] = React.useState({
+		imageModal: false,
 	});
 
 	const [dExpand, setDExpand] = React.useState(false);
@@ -99,7 +104,7 @@ function BusinessDetail() {
 				<Card sx={{ padding: "20px" }}>
 					<Grid item container xs={12}>
 						<Grid item xs={12} sm={6}>
-							<Box sx={{ display: "flex", alignItems: "center" }}>
+							<Box sx={{ display: "flex" }}>
 								<Box>
 									<Avatar
 										src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${state?.logoURL}.png`}
@@ -110,7 +115,7 @@ function BusinessDetail() {
 										}}
 									/>
 								</Box>
-								<Box sx={{ marginLeft: "20px" }}>
+								<Box sx={{ marginLeft: { xs: "10px", sm: "10px", md: "20px" } }}>
 									<Box sx={{ marginBottom: "20px" }}>
 										<Typography sx={{ fontSize: "24px" }}>{state?.name}</Typography>
 										{state?.createdOn && (
@@ -192,6 +197,7 @@ function BusinessDetail() {
 													<Box
 														key={index}
 														sx={{
+															position: "relative",
 															width: "100%",
 															height: "100%",
 															maxHeight: "400px",
@@ -220,6 +226,23 @@ function BusinessDetail() {
 															style={{ width: "100%", height: "100%" }}
 														/>
 													</Box>
+													<IconButton
+														sx={{ position: "absolute", bottom: "5px", right: "5px" }}
+														onClick={() => {
+															setFullScreenState({
+																imageModal: true,
+																src:
+																	item &&
+																	`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${item}.png`,
+															});
+														}}>
+														<Fullscreen
+															style={{
+																color: "#000",
+																fontSize: "30px",
+															}}
+														/>
+													</IconButton>
 												</SwiperSlide>
 											);
 										})}
@@ -265,6 +288,12 @@ function BusinessDetail() {
 						</Button>
 					</Box>
 				</ModalComp>
+				{fullScreenState.imageModal && (
+					<FullScreenImageModal
+						state={fullScreenState}
+						handleClose={() => setFullScreenState({ imageModal: false })}
+					/>
+				)}
 			</Container>
 		);
 	} else {
