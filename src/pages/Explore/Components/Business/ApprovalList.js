@@ -164,7 +164,7 @@ export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 		<Box>
 			{data ? (
 				<div>
-					<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
+					<div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
 						In Approval ({state?.totalElement})
 					</div>
 					<hr />

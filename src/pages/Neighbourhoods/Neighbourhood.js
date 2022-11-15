@@ -65,6 +65,7 @@ function Neighbourhood() {
 	const listApiCAll = React.useCallback((page, pageSize) => {
 		filterNeighbourhood({ page: page, pageSize: pageSize, online: true })
 			.then((res) => {
+				console.log("--------", res);
 				const resp = res.content.map((ele) => {
 					return {
 						routingId: ele.id,

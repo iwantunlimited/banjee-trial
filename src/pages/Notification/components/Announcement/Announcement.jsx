@@ -187,7 +187,7 @@ function Announcement() {
 					<Grid item xs={12}>
 						<Card sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
 							<Box>
-								<Typography sx={{ fontWeight: 600, color: "gray", fontSize: "25px" }}>
+								<Typography sx={{ fontWeight: 500, color: "#6b778c", fontSize: "22px" }}>
 									Template({totalEle})
 								</Typography>
 							</Box>

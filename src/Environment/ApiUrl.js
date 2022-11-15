@@ -55,14 +55,16 @@ export const urls = {
 
 	GEO_CLOUD: {
 		CREATE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud",
-		FILTER_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/filter",
+		FILTER_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/social-cloud-list",
 		PENDING_APPROVAL: services.GEO_CLOUD + "social-cloud/pending-approvals",
 		APPROVE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/approve",
 		REJECT_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/reject",
 		FIND_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/findById/",
 		FILTER_MEMBERS: services.GEO_CLOUD + "social-cloud/members/filter",
+		FIND_MEMBERS_BY_CLOUDID: services.GEO_CLOUD + "social-cloud/members/byCloudId/",
 		GEO_ALERT: services.GEO_CLOUD + "api/geo-alert/",
 		FILTER_REPORTED_ALERT: services.GEO_CLOUD + "api/geo-alert/report/filter",
+		COMMUNITY: services.GEO_CLOUD + "community",
 	},
 
 	LOCAL_DISCOVERY: {

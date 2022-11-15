@@ -195,7 +195,7 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 		<Box>
 			{data ? (
 				<div>
-					<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
+					<div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
 						Pending Neighrbourhood ({state?.totalElement})
 					</div>
 					<hr />

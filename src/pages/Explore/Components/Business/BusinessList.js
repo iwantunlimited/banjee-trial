@@ -97,7 +97,7 @@ function BusinessList(props) {
 		<Box>
 			{data ? (
 				<div>
-					<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
+					<div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
 						Business ({paginationState?.totalElement})
 					</div>
 					<hr />

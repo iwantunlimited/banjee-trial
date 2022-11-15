@@ -56,6 +56,10 @@ function CreatePushNotification() {
 		},
 	});
 
+	console.log("====================================");
+	console.log(data);
+	console.log("====================================");
+
 	const [imgShow, setImgShow] = React.useState("");
 	const [neighbourList, setNeighbourList] = React.useState("");
 	const [blogList, setBLogList] = React.useState("");
@@ -65,7 +69,7 @@ function CreatePushNotification() {
 	// console.log("====================================");
 
 	const NeighbourListApi = React.useCallback(() => {
-		filterNeighbourhood({ page: 0, pageSize: 1000, online: true })
+		filterNeighbourhood({ page: 0, size: 1000, online: true })
 			.then((res) => {
 				console.log("====================================");
 				console.log(res.content);

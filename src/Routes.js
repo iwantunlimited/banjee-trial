@@ -39,6 +39,8 @@ import NotificationDetail from "./pages/Notification/components/Notification/Det
 import AnnouncementDetail from "./pages/Notification/components/Announcement/Detail";
 import UpdateBlog from "./pages/Explore/Components/Blogs/UpdateBlog";
 import UpdateAnnouncement from "./pages/Notification/components/Announcement/UpdateAnnouncement";
+import GroupsComp from "./pages/Groups/Groups";
+import GroupDetailPage from "./pages/Groups/components/GroupDetailPage";
 
 const Routes = () => {
 	return useRoutes([
@@ -182,6 +184,14 @@ const Routes = () => {
 				{
 					path: "/notification/template/update/:id",
 					element: <UpdateAnnouncement />,
+				},
+				{
+					path: "/groups",
+					element: <GroupsComp />,
+				},
+				{
+					path: "/groups/:id",
+					element: <GroupDetailPage />,
 				},
 				// {
 				//     path: '/account',

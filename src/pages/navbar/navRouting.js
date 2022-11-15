@@ -24,6 +24,7 @@ import BanjeeAlert from "../BanjeeAlert/BanjeeAlert";
 import Notification from "../Notification/Notification";
 import Announcement from "../Notification/components/Announcement/Announcement";
 import { Notifications } from "@mui/icons-material";
+import GroupComp from "../Groups/Groups";
 
 const routing = [
 	{
@@ -145,6 +146,13 @@ const routing = [
 				component: <Notification />,
 			},
 		],
+	},
+	{
+		id: 17,
+		path: "/groups",
+		name: "Groups",
+		icon: <PeopleAlt fontSize='medium' />,
+		component: <GroupComp />,
 	},
 	// {
 	//     id:3,

@@ -30,7 +30,7 @@ function ChipComp(props) {
 					<Typography
 						sx={{
 							color: "#6b778c",
-							fontSize: "20px",
+							fontSize: "22px",
 							fontWeight: "500",
 							textAlign: "left",
 						}}>
