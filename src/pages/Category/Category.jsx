@@ -31,6 +31,7 @@ import {
 } from "../Users/User_Services/UserApiService";
 import SwitchSelector from "react-switch-selector";
 import { MainContext } from "../../context/Context";
+import ModalComp from "../../CustomComponents/ModalComp";
 
 const style = {
 	position: "absolute",
@@ -52,6 +53,10 @@ function Category(props) {
 	const [showId, setShowId] = React.useState();
 	const [openModal, setOpenModal] = React.useState(false);
 	const [toggleBtn, setToggleBtn] = React.useState("parent");
+	const [deleteCategoryModal, setDeleteCategoryModal] = React.useState({
+		open: false,
+		id: "",
+	});
 
 	const [categoryList, setCategoryList] = React.useState([]);
 
@@ -76,6 +81,13 @@ function Category(props) {
 				[name]: value,
 			};
 		});
+	}
+
+	function handleModal(data) {
+		setDeleteCategoryModal((prev) => ({
+			...prev,
+			open: data,
+		}));
 	}
 
 	function handleSubmit(event) {
@@ -104,6 +116,7 @@ function Category(props) {
 				context?.setModalOpen(true);
 				context?.setModalData("Category Deleted", "success");
 				setModalData(intialValue);
+				handleModal(false);
 				CategoryListApiCall();
 			})
 			.catch((err) => {
@@ -208,7 +221,7 @@ function Category(props) {
 
 	if (categoryList?.content) {
 		return (
-			<Container maxWidth='lg'>
+			<Container maxWidth='xl'>
 				<div style={{ marginTop: "50px", background: "white", fontSize: "33px" }}>
 					<Card style={{ width: "auto", height: "100%", padding: "20px", borderRadius: "5px" }}>
 						{/* ---------------------- Refresh and Add Category button with modal start ------------------------- */}
@@ -508,7 +521,7 @@ function Category(props) {
 
 						{categoryList?.content?.length > 0 ? (
 							<Grid container>
-								<Grid item container xs={12} spacing={4}>
+								<Grid item container xs={12} spacing={3}>
 									<Grid item xs={12} sm={4} md={4} lg={4}>
 										<Box style={{ padding: "10px", borderRadius: "10px" }}>
 											<TreeView
@@ -640,11 +653,44 @@ function Category(props) {
 																		<div>
 																			<IconButton
 																				onClick={() => {
-																					handleDelete(ele.id);
+																					setDeleteCategoryModal({
+																						open: true,
+																						id: ele?.id,
+																					});
+																					// handleDelete(ele.id);
 																				}}
 																				style={{ color: "#5664D2" }}>
 																				<Delete />
 																			</IconButton>
+																			<ModalComp
+																				data={deleteCategoryModal}
+																				handleModal={handleModal}>
+																				<Box>
+																					<Typography sx={{ fontSize: "20px" }}>
+																						<b>Are you sure to delete the category ?</b>
+																					</Typography>
+																					<Box
+																						sx={{
+																							marginTop: "20px",
+																							display: "flex",
+																							justifyContent: "center",
+																						}}>
+																						<Button
+																							variant='outlined'
+																							onClick={() => handleModal(false)}>
+																							Cancel
+																						</Button>
+																						<Button
+																							variant='contained'
+																							onClick={() => {
+																								handleDelete(deleteCategoryModal?.id);
+																							}}
+																							sx={{ marginLeft: "20px" }}>
+																							Confirm
+																						</Button>
+																					</Box>
+																				</Box>
+																			</ModalComp>
 																		</div>
 																	</Box>
 																</Box>

@@ -84,6 +84,15 @@ function GroupsComp(props) {
 		},
 		{
 			id: "4",
+			field: "totalMembers",
+			headerClassName: "app-header",
+			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+			headerName: "Members",
+			// align: "center",
+			flex: 0.3,
+		},
+		{
+			id: "5",
 			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
@@ -99,7 +108,7 @@ function GroupsComp(props) {
 			},
 		},
 		{
-			id: "8",
+			id: "6",
 			field: "id",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
