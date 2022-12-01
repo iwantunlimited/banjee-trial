@@ -6,17 +6,34 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { MainContext } from "../../../context/Context";
 import ModalComp from "../../../CustomComponents/ModalComp";
-import { deleteAlert } from "../api-services/apiServices";
+import { deleteAlert, filterReportList } from "../api-services/apiServices";
 
-function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
+function ReportedAlertList() {
 	const navigate = useNavigate();
 
 	const context = React.useContext(MainContext);
+
+	const [data, setData] = React.useState("");
 
 	const [modalData, setModalData] = React.useState({
 		open: false,
 		id: "",
 	});
+
+	const [pagination, setPagination] = React.useState({
+		totalElement: 0,
+		pagination: {
+			page: 0,
+			pageSize: 10,
+		},
+	});
+
+	const handlePagination = (data) => {
+		setPagination((prev) => ({
+			...prev,
+			pagination: data,
+		}));
+	};
 
 	function handleModal(data) {
 		setModalData((prev) => ({
@@ -24,6 +41,33 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			open: data,
 		}));
 	}
+
+	const ReportedAlertListApiCall = React.useCallback((page, pageSize) => {
+		filterReportList({ page: page, pageSize: pageSize })
+			.then((res) => {
+				const resp = res?.content?.map((item) => {
+					return {
+						routingId: item?.id,
+						rFirstName: item?.reportedByUser?.firstName,
+						rLastName: item?.reportedByUser?.lastName,
+						cloudName: item?.content?.cloudName,
+						eventName: item?.content?.eventName,
+						description: item?.content?.description,
+						...item,
+					};
+				});
+				setData(resp);
+				setPagination((prev) => ({
+					...prev,
+					totalElement: res.totalElements,
+					pagination: {
+						page: res?.pageable?.pageNumber,
+						pageSize: res?.pageable?.pageSize,
+					},
+				}));
+			})
+			.catch((err) => console.error(err));
+	}, []);
 
 	const deleteAlertApiCall = React.useCallback((id) => {
 		deleteAlert(id)
@@ -38,6 +82,10 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			})
 			.catch((err) => console.log(err));
 	}, []);
+
+	React.useEffect(() => {
+		ReportedAlertListApiCall();
+	}, [ReportedAlertListApiCall]);
 
 	let rows = data ? data : [];
 
@@ -65,10 +113,19 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "Description",
 			// align: "center",
-			flex: 0.4,
+			flex: 0.3,
 		},
 		{
 			id: "4",
+			field: "comment",
+			headerClassName: "app-header",
+			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+			headerName: "Comment",
+			// align: "center",
+			flex: 0.4,
+		},
+		{
+			id: "5",
 			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
@@ -84,21 +141,21 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			},
 		},
 		{
-			id: "5",
-			field: "mFirstName",
+			id: "6",
+			field: "rFirstName",
 			headerClassName: "app-header",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "Created By",
+			headerName: "Reported By",
 			// align: "center",
 			flex: 0.3,
 			renderCell: (params) => {
-				const fullname = params?.row?.cFirstName + " " + params?.row?.cLastName;
-				return fullname;
+				const fullName = params?.row?.rFirstName + " " + params?.row?.rLastName;
+				return fullName;
 			},
 		},
 
 		{
-			id: "6",
+			id: "7",
 			field: "id",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
@@ -119,7 +176,7 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			},
 		},
 		{
-			id: "7",
+			id: "8",
 			field: "routingId",
 			headerClassName: "app-header",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
@@ -161,7 +218,7 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 									page: pagination?.pagination?.page,
 									pageSize: event,
 								});
-								listApiCall(pagination?.pagination?.page, event);
+								ReportedAlertListApiCall(pagination?.pagination?.page, event);
 							}}
 							rowCount={pagination?.totalElement}
 							rows={rows}
@@ -174,7 +231,7 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 									page: event,
 									pageSize: pagination?.pagination?.page,
 								});
-								listApiCall(event, pagination?.pagination?.pageSize);
+								ReportedAlertListApiCall(event, pagination?.pagination?.pageSize);
 							}}
 							rowsPerPageOptions={[5, 10, 20]}
 							className='dataGridFooter'
@@ -216,4 +273,4 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 	);
 }
 
-export default AlertListTable;
+export default ReportedAlertList;

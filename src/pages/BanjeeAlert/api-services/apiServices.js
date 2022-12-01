@@ -28,7 +28,7 @@ export let listMyAlert = (requestLoad) => {
 };
 
 export let deleteAlert = (requestLoad) => {
-	let url = urls.GEO_CLOUD.GEO_ALERT + "/" + requestLoad;
+	let url = urls.GEO_CLOUD.GEO_ALERT + requestLoad;
 	let actionCode = "";
 	let payload = {};
 	let method = "DELETE";

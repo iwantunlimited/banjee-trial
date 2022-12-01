@@ -6,6 +6,7 @@ import AlertListTable from "./components/AlertListTable";
 import { useCallback } from "react";
 import PropTypes from "prop-types";
 import AlertLocation from "./components/AlertMap";
+import ReportedAlertList from "./components/ReportedAlertList";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -43,7 +44,6 @@ function BanjeeAlert() {
 	});
 
 	const [data, setData] = React.useState("");
-	const [reportedData, setReportedData] = React.useState("");
 
 	const [state, setState] = React.useState({
 		totalElement: 0,
@@ -52,21 +52,6 @@ function BanjeeAlert() {
 			pageSize: 10,
 		},
 	});
-
-	const [reportPagination, setReportPagination] = React.useState({
-		totalElement: 0,
-		pagination: {
-			page: 0,
-			pageSize: 10,
-		},
-	});
-
-	const handleReportPagination = (data) => {
-		setReportPagination((prev) => ({
-			...prev,
-			pagination: data,
-		}));
-	};
 
 	const handlePagination = (data) => {
 		setState((prev) => ({
@@ -78,8 +63,6 @@ function BanjeeAlert() {
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
-
-	// console.log("currentLocation", currentLocation);
 
 	const ListAlertApiCall = useCallback(
 		(page, pageSize) => {
@@ -93,7 +76,10 @@ function BanjeeAlert() {
 					.then((res) => {
 						const resp = res?.content?.map((item) => {
 							return {
+								routingId: item?.id,
 								address: item?.metaInfo?.address,
+								cFirstName: item?.createdByUser?.firstName,
+								cLastName: item?.createdByUser?.lastName,
 								...item,
 							};
 						});
@@ -126,30 +112,9 @@ function BanjeeAlert() {
 		}
 	}, []);
 
-	const ReportedAlertListApiCall = React.useCallback((page, pageSize) => {
-		filterReportList({ page: page, pageSize: pageSize })
-			.then((res) => {
-				// console.log("====================================");
-				// console.log("reported list for alert", res);
-				// console.log("====================================");
-
-				setReportedData(res);
-				setReportPagination((prev) => ({
-					...prev,
-					totalElement: res.totalElements,
-					pagination: {
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					},
-				}));
-			})
-			.catch((err) => console.error(err));
-	}, []);
-
 	React.useEffect(() => {
 		listAllData();
-		ReportedAlertListApiCall(0, 10);
-	}, [listAllData, ReportedAlertListApiCall]);
+	}, [listAllData]);
 
 	React.useEffect(() => {
 		ListAlertApiCall(0, 10);
@@ -208,12 +173,7 @@ function BanjeeAlert() {
 						</TabPanel>
 						<TabPanel value={value} index={1}>
 							{/* <Box sx={{ padding: "10px" }}> */}
-							<AlertListTable
-								listApiCall={ReportedAlertListApiCall}
-								pagination={reportPagination}
-								handlePagination={handleReportPagination}
-								data={reportedData}
-							/>
+							<ReportedAlertList />
 							{/* </Box> */}
 						</TabPanel>
 					</Card>

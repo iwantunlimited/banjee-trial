@@ -8,28 +8,49 @@ import {
 	CircularProgress,
 	Divider,
 	IconButton,
+	Button,
 } from "@mui/material";
 import { useParams, useNavigate } from "react-router";
-import { listAlert, listMyAlert } from "../api-services/apiServices";
+import { deleteAlert, listAlert, listMyAlert } from "../api-services/apiServices";
 import AlertLocation from "./AlertMap";
 import { ArrowBack } from "@mui/icons-material";
+import ModalComp from "../../../CustomComponents/ModalComp";
+import { MainContext } from "../../../context/Context";
 
 function ViewAlert() {
 	const params = useParams();
 	const navigate = useNavigate();
-
+	const context = React.useContext(MainContext);
 	const [data, setData] = React.useState("");
 	const [currentLocation, setCurrentLocation] = React.useState({
 		lat: "",
 		lon: "",
 	});
+	const [modalData, setModalData] = React.useState({
+		open: false,
+		id: "",
+	});
+
+	function handleModal(data) {
+		setModalData((prev) => ({
+			...prev,
+			open: data,
+		}));
+	}
+
+	const deleteAlertApiCall = React.useCallback((id) => {
+		deleteAlert(id)
+			.then((res) => {
+				context?.setModalOpen(true);
+				context?.setModalData("Alert Deleted Successfully", "success");
+				navigate(-1);
+			})
+			.catch((err) => console.log(err));
+	}, []);
 
 	const alertApiCall = React.useCallback(() => {
 		listMyAlert(params?.id)
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("view alert res", res);
-				// console.log("====================================");
 				setData(res);
 			})
 			.catch((err) => console.error(err));
@@ -58,9 +79,20 @@ function ViewAlert() {
 			<Container maxWidth='xl'>
 				<Grid item container xs={12} spacing={2}>
 					<Grid item xs={12}>
-						<IconButton onClick={() => navigate(-1)}>
-							<ArrowBack color='primary' />
-						</IconButton>
+						<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+							<IconButton onClick={() => navigate(-1)}>
+								<ArrowBack color='primary' />
+							</IconButton>
+							<Button
+								onClick={() =>
+									setModalData({
+										open: true,
+										id: params?.id,
+									})
+								}>
+								delete
+							</Button>
+						</Box>
 					</Grid>
 					<Grid item xs={12}>
 						<Card sx={{ padding: "10px" }}>
@@ -115,6 +147,26 @@ function ViewAlert() {
 						</Card>
 					</Grid>
 				</Grid>
+				<ModalComp data={modalData} handleModal={handleModal}>
+					<Box>
+						<Typography>
+							<b>Are you sure to delete the alert ?</b>
+						</Typography>
+						<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
+							<Button variant='outlined' onClick={() => handleModal(false)}>
+								Cancel
+							</Button>
+							<Button
+								variant='contained'
+								sx={{ marginLeft: "20px" }}
+								onClick={() => {
+									deleteAlertApiCall(modalData?.id);
+								}}>
+								Confirm
+							</Button>
+						</Box>
+					</Box>
+				</ModalComp>
 			</Container>
 		);
 	} else {

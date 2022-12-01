@@ -91,7 +91,7 @@ function Announcement() {
 			headerClassName: "app-header",
 			headerName: "Created On",
 			// align: "center",
-			flex: 0.3,
+			flex: 0.2,
 			renderCell: (params) => {
 				if (params.row && params.row.createdOn) {
 					const date = moment(params.row.createdOn).format("L");

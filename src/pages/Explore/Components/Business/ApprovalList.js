@@ -152,6 +152,7 @@ export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Business Approved", "success");
+				listApiCall();
 			})
 			.catch((err) => console.error(err));
 	}, []);
