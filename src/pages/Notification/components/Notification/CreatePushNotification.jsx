@@ -28,6 +28,8 @@ import axios from "axios";
 import { MainContext } from "../../../../context/Context";
 import SnackbarContext from "../../../../CustomComponents/SnackbarContext";
 
+import Compressor from "compressorjs";
+
 const icon = <CheckBoxOutlineBlank fontSize='small' />;
 const checkedIcon = <CheckBox fontSize='small' />;
 
@@ -43,13 +45,14 @@ function CreatePushNotification() {
 		eventName: "",
 		cloudIds: [],
 		description: "",
-		imageUrl: "",
+		imageUrl: [],
+		videoUrl: [],
 		metaInfo: {
 			templateId: "",
 			templateName: "",
 			detail: false,
 		},
-		sendTo: "MEMBERS",
+		sendTo: "TO_NEARBY",
 		location: {
 			coordinates: [72.51113723963499, 23.069438702322635],
 			type: "Point",
@@ -60,13 +63,13 @@ function CreatePushNotification() {
 	console.log(data);
 	console.log("====================================");
 
-	const [imgShow, setImgShow] = React.useState("");
+	const [imgShow, setImgShow] = React.useState([]);
 	const [neighbourList, setNeighbourList] = React.useState("");
 	const [blogList, setBLogList] = React.useState("");
 
-	// console.log("====================================");
-	// console.log("selectedNeighbour", data);
-	// console.log("====================================");
+	console.log("====================================");
+	console.log("imgShow", imgShow);
+	console.log("====================================");
 
 	const NeighbourListApi = React.useCallback(() => {
 		filterNeighbourhood({ page: 0, size: 1000, online: true })
@@ -100,13 +103,14 @@ function CreatePushNotification() {
 					eventName: "",
 					cloudIds: [],
 					description: "",
-					imageUrl: "",
+					imageUrl: [],
+					videoUrl: [],
 					metaInfo: {
 						templateId: "",
 						templateName: "",
 						detail: false,
 					},
-					sendTo: "MEMBERS",
+					sendTo: "TO_NEARBY",
 					location: {
 						coordinates: [72.51113723963499, 23.069438702322635],
 						type: "Point",
@@ -119,29 +123,123 @@ function CreatePushNotification() {
 			.catch((err) => console.error(err));
 	}, []);
 
-	const ImageApiCAll = React.useCallback((data) => {
-		const mime = "image";
-		const formData = new FormData();
+	const handleImageChange = (event) => {
+		console.log("====================================");
+		console.log(event.target.files);
+		console.log("====================================");
+		if (event?.target?.files?.length > 0) {
+			for (let index = 0; index < event?.target?.files?.length; index++) {
+				const image = event.target.files[index];
+				const inputType = image.type.split("/")?.[0];
+				if (inputType === "image") {
+					new Compressor(image, {
+						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+						convertTypes: inputType === "video" ? ["video/mp4"] : ["image/png"],
+						success: (compressedResult) => {
+							// compressedResult has the compressed file.
+							// Use the compressed file to upload the images to your server.
+							// setImages(compressedResult);
+							// setImgShow(URL.createObjectURL(compressedResult));
+							setImgShow((prev) => [
+								...prev,
+								{ type: inputType, data: URL.createObjectURL(compressedResult) },
+							]);
+							ImageApiCAll(
+								compressedResult,
+								inputType
+								// event?.target?.files[index].type,
+							);
+						},
+					});
+				} else {
+					setImgShow((prev) => [...prev, { type: inputType, data: URL.createObjectURL(image) }]);
+					ImageApiCAll(
+						image,
+						inputType
+						// event?.target?.files[index].type,
+					);
+				}
+			}
+		} else {
+			const image = event.target.files[0];
+			const inputType = image.type.split("/")?.[0];
+			console.log("====================================");
+			console.log("inputType", inputType);
+			console.log("====================================");
+			if (inputType === "image") {
+				new Compressor(image, {
+					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+					convertTypes: inputType === "video" ? ["video/mp4"] : ["image/png"],
+					success: (compressedResult) => {
+						// compressedResult has the compressed file.
+						// Use the compressed file to upload the images to your server.
+						// setImages(compressedResult);
+						// setImgShow(URL.createObjectURL(compressedResult));
+						setImgShow((prev) => [
+							...prev,
+							{ type: inputType, data: URL.createObjectURL(compressedResult) },
+						]);
+						ImageApiCAll(
+							compressedResult,
+							inputType
+							// event?.target?.files[index].type,
+						);
+					},
+				});
+			} else {
+				setImgShow((prev) => [...prev, { type: inputType, data: URL.createObjectURL(image) }]);
+			}
+		}
+	};
 
-		// formData.append("directoryId", "root");
+	const ImageApiCAll = React.useCallback((data, dataType) => {
+		if (dataType === "video") {
+			const mime = "video";
+			const formData = new FormData();
 
-		formData.append("cloud_name", "banjee");
-		formData.append("upload_preset", "notification_image");
-		formData.append("file", data);
-		// { headers: { "Content-Type": "multipart/form-data" }
+			// formData.append("directoryId", "root");
 
-		const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
+			formData.append("cloud_name", "banjee");
+			formData.append("upload_preset", "notification_image");
+			formData.append("file", data);
+			// { headers: { "Content-Type": "multipart/form-data" }
 
-		axios
-			.post(url, formData)
-			.then((res) => {
-				setData((prev) => ({
-					...prev,
-					// imageUrl: res?.data?.data[0]?.data?.id,
-					imageUrl: res?.data?.public_id,
-				}));
-			})
-			.catch((err) => console.error(err));
+			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
+
+			axios
+				.post(url, formData)
+				.then((res) => {
+					setData((prev) => ({
+						...prev,
+						// imageUrl: res?.data?.data[0]?.data?.id,
+						videoUrl: [...prev.videoUrl, res?.data?.public_id],
+					}));
+				})
+				.catch((err) => console.error(err));
+		} else {
+			const mime = "image";
+			const formData = new FormData();
+
+			// formData.append("directoryId", "root");
+
+			formData.append("cloud_name", "banjee");
+			formData.append("upload_preset", "notification_image");
+			formData.append("file", data);
+			// { headers: { "Content-Type": "multipart/form-data" }
+
+			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
+
+			axios
+				.post(url, formData)
+				.then((res) => {
+					setData((prev) => ({
+						...prev,
+						// imageUrl: res?.data?.data[0]?.data?.id,
+						imageUrl: [...prev.imageUrl, res?.data?.public_id],
+					}));
+				})
+				.catch((err) => console.error(err));
+		}
 	}, []);
 
 	const handleSubmit = (event) => {
@@ -278,56 +376,101 @@ function CreatePushNotification() {
 													borderRadius: "5px",
 												}}>
 												<input
+													multiple
 													className='neighbourhood-form-textField'
 													type='file'
 													name='logoURL'
 													id='img'
-													accept='.jpg, .jpeg, .png'
+													// accept='.jpg, .jpeg, .png'
 													onChange={(event) => {
 														// newImageFunc(event.target.files[0]);
-														setImgShow(URL.createObjectURL(event?.target?.files[0]));
-														ImageApiCAll(event?.target?.files[0]);
+														handleImageChange(event);
+														// setImgShow(URL.createObjectURL(event?.target?.files[0]));
+														// ImageApiCAll(event?.target?.files[0]);
 														// setData((prev) => ({
 														// 	...prev,
 														// 	logoURL: event.target.files[0],
 														// }));
 													}}
 												/>
-												{imgShow && (
-													<Box
-														sx={{
-															position: "relative",
-															width: "80px",
-															height: "80px",
-															border: "0.5px solid lightgrey",
-															padding: "5px",
-															borderRadius: "5px",
-														}}>
-														<IconButton
-															onClick={() => {
-																document.getElementById("img").value = "";
-																setImgShow("");
-																setData((prev) => ({
-																	...prev,
-																	imageUrl: "",
-																}));
-															}}
-															sx={{
-																position: "absolute",
-																top: "0px",
-																right: "0px",
-																padding: "0px",
-																background: "white",
-															}}>
-															<Cancel fontSize='small' style={{ color: "brown" }} />
-														</IconButton>
-														<img
-															src={imgShow}
-															alt='photo'
-															style={{ width: "100%", height: "100%" }}
-														/>
-													</Box>
-												)}
+												{imgShow &&
+													imgShow?.map((item, index) => {
+														if (item?.type === "image") {
+															return (
+																<Box
+																	key={index}
+																	sx={{
+																		position: "relative",
+																		width: "80px",
+																		height: "80px",
+																		border: "0.5px solid lightgrey",
+																		padding: "5px",
+																		borderRadius: "5px",
+																	}}>
+																	<IconButton
+																		onClick={() => {
+																			document.getElementById("img").value = "";
+																			setImgShow("");
+																			setData((prev) => ({
+																				...prev,
+																				imageUrl: "",
+																			}));
+																		}}
+																		sx={{
+																			position: "absolute",
+																			top: "0px",
+																			right: "0px",
+																			padding: "0px",
+																			background: "white",
+																		}}>
+																		<Cancel fontSize='small' style={{ color: "brown" }} />
+																	</IconButton>
+																	<img
+																		src={item?.data}
+																		alt='photo'
+																		style={{ width: "100%", height: "100%" }}
+																	/>
+																</Box>
+															);
+														} else {
+															return (
+																<Box
+																	key={index}
+																	sx={{
+																		position: "relative",
+																		width: "80px",
+																		height: "80px",
+																		border: "0.5px solid lightgrey",
+																		padding: "5px",
+																		borderRadius: "5px",
+																	}}>
+																	<IconButton
+																		onClick={() => {
+																			document.getElementById("img").value = "";
+																			setImgShow("");
+																			setData((prev) => ({
+																				...prev,
+																				videoUrl: "",
+																			}));
+																		}}
+																		sx={{
+																			position: "absolute",
+																			top: "0px",
+																			right: "0px",
+																			padding: "0px",
+																			background: "white",
+																		}}>
+																		<Cancel fontSize='small' style={{ color: "brown" }} />
+																	</IconButton>
+																	<iframe
+																		src={item?.data}
+																		alt='video'
+																		style={{ width: "100%", height: "100%" }}
+																	/>
+																</Box>
+															);
+														}
+													})}
 											</Box>
 										</Box>
 									</Grid>
