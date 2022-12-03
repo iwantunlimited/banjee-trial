@@ -41,6 +41,7 @@ import UpdateBlog from "./pages/Explore/Components/Blogs/UpdateBlog";
 import UpdateAnnouncement from "./pages/Notification/components/Announcement/UpdateAnnouncement";
 import GroupsComp from "./pages/Groups/Groups";
 import GroupDetailPage from "./pages/Groups/components/GroupDetailPage";
+import UserComp from "./pages/Users/users";
 
 const Routes = () => {
 	return useRoutes([
@@ -59,7 +60,7 @@ const Routes = () => {
 				},
 				{
 					path: "/user",
-					element: <User />,
+					element: <UserComp />,
 				},
 				{
 					path: "/rooms",

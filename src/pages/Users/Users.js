@@ -75,10 +75,16 @@ function User() {
 			setState((prev) => ({ ...prev, componentLoad: "Load" }));
 			let customerCols = [
 				{
-					field: "name",
+					field: "firstName",
 					headerClassName: "app-header",
-					headerName: "Username",
-					flex: 0.5,
+					headerName: "First Name",
+					flex: 0.4,
+				},
+				{
+					field: "lastName",
+					headerClassName: "app-header",
+					headerName: "Last Name",
+					flex: 0.4,
 				},
 				{
 					field: "mobile",
@@ -91,20 +97,6 @@ function User() {
 					headerClassName: "app-header",
 					headerName: "Email",
 					flex: 0.5,
-				},
-				{
-					field: "activeConnection",
-					headerClassName: "app-header",
-					headerName: "Active Connection",
-					flex: 0.5,
-					align: "center",
-				},
-				{
-					field: "pendingConnection",
-					headerClassName: "app-header",
-					headerName: "Pending Connection",
-					flex: 0.5,
-					align: "center",
 				},
 				{
 					field: "displayDate",
@@ -158,16 +150,6 @@ function User() {
 							return (data = {
 								...data,
 								...data.userObject,
-								activeConnection: data.connections
-									? data.connections.length > 0
-										? data.connections.length
-										: 0
-									: null,
-								pendingConnection: data.pendingConnections
-									? data.pendingConnections.length > 0
-										? data.pendingConnections.length
-										: 0
-									: null,
 								displayDate: data.createdOn ? Moment(data.createdOn).format("DD-MM-YYYY") : null,
 								View: "View",
 							});

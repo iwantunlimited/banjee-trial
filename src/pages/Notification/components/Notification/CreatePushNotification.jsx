@@ -204,7 +204,7 @@ function CreatePushNotification() {
 			formData.append("file", data);
 			// { headers: { "Content-Type": "multipart/form-data" }
 
-			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
+			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload/`;
 
 			axios
 				.post(url, formData)
@@ -381,7 +381,8 @@ function CreatePushNotification() {
 													type='file'
 													name='logoURL'
 													id='img'
-													// accept='.jpg, .jpeg, .png'
+													// accept='.jpg, .jpeg, .png .mp4, .mov, .webm'
+													accept='video/*, image/*'
 													onChange={(event) => {
 														// newImageFunc(event.target.files[0]);
 														handleImageChange(event);

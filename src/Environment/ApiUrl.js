@@ -107,7 +107,7 @@ export const urls = {
 	},
 
 	USERPROFILE: {
-		CUSTOMER_LIST: services.USER_PROFILE + "admin/registry/filter",
+		CUSTOMER_LIST: services.USER_PROFILE + "profile/filter",
 		CUSTOMER_FIND_BY_ID: services.USER_PROFILE + "admin/findById/",
 		FIND_USER_CONNECTION_BY_ID: services.USER_PROFILE + "admin/userConnection/",
 		FIND_USER_BLOCK_LIST: services.USER_PROFILE + "admin/userBlockList/",

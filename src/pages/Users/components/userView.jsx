@@ -86,42 +86,6 @@ function CustomerView(props) {
 		};
 	};
 
-	// ------------------------------------ find customer connection api call-------------------------------------//
-
-	const findCustomerConnectionApiCall = React.useCallback(() => {
-		findCustomerConnection(id)
-			.then((response) => {
-				setConData(response);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}, [id]);
-
-	// ----------------------------------- find blocked user api call ---------------------------------------
-
-	const findBlockedCustomerApiCall = React.useCallback(() => {
-		findBlockedCustomers(id)
-			.then((response) => {
-				setBlockCon(response);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}, [id]);
-
-	// --------------------------------- pendding connections api call --------------------------------------
-
-	const penddingConnectionsListApiCall = React.useCallback((data) => {
-		penddingConnectionsList(data)
-			.then((response) => {
-				// setPenddingData(response);
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	}, []);
-
 	// ----------------------------------- find user api call --------------------------------------------
 
 	const findByUserApiCall = React.useCallback(() => {
@@ -129,20 +93,17 @@ function CustomerView(props) {
 			.then((response) => {
 				setState(response);
 				// setpenddingConIds(response.pendingConnections);
-				penddingConnectionsListApiCall(response.pendingConnections);
 			})
 			.catch((err) => {
 				console.error(err);
 			});
-	}, [id, penddingConnectionsListApiCall]);
+	}, [id]);
 
 	React.useEffect(() => {
 		findByUserApiCall();
-		findCustomerConnectionApiCall();
-		findBlockedCustomerApiCall();
-	}, [findByUserApiCall, findCustomerConnectionApiCall, findBlockedCustomerApiCall, id]);
+	}, [findByUserApiCall, id]);
 
-	if (state && conData) {
+	if (state) {
 		return (
 			<div>
 				<Box
