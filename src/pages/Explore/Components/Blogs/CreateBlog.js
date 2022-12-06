@@ -19,7 +19,6 @@ import axios from "axios";
 import { ArrowBack, Cancel } from "@mui/icons-material";
 import { createBlog } from "../../services/ApiServices";
 import { useNavigate } from "react-router";
-import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Compressor from "compressorjs";

@@ -1,5 +1,3 @@
-import DashboardComp from "../Dashboard/dashboard";
-import User from "../Users/Users";
 import {
 	Dashboard,
 	PeopleAlt,
@@ -11,11 +9,8 @@ import {
 	TravelExplore,
 	NotificationImportant,
 } from "@mui/icons-material";
-// import Account from "../Account/Account";
-import Room from "../Rooms/Rooms";
 import SocialFeed from "../Social_Feeds/Social_Feed";
 import UsersReport from "../Report/UsersReport";
-import RoomsReport from "../Report/RoomsReport";
 import Neighbourhood from "../Neighbourhoods/Neighbourhood";
 import { MainCategoryComp } from "../Category/MainCategoryPage";
 import Explore from "../Explore/Explore";
@@ -25,6 +20,8 @@ import Notification from "../Notification/Notification";
 import Announcement from "../Notification/components/Announcement/Announcement";
 import { Notifications } from "@mui/icons-material";
 import GroupComp from "../Groups/Groups";
+import UserComp from "../Users/users";
+import DashboardTrial from "../Dashboard/DashboardChart";
 
 const routing = [
 	{
@@ -32,7 +29,7 @@ const routing = [
 		path: "/",
 		name: "Dashboard",
 		icon: <Dashboard fontSize='medium' />,
-		component: <DashboardComp />,
+		component: <DashboardTrial />,
 	},
 	{
 		id: 2,
@@ -46,7 +43,7 @@ const routing = [
 		path: "/user",
 		name: "Users",
 		icon: <PeopleAlt fontSize='medium' />,
-		component: <User />,
+		component: <UserComp />,
 	},
 	// {
 	// 	id: 4,

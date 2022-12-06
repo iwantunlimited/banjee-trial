@@ -41,7 +41,7 @@ const AlertLocation = compose(
 	if (props?.type === "array" && lat && lon && props?.data) {
 		return (
 			<GoogleMap
-				defaultZoom={8}
+				defaultZoom={props?.zoom ? props?.zoom : 10}
 				defaultCenter={{ lat: lat ? lat : 23.75, lng: lon ? lon : -73.85 }}>
 				{props?.data?.map((item, index) => {
 					return (
@@ -71,8 +71,8 @@ const AlertLocation = compose(
 									// }
 									defaultOptions={{ pixelOffset: "0" }}
 									position={{
-										lat: item?.location?.coordinates[1] + 0.2,
-										lng: item?.location?.coordinates[0] + 0.01,
+										lat: item?.location?.coordinates[1] + 0.0001,
+										lng: item?.location?.coordinates[0] + 0.000001,
 									}}>
 									<Box sx={{ display: "flex", flexDirection: "column" }}>
 										<span>{item.eventName}</span>
@@ -88,7 +88,7 @@ const AlertLocation = compose(
 	} else if (props?.type === "object" && lat && lon && props?.data) {
 		return (
 			<GoogleMap
-				defaultZoom={8}
+				defaultZoom={props?.zoom ? props?.zoom : 10}
 				defaultCenter={{
 					lat: props?.data?.location?.coordinates[1] ? props?.data?.location?.coordinates[1] : lat,
 					lng: props?.data?.location?.coordinates[0] ? props?.data?.location?.coordinates[0] : lon,
@@ -127,12 +127,13 @@ const AlertLocation = compose(
 						<Box sx={{ display: "flex", flexDirection: "column" }}>
 							<span>{props?.data.eventName}</span>
 							<a
+								target='__blank'
 								href={
-									"https://www.google.com/maps/@" +
+									"http://maps.google.com?q=" +
 									props?.data?.location?.coordinates[1] +
 									"," +
-									props?.data?.location?.coordinates[0] +
-									",12.17z"
+									props?.data?.location?.coordinates[0]
+									// ",12.17z"
 								}>
 								share direction
 							</a>

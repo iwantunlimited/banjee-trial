@@ -7,7 +7,7 @@ import { executeGet } from "../../../Services/iwant-rest-generic";
 // ----------------------------------------- CUSTOMER LIST SERVICE ---------------------------------------------------
 let listCustomer = (requestLoad) => {
 	let url = urls.USERPROFILE.CUSTOMER_LIST;
-	let actionCode = "ACTION_FILTER_REGISTRY";
+	let actionCode = "ACTION_FILTER_PROFILE";
 	let payload = requestLoad;
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);

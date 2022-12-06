@@ -30,6 +30,7 @@ function ChipComp({ refreshApi, keyword, handleKey, handleDate }) {
 					<Refresh fontSize='small' />
 				</IconButton>
 				<TextField
+					size='small'
 					variant='outlined'
 					label='Search'
 					name='keyword'
@@ -56,9 +57,9 @@ function ChipComp({ refreshApi, keyword, handleKey, handleDate }) {
 								}}
 								renderInput={(startProps, endProps) => (
 									<React.Fragment>
-										<TextField required {...startProps} />
+										<TextField size='small' required {...startProps} />
 										<Box sx={{ mx: 2 }}> to </Box>
-										<TextField required {...endProps} />
+										<TextField size='small' required {...endProps} />
 									</React.Fragment>
 								)}
 							/>

@@ -115,7 +115,7 @@ function NeighrbourhoodList(props) {
 							Neighrbourhood
 						</div>
 						<hr /> */}
-						<div style={{ width: "100%" }}>
+						<div style={{ width: "100%", height: "100%" }}>
 							<Box
 								className='root'
 								sx={{

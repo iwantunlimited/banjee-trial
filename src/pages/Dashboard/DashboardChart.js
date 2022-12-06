@@ -1,7 +1,5 @@
 import "./Dashboard.css";
 import React from "react";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import Chart from "./Chart";
 import {
 	Box,
@@ -18,29 +16,23 @@ import { FilterAlt } from "@mui/icons-material";
 import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDateFns } from "@mui/x-date-pickers-pro/AdapterDateFns";
 import { MobileDateRangePicker } from "@mui/x-date-pickers-pro/MobileDateRangePicker";
-import { DateRange } from "@mui/x-date-pickers-pro/DateRangePicker";
+import { MainContext } from "../../context/Context";
 
 const DashboardTrial = () => {
+	const context = React.useContext(MainContext);
+	const { setModalOpen, setModalData } = context;
 	const [open, setOpen] = React.useState(false);
 	const [state, setState] = React.useState([null, null]);
-	const [totalUser, setTotalUser] = React.useState([null, null]);
 	const [filterDate, setFilterDate] = React.useState(null);
-	const [customDate, setCustomDate] = React.useState(null);
-	const [chartType, setChartType] = React.useState("");
-
-	function handleCustomDate(event) {
-		setCustomDate(new Date(event.target.value));
-	}
 
 	// console.log("sdtate------------date", state);
 	return (
 		<div
 			className='App'
 			style={{ position: "relative", display: "flex", justifyContent: "center" }}>
-			{/* <h1 className="title">MongoDB Charts</h1> */}
 			<Grid container xs={12} spacing={1}>
 				{/* Total User */}
-				<Grid item xs={12} sm={2.4}>
+				<Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
 					<Box sx={{ position: "relative" }}>
 						<Chart
 							height={window?.innerWidth < 426 ? "120px" : "160px"}
@@ -53,7 +45,8 @@ const DashboardTrial = () => {
 						/>
 					</Box>
 				</Grid>
-				<Grid item xs={12} sm={2.4}>
+				{/* total feeds */}
+				<Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
 					<Chart
 						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
@@ -61,28 +54,65 @@ const DashboardTrial = () => {
 						chartId={"62b42c5d-5876-476c-83e4-9d8f2cddf29e"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={2.4}>
+				{/* total business */}
+				<Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
 					<Chart
 						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
 						chartId={"63118227-acdd-4bc8-8d7e-64b97216c5ab"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={2.4}>
+				{/* total neighbourhood */}
+				<Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
 					<Chart
 						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
 						chartId={"63118421-e4c6-4de3-82b9-da1bc3db7866"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={2.4}>
+				{/* total alerts */}
+				<Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
+					<Chart
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
+						width={"100%"}
+						chartId={"638db40c-855f-40eb-838c-f9480c35449e"}
+					/>
+				</Grid>
+				{/* total live rooms */}
+				<Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
+					<Chart
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
+						width={"100%"}
+						chartId={"62b4307c-cbdc-4916-82d6-ad1b8a2009bd"}
+					/>
+				</Grid>
+				{/* total live users */}
+				<Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
+					<Chart
+						height={window?.innerWidth < 426 ? "120px" : "160px"}
+						width={"100%"}
+						chartId={"62b567a0-2b11-484e-8773-6d176c8ba08e"}
+					/>
+				</Grid>
+				{/* total blog */}
+				<Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
 					<Chart
 						height={window?.innerWidth < 426 ? "120px" : "160px"}
 						width={"100%"}
 						chartId={"631182b2-5381-4cdc-87d4-5f38f430a48d"}
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				{/* gender wise count */}
+				<Grid item xs={12} sm={12}>
+					<Chart
+						height={"400px"}
+						width={"100%"}
+						filter={filterDate !== null ? filterDate : null}
+						chartId={"62b400d4-2b11-415f-8a77-6d176cf7aa3c"}
+					/>
+				</Grid>
+				{/* monthly user registrations */}
+				<Grid item xs={12} sm={12} md={12} lg={8.5} xl={9}>
 					<Box sx={{ position: "relative" }}>
 						<Chart
 							height={"400px"}
@@ -95,15 +125,9 @@ const DashboardTrial = () => {
 						/>
 					</Box>
 				</Grid>
-				<Grid item xs={12} sm={6}>
-					<Chart
-						height={"400px"}
-						width={"100%"}
-						filter={filterDate !== null ? filterDate : null}
-						chartId={"62b400d4-2b11-415f-8a77-6d176cf7aa3c"}
-					/>
-				</Grid>
-				<Grid item xs={12} sm={6}>
+
+				{/* monthly feed */}
+				<Grid item xs={12} sm={5} md={5.5} lg={3.5} xl={3}>
 					<Chart
 						height={"400px"}
 						width={"100%"}
@@ -112,7 +136,20 @@ const DashboardTrial = () => {
 						chartname='feed'
 					/>
 				</Grid>
-				<Grid item xs={12} sm={6}>
+				{/* city wise alert today */}
+				<Grid item xs={12} sm={7} md={6.5} lg={4.5} xl={4.5}>
+					<Box sx={{ position: "relative" }}>
+						<Chart
+							height={"400px"}
+							width={"100%"}
+							filter={filterDate !== null ? filterDate : null}
+							chartId={"638db526-6b6e-47ef-8aac-43649de6b297"}
+							chartname='userChart'
+						/>
+					</Box>
+				</Grid>
+				{/* recently registered user */}
+				<Grid item xs={12} sm={12} md={12} lg={7.5} xl={7.5}>
 					<Box sx={{ position: "relative" }}>
 						<Chart
 							height={"400px"}
@@ -124,8 +161,9 @@ const DashboardTrial = () => {
 					</Box>
 				</Grid>
 
+				{/* alerts map */}
 				<Grid item xs={12} sm={12}>
-					<Chart height={"600px"} width={"100%"} chartId={"62b4105b-b622-4303-8a85-e9ffab6f9fe7"} />
+					<Chart height={"600px"} width={"100%"} chartId={"638db3b2-d3fc-4d29-862f-fc2e3d5b4de5"} />
 				</Grid>
 			</Grid>
 			<Box sx={{ position: "fixed", bottom: "5px", right: "5px" }}>
@@ -190,6 +228,9 @@ const DashboardTrial = () => {
 								<Button
 									onClick={() => {
 										setFilterDate(null);
+										setState([null, null]);
+										setModalOpen(true);
+										setModalData("filter removed", "success");
 										setOpen(false);
 									}}>
 									Reset
@@ -202,6 +243,8 @@ const DashboardTrial = () => {
 												$lte: new Date(state[1]),
 											},
 										});
+										setModalOpen(true);
+										setModalData("filter applied", "success");
 										setOpen(false);
 									}}>
 									Filter
@@ -216,14 +259,3 @@ const DashboardTrial = () => {
 };
 
 export default DashboardTrial;
-{
-	/* <TextField
-						type="date"
-						variant="filled"
-						name="date"
-						value={date}
-						onChange={(event) => {
-							setDate(new Date(event.target.value));
-						}}
-					/> */
-}

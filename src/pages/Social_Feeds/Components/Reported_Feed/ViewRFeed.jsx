@@ -23,7 +23,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // import required modules
 import { Pagination } from "swiper";
-import DeleteFeedSnackBar from "../SnackBar";
 import DeleteFeedModal from "../DeleteFeedModal";
 import { useNavigate, useParams } from "react-router";
 import { getReportedFeedDetail, getSocialFeedDetails } from "../../services/ApiServices";
@@ -65,7 +64,6 @@ function ViewRFeed() {
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
 	});
-	const [openSnackBar, setOpenSnackBar] = React.useState(false);
 	const [pRData, setPRData] = React.useState([]);
 
 	const { id } = useParams();
@@ -430,7 +428,6 @@ function ViewRFeed() {
 										handleClose={() => setFullScreenState({ imageModal: false })}
 									/>
 								)}
-								<DeleteFeedSnackBar open={openSnackBar} openFun={(e) => setOpenSnackBar(e)} />
 							</Container>
 						</Grid>
 						<Grid item xs={12}>

@@ -17,7 +17,6 @@ import { Visibility } from "@mui/icons-material";
 import "../../../Explore/Components/component.css";
 import { DataGrid } from "@mui/x-data-grid";
 import { deleteAlert, listNotification } from "../../ApiServices/apiServices";
-import SnackBarComp from "../../../../CustomComponents/SnackBarComp";
 import { MainContext } from "../../../../context/Context";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 
@@ -200,7 +199,7 @@ function NotificationList() {
 						<Card sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
 							<Box>
 								<Typography sx={{ fontWeight: 500, color: "#6b778c", fontSize: "22px" }}>
-									Notifications({totalEle})
+									Notifications({totalEle ? totalEle : 0})
 								</Typography>
 							</Box>
 							<Tooltip
@@ -215,7 +214,7 @@ function NotificationList() {
 					</Grid>
 					<Grid item xs={12}>
 						<Card sx={{ padding: "10px" }}>
-							{data ? (
+							{data?.length > 0 ? (
 								<div>
 									<div style={{ width: "100%" }}>
 										<Box
@@ -263,9 +262,9 @@ function NotificationList() {
 										display: "flex",
 										justifyContent: "center",
 										alignItems: "center",
-										height: "50vh",
+										marginTop: "10px",
 									}}>
-									<CircularProgress />
+									<p>No data available</p>
 								</div>
 							)}
 						</Card>

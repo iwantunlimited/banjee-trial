@@ -200,7 +200,7 @@ function Announcement() {
 					</Grid>
 					<Grid item xs={12}>
 						<Card sx={{ padding: "10px" }}>
-							{data ? (
+							{data?.length > 0 ? (
 								<div>
 									<div style={{ width: "100%" }}>
 										<Box
@@ -248,9 +248,9 @@ function Announcement() {
 										display: "flex",
 										justifyContent: "center",
 										alignItems: "center",
-										height: "50vh",
+										marginTop: "10px",
 									}}>
-									<CircularProgress />
+									<p>No data available</p>
 								</div>
 							)}
 						</Card>

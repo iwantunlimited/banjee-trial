@@ -91,7 +91,11 @@ function CustomerView(props) {
 	const findByUserApiCall = React.useCallback(() => {
 		findCustomer(id)
 			.then((response) => {
-				setState(response);
+				setState((prev) => ({
+					...prev,
+					zoom: 15,
+					...response,
+				}));
 				// setpenddingConIds(response.pendingConnections);
 			})
 			.catch((err) => {
@@ -142,7 +146,7 @@ function CustomerView(props) {
 										boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
 										padding: "40px 10px 40px 10px",
 										background: "white ",
-										minHeight: "420px",
+										minHeight: "427px",
 									}}>
 									<Box
 										style={{
@@ -223,9 +227,35 @@ function CustomerView(props) {
 								sx={{
 									background: "#FFF",
 									padding: "5px 5px 5px 20px",
+									boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
 								}}>
-								{/* <Box sx={{ bgcolor: 'background.paper', width: 500 }}> */}
-								{/* <AppBar position="static"> */}
+								{/* <Card style={{ background: "white", padding: "20px", marginBottom: "20px" }}> */}
+								<Box sx={{ paddingTop: "5px" }}>
+									<h4 style={{ color: "grey", marginBottom: "0rem" }}>User's Current Location</h4>
+								</Box>
+								<hr style={{ marginTop: "0.2rem" }} />
+								{state?.currentLocation && (
+									<Box style={{ width: "100%", height: "350px" }}>
+										<UserLocation
+											// googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk&v=3.exp&libraries=geometry,drawing,places"
+											// loadingElement={<div style={{ height: `100%` }} />}
+											// containerElement={<div style={{ height: `300px` }} />}
+											// mapElement={<div style={{ height: `100%` }} />}
+											data={state}
+										/>
+									</Box>
+								)}
+								{/* </Card> */}
+							</Grid>
+						</Grid>
+						{/* <Grid item container xs={12}> */}
+						<Grid item xs={12}>
+							<Card
+								sx={{
+									padding: "10px",
+									borderRadius: "0px",
+									boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
+								}}>
 								<Tabs
 									value={value}
 									onChange={handleChange}
@@ -236,7 +266,7 @@ function CustomerView(props) {
 									style={{ height: "10px!important" }}>
 									{/* <Tab label="Profile" {...a11yProps(0)} /> */}
 									<Tab label='Neighbourhood' {...a11yProps(0)} />
-									<Tab label='Pending Connection' {...a11yProps(1)} />
+									<Tab label='Business' {...a11yProps(1)} />
 									<Tab label='Blocked' {...a11yProps(2)} />
 								</Tabs>
 								{/* </AppBar> */}
@@ -244,60 +274,13 @@ function CustomerView(props) {
 									axis={theme.direction === "rtl" ? "x-reverse" : "x"}
 									index={value}
 									onChangeIndex={handleChangeIndex}
-									style={{ overflowY: "scroll", height: "355px" }}>
+									// style={{ overflowY: "scroll", height: "355px" }}
+								>
 									{/* ------------------------- connections ---------------------------- */}
 									<TabPanel value={value} index={0} dir={theme.direction}>
 										<Grid item xs={12} sx={{ padding: { xs: "0px", sm: "10px" } }}>
 											<NeighrbourhoodList data={id} />
 										</Grid>
-										{/* <Grid container spacing={2}>
-											{conData?.content?.length > 0 ? (
-												conData?.content.map((ele, index) => (
-													<Grid
-														item
-														xs={4}
-														sm={4}
-														md={3}
-														lg={3}
-														xl={2}
-														key={index}
-														onClick={() => {
-															navigate("/user/view/" + ele?.systemUserId);
-															window.location.reload();
-														}}
-														style={{
-															display: "flex",
-															justifyContent: "center",
-															alignItems: "center",
-															flexDirection: "column",
-														}}>
-														<Badge
-															badgeContent={
-																ele?.connections?.length > 0 ? ele?.connections?.length : 0
-															}
-															max='9'
-															color='primary'
-															s
-															className='badge-css'>
-															<Avatar
-																alt={ele?.name?.length > 0 ? ele?.name?.slice(0, 1) : "avatar"}
-																src={
-																	"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
-																	ele?.avtarUrl
-																}
-																sx={{ width: 50, height: 50 }}
-															/>
-														</Badge>
-														<Typography
-															style={{ textAlign: "left", marginTop: "5px", fontSize: "15px" }}>
-															{ele?.name?.slice(0, 20)}
-														</Typography>
-													</Grid>
-												))
-											) : (
-												<div>User is not Connected to Anyone</div>
-											)}
-										</Grid> */}
 									</TabPanel>
 									{/* ------------------------- pendding connections ---------------------------- */}
 									<TabPanel value={value} index={1} dir={theme.direction}>
@@ -349,27 +332,6 @@ function CustomerView(props) {
 										</Grid>
 									</TabPanel>
 								</SwipeableViews>
-								{/* </Box> */}
-							</Grid>
-						</Grid>
-						{/* <Grid item container xs={12}> */}
-						<Grid item xs={12}>
-							<Card style={{ background: "white", padding: "20px", marginBottom: "20px" }}>
-								<Box>
-									<h4 style={{ color: "grey" }}>User's Current Location</h4>
-								</Box>
-								<hr />
-								{state?.currentLocation && (
-									<Box style={{ width: "100%", height: "400px" }}>
-										<UserLocation
-											// googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk&v=3.exp&libraries=geometry,drawing,places"
-											// loadingElement={<div style={{ height: `100%` }} />}
-											// containerElement={<div style={{ height: `300px` }} />}
-											// mapElement={<div style={{ height: `100%` }} />}
-											data={state}
-										/>
-									</Box>
-								)}
 							</Card>
 						</Grid>
 					</Grid>

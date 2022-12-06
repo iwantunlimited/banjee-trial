@@ -131,7 +131,7 @@ function BanjeeAlert() {
 						<Box sx={{ marginY: "10px" }}>
 							<Divider />
 						</Box>
-						<AlertLocation currentLocation={currentLocation} data={data} type={"array"} />
+						<AlertLocation currentLocation={currentLocation} zoom={10} data={data} type={"array"} />
 					</Card>
 				</Grid>
 				{/* <Grid item xs={12}>
@@ -162,19 +162,15 @@ function BanjeeAlert() {
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
-							{/* <Box sx={{ padding: { xs: "10px", sm: "10px" } }}> */}
 							<AlertListTable
 								listApiCall={ListAlertApiCall}
 								pagination={state}
 								handlePagination={handlePagination}
 								data={data}
 							/>
-							{/* </Box> */}
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							{/* <Box sx={{ padding: "10px" }}> */}
 							<ReportedAlertList />
-							{/* </Box> */}
 						</TabPanel>
 					</Card>
 				</Grid>

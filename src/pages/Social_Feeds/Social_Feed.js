@@ -39,7 +39,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // import required modules
 import { Pagination } from "swiper";
 
-import DeleteFeedSnackBar from "./Components/SnackBar";
 import DeleteFeedModal from "./Components/DeleteFeedModal";
 import { useTheme } from "@mui/material/styles";
 
@@ -68,8 +67,6 @@ export default function SocialFeed(props) {
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
 	});
-
-	const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
 	const filterSocialFeedsApiCall = React.useCallback(
 		(page, pageSize, startDate, endDate) => {
@@ -278,7 +275,9 @@ export default function SocialFeed(props) {
 															overflow: "hidden",
 															WebkitBoxOrient: "vertical",
 															WebkitLineClamp: 1,
-														}}>{`${ele?.author?.userName || "userName"}`}</span>
+														}}>
+														{ele?.author?.username ? ele?.author?.username : "username"}
+													</span>
 												)}
 												<span style={{ fontSize: "12px" }}>
 													{moment(ele?.createdOn).format("lll")}
@@ -641,7 +640,6 @@ export default function SocialFeed(props) {
 						filterApi={filterSocialFeedsApiCall}
 					/>
 				)}
-				<DeleteFeedSnackBar open={openSnackBar} openFun={(e) => setOpenSnackBar(e)} />
 			</Container>
 		);
 	} else {

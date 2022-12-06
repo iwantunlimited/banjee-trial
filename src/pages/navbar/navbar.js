@@ -13,6 +13,8 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { useTheme } from "@mui/material/styles";
 import SidebarList from "./newSideBar";
+import SnackbarContext from "../../CustomComponents/SnackbarContext";
+import { MainContext } from "../../context/Context";
 
 const LightTooltip = styled(({ className, ...props }) => (
 	<Tooltip {...props} classes={{ popper: className }} />
@@ -28,6 +30,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 function Navbar(props) {
 	let navigate = useNavigate();
 	const theme = useTheme();
+	const { setModalOpen, setModalData } = React.useContext(MainContext);
 
 	const [id, setId] = React.useState("");
 
@@ -167,7 +170,11 @@ function Navbar(props) {
 							<div style={{ display: "flex", justifyContent: "flex-end" }}>
 								<LightTooltip title='Logout'>
 									<IconButton
-										onClick={() => localStorage.clear()}
+										onClick={() => {
+											setModalOpen(true);
+											setModalData("Logout Successfully", "success");
+											localStorage.clear();
+										}}
 										style={{ paddingTop: "3px", paddingBottom: "3px" }}>
 										<Link to='/login'>
 											<LogoutIcon style={{ color: theme.palette.primary.contrastText }} />
@@ -193,6 +200,7 @@ function Navbar(props) {
 					<Outlet />
 				</Box>
 			</Box>
+			<SnackbarContext />
 		</div>
 	);
 }

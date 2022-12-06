@@ -7,16 +7,13 @@ import { urls } from "../../Environment/ApiUrl";
 import Setting from "../../Environment/Setting";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import SnackBarComp from "../../CustomComponents/SnackBarComp";
+import { MainContext } from "../../context/Context";
+import SnackbarContext from "../../CustomComponents/SnackbarContext";
 
 function Login() {
+	const context = React.useContext(MainContext);
+	const { setModalData, setModalOpen } = context;
 	const navigate = useNavigate();
-	const [snackBar, setSnackBar] = React.useState({
-		open: false,
-		duration: 3000,
-		message: "",
-		severity: "",
-	});
 
 	const [state, setState] = React.useState({
 		formType: "login",
@@ -44,13 +41,6 @@ function Login() {
 		setState((prevState) => ({ ...prevState, [name]: value }));
 	};
 
-	const handleSnackbar = (data) => {
-		setSnackBar((prev) => ({
-			...prev,
-			open: data,
-		}));
-	};
-
 	const handleSubmit = (event) => {
 		const { formType } = state;
 
@@ -75,12 +65,9 @@ function Login() {
 					},
 				})
 				.then((response) => {
-					setSnackBar({
-						open: true,
-						severity: "success",
-						duration: 3000,
-						message: "Login Success",
-					});
+					setModalOpen(true);
+					setModalData("Login Success", "success");
+
 					const { access_token } = response && response.data ? response.data : null;
 					//   const {firstName}  = response && response.data ? response.data : null ;
 					//   const {lastName}  = response && response.data ? response.data : null ;
@@ -106,28 +93,19 @@ function Login() {
 				.catch((error) => {
 					console.error(error);
 					if (error.response.status === 400) {
-						setSnackBar({
-							open: true,
-							severity: "error",
-							duration: 3000,
-							message: "Invalid UserName or Password",
-						});
+						setModalOpen(true);
+						setModalData("Invalid UserName or Password", "error");
+
 						// alert("Please Enter Correct UserName or Password");
 					} else if (error.response.status === 404) {
-						setSnackBar({
-							open: true,
-							severity: "warning",
-							duration: 3000,
-							message: "Request URL was not found on this server",
-						});
+						setModalOpen(true);
+						setModalData("Request URL was not found on this server", "warning");
+
 						// alert("The Requested URL/badpage was not found on this server.");
 					} else if (error.response.status === 500) {
-						setSnackBar({
-							open: true,
-							severity: "warning",
-							duration: 3000,
-							message: "Something Went Wrong!",
-						});
+						setModalOpen(true);
+						setModalData("Something Went Wrong!", "warning");
+
 						// alert("Something Went Wrong!");
 					}
 				});
@@ -200,7 +178,7 @@ function Login() {
 						</Card>
 					</div>
 				</Container>
-				<SnackBarComp data={snackBar} handleSnackbar={handleSnackbar} />
+				<SnackbarContext />
 			</div>
 		</>
 	);

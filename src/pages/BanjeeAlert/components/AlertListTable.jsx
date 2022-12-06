@@ -44,14 +44,6 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 	let columns = [
 		{
 			id: "1",
-			field: "cloudName",
-			headerClassName: "app-header",
-			headerName: "Cloud Name",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			flex: 0.3,
-		},
-		{
-			id: "2",
 			field: "eventName",
 			headerClassName: "app-header",
 			headerName: "Event Name",
@@ -59,7 +51,7 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			flex: 0.3,
 		},
 		{
-			id: "3",
+			id: "2",
 			field: "description",
 			headerClassName: "app-header",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
@@ -68,7 +60,7 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			flex: 0.4,
 		},
 		{
-			id: "4",
+			id: "3",
 			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
@@ -84,7 +76,7 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			},
 		},
 		{
-			id: "5",
+			id: "4",
 			field: "mFirstName",
 			headerClassName: "app-header",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
@@ -98,7 +90,7 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 		},
 
 		{
-			id: "6",
+			id: "5",
 			field: "id",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
@@ -119,7 +111,7 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 			},
 		},
 		{
-			id: "7",
+			id: "6",
 			field: "routingId",
 			headerClassName: "app-header",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),

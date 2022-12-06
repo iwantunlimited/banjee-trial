@@ -17,11 +17,14 @@ import { ArrowBack } from "@mui/icons-material";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../context/Context";
 
+import SwiperComp from "../../../CustomComponents/SwiperComp";
+
 function ViewAlert() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const context = React.useContext(MainContext);
 	const [data, setData] = React.useState("");
+	const [finalData, setFinalData] = React.useState([]);
 	const [currentLocation, setCurrentLocation] = React.useState({
 		lat: "",
 		lon: "",
@@ -38,6 +41,10 @@ function ViewAlert() {
 		}));
 	}
 
+	console.log("====================================");
+	console.log("data---", finalData);
+	console.log("====================================");
+
 	const deleteAlertApiCall = React.useCallback((id) => {
 		deleteAlert(id)
 			.then((res) => {
@@ -51,6 +58,24 @@ function ViewAlert() {
 	const alertApiCall = React.useCallback(() => {
 		listMyAlert(params?.id)
 			.then((res) => {
+				console.log("====================================");
+				console.log(res);
+				console.log("====================================");
+				if (res?.imageUrl?.length > 0) {
+					res?.imageUrl?.map((item) => {
+						setFinalData((prev) => [...prev, { src: item, mimeType: "image/jpg" }]);
+						return item;
+					});
+				}
+				if (res?.videoUrl?.length > 0) {
+					res?.videoUrl?.map((item) => {
+						setFinalData((prev) => [...prev, { src: item, mimeType: "video/mp4" }]);
+						return item;
+					});
+				}
+				if (res?.audioSrc) {
+					setFinalData((prev) => [...prev, { src: res?.audioSrc, mimeType: "audio/mp3" }]);
+				}
 				setData(res);
 			})
 			.catch((err) => console.error(err));
@@ -76,7 +101,7 @@ function ViewAlert() {
 
 	if (currentLocation && data) {
 		return (
-			<Container maxWidth='xl'>
+			<Container maxWidth='lg'>
 				<Grid item container xs={12} spacing={2}>
 					<Grid item xs={12}>
 						<Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -96,43 +121,56 @@ function ViewAlert() {
 					</Grid>
 					<Grid item xs={12}>
 						<Card sx={{ padding: "10px" }}>
-							<Typography sx={{ fontSize: "22px", fontWeight: 600, color: "gray" }}>
-								Alert Information
-							</Typography>
-							<Box sx={{ marginY: "5px" }}>
-								<Divider />
-							</Box>
-							<Box>
-								<Typography sx={{ fontSize: "22px", fontWeight: 600 }}>
-									{data?.eventName}
-								</Typography>
-								{data?.cloudName && <Typography>{data?.cloudName}</Typography>}
+							<Grid item container xs={12} spacing={1}>
+								<Grid item xs={12}>
+									<Typography sx={{ fontSize: "22px", fontWeight: 600, color: "gray" }}>
+										Alert Information
+									</Typography>
+									<Box sx={{ marginY: "5px" }}>
+										<Divider />
+									</Box>
+								</Grid>
+								<Grid item xs={6}>
+									<Box sx={{ width: "100%" }}>
+										<Typography sx={{ fontSize: "22px", fontWeight: 600 }}>
+											{data?.eventName}
+										</Typography>
+										{data?.cloudName && <Typography>{data?.cloudName}</Typography>}
 
-								{data?.metaInfo?.address && (
-									<Typography>
-										<span>
-											<b>Address: </b>
-										</span>
-										{data?.metaInfo?.address}
-									</Typography>
-								)}
-								{data?.createdByUser && (
-									<Typography>
-										<span>
-											<b>Created By: </b>
-										</span>
-										{data?.createdByUser?.firstName + " " + data?.createdByUser?.lastName}
-									</Typography>
-								)}
-								{data?.description && (
-									<Typography>
-										<span>
-											<b>Description: </b>
-										</span>
-										{data?.description}
-									</Typography>
-								)}
-							</Box>
+										{data?.metaInfo?.address && (
+											<Typography>
+												<span>
+													<b>Address: </b>
+												</span>
+												{data?.metaInfo?.address}
+											</Typography>
+										)}
+										{data?.createdByUser && (
+											<Typography>
+												<span>
+													<b>Created By: </b>
+												</span>
+												{data?.createdByUser?.firstName + " " + data?.createdByUser?.lastName}
+											</Typography>
+										)}
+										{data?.description && (
+											<Typography>
+												<span>
+													<b>Description: </b>
+												</span>
+												{data?.description}
+											</Typography>
+										)}
+									</Box>
+								</Grid>
+								<Grid item xs={6}>
+									{data?.imageUrl?.length > 0 && (
+										<Box sx={{ position: "relative", marginLeft: "20px", height: "420px" }}>
+											<SwiperComp data={finalData} />
+										</Box>
+									)}
+								</Grid>
+							</Grid>
 						</Card>
 					</Grid>
 					<Grid item xs={12}>

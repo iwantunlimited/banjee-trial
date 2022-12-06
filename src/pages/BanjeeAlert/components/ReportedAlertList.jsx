@@ -84,7 +84,7 @@ function ReportedAlertList() {
 	}, []);
 
 	React.useEffect(() => {
-		ReportedAlertListApiCall();
+		ReportedAlertListApiCall(0, 10);
 	}, [ReportedAlertListApiCall]);
 
 	let rows = data ? data : [];
@@ -203,74 +203,87 @@ function ReportedAlertList() {
 		},
 	];
 
-	return (
-		<Box>
-			{data ? (
-				<div style={{ width: "100%" }}>
-					<Box className='root'>
-						<DataGrid
-							autoHeight
-							getRowClassName={(params) => `app-header-${params.row.status}`}
-							page={pagination?.pagination?.page}
-							pageSize={pagination?.pagination?.pageSize}
-							onPageSizeChange={(event) => {
-								handlePagination({
-									page: pagination?.pagination?.page,
-									pageSize: event,
-								});
-								ReportedAlertListApiCall(pagination?.pagination?.page, event);
-							}}
-							rowCount={pagination?.totalElement}
-							rows={rows}
-							columns={columns}
-							paginationMode='server'
-							// autoPageSize
-							pagination
-							onPageChange={(event) => {
-								handlePagination({
-									page: event,
-									pageSize: pagination?.pagination?.page,
-								});
-								ReportedAlertListApiCall(event, pagination?.pagination?.pageSize);
-							}}
-							rowsPerPageOptions={[5, 10, 20]}
-							className='dataGridFooter'
-						/>
-					</Box>
-					<ModalComp data={modalData} handleModal={handleModal}>
-						<Box>
-							<Typography>
-								<b>Are you sure to delete the alert ?</b>
-							</Typography>
-							<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-								<Button variant='outlined' onClick={() => handleModal(false)}>
-									Cancel
-								</Button>
-								<Button
-									variant='contained'
-									sx={{ marginLeft: "20px" }}
-									onClick={() => {
-										deleteAlertApiCall(modalData?.id);
-									}}>
-									Confirm
-								</Button>
-							</Box>
+	if (data) {
+		return (
+			<Box>
+				{data?.length > 0 ? (
+					<div style={{ width: "100%" }}>
+						<Box className='root'>
+							<DataGrid
+								autoHeight
+								getRowClassName={(params) => `app-header-${params.row.status}`}
+								page={pagination?.pagination?.page}
+								pageSize={pagination?.pagination?.pageSize}
+								onPageSizeChange={(event) => {
+									handlePagination({
+										page: pagination?.pagination?.page,
+										pageSize: event,
+									});
+									ReportedAlertListApiCall(pagination?.pagination?.page, event);
+								}}
+								rowCount={pagination?.totalElement}
+								rows={rows}
+								columns={columns}
+								paginationMode='server'
+								// autoPageSize
+								pagination
+								onPageChange={(event) => {
+									handlePagination({
+										page: event,
+										pageSize: pagination?.pagination?.page,
+									});
+									ReportedAlertListApiCall(event, pagination?.pagination?.pageSize);
+								}}
+								rowsPerPageOptions={[5, 10, 20]}
+								className='dataGridFooter'
+							/>
 						</Box>
-					</ModalComp>
-				</div>
-			) : (
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						height: "50vh",
-					}}>
-					<CircularProgress />
-				</div>
-			)}
-		</Box>
-	);
+						<ModalComp data={modalData} handleModal={handleModal}>
+							<Box>
+								<Typography>
+									<b>Are you sure to delete the alert ?</b>
+								</Typography>
+								<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
+									<Button variant='outlined' onClick={() => handleModal(false)}>
+										Cancel
+									</Button>
+									<Button
+										variant='contained'
+										sx={{ marginLeft: "20px" }}
+										onClick={() => {
+											deleteAlertApiCall(modalData?.id);
+										}}>
+										Confirm
+									</Button>
+								</Box>
+							</Box>
+						</ModalComp>
+					</div>
+				) : (
+					<div
+						style={{
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+						}}>
+						<p>No data available!</p>
+					</div>
+				)}
+			</Box>
+		);
+	} else {
+		return (
+			<div
+				style={{
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					height: "50vh",
+				}}>
+				<CircularProgress />
+			</div>
+		);
+	}
 }
 
 export default ReportedAlertList;
