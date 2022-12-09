@@ -29,6 +29,7 @@ class MyGoogleMap extends Component {
 		draggable: true,
 		lat: null,
 		lng: null,
+		newCenter: [],
 	};
 
 	constructor(props) {
@@ -44,7 +45,12 @@ class MyGoogleMap extends Component {
 			lat: mouse.lat,
 			lng: mouse.lng,
 		});
-		this.props.handleGLocation(mouse?.lat, mouse?.lng, this?.state?.address);
+		this.props.handleGLocation(
+			mouse?.lat,
+			mouse?.lng,
+			this?.state?.address,
+			this?.state?.places[0]
+		);
 	};
 	onMarkerInteractionMouseUp = (childKey, childProps, mouse) => {
 		this.setState({ draggable: true });
@@ -54,6 +60,7 @@ class MyGoogleMap extends Component {
 	_onChange = ({ center, zoom }) => {
 		this.setState({
 			center: center,
+			newCenter: center,
 			zoom: zoom,
 		});
 	};
@@ -64,7 +71,12 @@ class MyGoogleMap extends Component {
 			lng: value.lng,
 		});
 
-		this.props.handleGLocation(value?.lat, value?.lng, this?.state?.address);
+		this.props.handleGLocation(
+			value?.lat,
+			value?.lng,
+			this?.state?.address,
+			this?.state?.places[0]
+		);
 	};
 
 	apiHasLoaded = (map, maps) => {
@@ -96,7 +108,8 @@ class MyGoogleMap extends Component {
 		this.props.handleGLocation(
 			place.geometry.location.lat(),
 			place.geometry.location.lng(),
-			this?.state?.address
+			this?.state?.address,
+			place
 		);
 		this._generateAddress();
 	};
@@ -109,8 +122,8 @@ class MyGoogleMap extends Component {
 		geocoder.geocode(
 			{ location: { lat: this.state.lat, lng: this.state.lng } },
 			(results, status) => {
-				console.log(results);
-				console.log(status);
+				// console.log(results);
+				// console.log(status);
 				if (status === "OK") {
 					if (results[0]) {
 						this.zoom = 12;
@@ -118,7 +131,8 @@ class MyGoogleMap extends Component {
 						this.props.handleGLocation(
 							this?.state?.lat,
 							this?.state?.lng,
-							results[0].formatted_address
+							results[0].formatted_address,
+							this?.state?.places[0]
 						);
 					} else {
 						window.alert("No results found");
@@ -134,21 +148,29 @@ class MyGoogleMap extends Component {
 	setCurrentLocation() {
 		if ("geolocation" in navigator) {
 			navigator.geolocation.getCurrentPosition((position) => {
+				console.log("====================================");
+				console.log("position", position);
+				console.log("====================================");
 				this.setState({
 					center: [position.coords.latitude, position.coords.longitude],
+					newCenter: [position.coords.latitude, position.coords.longitude],
 					lat: position.coords.latitude,
 					lng: position.coords.longitude,
 				});
 				this.props.handleGLocation(
 					position.coords.latitude,
 					position.coords.longitude,
-					this?.state?.address
+					this?.state?.address,
+					this?.state?.places[0]
 				);
 			});
 		}
 	}
 
 	render() {
+		console.log("====================================");
+		console.log("map state", this.state);
+		console.log("====================================");
 		const { places, mapApiLoaded, mapInstance, mapApi } = this.state;
 
 		return (
@@ -166,7 +188,7 @@ class MyGoogleMap extends Component {
 				<Box sx={{ position: "relative" }}>
 					<GoogleMapReact
 						style={{ width: "100%", height: "500px" }}
-						center={this.state.center}
+						center={this.state.newCenter}
 						defaultCenter={{ lat: this?.state?.center[0], lng: this?.state?.center[1] }}
 						zoom={this.state.zoom}
 						draggable={this.state.draggable}

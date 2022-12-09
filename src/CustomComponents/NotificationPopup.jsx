@@ -21,8 +21,13 @@ function NotificationPopup(props) {
 
 	return (
 		<Modal
-			open={notificationPopup}
-			onClose={() => setNotificationPopup(false)}
+			open={notificationPopup?.open}
+			onClose={() =>
+				setNotificationPopup({
+					open: false,
+					messsage: "",
+				})
+			}
 			aria-labelledby='modal-modal-title'
 			aria-describedby='modal-modal-description'>
 			<Box
@@ -47,7 +52,7 @@ function NotificationPopup(props) {
 					}}>
 					<Lottie options={defaultOptions} height={200} width={200} />
 					<Typography sx={{ textAlign: "center", color: "#208354", marginTop: "10px" }}>
-						<b>Notification Sent Successfully</b>{" "}
+						<b>{notificationPopup?.message}</b>{" "}
 					</Typography>
 				</Box>
 			</Box>

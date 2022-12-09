@@ -22,7 +22,8 @@ function CreateNeighbour(props) {
 	const { listApiCAll, handleExpanded } = props;
 
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
-
+	const [submitForm, setSubmitForm] = React.useState(false);
+	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [data, setData] = React.useState({
 		name: "",
 		approvalType: "",
@@ -43,7 +44,6 @@ function CreateNeighbour(props) {
 	const [sState, setSState] = React.useState();
 	const [defaultLocation, setDefaultLocation] = React.useState();
 
-	const [images, setImages] = React.useState("");
 	const [imgShow, setImgShow] = React.useState("");
 
 	const [loc, setLoc] = React.useState({
@@ -91,7 +91,7 @@ function CreateNeighbour(props) {
 			.catch((err) => console.error(err));
 	}, []);
 
-	const ImageApiCAll = React.useCallback((data) => {
+	const ImageApiCAll = React.useCallback((data, notifyMessage) => {
 		const header = {
 			"Content-Type": "multipart/form-data",
 			Authorization: `Bearer ${token}`,
@@ -117,6 +117,12 @@ function CreateNeighbour(props) {
 				// console.log("====================================");
 				// console.log("image upload response", res);
 				// console.log("====================================");
+				if (notifyMessage === "Images Uploaded") {
+					setImageUploaded(true);
+					setModalOpen(true);
+					setModalData("Image Uploaded", "success");
+				}
+				setSubmitForm(true);
 				setData((prev) => ({
 					...prev,
 					imageUrl: res?.data?.data[0]?.data?.id,
@@ -146,7 +152,6 @@ function CreateNeighbour(props) {
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Neighbourhood created successfully", "success");
-				setImages("");
 				setImgShow("");
 
 				setData({
@@ -177,16 +182,19 @@ function CreateNeighbour(props) {
 			success: (compressedResult) => {
 				// compressedResult has the compressed file.
 				// Use the compressed file to upload the images to your server.
-				setImages(compressedResult);
-				setImgShow(URL.createObjectURL(compressedResult));
-				ImageApiCAll(compressedResult);
+				setImgShow({ data: URL.createObjectURL(compressedResult), src: compressedResult });
+				// ImageApiCAll(compressedResult);
 			},
 		});
 	}
 
 	function handleSubmit(event) {
-		createApiCall(data);
 		event.preventDefault();
+		if (imgShow && submitForm === false) {
+			window.alert("Please upload the selected image first");
+		} else {
+			createApiCall(data);
+		}
 	}
 
 	function blobToBase64(blob) {
@@ -374,50 +382,53 @@ function CreateNeighbour(props) {
 										}}
 									/>
 									{imgShow && (
-										<Box
-											sx={{
-												position: "relative",
-												width: "80px",
-												height: "80px",
-												border: "0.5px solid lightgrey",
-												padding: "5px",
-												borderRadius: "5px",
-											}}>
-											<IconButton
-												onClick={() => {
-													document.getElementById("img").value = "";
-													setImages("");
-													setImgShow("");
-													setData((prev) => ({
-														...prev,
-														imageUrl: "",
-													}));
-												}}
+										<React.Fragment>
+											<Box
 												sx={{
-													position: "absolute",
-													top: "0px",
-													right: "0px",
-													padding: "0px",
-													background: "white",
+													position: "relative",
+													width: "80px",
+													height: "80px",
+													border: "0.5px solid lightgrey",
+													padding: "5px",
+													borderRadius: "5px",
 												}}>
-												<Cancel fontSize='small' style={{ color: "brown" }} />
-											</IconButton>
-											<img src={imgShow} alt='photo' style={{ width: "100%", height: "100%" }} />
-										</Box>
+												<IconButton
+													onClick={() => {
+														document.getElementById("img").value = "";
+														setImgShow("");
+													}}
+													sx={{
+														position: "absolute",
+														top: "0px",
+														right: "0px",
+														padding: "0px",
+														background: "white",
+													}}>
+													<Cancel fontSize='small' style={{ color: "brown" }} />
+												</IconButton>
+												<img
+													src={imgShow.data}
+													alt='photo'
+													style={{ width: "100%", height: "100%", objectFit: "contain" }}
+												/>
+											</Box>
+											<Box sx={{ marginLeft: "20px" }}>
+												<Button
+													color={imageUploaded ? "secondary" : "primary"}
+													onClick={() => {
+														if (imgShow) {
+															ImageApiCAll(imgShow?.src, "Images Uploaded");
+														} else {
+															ImageApiCAll(imgShow?.src, "");
+														}
+													}}>
+													upload
+												</Button>
+											</Box>
+										</React.Fragment>
 									)}
 								</Box>
 							</Grid>
-							{/* <Grid item xs={12}>
-								<Map
-									handleLocation={handleLocation}
-									zoom={8}
-									height={"400px"}
-									center={{
-										lat: -22.1999,
-										lng: 23.9989,
-									}}
-								/>
-							</Grid> */}
 							<Grid item xs={12}>
 								<Box sx={{ position: "relative" }}>
 									<MyGoogleMap handleGLocation={handleGLocation} />

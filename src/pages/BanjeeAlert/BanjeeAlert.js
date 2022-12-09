@@ -1,4 +1,14 @@
-import { Box, Card, Divider, Grid, Tabs, Tab } from "@mui/material";
+import {
+	Box,
+	Card,
+	Divider,
+	Grid,
+	Tabs,
+	Tab,
+	IconButton,
+	Typography,
+	Tooltip,
+} from "@mui/material";
 import React from "react";
 import AlertMap from "./components/AlertMap";
 import { filterReportList, listAlert } from "./api-services/apiServices";
@@ -7,6 +17,8 @@ import { useCallback } from "react";
 import PropTypes from "prop-types";
 import AlertLocation from "./components/AlertMap";
 import ReportedAlertList from "./components/ReportedAlertList";
+import { Add } from "@mui/icons-material";
+import { useNavigate } from "react-router";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -37,6 +49,7 @@ function a11yProps(index) {
 }
 
 function BanjeeAlert() {
+	const navigate = useNavigate();
 	const [value, setValue] = React.useState(0);
 	const [currentLocation, setCurrentLocation] = React.useState({
 		lat: "",
@@ -124,6 +137,20 @@ function BanjeeAlert() {
 		<Box>
 			<Grid item container xs={12} spacing={2}>
 				<Grid item xs={12}>
+					<Card sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
+						<Box>
+							<Typography sx={{ fontWeight: 500, color: "#6b778c", fontSize: "22px" }}>
+								Alerts({state?.totalElement ? state?.totalElement : 0})
+							</Typography>
+						</Box>
+						<Tooltip title='Create Alert' arrow sx={{ bacground: "white", color: "black" }}>
+							<IconButton onClick={() => navigate("/banjee-alert/create")}>
+								<Add color='primary' />
+							</IconButton>
+						</Tooltip>
+					</Card>
+				</Grid>
+				{/* <Grid item xs={12}>
 					<Card sx={{ padding: "20px", borderRadius: "0px" }}>
 						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
 							Banjee Alert
@@ -133,7 +160,7 @@ function BanjeeAlert() {
 						</Box>
 						<AlertLocation currentLocation={currentLocation} zoom={10} data={data} type={"array"} />
 					</Card>
-				</Grid>
+				</Grid> */}
 				{/* <Grid item xs={12}>
 					<Card sx={{ padding: "10px", borderRadius: "0px" }}>
 						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>Alert List</div>

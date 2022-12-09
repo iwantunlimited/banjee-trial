@@ -38,6 +38,7 @@ import UpdateAnnouncement from "./pages/Notification/components/Announcement/Upd
 import GroupsComp from "./pages/Groups/Groups";
 import GroupDetailPage from "./pages/Groups/components/GroupDetailPage";
 import UserComp from "./pages/Users/users";
+import CreateAlert from "./pages/BanjeeAlert/components/CreateAlert";
 
 const Routes = () => {
 	return useRoutes([
@@ -148,6 +149,10 @@ const Routes = () => {
 				{
 					path: "/banjee-alert",
 					element: <BanjeeAlert />,
+				},
+				{
+					path: "/banjee-alert/create",
+					element: <CreateAlert />,
 				},
 				{
 					path: "/banjee-alert/:id",

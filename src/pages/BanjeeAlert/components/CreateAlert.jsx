@@ -18,40 +18,111 @@ import {
 	CircularProgress,
 	Autocomplete,
 } from "@mui/material";
-import "../../../Explore/business.css";
+// import "../../../Explore/business.css";
 import { ArrowBack, Cancel, CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
-import { blogsList } from "../../../Explore/services/ApiServices";
 import { useNavigate } from "react-router";
-import { createAlert } from "../../ApiServices/apiServices";
-import { filterNeighbourhood } from "../../../Neighbourhoods/services/apiServices";
+import { createAlert } from "../api-services/apiServices";
 import axios from "axios";
-import { MainContext } from "../../../../context/Context";
-import SnackbarContext from "../../../../CustomComponents/SnackbarContext";
+import { MainContext } from "../../../context/Context";
+import SnackbarContext from "../../../CustomComponents/SnackbarContext";
 
 import Compressor from "compressorjs";
+import MyGoogleMap from "../../Neighbourhoods/Map/GoogleMap";
 import { v4 as uuidv4 } from "uuid";
+import SuspiciousVehicle from "../../../assets/alerticonset/SuspiciusVehicle.png";
+import SuspiciousPerson from "../../../assets/alerticonset/SuspiciusPerson.png";
+import HouseBreakIn from "../../../assets/alerticonset/HouseBreak-In.png";
+import CarVandalism from "../../../assets/alerticonset/CarVandalism.png";
+import TheftRobbery from "../../../assets/alerticonset/Theft-Robbery.png";
+import ViolenceAssault from "../../../assets/alerticonset/Violence-Assault.png";
+import HitRun from "../../../assets/alerticonset/Hit&Run.png";
+import SuspiciousActivity from "../../../assets/alerticonset/SuspiciusActivity.png";
+import PoliceRoadblock from "../../../assets/alerticonset/PoliceRoadblock.png";
+import fire from "../../../assets/alerticonset/fire.png";
+import thunder from "../../../assets/alerticonset/thunder.png";
+import pawprint from "../../../assets/alerticonset/pawprint.png";
 
-const icon = <CheckBoxOutlineBlank fontSize='small' />;
-const checkedIcon = <CheckBox fontSize='small' />;
+const alertList = [
+	{
+		icon: "tow-truck",
+		img: SuspiciousVehicle,
+		name: "Suspicious Vehicle",
+	},
+	{
+		icon: "person",
+		img: SuspiciousPerson,
+		name: "Suspicious Person",
+	},
+	{
+		icon: "pets",
+		img: pawprint,
+		name: "Lost / Found Pet",
+	},
+	{
+		icon: "robber",
+		img: HouseBreakIn,
+		name: "House Break-In",
+	},
+	{
+		icon: "car",
+		img: CarVandalism,
+		name: "Car Vandalism",
+	},
+	{
+		icon: "sound",
+		img: TheftRobbery,
+		name: "Theft/Robbery",
+	},
+	{
+		icon: "car",
+		img: ViolenceAssault,
+		name: "Violence/Assault",
+	},
+	{
+		icon: "car",
+		img: HitRun,
+		name: "Hit & Run",
+	},
+	{
+		icon: "local-activity",
+		img: SuspiciousActivity,
+		name: "Suspicious Activity",
+	},
+	{
+		icon: "road",
+		img: PoliceRoadblock,
+		name: "Police Roadblock",
+	},
+	{
+		icon: "fire",
+		img: fire,
+		name: "Fire",
+	},
+	{
+		icon: "lightning-bolt",
+		img: thunder,
+		name: "Power Cut",
+	},
+];
 
-function CreatePushNotification() {
+function CreateAlert() {
 	const context = React.useContext(MainContext);
 
 	console.log("context", context);
-	const { setNotificationPopup, setModalData, setModalOpen } = context;
+	const { setModalOpen, setModalData, setNotificationPopup } = context;
 	const navigate = useNavigate();
+	const [submitForm, setSubmitForm] = React.useState(false);
+	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [data, setData] = React.useState({
-		anonymous: false,
-		eventCode: "ADMIN_NOTIFICATION",
+		anonymous: true,
+		eventCode: "NEW_ALERT",
+		cityName: "",
 		eventName: "",
-		cloudIds: [],
 		description: "",
 		imageUrl: [],
 		videoUrl: [],
 		metaInfo: {
-			templateId: "",
-			templateName: "",
-			detail: false,
+			address: "",
 		},
 		sendTo: "TO_NEARBY",
 		location: {
@@ -65,53 +136,47 @@ function CreatePushNotification() {
 	console.log("====================================");
 
 	const [imgShow, setImgShow] = React.useState([]);
-	const [submitForm, setSubmitForm] = React.useState(false);
-	const [imageUploaded, setImageUploaded] = React.useState(false);
-	const [neighbourList, setNeighbourList] = React.useState("");
-	const [blogList, setBLogList] = React.useState("");
 
 	console.log("====================================");
 	console.log("imgShow", imgShow);
 	console.log("====================================");
-
-	const NeighbourListApi = React.useCallback(() => {
-		filterNeighbourhood({ page: 0, size: 1000, online: true })
-			.then((res) => {
-				console.log("====================================");
-				console.log(res.content);
-				console.log("====================================");
-				setNeighbourList(res?.content);
-			})
-			.catch((err) => console.error(err));
-	}, []);
-
-	const BlogsListApiCall = React.useCallback((page, pageSize) => {
-		blogsList({ page: page, pageSize: pageSize, blogType: "ANNOUNCEMENT" })
-			.then((res) => {
-				setBLogList(res?.content);
-			})
-			.catch((err) => console.error(err));
-	}, []);
+	const handleGLocation = (lat, lng, address, cityName) => {
+		const arr = cityName?.formatted_address?.split(",");
+		// console.log("====================================");
+		// console.log("11----", arr[arr?.length - 3]);
+		// console.log("====================================");
+		const city = arr[arr?.length - 3];
+		setData((prev) => ({
+			...prev,
+			cityName: city ? city : "",
+			location: {
+				coordinates: [lng, lat],
+				type: "Point",
+			},
+			metaInfo: {
+				address: address,
+			},
+			// address: address,
+		}));
+	};
 
 	const CreateAlertApiCall = React.useCallback((data) => {
 		createAlert(data)
 			.then((res) => {
 				// setModalOpen(true);
 				// setModalData("Notification created successfully", "success");
-				setNotificationPopup({ open: true, message: "Notification Created Successfully" });
-				navigate("/notification");
+				setNotificationPopup({ open: true, message: "Alert Created Successfully" });
+				navigate("/banjee-alert");
 				setData({
-					anonymous: false,
-					eventCode: "ADMIN_NOTIFICATION",
+					anonymous: true,
+					eventCode: "NEW_ALERT",
+					cityName: "",
 					eventName: "",
-					cloudIds: [],
 					description: "",
 					imageUrl: [],
 					videoUrl: [],
 					metaInfo: {
-						templateId: "",
-						templateName: "",
-						detail: false,
+						address: "",
 					},
 					sendTo: "TO_NEARBY",
 					location: {
@@ -127,6 +192,9 @@ function CreatePushNotification() {
 	}, []);
 
 	const handleImageChange = (event) => {
+		// console.log("====================================");
+		// console.log(event.target.files);
+		// console.log("====================================");
 		if (event?.target?.files?.length > 0) {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
 				const image = event.target.files[index];
@@ -134,7 +202,7 @@ function CreatePushNotification() {
 				if (inputType === "image") {
 					new Compressor(image, {
 						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-						convertTypes: inputType === "video" ? ["video/mp4"] : ["image/png"],
+						convertTypes: ["image/png"],
 						success: (compressedResult) => {
 							// compressedResult has the compressed file.
 							// Use the compressed file to upload the images to your server.
@@ -144,25 +212,27 @@ function CreatePushNotification() {
 								...prev,
 								{
 									type: inputType,
-									id: uuidv4(),
 									data: URL.createObjectURL(compressedResult),
+									id: uuidv4(),
 									src: compressedResult,
 								},
 							]);
 							// ImageApiCAll(
 							// 	compressedResult,
 							// 	inputType
+							// 	// event?.target?.files[index].type,
 							// );
 						},
 					});
 				} else {
 					setImgShow((prev) => [
 						...prev,
-						{ type: inputType, id: uuidv4(), data: URL.createObjectURL(image), src: image },
+						{ type: inputType, data: URL.createObjectURL(image), id: uuidv4(), src: image },
 					]);
 					// ImageApiCAll(
 					// 	image,
 					// 	inputType
+					// 	// event?.target?.files[index].type,
 					// );
 				}
 			}
@@ -175,28 +245,25 @@ function CreatePushNotification() {
 			if (inputType === "image") {
 				new Compressor(image, {
 					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-					convertTypes: ["image/png"],
+					convertTypes: inputType === "video" ? ["video/mp4"] : ["image/png"],
 					success: (compressedResult) => {
+						// compressedResult has the compressed file.
+						// Use the compressed file to upload the images to your server.
+						// setImages(compressedResult);
+						// setImgShow(URL.createObjectURL(compressedResult));
 						setImgShow((prev) => [
 							...prev,
-							{
-								type: inputType,
-								id: uuidv4(),
-								data: URL.createObjectURL(compressedResult),
-								src: compressedResult,
-							},
+							{ type: inputType, data: URL.createObjectURL(compressedResult) },
 						]);
-						// ImageApiCAll(
-						// 	compressedResult,
-						// 	inputType
-						// );
+						ImageApiCAll(
+							compressedResult,
+							inputType
+							// event?.target?.files[index].type,
+						);
 					},
 				});
 			} else {
-				setImgShow((prev) => [
-					...prev,
-					{ type: inputType, id: uuidv4(), data: URL.createObjectURL(image), src: image },
-				]);
+				setImgShow((prev) => [...prev, { type: inputType, data: URL.createObjectURL(image) }]);
 			}
 		}
 	};
@@ -265,22 +332,16 @@ function CreatePushNotification() {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		// setFinalData(data);
 		if (imgShow?.length > 0 && submitForm === false) {
-			window.alert("Please upload the selected image first");
+			window.alert("PLease upload the selected image first");
 		} else {
 			CreateAlertApiCall(data);
 		}
 	};
 
-	React.useEffect(() => {
-		NeighbourListApi();
-		BlogsListApiCall();
-	}, [NeighbourListApi, BlogsListApiCall]);
-
 	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
 
-	if (neighbourList && blogList) {
+	if (data) {
 		return (
 			<Container maxWidth='xl'>
 				<Grid item container xs={12} spacing={2}>
@@ -292,7 +353,7 @@ function CreatePushNotification() {
 					<Grid item xs={12}>
 						<Card sx={{ padding: "20px" }}>
 							<Typography sx={{ fontSize: "22px", color: "#666", fontWeight: 500 }}>
-								Create Push Notification
+								Create Alert
 							</Typography>
 						</Card>
 					</Grid>
@@ -301,86 +362,33 @@ function CreatePushNotification() {
 							<form onSubmit={handleSubmit}>
 								<Grid item container xs={12} spacing={2}>
 									<Grid item xs={12}>
-										<TextField
-											required
-											fullWidth
-											className='neighbourhood-form-textField'
-											name='eventName'
-											value={data?.eventName}
-											onChange={(event) => {
-												setData((prev) => ({
-													...prev,
-													eventName: event.target.value,
-													// slug: event.target.value.replace(/[ ,]+/g, "-"),
-												}));
-											}}
-											placeholder='Enter Title'
-										/>
-									</Grid>
-									<Grid item xs={12}>
-										<Autocomplete
-											fullWidth
-											multiple
-											id='checkboxes-tags-demo'
-											options={neighbourList}
-											disableCloseOnSelect
-											onChange={(event, value) => {
-												setData((prev) => ({
-													...prev,
-													cloudIds: value?.map((item) => item?.id),
-												}));
-											}}
-											getOptionLabel={(option) => option?.name}
-											renderOption={(props, option, { selected }) => {
-												return (
-													<li {...props}>
-														<Checkbox
-															icon={icon}
-															checkedIcon={checkedIcon}
-															style={{ marginRight: 8 }}
-															checked={selected}
-														/>
-														{option.name}
-													</li>
-												);
-											}}
-											renderInput={(params) => (
-												<TextField
-													fullWidth
-													{...params}
-													label='Select Neighbourhood'
-													placeholder='Favorites'
-												/>
-											)}
-										/>
-									</Grid>
-									<Grid item xs={12}>
 										<FormControl fullWidth>
-											<InputLabel id='demo-simple-select-label'>Select Template</InputLabel>
+											<InputLabel id='demo-simple-select-label'>Select Event</InputLabel>
 											<Select
 												required
 												labelId='demo-simple-select-label'
 												id='demo-simple-select'
 												name='templateId'
 												label='Select Template'
-												value={data?.metaInfo.templateId}
+												value={data?.eventName}
 												onChange={(event, data) => {
 													setData((prev) => ({
 														...prev,
-														metaInfo: {
-															templateId: event.target.value,
-															templateName: data?.props?.children,
-															detail: true,
-														},
-
-														// categoryName: data?.props?.children,
+														eventName: event.target?.value,
 													}));
 												}}>
-												{blogList &&
-													blogList?.map((item, index) => {
+												{alertList &&
+													alertList?.map((item, index) => {
 														return (
-															<MenuItem key={index} value={item?.id}>
-																{item?.title}
+															<MenuItem key={index} value={item?.name}>
+																<IconButton sx={{ marginRight: "20px" }}>
+																	<img
+																		src={item?.img}
+																		alt={item?.icon}
+																		style={{ width: "25px", height: "25px", objectFit: "contain" }}
+																	/>
+																</IconButton>
+																{item?.name}
 															</MenuItem>
 														);
 													})}
@@ -417,40 +425,41 @@ function CreatePushNotification() {
 													imgShow?.map((item, index) => {
 														if (item?.type === "image") {
 															return (
-																<Box
-																	key={index}
-																	sx={{
-																		position: "relative",
-																		width: "80px",
-																		height: "80px",
-																		border: "0.5px solid lightgrey",
-																		padding: "5px",
-																		borderRadius: "5px",
-																		marginRight: "10px",
-																	}}>
-																	<IconButton
-																		disabled={imageUploaded}
-																		onClick={() => {
-																			document.getElementById("img").value = "";
-																			setImgShow((prev) =>
-																				prev?.filter((data) => data?.id !== item?.id)
-																			);
-																		}}
+																<React.Fragment>
+																	<Box
+																		key={index}
 																		sx={{
-																			position: "absolute",
-																			top: "0px",
-																			right: "0px",
-																			padding: "0px",
-																			background: "white",
+																			position: "relative",
+																			width: "80px",
+																			height: "80px",
+																			border: "0.5px solid lightgrey",
+																			padding: "5px",
+																			borderRadius: "5px",
 																		}}>
-																		<Cancel fontSize='small' style={{ color: "brown" }} />
-																	</IconButton>
-																	<img
-																		src={item?.data}
-																		alt={item.id}
-																		style={{ width: "100%", height: "100%" }}
-																	/>
-																</Box>
+																		<IconButton
+																			disabled={imageUploaded}
+																			onClick={() => {
+																				document.getElementById("img").value = "";
+																				setImgShow((prev) =>
+																					prev?.filter((data) => data?.id !== item?.id)
+																				);
+																			}}
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				background: "white",
+																			}}>
+																			<Cancel fontSize='small' style={{ color: "brown" }} />
+																		</IconButton>
+																		<img
+																			src={item?.data}
+																			alt={item?.id}
+																			style={{ width: "100%", height: "100%" }}
+																		/>
+																	</Box>
+																</React.Fragment>
 															);
 														} else {
 															return (
@@ -463,7 +472,6 @@ function CreatePushNotification() {
 																		border: "0.5px solid lightgrey",
 																		padding: "5px",
 																		borderRadius: "5px",
-																		marginRight: "10px",
 																	}}>
 																	<IconButton
 																		disabled={imageUploaded}
@@ -483,7 +491,7 @@ function CreatePushNotification() {
 																		<Cancel fontSize='small' style={{ color: "brown" }} />
 																	</IconButton>
 																	<iframe
-																		title={item.id}
+																		title={item?.id}
 																		src={item?.data}
 																		alt='video'
 																		style={{ width: "100%", height: "100%" }}
@@ -534,6 +542,11 @@ function CreatePushNotification() {
 										/>
 									</Grid>
 									<Grid item xs={12}>
+										<Box sx={{ position: "relative" }}>
+											<MyGoogleMap handleGLocation={handleGLocation} />
+										</Box>
+									</Grid>
+									<Grid item xs={12}>
 										<Box>
 											<Button
 												// disabled={imgShow?.length === 0 ? false : submitForm ? false : true}
@@ -567,4 +580,4 @@ function CreatePushNotification() {
 	}
 }
 
-export default CreatePushNotification;
+export default CreateAlert;

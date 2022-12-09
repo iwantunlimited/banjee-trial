@@ -11,6 +11,14 @@ export let listAlert = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 
+export const createAlert = (requestLoad) => {
+	let url = urls.GEO_CLOUD.GEO_ALERT;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
 export let nearByAlert = (requestLoad) => {
 	let url = urls.GEO_CLOUD.GEO_ALERT + "/near-by";
 	let actionCode = "";
