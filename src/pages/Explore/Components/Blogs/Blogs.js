@@ -18,8 +18,10 @@ import { useNavigate } from "react-router";
 import { blogsList, deleteBlog } from "../../services/ApiServices";
 import ".././component.css";
 import ModalComp from "../../../../CustomComponents/ModalComp";
+import { MainContext } from "../../../../context/Context";
 
 function ExploreBlogs() {
+	const { setModalOpen, setModalData } = React.useContext(MainContext);
 	const navigate = useNavigate();
 	const [data, setData] = React.useState("");
 	const [modal, setModal] = React.useState({
@@ -63,7 +65,10 @@ function ExploreBlogs() {
 
 	const DeleteBlogApiCall = React.useCallback((data) => {
 		deleteBlog(data)
-			.then((res) => {})
+			.then((res) => {
+				setModalOpen(true);
+				setModalData("Blog Deleted", "warning");
+			})
 			.catch((err) => console.error(err));
 	}, []);
 

@@ -131,10 +131,6 @@ function CreateAlert() {
 		},
 	});
 
-	console.log("====================================");
-	console.log(data);
-	console.log("====================================");
-
 	const [imgShow, setImgShow] = React.useState([]);
 
 	console.log("====================================");

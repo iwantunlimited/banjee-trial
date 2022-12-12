@@ -19,7 +19,7 @@ import {
 	Autocomplete,
 } from "@mui/material";
 import "../../../Explore/business.css";
-import { ArrowBack, Cancel, CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
+import { ArrowBack, Cancel, CheckBox, CheckBoxOutlineBlank, Done } from "@mui/icons-material";
 import { blogsList } from "../../../Explore/services/ApiServices";
 import { useNavigate } from "react-router";
 import { createAlert } from "../../ApiServices/apiServices";
@@ -44,7 +44,7 @@ function CreatePushNotification() {
 		anonymous: false,
 		eventCode: "ADMIN_NOTIFICATION",
 		eventName: "",
-		cloudIds: [],
+		// cloudIds: [],
 		description: "",
 		imageUrl: [],
 		videoUrl: [],
@@ -60,19 +60,11 @@ function CreatePushNotification() {
 		},
 	});
 
-	console.log("====================================");
-	console.log(data);
-	console.log("====================================");
-
 	const [imgShow, setImgShow] = React.useState([]);
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [neighbourList, setNeighbourList] = React.useState("");
 	const [blogList, setBLogList] = React.useState("");
-
-	console.log("====================================");
-	console.log("imgShow", imgShow);
-	console.log("====================================");
 
 	const NeighbourListApi = React.useCallback(() => {
 		filterNeighbourhood({ page: 0, size: 1000, online: true })
@@ -104,7 +96,7 @@ function CreatePushNotification() {
 					anonymous: false,
 					eventCode: "ADMIN_NOTIFICATION",
 					eventName: "",
-					cloudIds: [],
+					// cloudIds: [],
 					description: "",
 					imageUrl: [],
 					videoUrl: [],
@@ -147,6 +139,8 @@ function CreatePushNotification() {
 									id: uuidv4(),
 									data: URL.createObjectURL(compressedResult),
 									src: compressedResult,
+									loader: false,
+									done: false,
 								},
 							]);
 							// ImageApiCAll(
@@ -158,7 +152,14 @@ function CreatePushNotification() {
 				} else {
 					setImgShow((prev) => [
 						...prev,
-						{ type: inputType, id: uuidv4(), data: URL.createObjectURL(image), src: image },
+						{
+							type: inputType,
+							id: uuidv4(),
+							data: URL.createObjectURL(image),
+							src: image,
+							loader: false,
+							done: false,
+						},
 					]);
 					// ImageApiCAll(
 					// 	image,
@@ -184,6 +185,8 @@ function CreatePushNotification() {
 								id: uuidv4(),
 								data: URL.createObjectURL(compressedResult),
 								src: compressedResult,
+								loader: false,
+								done: false,
 							},
 						]);
 						// ImageApiCAll(
@@ -195,7 +198,14 @@ function CreatePushNotification() {
 			} else {
 				setImgShow((prev) => [
 					...prev,
-					{ type: inputType, id: uuidv4(), data: URL.createObjectURL(image), src: image },
+					{
+						type: inputType,
+						id: uuidv4(),
+						data: URL.createObjectURL(image),
+						src: image,
+						loader: false,
+						done: false,
+					},
 				]);
 			}
 		}
@@ -210,7 +220,7 @@ function CreatePushNotification() {
 
 			formData.append("cloud_name", "banjee");
 			formData.append("upload_preset", "notification_image");
-			formData.append("file", data);
+			formData.append("file", data.src);
 			// { headers: { "Content-Type": "multipart/form-data" }
 
 			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload/`;
@@ -229,6 +239,19 @@ function CreatePushNotification() {
 						// imageUrl: res?.data?.data[0]?.data?.id,
 						videoUrl: [...prev.videoUrl, res?.data?.public_id],
 					}));
+					setImgShow((prev) => {
+						return prev.map((item) => {
+							if (item?.id === data?.id) {
+								return {
+									...item,
+									loader: false,
+									done: true,
+								};
+							} else {
+								return item;
+							}
+						});
+					});
 				})
 				.catch((err) => console.error(err));
 		} else {
@@ -239,7 +262,7 @@ function CreatePushNotification() {
 
 			formData.append("cloud_name", "banjee");
 			formData.append("upload_preset", "notification_image");
-			formData.append("file", data);
+			formData.append("file", data.src);
 			// { headers: { "Content-Type": "multipart/form-data" }
 
 			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
@@ -258,6 +281,19 @@ function CreatePushNotification() {
 						// imageUrl: res?.data?.data[0]?.data?.id,
 						imageUrl: [...prev.imageUrl, res?.data?.public_id],
 					}));
+					setImgShow((prev) => {
+						return prev.map((item) => {
+							if (item?.id === data?.id) {
+								return {
+									...item,
+									loader: false,
+									done: true,
+								};
+							} else {
+								return item;
+							}
+						});
+					});
 				})
 				.catch((err) => console.error(err));
 		}
@@ -317,7 +353,7 @@ function CreatePushNotification() {
 											placeholder='Enter Title'
 										/>
 									</Grid>
-									<Grid item xs={12}>
+									{/* <Grid item xs={12}>
 										<Autocomplete
 											fullWidth
 											multiple
@@ -353,7 +389,7 @@ function CreatePushNotification() {
 												/>
 											)}
 										/>
-									</Grid>
+									</Grid> */}
 									<Grid item xs={12}>
 										<FormControl fullWidth>
 											<InputLabel id='demo-simple-select-label'>Select Template</InputLabel>
@@ -428,10 +464,49 @@ function CreatePushNotification() {
 																		borderRadius: "5px",
 																		marginRight: "10px",
 																	}}>
+																	{item?.loader && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<CircularProgress />
+																		</Box>
+																	)}
+																	{item?.done && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<IconButton disabled>
+																				<Done color='secondary' fontSize='large' />
+																			</IconButton>
+																		</Box>
+																	)}
 																	<IconButton
-																		disabled={imageUploaded}
+																		disabled={item?.done}
 																		onClick={() => {
-																			document.getElementById("img").value = "";
+																			imgShow?.map((item, index) => {
+																				if (imgShow?.length - 1 === index) {
+																					document.getElementById("img").value = "";
+																				}
+																				return item;
+																			});
 																			setImgShow((prev) =>
 																				prev?.filter((data) => data?.id !== item?.id)
 																			);
@@ -465,10 +540,49 @@ function CreatePushNotification() {
 																		borderRadius: "5px",
 																		marginRight: "10px",
 																	}}>
+																	{item?.loader && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<CircularProgress />
+																		</Box>
+																	)}
+																	{item?.done && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<IconButton disabled>
+																				<Done color='secondary' fontSize='large' />
+																			</IconButton>
+																		</Box>
+																	)}
 																	<IconButton
-																		disabled={imageUploaded}
+																		disabled={item?.done}
 																		onClick={() => {
-																			document.getElementById("img").value = "";
+																			imgShow?.map((item, index) => {
+																				if (imgShow?.length - 1 === index) {
+																					document.getElementById("img").value = "";
+																				}
+																				return item;
+																			});
 																			setImgShow((prev) =>
 																				prev?.filter((data) => data?.id !== item?.id)
 																			);
@@ -492,16 +606,25 @@ function CreatePushNotification() {
 															);
 														}
 													})}
-												{imgShow?.length > 0 && (
+												{imgShow?.length > 0 && imageUploaded === false && (
 													<Box sx={{ marginLeft: "20px" }}>
 														<Button
 															color={imageUploaded ? "secondary" : "primary"}
 															onClick={() => {
+																setImgShow((prev) => {
+																	return prev.map((item) => {
+																		return {
+																			...item,
+																			loader: true,
+																			done: false,
+																		};
+																	});
+																});
 																imgShow?.map((item, index) => {
 																	if (imgShow?.length - 1 === index) {
-																		ImageApiCAll(item?.src, item?.type, "Images Uploaded");
+																		ImageApiCAll(item, item?.type, "Images Uploaded");
 																	} else {
-																		ImageApiCAll(item?.src, item?.type, "");
+																		ImageApiCAll(item, item?.type, "");
 																	}
 																	return item;
 																});

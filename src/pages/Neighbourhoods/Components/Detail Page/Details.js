@@ -207,13 +207,13 @@ function DetailPage() {
 					<IconButton onClick={() => navigate(-1)}>
 						<ArrowBack style={{ color: theme.palette.primary.main }} />
 					</IconButton>
-					<Button
+					{/* <Button
 						variant='contained'
 						onClick={() => {
 							navigate("/neighbourhood/update/" + params.id);
 						}}>
 						Edit
-					</Button>
+					</Button> */}
 				</Box>
 				<Card sx={{ padding: "20px" }}>
 					<Grid item container xs={12}>
@@ -222,7 +222,8 @@ function DetailPage() {
 								<Box>
 									<Avatar
 										// src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${state?.imageUrl}.png`}
-										src={`https://gateway.banjee.org/services/media-service/iwantcdn/resources/${state?.imageUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+										src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${state?.imageUrl}.png`}
+										// src={`https://gateway.banjee.org/services/media-service/iwantcdn/resources/${state?.imageUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 										alt={state?.name}
 										style={{
 											width: window.innerWidth < 500 ? "70px" : "150px",

@@ -3,18 +3,39 @@ import { ArrowBack } from "@mui/icons-material";
 import { Box, Card, CircularProgress, Divider, Grid, IconButton, Typography } from "@mui/material";
 import { useParams, useNavigate } from "react-router";
 import { AlertById } from "../../ApiServices/apiServices";
+import SwiperComp from "../../../../CustomComponents/SwiperComp";
 
 function NotificationDetail() {
 	const params = useParams();
 	const navigate = useNavigate();
 
 	const [data, setData] = React.useState("");
+	const [imageState, setImageState] = React.useState([]);
+	const [videoState, setVideoState] = React.useState([]);
 
 	const DetailApiCall = React.useCallback(() => {
 		AlertById(params?.id)
 			.then((res) => {
 				console.log("res");
 				setData(res);
+				if (res?.imageUrl?.length > 0) {
+					const images = res?.imageUrl?.map((item) => {
+						return {
+							src: item,
+							mimeType: "image/png",
+						};
+					});
+					setImageState(images);
+				}
+				if (res?.videoUrl?.length > 0) {
+					const video = res?.videoUrl?.map((item) => {
+						return {
+							src: item,
+							mimeType: "video/mp4",
+						};
+					});
+					setVideoState(video);
+				}
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -85,17 +106,9 @@ function NotificationDetail() {
 										)}
 									</Box>
 								</Grid>
-								{data?.imageUrl && (
+								{(imageState?.length > 0 || videoState?.length > 0) && (
 									<Grid item xs={4}>
-										<Box>
-											<Box sx={{ width: "100%", maxHeight: "300px", height: "300px" }}>
-												<img
-													src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${data?.imageUrl}.png`}
-													alr='image'
-													style={{ width: "100%", height: "100%", objectFit: "contain" }}
-												/>
-											</Box>
-										</Box>
+										<SwiperComp data={[...imageState, ...videoState]} />
 									</Grid>
 								)}
 							</Grid>

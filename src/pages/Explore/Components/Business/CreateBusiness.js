@@ -1,4 +1,4 @@
-import { Cancel, Upload } from "@mui/icons-material";
+import { Cancel, Done, Upload } from "@mui/icons-material";
 import {
 	Container,
 	Box,
@@ -13,6 +13,7 @@ import {
 	Button,
 	IconButton,
 	Typography,
+	CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
@@ -37,6 +38,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		cloudId: "",
 		cloudName: "",
 		imageUrls: [],
+		videoUrls: [],
 		geoLocation: {
 			coordinates: [0, 0],
 		},
@@ -83,7 +85,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 									data: URL.createObjectURL(compressedResult),
 									id: uuidv4(),
 									src: compressedResult,
-									circular: false,
+									loader: false,
 									done: false,
 								},
 							]);
@@ -97,7 +99,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 							data: URL.createObjectURL(image),
 							id: uuidv4(),
 							src: image,
-							circular: false,
+							loader: false,
 							done: false,
 						},
 					]);
@@ -123,6 +125,8 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 								data: URL.createObjectURL(compressedResult),
 								id: uuidv4(),
 								src: image,
+								loader: true,
+								done: false,
 							},
 						]);
 					},
@@ -135,6 +139,8 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 						data: URL.createObjectURL(image),
 						id: uuidv4(),
 						src: image,
+						loader: true,
+						done: false,
 					},
 				]);
 			}
@@ -163,8 +169,21 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 					setSubmitForm(true);
 					setData((prev) => ({
 						...prev,
-						videoUrl: [...prev.videoUrl, res?.data?.public_id],
+						videoUrls: [...prev.videoUrls, res?.data?.public_id],
 					}));
+					setBusinessImgShow((prev) => {
+						return prev.map((item) => {
+							if (item?.id === data?.id) {
+								return {
+									...item,
+									loader: false,
+									done: true,
+								};
+							} else {
+								return item;
+							}
+						});
+					});
 				})
 				.catch((err) => console.error(err));
 		} else {
@@ -195,6 +214,19 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 							...prev,
 							imageUrls: [...prev.imageUrls, res?.data?.public_id],
 						}));
+						setBusinessImgShow((prev) => {
+							return prev.map((item) => {
+								if (item?.id === data?.id) {
+									return {
+										...item,
+										loader: false,
+										done: true,
+									};
+								} else {
+									return item;
+								}
+							});
+						});
 					}
 				})
 				.catch((err) => console.error(err));
@@ -511,10 +543,49 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 																	padding: "5px",
 																	borderRadius: "5px",
 																}}>
+																{item?.loader && (
+																	<Box
+																		sx={{
+																			position: "absolute",
+																			top: "0px",
+																			right: "0px",
+																			padding: "0px",
+																			width: "100%",
+																			height: "100%",
+																			display: "flex",
+																			justifyContent: "center",
+																			alignItems: "center",
+																		}}>
+																		<CircularProgress />
+																	</Box>
+																)}
+																{item?.done && (
+																	<Box
+																		sx={{
+																			position: "absolute",
+																			top: "0px",
+																			right: "0px",
+																			padding: "0px",
+																			width: "100%",
+																			height: "100%",
+																			display: "flex",
+																			justifyContent: "center",
+																			alignItems: "center",
+																		}}>
+																		<IconButton disabled>
+																			<Done color='secondary' fontSize='large' />
+																		</IconButton>
+																	</Box>
+																)}
 																<IconButton
-																	disabled={imageUploaded}
+																	disabled={item?.done}
 																	onClick={() => {
-																		document.getElementById("businessImage").value = "";
+																		businessImgShow?.map((item, index) => {
+																			if (businessImgShow?.length - 1 === index) {
+																				document.getElementById("businessImage").value = "";
+																			}
+																			return item;
+																		});
 																		setBusinessImgShow((prev) =>
 																			prev?.filter((data) => data?.id !== item?.id)
 																		);
@@ -548,10 +619,49 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 																padding: "5px",
 																borderRadius: "5px",
 															}}>
+															{item?.loader && (
+																<Box
+																	sx={{
+																		position: "absolute",
+																		top: "0px",
+																		right: "0px",
+																		padding: "0px",
+																		width: "100%",
+																		height: "100%",
+																		display: "flex",
+																		justifyContent: "center",
+																		alignItems: "center",
+																	}}>
+																	<CircularProgress />
+																</Box>
+															)}
+															{item?.done && (
+																<Box
+																	sx={{
+																		position: "absolute",
+																		top: "0px",
+																		right: "0px",
+																		padding: "0px",
+																		width: "100%",
+																		height: "100%",
+																		display: "flex",
+																		justifyContent: "center",
+																		alignItems: "center",
+																	}}>
+																	<IconButton disabled>
+																		<Done color='secondary' fontSize='large' />
+																	</IconButton>
+																</Box>
+															)}
 															<IconButton
-																disabled={imageUploaded}
+																disabled={item?.done}
 																onClick={() => {
-																	document.getElementById("businessImage").value = "";
+																	businessImgShow?.map((item, index) => {
+																		if (businessImgShow?.length - 1 === index) {
+																			document.getElementById("businessImage").value = "";
+																		}
+																		return item;
+																	});
 																	setBusinessImgShow((prev) =>
 																		prev?.filter((data) => data?.id !== item?.id)
 																	);
@@ -575,11 +685,20 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 													);
 												}
 											})}
-										{businessImgShow?.length > 0 && (
+										{businessImgShow?.length > 0 && imageUploaded === false && (
 											<Box sx={{ marginLeft: "20px" }}>
 												<Button
 													color={imageUploaded ? "secondary" : "primary"}
 													onClick={() => {
+														setBusinessImgShow((prev) => {
+															return prev.map((item) => {
+																return {
+																	...item,
+																	loader: true,
+																	done: false,
+																};
+															});
+														});
 														businessImgShow?.map((item, index) => {
 															if (businessImgShow?.length - 1 === index) {
 																ImageApiCAll(item, item?.type, "Images Uploaded");

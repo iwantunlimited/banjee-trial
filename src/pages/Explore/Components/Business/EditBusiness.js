@@ -1,4 +1,4 @@
-import { ArrowBack, Cancel, Upload } from "@mui/icons-material";
+import { ArrowBack, Cancel, Done, Upload } from "@mui/icons-material";
 import {
 	Container,
 	Box,
@@ -27,6 +27,8 @@ import { useNavigate, useParams } from "react-router";
 import { MainContext } from "../../../../context/Context";
 import Compressor from "compressorjs";
 
+import { v4 as uuidv4 } from "uuid";
+
 function EditBusiness() {
 	const { setModalData, setModalOpen } = React.useContext(MainContext);
 	const params = useParams();
@@ -53,6 +55,8 @@ function EditBusiness() {
 
 	const [categoryList, setCategoryList] = React.useState([]);
 	const [cloudList, setCloudList] = React.useState([]);
+	const [submitForm, setSubmitForm] = React.useState(false);
+	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [businessImgShow, setBusinessImgShow] = React.useState([]);
 
 	const [images, setImages] = React.useState("");
@@ -68,41 +72,6 @@ function EditBusiness() {
 		}));
 	};
 
-	const ImageApiCAll = React.useCallback((data, imageType) => {
-		const mime = "image";
-		const formData = new FormData();
-
-		formData.append("cloud_name", "banjee");
-		formData.append("upload_preset", "business_images");
-		formData.append("file", data);
-
-		const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
-
-		// const header = {
-		// 	"Content-Type": "multipart/form-data",
-		// 	Authorization: `Bearer ${token}`,
-		// };
-
-		axios
-			.post(url, formData)
-			.then((res) => {
-				if (imageType === "logo") {
-					setData((prev) => ({
-						...prev,
-						logoURL: res?.data?.public_id,
-						// logoURL: res?.data?.data[0]?.data?.id,
-						// logoURL: `https://gateway.banjee.org/services/media-service/iwantcdn/resources/${res?.data?.data[0]?.data?.id}?actionCode=ACTION_GET_RESOURCE`,
-					}));
-				} else {
-					setData((prev) => ({
-						...prev,
-						imageUrls: [...prev.imageUrls, res?.data?.public_id],
-					}));
-				}
-			})
-			.catch((err) => console.error(err));
-	}, []);
-
 	function handleChange(event) {
 		const { name, value } = event.target;
 
@@ -117,45 +86,170 @@ function EditBusiness() {
 	const handleImageChange = (event) => {
 		if (event?.target?.files?.length > 0) {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
-				// const data = event?.target?.files[index].type.split("/")?.[0];
 				const image = event.target.files[index];
+				const inputType = image.type.split("/")?.[0];
+				if (inputType === "image") {
+					new Compressor(image, {
+						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+						convertTypes: ["image/png"],
+						success: (compressedResult) => {
+							// compressedResult has the compressed file.
+							// Use the compressed file to upload the images to your server.
+							setBusinessImgShow((prev) => [
+								...prev,
+								{
+									update: true,
+									type: inputType,
+									data: URL.createObjectURL(compressedResult),
+									id: uuidv4(),
+									src: compressedResult,
+									loader: false,
+									done: false,
+								},
+							]);
+						},
+					});
+				} else {
+					setBusinessImgShow((prev) => [
+						...prev,
+						{
+							update: true,
+							type: inputType,
+							data: URL.createObjectURL(image),
+							id: uuidv4(),
+							src: image,
+							loader: false,
+							done: false,
+						},
+					]);
+				}
+			}
+		} else {
+			const image = event.target.files[0];
+			const inputType = image.type.split("/")?.[0];
+			if (inputType === "image") {
 				new Compressor(image, {
 					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
 					convertTypes: ["image/png"],
 					success: (compressedResult) => {
 						// compressedResult has the compressed file.
 						// Use the compressed file to upload the images to your server.
-						// setImages(compressedResult);
-						// setImgShow(URL.createObjectURL(compressedResult));
-						setBusinessImgShow((prev) => [...prev, URL.createObjectURL(compressedResult)]);
-						ImageApiCAll(
-							compressedResult,
-							"image"
-							// event?.target?.files[index].type,
-						);
+						setBusinessImgShow((prev) => [
+							...prev,
+							{
+								update: true,
+								type: inputType,
+								data: URL.createObjectURL(compressedResult),
+								id: uuidv4(),
+								src: image,
+								loader: true,
+								done: false,
+							},
+						]);
 					},
 				});
+			} else {
+				setBusinessImgShow((prev) => [
+					...prev,
+					{
+						update: true,
+						type: inputType,
+						data: URL.createObjectURL(image),
+						id: uuidv4(),
+						src: image,
+						loader: true,
+						done: false,
+					},
+				]);
 			}
-		} else {
-			const image = event.target.files[0];
-			new Compressor(image, {
-				quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-				convertTypes: ["image/png"],
-				success: (compressedResult) => {
-					// compressedResult has the compressed file.
-					// Use the compressed file to upload the images to your server.
-					// setImages(compressedResult);
-					// setImgShow(URL.createObjectURL(compressedResult));
-					setBusinessImgShow((prev) => [...prev, URL.createObjectURL(compressedResult)]);
-					ImageApiCAll(
-						compressedResult,
-						"image"
-						// event?.target?.files[index].type,
-					);
-				},
-			});
 		}
 	};
+
+	const ImageApiCAll = React.useCallback((data, imageType, notifyMessage) => {
+		if (imageType === "video") {
+			const mime = "video";
+			const formData = new FormData();
+
+			formData.append("cloud_name", "banjee");
+			formData.append("upload_preset", "business_images");
+			formData.append("file", data?.src);
+
+			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload/`;
+
+			axios
+				.post(url, formData)
+				.then((res) => {
+					if (notifyMessage === "Images Uploaded") {
+						setImageUploaded(true);
+						setModalOpen(true);
+						setModalData("Image Uploaded", "success");
+						setSubmitForm(true);
+					}
+					setData((prev) => ({
+						...prev,
+						videoUrls: [...prev.videoUrls, res?.data?.public_id],
+					}));
+					setBusinessImgShow((prev) => {
+						return prev.map((item) => {
+							if (item?.id === data?.id) {
+								return {
+									...item,
+									loader: false,
+									done: true,
+								};
+							} else {
+								return item;
+							}
+						});
+					});
+				})
+				.catch((err) => console.error(err));
+		} else {
+			const mime = "image";
+			const formData = new FormData();
+
+			formData.append("cloud_name", "banjee");
+			formData.append("upload_preset", "business_images");
+			formData.append("file", data?.src);
+
+			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
+			axios
+				.post(url, formData)
+				.then((res) => {
+					if (imageType === "logo") {
+						setData((prev) => ({
+							...prev,
+							logoURL: res?.data?.public_id,
+						}));
+					} else {
+						if (notifyMessage === "Images Uploaded") {
+							setImageUploaded(true);
+							setModalOpen(true);
+							setModalData("Image Uploaded", "success");
+							setSubmitForm(true);
+						}
+						setData((prev) => ({
+							...prev,
+							imageUrls: [...prev.imageUrls, res?.data?.public_id],
+						}));
+						setBusinessImgShow((prev) => {
+							return prev.map((item) => {
+								if (item?.id === data?.id) {
+									return {
+										...item,
+										loader: false,
+										done: true,
+									};
+								} else {
+									return item;
+								}
+							});
+						});
+					}
+				})
+				.catch((err) => console.error(err));
+		}
+	}, []);
 
 	const BusinessDetailApiCall = React.useCallback(() => {
 		findByIdBusiness(params?.id)
@@ -186,14 +280,33 @@ function EditBusiness() {
 					for (let index = 0; index < res?.imageUrls?.length; index++) {
 						setBusinessImgShow((prev) => [
 							...prev,
-							`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.imageUrls[index]}.png`,
+							{
+								update: false,
+								type: "image",
+								id: uuidv4(),
+								data: `https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.imageUrls[index]}.png`,
+								src: "",
+								loader: false,
+								done: false,
+							},
 						]);
 					}
-				} else {
-					setBusinessImgShow((prev) => [
-						...prev,
-						"https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.imageUrls[index]}.png",
-					]);
+				}
+				if (res?.videoUrls?.length > 0) {
+					for (let index = 0; index < res?.videoUrls?.length; index++) {
+						setBusinessImgShow((prev) => [
+							...prev,
+							{
+								update: false,
+								type: "video",
+								id: uuidv4(),
+								data: `https://res.cloudinary.com/banjee/video/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.videoUrls[index]}.mp4`,
+								src: "",
+								loader: false,
+								done: false,
+							},
+						]);
+					}
 				}
 			})
 			.catch((err) => console.error(err));
@@ -255,8 +368,13 @@ function EditBusiness() {
 	}, []);
 
 	function handleSubmit(event) {
-		EditApiCall(data);
 		event.preventDefault();
+		const result = businessImgShow?.filter((item) => item?.update === true);
+		if (result?.length > 0 && submitForm === false) {
+			window.alert("Please upload the selected image first");
+		} else {
+			EditApiCall(data);
+		}
 	}
 
 	if (businessData && cloudList && categoryList) {
@@ -410,10 +528,12 @@ function EditBusiness() {
 																// Use the compressed file to upload the images to your server.
 																// setImages(compressedResult);
 																// setImgShow(URL.createObjectURL(compressedResult));
-
+																const data = {
+																	src: compressedResult,
+																};
 																setImages(compressedResult);
 																setImgShow(URL.createObjectURL(compressedResult));
-																ImageApiCAll(compressedResult, "logo");
+																ImageApiCAll(data, "logo", "");
 															},
 														});
 													}}
@@ -483,45 +603,200 @@ function EditBusiness() {
 														handleImageChange(event);
 													}}
 												/>
-												{businessImgShow?.length > 0 &&
+												{businessImgShow &&
 													businessImgShow?.map((item, index) => {
-														return (
-															<Box
-																sx={{
-																	position: "relative",
-																	width: "150px",
-																	height: "150px",
-																	border: "0.5px solid lightgrey",
-																	padding: "5px",
-																	borderRadius: "5px",
-																	marginRight: "5px",
-																}}>
-																<IconButton
-																	onClick={() => {
-																		if (businessImgShow?.length === 1) {
-																			document.getElementById("businessImage").value = "";
-																		}
-																		setBusinessImgShow((prev) =>
-																			prev?.filter((data) => data !== item)
-																		);
-																	}}
+														if (item?.type === "image") {
+															return (
+																<React.Fragment>
+																	<Box
+																		key={index}
+																		sx={{
+																			position: "relative",
+																			width: "80px",
+																			height: "80px",
+																			border: "0.5px solid lightgrey",
+																			padding: "5px",
+																			marginRight: "5px",
+																			borderRadius: "5px",
+																		}}>
+																		{item?.loader && (
+																			<Box
+																				sx={{
+																					position: "absolute",
+																					top: "0px",
+																					right: "0px",
+																					padding: "0px",
+																					width: "100%",
+																					height: "100%",
+																					display: "flex",
+																					justifyContent: "center",
+																					alignItems: "center",
+																				}}>
+																				<CircularProgress />
+																			</Box>
+																		)}
+																		{item?.done && (
+																			<Box
+																				sx={{
+																					position: "absolute",
+																					top: "0px",
+																					right: "0px",
+																					padding: "0px",
+																					width: "100%",
+																					height: "100%",
+																					display: "flex",
+																					justifyContent: "center",
+																					alignItems: "center",
+																				}}>
+																				<IconButton disabled>
+																					<Done color='secondary' fontSize='large' />
+																				</IconButton>
+																			</Box>
+																		)}
+																		<IconButton
+																			disabled={item?.done}
+																			onClick={() => {
+																				businessImgShow?.map((item, index) => {
+																					if (businessImgShow?.length - 1 === index) {
+																						document.getElementById("businessImage").value = "";
+																					}
+																					return item;
+																				});
+																				setBusinessImgShow((prev) =>
+																					prev?.filter((data) => data?.id !== item?.id)
+																				);
+																			}}
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				background: "white",
+																			}}>
+																			<Cancel fontSize='small' style={{ color: "brown" }} />
+																		</IconButton>
+																		<img
+																			src={item?.data}
+																			alt={item?.id}
+																			style={{ width: "100%", height: "100%" }}
+																		/>
+																	</Box>
+																</React.Fragment>
+															);
+														} else {
+															return (
+																<Box
+																	key={index}
 																	sx={{
-																		position: "absolute",
-																		top: "0px",
-																		right: "0px",
-																		padding: "0px",
-																		background: "white",
+																		position: "relative",
+																		width: "80px",
+																		height: "80px",
+																		border: "0.5px solid lightgrey",
+																		padding: "5px",
+																		marginRight: "5px",
+																		borderRadius: "5px",
 																	}}>
-																	<Cancel fontSize='small' style={{ color: "brown" }} />
-																</IconButton>
-																<img
-																	src={item}
-																	alt='photo'
-																	style={{ width: "100%", height: "100%", objectFit: "contain" }}
-																/>
-															</Box>
-														);
+																	{item?.loader && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<CircularProgress />
+																		</Box>
+																	)}
+																	{item?.done && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<IconButton disabled>
+																				<Done color='secondary' fontSize='large' />
+																			</IconButton>
+																		</Box>
+																	)}
+																	<IconButton
+																		disabled={item?.done}
+																		onClick={() => {
+																			businessImgShow?.map((item, index) => {
+																				if (businessImgShow?.length - 1 === index) {
+																					document.getElementById("businessImage").value = "";
+																				}
+																				return item;
+																			});
+																			setBusinessImgShow((prev) =>
+																				prev?.filter((data) => data?.id !== item?.id)
+																			);
+																		}}
+																		sx={{
+																			position: "absolute",
+																			top: "0px",
+																			right: "0px",
+																			padding: "0px",
+																			background: "white",
+																		}}>
+																		<Cancel fontSize='small' style={{ color: "brown" }} />
+																	</IconButton>
+																	<iframe
+																		title={item?.id}
+																		src={item?.data}
+																		alt='video'
+																		style={{ width: "100%", height: "100%" }}
+																	/>
+																</Box>
+															);
+														}
 													})}
+												{businessImgShow?.length > 0 && imageUploaded === false && (
+													<Box sx={{ marginLeft: "20px" }}>
+														<Button
+															color={imageUploaded ? "secondary" : "primary"}
+															onClick={() => {
+																setBusinessImgShow((prev) => {
+																	return prev.map((item) => {
+																		if (item?.update) {
+																			return {
+																				...item,
+																				loader: true,
+																				done: false,
+																			};
+																		} else {
+																			return item;
+																		}
+																	});
+																});
+																businessImgShow?.map((item, index) => {
+																	if (item?.update) {
+																		if (businessImgShow?.length - 1 === index) {
+																			ImageApiCAll(item, item?.type, "Images Uploaded");
+																		} else {
+																			ImageApiCAll(item, item?.type, "");
+																		}
+																		return item;
+																	} else {
+																		return item;
+																	}
+																});
+															}}>
+															upload
+														</Button>
+													</Box>
+												)}
 											</Box>
 										</Box>
 									</Grid>

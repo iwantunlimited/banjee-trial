@@ -1,4 +1,4 @@
-import { Cancel } from "@mui/icons-material";
+import { Cancel, Done } from "@mui/icons-material";
 import {
 	Box,
 	Grid,
@@ -9,6 +9,7 @@ import {
 	Select,
 	Button,
 	IconButton,
+	CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
@@ -92,31 +93,23 @@ function CreateNeighbour(props) {
 	}, []);
 
 	const ImageApiCAll = React.useCallback((data, notifyMessage) => {
-		const header = {
-			"Content-Type": "multipart/form-data",
-			Authorization: `Bearer ${token}`,
-		};
-
-		const formData = new FormData();
-		formData.append("directoryId", "root");
-		formData.append("domain", "banjee");
-		formData.append("actionCode", "ACTION_UPLOAD_RESOURCE");
-		formData.append("files", data, "[PROXY]");
-
-		const url = "https://gateway.banjee.org/services/media-service/api/resources/bulk";
-		// var requestOptions = {
-		// 	method: "POST",
-		// 	headers: myHeaders,
-		// 	body: formdata,
-		// 	redirect: "follow",
+		const mime = "image";
+		// const header = {
+		// 	"Content-Type": "multipart/form-data",
+		// 	Authorization: `Bearer ${token}`,
 		// };
 
+		const formData = new FormData();
+		formData.append("cloud_name", "banjee");
+		formData.append("upload_preset", "blog_image");
+		formData.append("file", data?.src);
+		// { headers: { "Content-Type": "multipart/form-data" }
+
+		const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
+
 		axios
-			.post(url, formData, { headers: header })
+			.post(url, formData)
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("image upload response", res);
-				// console.log("====================================");
 				if (notifyMessage === "Images Uploaded") {
 					setImageUploaded(true);
 					setModalOpen(true);
@@ -127,6 +120,11 @@ function CreateNeighbour(props) {
 					...prev,
 					imageUrl: res?.data?.data[0]?.data?.id,
 					// imageUrl: res?.data[0].data.id,
+				}));
+				setImgShow((prev) => ({
+					...prev,
+					loader: false,
+					done: true,
 				}));
 			})
 			.catch((err) => console.log(err));
@@ -182,7 +180,12 @@ function CreateNeighbour(props) {
 			success: (compressedResult) => {
 				// compressedResult has the compressed file.
 				// Use the compressed file to upload the images to your server.
-				setImgShow({ data: URL.createObjectURL(compressedResult), src: compressedResult });
+				setImgShow({
+					data: URL.createObjectURL(compressedResult),
+					src: compressedResult,
+					loader: false,
+					done: false,
+				});
 				// ImageApiCAll(compressedResult);
 			},
 		});
@@ -392,7 +395,42 @@ function CreateNeighbour(props) {
 													padding: "5px",
 													borderRadius: "5px",
 												}}>
+												{imgShow?.loader && (
+													<Box
+														sx={{
+															position: "absolute",
+															top: "0px",
+															right: "0px",
+															padding: "0px",
+															width: "100%",
+															height: "100%",
+															display: "flex",
+															justifyContent: "center",
+															alignItems: "center",
+														}}>
+														<CircularProgress />
+													</Box>
+												)}
+												{imgShow?.done && (
+													<Box
+														sx={{
+															position: "absolute",
+															top: "0px",
+															right: "0px",
+															padding: "0px",
+															width: "100%",
+															height: "100%",
+															display: "flex",
+															justifyContent: "center",
+															alignItems: "center",
+														}}>
+														<IconButton disabled>
+															<Done color='secondary' fontSize='large' />
+														</IconButton>
+													</Box>
+												)}
 												<IconButton
+													disabled={imgShow?.done}
 													onClick={() => {
 														document.getElementById("img").value = "";
 														setImgShow("");
@@ -412,19 +450,25 @@ function CreateNeighbour(props) {
 													style={{ width: "100%", height: "100%", objectFit: "contain" }}
 												/>
 											</Box>
-											<Box sx={{ marginLeft: "20px" }}>
-												<Button
-													color={imageUploaded ? "secondary" : "primary"}
-													onClick={() => {
-														if (imgShow) {
-															ImageApiCAll(imgShow?.src, "Images Uploaded");
-														} else {
-															ImageApiCAll(imgShow?.src, "");
-														}
-													}}>
-													upload
-												</Button>
-											</Box>
+											{imgShow?.done === false && (
+												<Box sx={{ marginLeft: "20px" }}>
+													<Button
+														color={imageUploaded ? "secondary" : "primary"}
+														onClick={() => {
+															setImgShow((prev) => ({
+																...prev,
+																loader: true,
+															}));
+															if (imgShow) {
+																ImageApiCAll(imgShow, "Images Uploaded");
+															} else {
+																ImageApiCAll(imgShow, "");
+															}
+														}}>
+														upload
+													</Button>
+												</Box>
+											)}
 										</React.Fragment>
 									)}
 								</Box>

@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowBack, Cancel, Upload } from "@mui/icons-material";
+import { ArrowBack, Cancel, Done, Upload } from "@mui/icons-material";
 import {
 	Container,
 	Box,
@@ -14,6 +14,7 @@ import {
 	Input,
 	Button,
 	IconButton,
+	CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import MyGoogleMap from "../Map/GoogleMap";
@@ -26,6 +27,8 @@ import {
 	findState,
 	updateNeighbourhood,
 } from "../services/apiServices";
+
+import Compressor from "compressorjs";
 import { useNavigate, useParams } from "react-router";
 import { MainContext } from "../../../context/Context";
 
@@ -38,6 +41,7 @@ function EditNeighbourhood() {
 	const token = localStorage?.getItem("token");
 
 	const [data, setData] = React.useState({
+		// id: params?.id,
 		name: "",
 		approvalType: "",
 		bannerImageUrls: [],
@@ -57,7 +61,7 @@ function EditNeighbourhood() {
 	const [sState, setSState] = React.useState();
 	const [defaultLocation, setDefaultLocation] = React.useState();
 
-	const [images, setImages] = React.useState("");
+	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imgShow, setImgShow] = React.useState("");
 
 	const handleGLocation = (lat, lng, address) => {
@@ -98,6 +102,26 @@ function EditNeighbourhood() {
 			.catch((err) => console.error(err));
 	}, []);
 
+	function handleImageChange(event) {
+		const image = event.target.files[0];
+		new Compressor(image, {
+			quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+			convertTypes: ["image/png"],
+			success: (compressedResult) => {
+				// compressedResult has the compressed file.
+				// Use the compressed file to upload the images to your server.
+				setImgShow({
+					data: URL.createObjectURL(compressedResult),
+					src: compressedResult,
+					loader: false,
+					done: false,
+					update: true,
+				});
+				// ImageApiCAll(compressedResult);
+			},
+		});
+	}
+
 	const ImageApiCAll = React.useCallback((data) => {
 		const header = {
 			"Content-Type": "multipart/form-data",
@@ -108,26 +132,25 @@ function EditNeighbourhood() {
 		formData.append("directoryId", "root");
 		formData.append("domain", "banjee");
 		formData.append("actionCode", "ACTION_UPLOAD_RESOURCE");
-		formData.append("files", data, "[PROXY]");
+		formData.append("files", data?.src, "[PROXY]");
 
 		const url = "https://gateway.banjee.org/services/media-service/api/resources/bulk";
-		// var requestOptions = {
-		// 	method: "POST",
-		// 	headers: myHeaders,
-		// 	body: formdata,
-		// 	redirect: "follow",
-		// };
 
 		axios
 			.post(url, formData, { headers: header })
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("image upload response", res);
-				// console.log("====================================");
+				setSubmitForm(true);
+				setModalOpen(true);
+				setModalData("Image Uploaded", "success");
 				setData((prev) => ({
 					...prev,
 					imageUrl: res?.data?.data[0]?.data?.id,
 					// imageUrl: res?.data[0].data.id,
+				}));
+				setImgShow((prev) => ({
+					...prev,
+					loader: false,
+					done: true,
 				}));
 			})
 			.catch((err) => console.log(err));
@@ -150,9 +173,15 @@ function EditNeighbourhood() {
 					type: res?.cloudType ? res?.cloudType : "",
 					approvalType: "BY_ADMIN",
 				}));
-				setImgShow(
-					`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.imageUrl}.png`
-				);
+				setImgShow({
+					data: res?.imageUrl
+						? `https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.imageUrl}.png`
+						: "",
+					src: "",
+					loader: false,
+					done: false,
+					update: false,
+				});
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -178,7 +207,6 @@ function EditNeighbourhood() {
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Neighbourhood updated successfully", "success");
-				setImages("");
 				setImgShow("");
 				setData({
 					name: "",
@@ -199,8 +227,12 @@ function EditNeighbourhood() {
 	}, []);
 
 	function handleSubmit(event) {
-		EditApiCall(data);
 		event.preventDefault();
+		if (imgShow?.update && submitForm === false) {
+			window.alert("please upload selected image first");
+		} else {
+			EditApiCall(data);
+		}
 	}
 
 	return (
@@ -377,47 +409,94 @@ function EditNeighbourhood() {
 											id='img'
 											accept='.jpg, .jpeg, .png'
 											onChange={(event) => {
-												// newImageFunc(event.target.files[0]);
-												setImages(event?.target?.files[0]);
-												setImgShow(URL.createObjectURL(event?.target?.files[0]));
-												ImageApiCAll(event?.target?.files[0]);
-												// setData((prev) => ({
-												// 	...prev,
-												// 	imageUrl: event.target.files[0],
-												// }));
+												handleImageChange(event);
 											}}
 										/>
-										{imgShow && (
-											<Box
-												sx={{
-													position: "relative",
-													width: "80px",
-													height: "80px",
-													border: "0.5px solid lightgrey",
-													padding: "5px",
-													borderRadius: "5px",
-												}}>
-												<IconButton
-													onClick={() => {
-														document.getElementById("img").value = "";
-														setImages("");
-														setImgShow("");
-														setData((prev) => ({
-															...prev,
-															imageUrl: "",
-														}));
-													}}
+										{imgShow?.data && (
+											<React.Fragment>
+												<Box
 													sx={{
-														position: "absolute",
-														top: "0px",
-														right: "0px",
-														padding: "0px",
-														background: "white",
+														position: "relative",
+														width: "80px",
+														height: "80px",
+														border: "0.5px solid lightgrey",
+														padding: "5px",
+														borderRadius: "5px",
 													}}>
-													<Cancel fontSize='small' style={{ color: "brown" }} />
-												</IconButton>
-												<img src={imgShow} alt='photo' style={{ width: "100%", height: "100%" }} />
-											</Box>
+													{imgShow?.loader && (
+														<Box
+															sx={{
+																position: "absolute",
+																top: "0px",
+																right: "0px",
+																padding: "0px",
+																width: "100%",
+																height: "100%",
+																display: "flex",
+																justifyContent: "center",
+																alignItems: "center",
+															}}>
+															<CircularProgress />
+														</Box>
+													)}
+													{imgShow?.done && (
+														<Box
+															sx={{
+																position: "absolute",
+																top: "0px",
+																right: "0px",
+																padding: "0px",
+																width: "100%",
+																height: "100%",
+																display: "flex",
+																justifyContent: "center",
+																alignItems: "center",
+															}}>
+															<IconButton disabled>
+																<Done color='secondary' fontSize='large' />
+															</IconButton>
+														</Box>
+													)}
+													<IconButton
+														disabled={imgShow?.done}
+														onClick={() => {
+															document.getElementById("img").value = "";
+															setImgShow("");
+														}}
+														sx={{
+															position: "absolute",
+															top: "0px",
+															right: "0px",
+															padding: "0px",
+															background: "white",
+														}}>
+														<Cancel fontSize='small' style={{ color: "brown" }} />
+													</IconButton>
+													<img
+														src={imgShow.data}
+														alt='photo'
+														style={{ width: "100%", height: "100%", objectFit: "contain" }}
+													/>
+												</Box>
+												{imgShow?.done === false && (
+													<Box sx={{ marginLeft: "20px" }}>
+														<Button
+															onClick={() => {
+																setImgShow((prev) => ({
+																	...prev,
+																	loader: true,
+																}));
+																if (imgShow) {
+																	ImageApiCAll(imgShow);
+																} else {
+																	ImageApiCAll(imgShow);
+																}
+															}}>
+															upload
+														</Button>
+													</Box>
+												)}
+											</React.Fragment>
 										)}
 									</Box>
 								</Grid>
