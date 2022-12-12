@@ -126,29 +126,36 @@ function CreateAlert() {
 		},
 		sendTo: "TO_NEARBY",
 		location: {
-			coordinates: [72.51113723963499, 23.069438702322635],
+			coordinates: [0, 0],
+			type: "Point",
+		},
+	});
+	const [dLocation, setDLocation] = React.useState({
+		location: {
+			coordinates: [0, 0],
 			type: "Point",
 		},
 	});
 
 	const [imgShow, setImgShow] = React.useState([]);
 
-	console.log("====================================");
-	console.log("imgShow", imgShow);
-	console.log("====================================");
 	const handleGLocation = (lat, lng, address, cityName) => {
-		const arr = cityName?.formatted_address?.split(",");
-		// console.log("====================================");
-		// console.log("11----", arr[arr?.length - 3]);
-		// console.log("====================================");
-		const city = arr[arr?.length - 3];
-		setData((prev) => ({
+		setDLocation((prev) => ({
 			...prev,
-			cityName: city ? city : "",
 			location: {
 				coordinates: [lng, lat],
 				type: "Point",
 			},
+		}));
+		const arr = cityName?.formatted_address?.split(",");
+		console.log("====================================");
+		// console.log("11----", arr[arr?.length - 3]);
+		console.log("lat", lat, lng);
+		console.log("====================================");
+		const city = arr[arr?.length - 3];
+		setData((prev) => ({
+			...prev,
+			cityName: city ? city : "",
 			metaInfo: {
 				address: address,
 			},
@@ -157,7 +164,7 @@ function CreateAlert() {
 	};
 
 	const CreateAlertApiCall = React.useCallback((data) => {
-		createAlert(data)
+		createAlert({ ...data, ...dLocation })
 			.then((res) => {
 				// setModalOpen(true);
 				// setModalData("Notification created successfully", "success");
@@ -176,7 +183,7 @@ function CreateAlert() {
 					},
 					sendTo: "TO_NEARBY",
 					location: {
-						coordinates: [72.51113723963499, 23.069438702322635],
+						coordinates: [0, 0],
 						type: "Point",
 					},
 				});
