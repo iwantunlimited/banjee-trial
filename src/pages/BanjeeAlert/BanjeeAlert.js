@@ -77,6 +77,10 @@ function BanjeeAlert() {
 		setValue(newValue);
 	};
 
+	const handleAlertListApiCall = () => {
+		ListAlertApiCall(0, 10);
+	};
+
 	const ListAlertApiCall = useCallback(
 		(page, pageSize) => {
 			if (currentLocation?.lat && currentLocation?.lon) {
@@ -190,6 +194,7 @@ function BanjeeAlert() {
 						</Box>
 						<TabPanel value={value} index={0}>
 							<AlertListTable
+								handleAlertListApiCall={handleAlertListApiCall}
 								listApiCall={ListAlertApiCall}
 								pagination={state}
 								handlePagination={handlePagination}

@@ -8,7 +8,13 @@ import { MainContext } from "../../../context/Context";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { deleteAlert } from "../api-services/apiServices";
 
-function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
+function AlertListTable({
+	data,
+	handlePagination,
+	pagination,
+	listApiCall,
+	handleAlertListApiCall,
+}) {
 	const navigate = useNavigate();
 
 	const context = React.useContext(MainContext);
@@ -25,19 +31,22 @@ function AlertListTable({ data, handlePagination, pagination, listApiCall }) {
 		}));
 	}
 
-	const deleteAlertApiCall = React.useCallback((id) => {
+	const deleteAlertApiCall = (id) => {
 		deleteAlert(id)
 			.then((res) => {
+				if (res) {
+					handleAlertListApiCall();
+				}
+				navigate("/banjee-alert");
 				context?.setModalOpen(true);
 				context?.setModalData("Alert Deleted Successfully", "success");
-				navigate("/banjee-alert");
 				setModalData((prev) => ({
 					open: false,
 					id: "",
 				}));
 			})
 			.catch((err) => console.log(err));
-	}, []);
+	};
 
 	let rows = data ? data : [];
 

@@ -121,6 +121,9 @@ export default function CommentsModal(props) {
 				console.error(err);
 			});
 	}, [data?.id]);
+	console.log("====================================");
+	console.log("modal", data.text?.length);
+	console.log("====================================");
 
 	React.useEffect(() => {
 		feedCommentApiCall();
@@ -135,7 +138,7 @@ export default function CommentsModal(props) {
 			aria-describedby='modal-modal-description'>
 			<Box sx={style}>
 				<Grid container sx={{ position: "relative" }}>
-					<Grid item container xs={12} md={6} spacing={2}>
+					<Grid item container xs={12} md={6} spacing={1}>
 						<Grid item xs={12}>
 							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 								<Box
@@ -314,7 +317,13 @@ export default function CommentsModal(props) {
 													justifyContent: "center",
 													alignItems: "center",
 												}}>
-												<Typography>{data?.text}</Typography>
+												{data?.text?.length > 350 ? (
+													<Box sx={{ overflowY: "scroll", height: "200px" }}>
+														<Typography>{data?.text}</Typography>
+													</Box>
+												) : (
+													<Typography>{data?.text}</Typography>
+												)}
 											</Box>
 										</SwiperSlide>
 									)}
@@ -324,12 +333,16 @@ export default function CommentsModal(props) {
 								style={{
 									marginTop: "5px",
 									padding: "0px 10px",
-									display: "flex",
-									flexDirection: "column",
 								}}>
-								{data?.text && data?.mediaContent?.length > 0 && (
-									<Typography>{data?.text}</Typography>
-								)}
+								{data?.text &&
+									data?.mediaContent?.length > 0 &&
+									(data?.text?.length > 350 ? (
+										<Box sx={{ overflowY: "scroll", height: "200px" }}>
+											<Typography>{data?.text}</Typography>
+										</Box>
+									) : (
+										<Typography>{data?.text}</Typography>
+									))}
 							</Box>
 						</Grid>
 					</Grid>
@@ -346,54 +359,56 @@ export default function CommentsModal(props) {
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0} style={{ width: "100%" }}>
-							<Box
-								style={{
-									height: "310px",
-									width: "100%",
-									// minWidth: "440px",
-									overflowY: data?.reactions?.length > 5 && "scroll",
-									overflowX: "hidden",
-								}}>
-								<Grid item container xs={12} spacing={2}>
-									{reaction?.length > 0 ? (
-										reaction?.map((ele, index) => {
-											const userLength = ele?.user?.username.length;
-											return (
-												<React.Fragment key={index}>
-													<Grid item xs={6}>
-														<span
-															style={{
-																height: "100%",
-																width: "100%",
-																display: "flex",
-																alignItems: "center",
-															}}>
-															{userLength > 15
-																? ele?.user?.username.slice(0, 15) + " ..."
-																: ele?.user?.username}
-														</span>
-													</Grid>
-													<Grid item xs={6}>
-														<img
-															src={getEmoji(ele?.reactionType)}
-															alt=''
-															style={{
-																height: "25px",
-																width: "25px",
-																objectFit: "contain",
-															}}
-														/>
-													</Grid>
-												</React.Fragment>
-											);
-										})
-									) : (
-										<Grid item xs={12}>
-											<Typography>No Reactions !</Typography>
-										</Grid>
-									)}
-								</Grid>
-							</Box>
+							<div>
+								<Box
+									style={{
+										height: "310px",
+										width: "100%",
+										// minWidth: "440px",
+										overflowY: data?.reactions?.length > 5 && "scroll",
+										overflowX: "hidden",
+									}}>
+									<Grid item container xs={12} spacing={1}>
+										{reaction?.length > 0 ? (
+											reaction?.map((ele, index) => {
+												const userLength = ele?.user?.username.length;
+												return (
+													<React.Fragment key={index}>
+														<Grid item xs={6}>
+															<span
+																style={{
+																	height: "100%",
+																	width: "100%",
+																	display: "flex",
+																	alignItems: "center",
+																}}>
+																{userLength > 15
+																	? ele?.user?.username.slice(0, 15) + " ..."
+																	: ele?.user?.username}
+															</span>
+														</Grid>
+														<Grid item xs={6}>
+															<img
+																src={getEmoji(ele?.reactionType)}
+																alt=''
+																style={{
+																	height: "25px",
+																	width: "25px",
+																	objectFit: "contain",
+																}}
+															/>
+														</Grid>
+													</React.Fragment>
+												);
+											})
+										) : (
+											<Grid item xs={12}>
+												<Typography>No Reactions !</Typography>
+											</Grid>
+										)}
+									</Grid>
+								</Box>
+							</div>
 						</TabPanel>
 						<TabPanel value={value} index={1} style={{ width: "100%" }}>
 							<Box

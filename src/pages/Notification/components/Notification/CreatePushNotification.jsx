@@ -12,11 +12,7 @@ import {
 	FormControl,
 	InputLabel,
 	Select,
-	Checkbox,
-	ListItemText,
-	OutlinedInput,
 	CircularProgress,
-	Autocomplete,
 } from "@mui/material";
 import "../../../Explore/business.css";
 import { ArrowBack, Cancel, CheckBox, CheckBoxOutlineBlank, Done } from "@mui/icons-material";
@@ -30,9 +26,6 @@ import SnackbarContext from "../../../../CustomComponents/SnackbarContext";
 
 import Compressor from "compressorjs";
 import { v4 as uuidv4 } from "uuid";
-
-const icon = <CheckBoxOutlineBlank fontSize='small' />;
-const checkedIcon = <CheckBox fontSize='small' />;
 
 function CreatePushNotification() {
 	const context = React.useContext(MainContext);
@@ -88,8 +81,6 @@ function CreatePushNotification() {
 	const CreateAlertApiCall = React.useCallback((data) => {
 		createAlert(data)
 			.then((res) => {
-				// setModalOpen(true);
-				// setModalData("Notification created successfully", "success");
 				setNotificationPopup({ open: true, message: "Notification Created Successfully" });
 				navigate("/notification");
 				setData({
@@ -130,8 +121,6 @@ function CreatePushNotification() {
 						success: (compressedResult) => {
 							// compressedResult has the compressed file.
 							// Use the compressed file to upload the images to your server.
-							// setImages(compressedResult);
-							// setImgShow(URL.createObjectURL(compressedResult));
 							setImgShow((prev) => [
 								...prev,
 								{
@@ -143,10 +132,6 @@ function CreatePushNotification() {
 									done: false,
 								},
 							]);
-							// ImageApiCAll(
-							// 	compressedResult,
-							// 	inputType
-							// );
 						},
 					});
 				} else {
@@ -161,10 +146,6 @@ function CreatePushNotification() {
 							done: false,
 						},
 					]);
-					// ImageApiCAll(
-					// 	image,
-					// 	inputType
-					// );
 				}
 			}
 		} else {
@@ -189,10 +170,6 @@ function CreatePushNotification() {
 								done: false,
 							},
 						]);
-						// ImageApiCAll(
-						// 	compressedResult,
-						// 	inputType
-						// );
 					},
 				});
 			} else {

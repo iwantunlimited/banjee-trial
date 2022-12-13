@@ -12,14 +12,10 @@ import {
 	FormControl,
 	InputLabel,
 	Select,
-	Checkbox,
-	ListItemText,
-	OutlinedInput,
 	CircularProgress,
-	Autocomplete,
 } from "@mui/material";
 // import "../../../Explore/business.css";
-import { ArrowBack, Cancel, CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
+import { ArrowBack, Cancel, Done } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { createAlert } from "../api-services/apiServices";
 import axios from "axios";
@@ -148,10 +144,9 @@ function CreateAlert() {
 			},
 		}));
 		const arr = cityName?.formatted_address?.split(",");
-		console.log("====================================");
+		// console.log("====================================");
 		// console.log("11----", arr[arr?.length - 3]);
-		console.log("lat", lat, lng);
-		console.log("====================================");
+		// console.log("====================================");
 		const city = arr[arr?.length - 3];
 		setData((prev) => ({
 			...prev,
@@ -166,8 +161,6 @@ function CreateAlert() {
 	const CreateAlertApiCall = React.useCallback((data) => {
 		createAlert({ ...data, ...dLocation })
 			.then((res) => {
-				// setModalOpen(true);
-				// setModalData("Notification created successfully", "success");
 				setNotificationPopup({ open: true, message: "Alert Created Successfully" });
 				navigate("/banjee-alert");
 				setData({
@@ -195,9 +188,6 @@ function CreateAlert() {
 	}, []);
 
 	const handleImageChange = (event) => {
-		// console.log("====================================");
-		// console.log(event.target.files);
-		// console.log("====================================");
 		if (event?.target?.files?.length > 0) {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
 				const image = event.target.files[index];
@@ -218,25 +208,24 @@ function CreateAlert() {
 									data: URL.createObjectURL(compressedResult),
 									id: uuidv4(),
 									src: compressedResult,
+									loader: false,
+									done: false,
 								},
 							]);
-							// ImageApiCAll(
-							// 	compressedResult,
-							// 	inputType
-							// 	// event?.target?.files[index].type,
-							// );
 						},
 					});
 				} else {
 					setImgShow((prev) => [
 						...prev,
-						{ type: inputType, data: URL.createObjectURL(image), id: uuidv4(), src: image },
+						{
+							type: inputType,
+							data: URL.createObjectURL(image),
+							id: uuidv4(),
+							src: image,
+							loader: false,
+							done: false,
+						},
 					]);
-					// ImageApiCAll(
-					// 	image,
-					// 	inputType
-					// 	// event?.target?.files[index].type,
-					// );
 				}
 			}
 		} else {
@@ -250,23 +239,29 @@ function CreateAlert() {
 					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
 					convertTypes: inputType === "video" ? ["video/mp4"] : ["image/png"],
 					success: (compressedResult) => {
-						// compressedResult has the compressed file.
-						// Use the compressed file to upload the images to your server.
-						// setImages(compressedResult);
-						// setImgShow(URL.createObjectURL(compressedResult));
 						setImgShow((prev) => [
 							...prev,
-							{ type: inputType, data: URL.createObjectURL(compressedResult) },
+							{
+								type: inputType,
+								data: URL.createObjectURL(compressedResult),
+								id: uuidv4(),
+								loader: false,
+								done: false,
+							},
 						]);
-						ImageApiCAll(
-							compressedResult,
-							inputType
-							// event?.target?.files[index].type,
-						);
 					},
 				});
 			} else {
-				setImgShow((prev) => [...prev, { type: inputType, data: URL.createObjectURL(image) }]);
+				setImgShow((prev) => [
+					...prev,
+					{
+						type: inputType,
+						data: URL.createObjectURL(image),
+						id: uuidv4(),
+						loader: false,
+						done: false,
+					},
+				]);
 			}
 		}
 	};
@@ -280,7 +275,7 @@ function CreateAlert() {
 
 			formData.append("cloud_name", "banjee");
 			formData.append("upload_preset", "notification_image");
-			formData.append("file", data);
+			formData.append("file", data?.src);
 			// { headers: { "Content-Type": "multipart/form-data" }
 
 			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload/`;
@@ -292,13 +287,26 @@ function CreateAlert() {
 						setImageUploaded(true);
 						setModalOpen(true);
 						setModalData("Image Uploaded", "success");
+						setSubmitForm(true);
 					}
-					setSubmitForm(true);
 					setData((prev) => ({
 						...prev,
 						// imageUrl: res?.data?.data[0]?.data?.id,
 						videoUrl: [...prev.videoUrl, res?.data?.public_id],
 					}));
+					setImgShow((prev) => {
+						return prev.map((item) => {
+							if (item?.id === data?.id) {
+								return {
+									...item,
+									loader: false,
+									done: true,
+								};
+							} else {
+								return item;
+							}
+						});
+					});
 				})
 				.catch((err) => console.error(err));
 		} else {
@@ -309,7 +317,7 @@ function CreateAlert() {
 
 			formData.append("cloud_name", "banjee");
 			formData.append("upload_preset", "notification_image");
-			formData.append("file", data);
+			formData.append("file", data.src);
 			// { headers: { "Content-Type": "multipart/form-data" }
 
 			const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
@@ -321,13 +329,26 @@ function CreateAlert() {
 						setImageUploaded(true);
 						setModalOpen(true);
 						setModalData("Image Uploaded", "success");
+						setSubmitForm(true);
 					}
-					setSubmitForm(true);
 					setData((prev) => ({
 						...prev,
 						// imageUrl: res?.data?.data[0]?.data?.id,
 						imageUrl: [...prev.imageUrl, res?.data?.public_id],
 					}));
+					setImgShow((prev) => {
+						return prev.map((item) => {
+							if (item?.id === data?.id) {
+								return {
+									...item,
+									loader: false,
+									done: true,
+								};
+							} else {
+								return item;
+							}
+						});
+					});
 				})
 				.catch((err) => console.error(err));
 		}
@@ -336,7 +357,7 @@ function CreateAlert() {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		if (imgShow?.length > 0 && submitForm === false) {
-			window.alert("PLease upload the selected image first");
+			window.alert("Please upload the selected image first");
 		} else {
 			CreateAlertApiCall(data);
 		}
@@ -439,10 +460,49 @@ function CreateAlert() {
 																			padding: "5px",
 																			borderRadius: "5px",
 																		}}>
+																		{item?.loader && (
+																			<Box
+																				sx={{
+																					position: "absolute",
+																					top: "0px",
+																					right: "0px",
+																					padding: "0px",
+																					width: "100%",
+																					height: "100%",
+																					display: "flex",
+																					justifyContent: "center",
+																					alignItems: "center",
+																				}}>
+																				<CircularProgress />
+																			</Box>
+																		)}
+																		{item?.done && (
+																			<Box
+																				sx={{
+																					position: "absolute",
+																					top: "0px",
+																					right: "0px",
+																					padding: "0px",
+																					width: "100%",
+																					height: "100%",
+																					display: "flex",
+																					justifyContent: "center",
+																					alignItems: "center",
+																				}}>
+																				<IconButton disabled>
+																					<Done color='secondary' fontSize='large' />
+																				</IconButton>
+																			</Box>
+																		)}
 																		<IconButton
-																			disabled={imageUploaded}
+																			disabled={item?.done}
 																			onClick={() => {
-																				document.getElementById("img").value = "";
+																				imgShow?.map((item, index) => {
+																					if (imgShow?.length - 1 === index) {
+																						document.getElementById("img").value = "";
+																					}
+																					return item;
+																				});
 																				setImgShow((prev) =>
 																					prev?.filter((data) => data?.id !== item?.id)
 																				);
@@ -476,10 +536,49 @@ function CreateAlert() {
 																		padding: "5px",
 																		borderRadius: "5px",
 																	}}>
+																	{item?.loader && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<CircularProgress />
+																		</Box>
+																	)}
+																	{item?.done && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<IconButton disabled>
+																				<Done color='secondary' fontSize='large' />
+																			</IconButton>
+																		</Box>
+																	)}
 																	<IconButton
-																		disabled={imageUploaded}
+																		disabled={item?.done}
 																		onClick={() => {
-																			document.getElementById("img").value = "";
+																			imgShow?.map((item, index) => {
+																				if (imgShow?.length - 1 === index) {
+																					document.getElementById("img").value = "";
+																				}
+																				return item;
+																			});
 																			setImgShow((prev) =>
 																				prev?.filter((data) => data?.id !== item?.id)
 																			);
@@ -503,16 +602,24 @@ function CreateAlert() {
 															);
 														}
 													})}
-												{imgShow?.length > 0 && (
+												{imgShow?.length > 0 && imageUploaded === false && (
 													<Box sx={{ marginLeft: "20px" }}>
 														<Button
-															color={imageUploaded ? "secondary" : "primary"}
 															onClick={() => {
+																setImgShow((prev) => {
+																	return prev.map((item) => {
+																		return {
+																			...item,
+																			loader: true,
+																			done: false,
+																		};
+																	});
+																});
 																imgShow?.map((item, index) => {
 																	if (imgShow?.length - 1 === index) {
-																		ImageApiCAll(item?.src, item?.type, "Images Uploaded");
+																		ImageApiCAll(item, item?.type, "Images Uploaded");
 																	} else {
-																		ImageApiCAll(item?.src, item?.type, "");
+																		ImageApiCAll(item, item?.type, "");
 																	}
 																	return item;
 																});
