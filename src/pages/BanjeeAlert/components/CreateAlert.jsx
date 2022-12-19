@@ -13,6 +13,12 @@ import {
 	InputLabel,
 	Select,
 	CircularProgress,
+	Chip,
+	Paper,
+	RadioGroup,
+	FormLabel,
+	FormControlLabel,
+	Radio,
 } from "@mui/material";
 // import "../../../Explore/business.css";
 import { ArrowBack, Cancel, Done } from "@mui/icons-material";
@@ -21,7 +27,7 @@ import { createAlert } from "../api-services/apiServices";
 import axios from "axios";
 import { MainContext } from "../../../context/Context";
 import SnackbarContext from "../../../CustomComponents/SnackbarContext";
-
+import "../alert.css";
 import Compressor from "compressorjs";
 import MyGoogleMap from "../../Neighbourhoods/Map/GoogleMap";
 import { v4 as uuidv4 } from "uuid";
@@ -37,67 +43,86 @@ import PoliceRoadblock from "../../../assets/alerticonset/PoliceRoadblock.png";
 import fire from "../../../assets/alerticonset/fire.png";
 import thunder from "../../../assets/alerticonset/thunder.png";
 import pawprint from "../../../assets/alerticonset/pawprint.png";
+import edit from "../../../assets/alerticonset/edit.png";
 
-const alertList = [
+const eventData = [
 	{
 		icon: "tow-truck",
 		img: SuspiciousVehicle,
 		name: "Suspicious Vehicle",
+		select: false,
 	},
 	{
 		icon: "person",
 		img: SuspiciousPerson,
 		name: "Suspicious Person",
+		select: false,
 	},
 	{
 		icon: "pets",
 		img: pawprint,
 		name: "Lost / Found Pet",
+		select: false,
 	},
 	{
 		icon: "robber",
 		img: HouseBreakIn,
 		name: "House Break-In",
+		select: false,
 	},
 	{
 		icon: "car",
 		img: CarVandalism,
 		name: "Car Vandalism",
+		select: false,
 	},
 	{
 		icon: "sound",
 		img: TheftRobbery,
 		name: "Theft/Robbery",
+		select: false,
 	},
 	{
 		icon: "car",
 		img: ViolenceAssault,
 		name: "Violence/Assault",
+		select: false,
 	},
 	{
 		icon: "car",
 		img: HitRun,
 		name: "Hit & Run",
+		select: false,
 	},
 	{
 		icon: "local-activity",
 		img: SuspiciousActivity,
 		name: "Suspicious Activity",
+		select: false,
 	},
 	{
 		icon: "road",
 		img: PoliceRoadblock,
 		name: "Police Roadblock",
+		select: false,
 	},
 	{
 		icon: "fire",
 		img: fire,
 		name: "Fire",
+		select: false,
 	},
 	{
 		icon: "lightning-bolt",
 		img: thunder,
 		name: "Power Cut",
+		select: false,
+	},
+	{
+		icon: "others",
+		img: edit,
+		name: "Others",
+		select: false,
 	},
 ];
 
@@ -109,11 +134,12 @@ function CreateAlert() {
 	const navigate = useNavigate();
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
+	const [eventTitle, setEventTitle] = React.useState("");
 	const [data, setData] = React.useState({
 		anonymous: true,
 		eventCode: "NEW_ALERT",
 		cityName: "",
-		eventName: "",
+		eventName: null,
 		description: "",
 		imageUrl: [],
 		videoUrl: [],
@@ -359,10 +385,17 @@ function CreateAlert() {
 		if (imgShow?.length > 0 && submitForm === false) {
 			window.alert("Please upload the selected image first");
 		} else {
-			CreateAlertApiCall(data);
+			if (data?.eventName === "Others") {
+				CreateAlertApiCall({ ...data, title: eventTitle });
+			} else {
+				CreateAlertApiCall(data);
+			}
 		}
 	};
 
+	console.log("====================================");
+	console.log("data", data);
+	console.log("====================================");
 	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
 
 	if (data) {
@@ -381,11 +414,12 @@ function CreateAlert() {
 							</Typography>
 						</Card>
 					</Grid>
+
 					<Grid item xs={12}>
 						<Card sx={{ padding: "20px" }}>
 							<form onSubmit={handleSubmit}>
 								<Grid item container xs={12} spacing={2}>
-									<Grid item xs={12}>
+									{/* <Grid item xs={12}>
 										<FormControl fullWidth>
 											<InputLabel id='demo-simple-select-label'>Select Event</InputLabel>
 											<Select
@@ -401,8 +435,8 @@ function CreateAlert() {
 														eventName: event.target?.value,
 													}));
 												}}>
-												{alertList &&
-													alertList?.map((item, index) => {
+												{eventData &&
+													eventData?.map((item, index) => {
 														return (
 															<MenuItem key={index} value={item?.name}>
 																<IconButton sx={{ marginRight: "20px" }}>
@@ -418,7 +452,166 @@ function CreateAlert() {
 													})}
 											</Select>
 										</FormControl>
+									</Grid> */}
+									<Grid item xs={12}>
+										<FormControl fullWidth required>
+											<FormLabel id='event-radios'>Select Event</FormLabel>
+											<RadioGroup
+												aria-labelledby='event-radios'
+												name='event-radios'
+												value={data?.eventName}
+												onChange={(event) => {
+													setData((prev) => ({
+														...prev,
+														eventName: event.target.value,
+													}));
+												}}>
+												<Grid item container xs={12} spacing={0.5}>
+													{eventData?.map((item, index) => {
+														return (
+															<Grid item xs={6} sm={4} md={4} lg={4} xl={2}>
+																<FormControlLabel
+																	sx={{ width: "100% !important" }}
+																	value={item?.name}
+																	control={
+																		<Radio
+																			required
+																			className='radio-button-icon'
+																			disableRipple
+																			color='default'
+																			checkedIcon={
+																				<Paper
+																					sx={{
+																						background: "#e1e1e1",
+																						borderRadius: "10px",
+																						padding: "10px",
+																						display: "flex",
+																						justifyContent: "center",
+																						alignItems: "center",
+																						flexDirection: "column",
+																						textAlign: "center",
+																						width: "100%",
+																						height: "100%",
+																					}}>
+																					<Box
+																						sx={{
+																							width: {
+																								xs: "20px",
+																								sm: "20px",
+																								md: "25px",
+																								lg: "35px",
+																							},
+																							height: {
+																								xs: "20px",
+																								sm: "20px",
+																								md: "25px",
+																								lg: "35px",
+																							},
+																						}}>
+																						<img
+																							src={item?.img}
+																							alt={item?.icon}
+																							style={{
+																								width: "100%",
+																								height: "100%",
+																								objectFit: "contain",
+																							}}
+																						/>
+																					</Box>
+																					<Typography
+																						sx={{
+																							marginTop: "5px",
+																							fontSize: {
+																								xs: "10px",
+																								sm: "11px",
+																								md: "12px",
+																								lg: "14px",
+																							},
+																						}}>
+																						{item?.name}
+																					</Typography>
+																				</Paper>
+																			}
+																			icon={
+																				<Paper
+																					sx={{
+																						background: "white",
+																						borderRadius: "10px",
+																						padding: "10px",
+																						display: "flex",
+																						justifyContent: "center",
+																						alignItems: "center",
+																						flexDirection: "column",
+																						textAlign: "center",
+																						width: "100%",
+																						height: "100%",
+																					}}>
+																					<Box
+																						sx={{
+																							width: {
+																								xs: "20px",
+																								sm: "20px",
+																								md: "25px",
+																								lg: "35px",
+																							},
+																							height: {
+																								xs: "20px",
+																								sm: "20px",
+																								md: "25px",
+																								lg: "35px",
+																							},
+																						}}>
+																						<img
+																							src={item?.img}
+																							alt={item?.icon}
+																							style={{
+																								width: "100%",
+																								height: "100%",
+																								objectFit: "contain",
+																							}}
+																						/>
+																					</Box>
+																					<Typography
+																						sx={{
+																							marginTop: "5px",
+																							fontSize: {
+																								xs: "10px",
+																								sm: "11px",
+																								md: "12px",
+																								lg: "14px",
+																							},
+																						}}>
+																						{item?.name}
+																					</Typography>
+																				</Paper>
+																			}
+																		/>
+																	}
+																	label=''
+																/>
+															</Grid>
+														);
+													})}
+												</Grid>
+											</RadioGroup>
+										</FormControl>
 									</Grid>
+									{data?.eventName === "Others" && (
+										<Grid item xs={12}>
+											<TextField
+												required
+												className='neighbourhood-form-textField'
+												fullWidth
+												label='Title'
+												placeholder='Title'
+												name='eventTitle'
+												value={eventTitle}
+												onChange={(event) => {
+													setEventTitle(event.target?.value);
+												}}
+											/>
+										</Grid>
+									)}
 									<Grid item xs={12}>
 										<Box>
 											<Typography sx={{ marginLeft: "0.3px" }}>Select Image</Typography>

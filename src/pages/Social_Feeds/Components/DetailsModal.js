@@ -122,7 +122,7 @@ export default function CommentsModal(props) {
 			});
 	}, [data?.id]);
 	console.log("====================================");
-	console.log("modal", data.text?.length);
+	console.log("modal", data);
 	console.log("====================================");
 
 	React.useEffect(() => {
@@ -262,7 +262,7 @@ export default function CommentsModal(props) {
 														</Box>
 													</SwiperSlide>
 												);
-											} else if (item?.mimeType === "image/jpg") {
+											} else if (item?.type === "image") {
 												return (
 													<SwiperSlide>
 														<Box
@@ -276,10 +276,7 @@ export default function CommentsModal(props) {
 															}}>
 															<img
 																alt=''
-																src={
-																	item?.src &&
-																	`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.webp`
-																}
+																src={`https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:best/v1/${item?.src}.jpg`}
 																style={{
 																	height: "100%",
 																	width: "100%",
@@ -289,7 +286,9 @@ export default function CommentsModal(props) {
 														</Box>
 													</SwiperSlide>
 												);
-											} else {
+											}
+											{
+												/* else {
 												return (
 													<SwiperSlide>
 														<Box
@@ -305,6 +304,7 @@ export default function CommentsModal(props) {
 														</Box>
 													</SwiperSlide>
 												);
+											} */
 											}
 										})
 									) : (
@@ -318,7 +318,7 @@ export default function CommentsModal(props) {
 													alignItems: "center",
 												}}>
 												{data?.text?.length > 350 ? (
-													<Box sx={{ overflowY: "scroll", height: "200px" }}>
+													<Box sx={{ overflowY: "scroll", height: "300px" }}>
 														<Typography>{data?.text}</Typography>
 													</Box>
 												) : (

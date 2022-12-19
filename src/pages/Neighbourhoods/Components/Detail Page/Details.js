@@ -16,8 +16,10 @@ import {
 	InputLabel,
 	FormControl,
 	CircularProgress,
+	Stack,
 } from "@mui/material";
 import {
+	deleteNeighbourhood,
 	filterMembers,
 	filterNeighbourhood,
 	findNeighbourhood,
@@ -32,15 +34,17 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
+import { MainContext } from "../../../../context/Context";
 
 function DetailPage() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const theme = useTheme();
-
+	const { setModalOpen, setModalData } = React.useContext(MainContext);
 	const [state, setState] = React.useState();
 
-	const [modalData, setModalData] = React.useState({
+	const [modal, setModal] = React.useState({
+		modalId: 1,
 		open: false,
 		data: "",
 	});
@@ -53,12 +57,31 @@ function DetailPage() {
 		totalMembers: 0,
 	});
 
-	const handleModal = (data) => {
-		setModalData((prev) => ({
+	function handleModal(data) {
+		setModal((prev) => ({
 			...prev,
 			open: data,
+			modalId: 1,
+			data: "",
 		}));
-	};
+	}
+
+	const deleteAlertApiCall = React.useCallback((id) => {
+		deleteNeighbourhood(id)
+			.then((res) => {
+				navigate(-1);
+				setModal((prev) => ({
+					...prev,
+					open: false,
+					modalId: 1,
+					data: "",
+				}));
+				console.log(res);
+				setModalOpen(true);
+				setModalData("neighbourhood deleted", "success");
+			})
+			.catch((err) => console.warn(err));
+	}, []);
 
 	let rows = members?.data ? members?.data : [];
 
@@ -150,7 +173,7 @@ function DetailPage() {
 					<strong>
 						<IconButton
 							onClick={() => {
-								setModalData({ open: true, data: params?.row });
+								setModal({ open: true, data: params?.row, modalId: 2 });
 								// navigate("/neighbourhood/detail/" + params?.row?.routingId);
 							}}>
 							<Visibility />
@@ -207,13 +230,26 @@ function DetailPage() {
 					<IconButton onClick={() => navigate(-1)}>
 						<ArrowBack style={{ color: theme.palette.primary.main }} />
 					</IconButton>
-					{/* <Button
-						variant='contained'
-						onClick={() => {
-							navigate("/neighbourhood/update/" + params.id);
-						}}>
-						Edit
-					</Button> */}
+					<Stack spacing={1} direction='row'>
+						<Button
+							variant='contained'
+							onClick={() => {
+								setModal(() => ({
+									open: true,
+									modalId: 1,
+									data: params?.id,
+								}));
+							}}>
+							Delete
+						</Button>
+						<Button
+							variant='contained'
+							onClick={() => {
+								navigate("/neighbourhood/update/" + params.id);
+							}}>
+							Edit
+						</Button>
+					</Stack>
 				</Box>
 				<Card sx={{ padding: "20px" }}>
 					<Grid item container xs={12}>
@@ -336,78 +372,101 @@ function DetailPage() {
 						</Grid>
 					</Grid>
 				</Card>
-				<ModalComp handleModal={handleModal} data={modalData}>
-					<IconButton
-						onClick={() => handleModal(false)}
-						style={{ position: "absolute", top: "0px", right: "0px" }}>
-						<Cancel sx={{ color: "brown" }} />
-					</IconButton>
-					<Box
-						elevation={1}
-						style={{
-							boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
-							padding: "40px 10px 40px 10px",
-							background: "white ",
-							minHeight: "420px",
-						}}>
+				{modal?.modalId === 2 ? (
+					<ModalComp handleModal={handleModal} data={modal}>
+						<IconButton
+							onClick={() => handleModal(false)}
+							style={{ position: "absolute", top: "0px", right: "0px" }}>
+							<Cancel sx={{ color: "brown" }} />
+						</IconButton>
 						<Box
+							elevation={1}
 							style={{
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-								flexDirection: "column",
-								padding: "0 10px 0 10px",
+								boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
+								padding: "40px 10px 40px 10px",
+								background: "white ",
+								minHeight: "420px",
 							}}>
-							<Avatar
-								src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modalData?.data?.mavtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
-								alt={modalData?.data?.muserName}
-								sx={{ width: "150px", height: "150px" }}
-							/>
-							{/* <Avatar
+							<Box
+								style={{
+									display: "flex",
+									justifyContent: "center",
+									alignItems: "center",
+									flexDirection: "column",
+									padding: "0 10px 0 10px",
+								}}>
+								<Avatar
+									src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modal?.data?.mavtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+									alt={modal?.data?.muserName}
+									sx={{ width: "150px", height: "150px" }}
+								/>
+								{/* <Avatar
 								alt={
-									modalData?.data?.mfirstName?.length > 0
-										? modalData?.data?.mfirstName?.slice(0, 1)
+									modal?.data?.mfirstName?.length > 0
+										? modal?.data?.mfirstName?.slice(0, 1)
 										: "A"
 								}
 								// src={
 								// 	"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
-								// 	modalData?.data?.mavatarUrl
+								// 	modal?.data?.mavatarUrl
 								// }
-								src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modalData?.data?.mavatarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+								src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modal?.data?.mavatarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 								sx={{ width: "150px", height: "150px" }}
 							/> */}
-							<div
-								style={{
-									display: "flex",
-									alignItems: "center",
-									marginTop: "10px",
-									fontSize: "10px",
-									fontWeight: "400",
-								}}>
-								{modalData?.data?.firstName && (
-									<Typography variant='h6' style={{ marginRight: "5px" }}>
-										{modalData?.data?.mfirstName + " " + modalData?.data?.mlastName}
+								<div
+									style={{
+										display: "flex",
+										alignItems: "center",
+										marginTop: "10px",
+										fontSize: "10px",
+										fontWeight: "400",
+									}}>
+									{modal?.data?.firstName && (
+										<Typography variant='h6' style={{ marginRight: "5px" }}>
+											{modal?.data?.mfirstName + " " + modal?.data?.mlastName}
+										</Typography>
+									)}
+								</div>
+								<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
+									{window.innerWidth > 1282
+										? modal?.data?.memail
+										: modal?.data?.memail && modal?.data?.memail.slice(0, 20)}
+								</Typography>
+								{window.innerWidth < 1282 && modal && modal?.data?.memail?.length > 10 && (
+									<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
+										{modal?.data?.memail?.slice(20, modal?.data?.memail?.length + 1)}
 									</Typography>
 								)}
-							</div>
-							<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-								{window.innerWidth > 1282
-									? modalData?.data?.memail
-									: modalData?.data?.memail && modalData?.data?.memail.slice(0, 20)}
-							</Typography>
-							{window.innerWidth < 1282 && modalData && modalData?.data?.memail?.length > 10 && (
 								<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-									{modalData?.data?.memail?.slice(20, modalData?.data?.memail?.length + 1)}
+									{modal?.data?.mmcc
+										? +modal?.data?.mmcc + " " + modal?.data?.mmobile
+										: modal?.data?.mmobile}
 								</Typography>
-							)}
-							<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-								{modalData?.data?.mmcc
-									? +modalData?.data?.mmcc + " " + modalData?.data?.mmobile
-									: modalData?.data?.mmobile}
-							</Typography>
+							</Box>
 						</Box>
-					</Box>
-				</ModalComp>
+					</ModalComp>
+				) : (
+					<ModalComp handleModal={handleModal} data={modal}>
+						<Box>
+							<Typography>
+								<b>Are you sure to delete the neighbourhood ?</b>
+							</Typography>
+							<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
+								<Button variant='outlined' onClick={() => handleModal(false)}>
+									Cancel
+								</Button>
+								<Button
+									variant='contained'
+									sx={{ marginLeft: "20px" }}
+									onClick={() => {
+										deleteAlertApiCall(modal?.data);
+									}}>
+									Confirm
+								</Button>
+							</Box>
+						</Box>
+					</ModalComp>
+				)}
 			</Container>
 		);
 	} else {

@@ -91,17 +91,17 @@ function CustomerView(props) {
 	const findByUserApiCall = React.useCallback(() => {
 		findCustomer(id)
 			.then((response) => {
-				setState((prev) => ({
-					...prev,
-					zoom: 15,
-					...response,
-				}));
+				setState(response);
 				// setpenddingConIds(response.pendingConnections);
 			})
 			.catch((err) => {
 				console.error(err);
 			});
 	}, [id]);
+
+	console.log("====================================");
+	console.log("state", state);
+	console.log("====================================");
 
 	React.useEffect(() => {
 		findByUserApiCall();
@@ -341,6 +341,24 @@ function CustomerView(props) {
 					{/* </ViewDetailGrid> */}
 				</Container>
 			</div>
+		);
+	} else if (state === null) {
+		return (
+			<Container maxWidth='xl'>
+				<IconButton onClick={() => navigate(-1)}>
+					<ArrowBack />
+				</IconButton>
+				<Box
+					sx={{
+						marginTop: "20px",
+						width: "100%",
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+					}}>
+					<Typography>No data available !</Typography>
+				</Box>
+			</Container>
 		);
 	} else {
 		return (

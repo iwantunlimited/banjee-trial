@@ -270,7 +270,7 @@ function Category(props) {
 														<span style={{ color: "grey", fontSize: "20px", fontWeight: "500" }}>
 															{toggleBtn === "parent" ? "Create Category" : "Create Sub-Category"}
 														</span>
-														{props.categoryName === "ROOMS" && (
+														{/* {props.categoryName === "ROOMS" && (
 															<div style={{ width: 150, height: 35, display: "flex" }}>
 																<SwitchSelector
 																	onChange={(e) => {
@@ -286,7 +286,7 @@ function Category(props) {
 																	selectedBackgroundColor='#1976D2'
 																/>
 															</div>
-														)}
+														)} */}
 													</Box>
 													<hr />
 												</Grid>

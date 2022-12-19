@@ -1,3 +1,7 @@
 .css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop {
 	background-color: rgba(0, 0, 0, 0.1) !important;
 }
+.loading {
+	background: transparent
+		url("http://thinkfuture.com/wp-content/uploads/2013/10/loading_spinner.gif") center no-repeat;
+}

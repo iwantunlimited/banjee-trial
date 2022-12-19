@@ -59,6 +59,7 @@ export const urls = {
 		PENDING_APPROVAL: services.GEO_CLOUD + "social-cloud/pending-approvals",
 		APPROVE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/approve",
 		REJECT_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/reject",
+		DELETE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/delete/",
 		FIND_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/findById/",
 		FILTER_MEMBERS: services.GEO_CLOUD + "social-cloud/members/filter",
 		FIND_MEMBERS_BY_CLOUDID: services.GEO_CLOUD + "social-cloud/members/byCloudId/",

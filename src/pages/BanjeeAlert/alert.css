@@ -16,3 +16,10 @@
 	padding: 5px;
 	border-radius: 4px;
 }
+
+.radio-button-icon {
+	width: 100% !important;
+}
+.css-jg12e5-MuiButtonBase-root-MuiRadio-root:hover {
+	background-color: white !important;
+}

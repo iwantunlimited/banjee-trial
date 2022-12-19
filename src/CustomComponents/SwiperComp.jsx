@@ -8,6 +8,7 @@ import { Pagination } from "swiper";
 import FullScreenImageModal from "../pages/Social_Feeds/Components/FullScreenImageModal";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Fullscreen } from "@mui/icons-material";
+import "./style.css";
 
 function SwiperComp({ data }) {
 	const [fullScreenState, setFullScreenState] = React.useState({
@@ -126,6 +127,7 @@ function SwiperComp({ data }) {
 										}}
 										key={iIndex}>
 										<img
+											loading='lazy'
 											alt='#'
 											src={
 												item?.src &&

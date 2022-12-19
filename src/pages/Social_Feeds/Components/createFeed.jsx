@@ -9,10 +9,17 @@ import {
 	Button,
 	IconButton,
 	Divider,
+	Autocomplete,
+	FormLabel,
+	FormControl,
+	FormGroup,
+	FormControlLabel,
+	Checkbox,
+	CircularProgress,
 } from "@mui/material";
 import "../SocialFeed.css";
 import axios from "axios";
-import { ArrowBack, Cancel } from "@mui/icons-material";
+import { ArrowBack, Cancel, Done } from "@mui/icons-material";
 import { createSocialFeeds } from "../services/ApiServices";
 import { useNavigate } from "react-router";
 // import ReactQuill from "react-quill";
@@ -20,10 +27,12 @@ import "react-quill/dist/quill.snow.css";
 import "react-quill-emoji/dist/quill-emoji";
 import { MainContext } from "../../../context/Context";
 import Compressor from "compressorjs";
+import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
+import { v4 as uuidv4 } from "uuid";
 
 function CreateFeed() {
 	const navigate = useNavigate();
-	const [data, setData] = React.useState({
+	const [cloudinaryData, setCloudinaryData] = React.useState({
 		type: "image",
 		src: "",
 		caption: "",
@@ -43,7 +52,17 @@ function CreateFeed() {
 	});
 
 	const { setModalData, setModalOpen } = React.useContext(MainContext);
-
+	const [pagination, setPagination] = React.useState({
+		page: 0,
+		pageSize: 100,
+	});
+	const [postType, setPostType] = React.useState({
+		global: false,
+		neighbourhood: false,
+	});
+	const [submitForm, setSubmitForm] = React.useState(false);
+	const [imageUploaded, setImageUploaded] = React.useState(false);
+	const [listData, setListData] = React.useState([]);
 	const [uploadData, setUploadData] = React.useState([]);
 	const [finalPayload, setFinalPayload] = React.useState({
 		geoLocation: {
@@ -52,6 +71,7 @@ function CreateFeed() {
 		},
 		mediaContent: [],
 		text: "",
+		pageId: "",
 		pageName: "Anyone",
 		visibility: "PUBLIC",
 	});
@@ -74,84 +94,27 @@ function CreateFeed() {
 		}
 	};
 
-	const ImageApiCAll = React.useCallback(
-		(imgData, mime) => {
-			const type = mime.split("/")?.[0];
-			// const mime = "image";
-			const formData = new FormData();
-			// console.log("mime", mime);
-
-			// formData.append("directoryId", "root");
-
-			formData.append("cloud_name", "banjee");
-			if (type === "image") {
-				formData.append("upload_preset", "feed_image");
-			} else if (type === "audio") {
-				formData.append("upload_preset", "feed_audio");
-			} else if (type === "video") {
-				formData.append("upload_preset", "feed_video");
-			}
-			formData.append("file", imgData);
-			// { headers: { "Content-Type": "multipart/form-data" }
-
-			if (type === "audio") {
-				const url = `https://api.cloudinary.com/v1_1/banjee/video/upload`;
-
-				axios
-					.post(url, formData)
-					.then((res) => {
-						// setData((prev) => ({
-						// 	...prev,
-						// 	// imageUrl: res?.data?.data[0]?.data?.id,
-						// 	src: res?.data?.public_id,
-						// }));
-						setUploadData((prev) => [
-							...prev,
-							{
-								...data,
-								src: res?.data?.public_id,
-								// url: renderType(type, res?.data?.public_id),
-								type: type,
-								mimeType: mime,
-							},
-						]);
-						setImgShow((prev) => [
-							...prev,
-							{ url: renderType(type, res?.data?.public_id), type: type, mimeType: mime },
-						]);
-					})
-					.catch((err) => console.error(err));
-			} else {
-				const url = `https://api.cloudinary.com/v1_1/banjee/${type}/upload`;
-
-				axios
-					.post(url, formData)
-					.then((res) => {
-						setUploadData((prev) => [
-							...prev,
-							{
-								...data,
-								src: res?.data?.public_id,
-								type: type,
-								mimeType: mime,
-							},
-						]);
-						setImgShow((prev) => [
-							...prev,
-							{ url: renderType(type, res?.data?.public_id), type: type, mimeType: mime },
-						]);
-
-						// setData((prev) => ({
-						// 	...prev,
-						// 	// imageUrl: res?.data?.data[0]?.data?.id,
-						// 	src: res?.data?.public_id,
-						// }));
-					})
-					.catch((err) => console.error(err));
-			}
-		},
-		[data]
-	);
+	const listNeighbourApiCAll = React.useCallback((page, pageSize) => {
+		filterNeighbourhood({ page: page, pageSize: pageSize, online: true })
+			.then((res) => {
+				console.log("--------", res);
+				const resp = res.content.map((ele) => {
+					return {
+						routingId: ele.id,
+						...ele,
+						// ...ele?.name,
+						// ...ele?.createdOn,
+					};
+				});
+				setListData(resp);
+				setPagination((prev) => ({
+					...prev,
+					page: res?.pageable?.pageNumber,
+					pageSize: res?.pageable?.pageSize,
+				}));
+			})
+			.catch((err) => console.log(err));
+	}, []);
 
 	const CreateFeedApiCall = React.useCallback(
 		(data) => {
@@ -180,44 +143,112 @@ function CreateFeed() {
 	const handleImageChange = (event) => {
 		if (event?.target?.files?.length > 0) {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
-				const dataType = event?.target?.files[index].type.split("/")?.[0];
 				const image = event.target.files[index];
+
+				const inputType = image.type.split("/")?.[0];
 				// console.log("dataTYpe", dataType);
-				if (dataType === "image") {
+				if (inputType === "image") {
 					new Compressor(image, {
 						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
 						// convertTypes: ["image/png"],
 						success: (compressedResult) => {
 							// compressedResult has the compressed file.
 							// Use the compressed file to upload the images to your server.
-							ImageApiCAll(compressedResult, compressedResult.type);
+							// ImageApiCAll(compressedResult, compressedResult.type);
+							setImgShow((prev) => [
+								...prev,
+								{
+									type: inputType,
+									data: URL.createObjectURL(compressedResult),
+									id: uuidv4(),
+									src: compressedResult,
+									loader: false,
+									done: false,
+								},
+							]);
 						},
 					});
 				} else {
-					ImageApiCAll(image, image.type);
+					// ImageApiCAll(image, image.type);
+					setImgShow((prev) => [
+						...prev,
+						{
+							type: inputType,
+							data: URL.createObjectURL(image),
+							id: uuidv4(),
+							src: image,
+							loader: false,
+							done: false,
+						},
+					]);
 				}
 			}
-		} else {
-			const image = event.target.files[0];
-			new Compressor(image, {
-				quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-				success: (compressedResult) => {
-					// compressedResult has the compressed file.
-					// Use the compressed file to upload the images to your server.
-					ImageApiCAll(compressedResult, compressedResult.type);
-				},
-			});
 		}
 	};
 
+	const ImageApiCAll = React.useCallback((imgData, imageType, notifyMessage) => {
+		console.log(":1111", imgData);
+		const formData = new FormData();
+		formData.append("cloud_name", "banjee");
+		if (imageType === "image") {
+			formData.append("upload_preset", "feed_image");
+		} else if (imageType === "audio") {
+			formData.append("upload_preset", "feed_audio");
+		} else if (imageType === "video") {
+			formData.append("upload_preset", "feed_video");
+		}
+		formData.append("file", imgData?.src);
+		const url = `https://api.cloudinary.com/v1_1/banjee/${imageType}/upload/`;
+		axios
+			.post(url, formData)
+			.then((res) => {
+				if (notifyMessage === "Images Uploaded") {
+					setImageUploaded(true);
+					setModalOpen(true);
+					setModalData("Image Uploaded", "success");
+				}
+				setSubmitForm(true);
+				setFinalPayload((prev) => ({
+					...prev,
+					mediaContent: [
+						...prev.mediaContent,
+						{
+							...cloudinaryData,
+							src: res?.data?.public_id,
+							type: imgData?.type,
+							mimeType: imgData?.src?.type,
+						},
+					],
+				}));
+				setImgShow((prev) => {
+					return prev.map((item) => {
+						if (item?.id === imgData?.id) {
+							return {
+								...item,
+								loader: false,
+								done: true,
+							};
+						} else {
+							return item;
+						}
+					});
+				});
+			})
+			.catch((err) => console.error(err));
+	}, []);
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		setFinalPayload((prev) => ({
-			...prev,
-			mediaContent: uploadData?.length > 0 ? uploadData : data,
-		}));
-		CreateFeedApiCall(finalPayload);
+		if (imgShow?.length > 0 && submitForm === false) {
+			window.alert("PLease upload the selected image first");
+		} else {
+			CreateFeedApiCall(finalPayload);
+		}
 	};
+
+	React.useEffect(() => {
+		listNeighbourApiCAll(0, 100);
+	}, [listNeighbourApiCAll]);
 
 	// const descriptionText = <div dangerouslySetInnerHTML={{ __html: state }} />;
 
@@ -249,6 +280,84 @@ function CreateFeed() {
 							<Grid item container xs={12} spacing={2}>
 								<Grid item xs={12}>
 									<Box>
+										<FormControl component='fieldset' variant='standard'>
+											<FormLabel component='legend'>Select Post Type</FormLabel>
+											<FormGroup>
+												<FormControlLabel
+													control={
+														<Checkbox
+															checked={postType?.global}
+															onChange={(event) => {
+																setPostType((prev) => ({
+																	...prev,
+																	global: event?.target?.checked,
+																	neighbourhood: false,
+																}));
+																setFinalPayload((prev) => ({
+																	...prev,
+																	pageId: "62401d53e3a009309544d3e8",
+																	pageName: "Global-Feeds",
+																}));
+															}}
+															name={postType?.global}
+														/>
+													}
+													label='Global Feed'
+												/>
+												<FormControlLabel
+													control={
+														<Checkbox
+															checked={postType?.neighbourhood}
+															onChange={(event) => {
+																setPostType((prev) => ({
+																	...prev,
+																	global: false,
+																	neighbourhood: event?.target?.checked,
+																}));
+															}}
+															name={postType?.neighbourhood}
+														/>
+													}
+													label='Neighbourhood'
+												/>
+											</FormGroup>
+										</FormControl>
+									</Box>
+								</Grid>
+								{postType?.neighbourhood === true && (
+									<Grid item xs={12}>
+										<Autocomplete
+											id='neightbourhood Id'
+											options={listData}
+											getOptionLabel={(option) => option.name}
+											renderOption={(props, option) => (
+												<Box component='li' {...props}>
+													{option.name}
+												</Box>
+											)}
+											onChange={(event, newValue) => {
+												setFinalPayload((prev) => ({
+													...prev,
+													pageId: newValue?.routingId,
+													pageName: newValue?.name,
+												}));
+											}}
+											sx={{ width: "100%" }}
+											renderInput={(params) => {
+												console.log("params", params);
+												return (
+													<TextField
+														required={postType?.neighbourhood}
+														{...params}
+														label='Neighbourhood'
+													/>
+												);
+											}}
+										/>
+									</Grid>
+								)}
+								<Grid item xs={12}>
+									<Box>
 										<Typography sx={{ marginLeft: "0.3px" }}>upload image</Typography>
 										<Box
 											sx={{
@@ -270,69 +379,144 @@ function CreateFeed() {
 												// accept='.jpg, .jpeg, .png'
 												onChange={(event) => {
 													handleImageChange(event);
-
-													// newImageFunc(event.target.files[0]);
-													// setImgShow(URL.createObjectURL(event?.target?.files[0]));
-													// ImageApiCAll(event?.target?.files[0]);
-													// setData((prev) => ({
-													// 	...prev,
-													// 	logoURL: event.target.files[0],
-													// }));
 												}}
 											/>
-											{imgShow?.length > 0 &&
+											{imgShow &&
 												imgShow?.map((item, index) => {
 													if (item?.type === "image") {
 														return (
-															<Box
-																sx={{
-																	position: "relative",
-																	width: "150px",
-																	height: "150px",
-																	border: "0.5px solid lightgrey",
-																	padding: "5px",
-																	borderRadius: "5px",
-																	marginRight: "5px",
-																}}>
-																<IconButton
-																	onClick={() => {
-																		document.getElementById("img").value = "";
-																		setImgShow((prev) =>
-																			prev?.filter((data) => data?.url !== item?.url)
-																		);
-																	}}
+															<React.Fragment>
+																<Box
+																	key={index}
 																	sx={{
-																		position: "absolute",
-																		top: "0px",
-																		right: "0px",
-																		padding: "0px",
-																		background: "white",
+																		position: "relative",
+																		width: "80px",
+																		height: "80px",
+																		border: "0.5px solid lightgrey",
+																		padding: "5px",
+																		borderRadius: "5px",
 																	}}>
-																	<Cancel fontSize='small' style={{ color: "brown" }} />
-																</IconButton>
-																<img
-																	src={item?.url}
-																	alt='photo'
-																	style={{ width: "100%", height: "100%" }}
-																/>
-															</Box>
+																	{item?.loader && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<CircularProgress />
+																		</Box>
+																	)}
+																	{item?.done && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<IconButton disabled>
+																				<Done color='secondary' fontSize='large' />
+																			</IconButton>
+																		</Box>
+																	)}
+																	<IconButton
+																		disabled={item?.done}
+																		onClick={() => {
+																			imgShow?.map((item, index) => {
+																				if (imgShow?.length - 1 === index) {
+																					document.getElementById("businessImage").value = "";
+																				}
+																				return item;
+																			});
+																			setImgShow((prev) =>
+																				prev?.filter((data) => data?.id !== item?.id)
+																			);
+																		}}
+																		sx={{
+																			position: "absolute",
+																			top: "0px",
+																			right: "0px",
+																			padding: "0px",
+																			background: "white",
+																		}}>
+																		<Cancel fontSize='small' style={{ color: "brown" }} />
+																	</IconButton>
+																	<img
+																		src={item?.data}
+																		alt={item?.id}
+																		style={{ width: "100%", height: "100%" }}
+																	/>
+																</Box>
+															</React.Fragment>
 														);
 													} else {
 														return (
 															<Box
+																key={index}
 																sx={{
 																	position: "relative",
-																	width: "150px",
-																	height: "150px",
+																	width: "80px",
+																	height: "80px",
 																	border: "0.5px solid lightgrey",
 																	padding: "5px",
 																	borderRadius: "5px",
 																}}>
+																{item?.loader && (
+																	<Box
+																		sx={{
+																			position: "absolute",
+																			top: "0px",
+																			right: "0px",
+																			padding: "0px",
+																			width: "100%",
+																			height: "100%",
+																			display: "flex",
+																			justifyContent: "center",
+																			alignItems: "center",
+																		}}>
+																		<CircularProgress />
+																	</Box>
+																)}
+																{item?.done && (
+																	<Box
+																		sx={{
+																			position: "absolute",
+																			top: "0px",
+																			right: "0px",
+																			padding: "0px",
+																			width: "100%",
+																			height: "100%",
+																			display: "flex",
+																			justifyContent: "center",
+																			alignItems: "center",
+																		}}>
+																		<IconButton disabled>
+																			<Done color='secondary' fontSize='large' />
+																		</IconButton>
+																	</Box>
+																)}
 																<IconButton
+																	disabled={item?.done}
 																	onClick={() => {
-																		document.getElementById("img").value = "";
+																		imgShow?.map((item, index) => {
+																			if (imgShow?.length - 1 === index) {
+																				document.getElementById("businessImage").value = "";
+																			}
+																			return item;
+																		});
 																		setImgShow((prev) =>
-																			prev?.filter((data) => data?.url !== item?.url)
+																			prev?.filter((data) => data?.id !== item?.id)
 																		);
 																	}}
 																	sx={{
@@ -345,14 +529,42 @@ function CreateFeed() {
 																	<Cancel fontSize='small' style={{ color: "brown" }} />
 																</IconButton>
 																<iframe
-																	src={item?.url}
-																	alt='photo'
+																	title={item?.id}
+																	src={item?.data}
+																	alt='video'
 																	style={{ width: "100%", height: "100%" }}
 																/>
 															</Box>
 														);
 													}
 												})}
+											{imgShow?.length > 0 && imageUploaded === false && (
+												<Box sx={{ marginLeft: "20px" }}>
+													<Button
+														color={imageUploaded ? "secondary" : "primary"}
+														onClick={() => {
+															setImgShow((prev) => {
+																return prev.map((item) => {
+																	return {
+																		...item,
+																		loader: true,
+																		done: false,
+																	};
+																});
+															});
+															imgShow?.map((item, index) => {
+																if (imgShow?.length - 1 === index) {
+																	ImageApiCAll(item, item?.type, "Images Uploaded");
+																} else {
+																	ImageApiCAll(item, item?.type, "");
+																}
+																return item;
+															});
+														}}>
+														upload
+													</Button>
+												</Box>
+											)}
 										</Box>
 									</Box>
 								</Grid>
@@ -371,7 +583,6 @@ function CreateFeed() {
 											setFinalPayload((prev) => ({
 												...prev,
 												text: event.target.value,
-												mediaContent: uploadData?.length > 0 ? uploadData : data,
 											}));
 										}}
 									/>

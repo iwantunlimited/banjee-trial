@@ -44,11 +44,13 @@ function EditNeighbourhood() {
 		// id: params?.id,
 		name: "",
 		approvalType: "",
-		bannerImageUrls: [],
+		bannerImageUrl: [],
 		cityId: "",
 		countryId: "",
-		lat: "",
-		lon: "",
+		geoLocation: {
+			coordinates: ["", ""],
+			type: "Point",
+		},
 		description: "",
 		imageUrl: "",
 		type: "",
@@ -60,18 +62,24 @@ function EditNeighbourhood() {
 	const [city, setCity] = React.useState();
 	const [sState, setSState] = React.useState();
 	const [defaultLocation, setDefaultLocation] = React.useState();
-
+	const [response, setResponse] = React.useState("");
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imgShow, setImgShow] = React.useState("");
+	const [payload, setPayload] = React.useState("");
 
 	const handleGLocation = (lat, lng, address) => {
 		setData((prev) => ({
 			...prev,
-			lat: lat,
-			lon: lng,
+			geoLocation: {
+				coordinates: [lng, lat],
+				type: "Point",
+			},
 			address: address,
 		}));
 	};
+	console.log("====================================");
+	console.log("121", data);
+	console.log("====================================");
 
 	const CityApi = React.useCallback((id) => {
 		findCity({ cityId: id })
@@ -159,15 +167,23 @@ function EditNeighbourhood() {
 	const ApiCall = React.useCallback(() => {
 		findNeighbourhood(params?.id)
 			.then((res) => {
+				setResponse(res);
 				setData((prev) => ({
 					...prev,
 					name: res?.name ? res?.name : "",
 					approvalType: "",
-					bannerImageUrls: res?.bannerImageUrl ? res?.bannerImageUrl : [],
+					bannerImageUrl: res?.bannerImageUrl ? res?.bannerImageUrl : [],
 					cityId: res?.cityId ? res.cityId : "",
 					countryId: res?.countryId ? res.countryId : "",
-					lat: res?.geoLocation?.coordinates ? res?.geoLocation?.coordinates[0] : "",
-					lon: res?.geoLocation?.coordinates ? res?.geoLocation?.coordinates[1] : "",
+					geoLocation: {
+						coordinates: [
+							res?.geoLocation?.coordinates ? res?.geoLocation?.coordinates[0] : "",
+							res?.geoLocation?.coordinates ? res?.geoLocation?.coordinates[1] : "",
+						],
+						type: "Ponit",
+					},
+					// lat: res?.geoLocation?.coordinates ? res?.geoLocation?.coordinates[0] : "",
+					// lon: res?.geoLocation?.coordinates ? res?.geoLocation?.coordinates[1] : "",
 					description: res?.description ? res?.description : "",
 					imageUrl: res?.imageUrl ? res?.imageUrl : "",
 					type: res?.cloudType ? res?.cloudType : "",
@@ -188,7 +204,9 @@ function EditNeighbourhood() {
 
 	React.useEffect(() => {
 		CountryApi();
-		ApiCall();
+		setTimeout(() => {
+			ApiCall();
+		}, 2000);
 	}, [CountryApi]);
 
 	function handleChange(event) {
@@ -202,19 +220,32 @@ function EditNeighbourhood() {
 		});
 	}
 
-	const EditApiCall = React.useCallback((data) => {
-		updateNeighbourhood(data)
+	const EditApiCall = (data) => {
+		const payload = {
+			categoryId: data?.categoryId,
+			categoryName: data?.categoryName,
+			description: data?.description,
+			name: data?.name,
+			id: data?.id,
+			imageUrl: data?.imageUrl,
+		};
+		updateNeighbourhood(payload)
 			.then((res) => {
+				console.log("====================================");
+				console.log("updated", res);
+				console.log("====================================");
 				setModalOpen(true);
 				setModalData("Neighbourhood updated successfully", "success");
 				setImgShow("");
 				setData({
 					name: "",
 					approvalType: "",
-					bannerImageUrls: [],
+					bannerImageUrl: [],
 					cityId: "",
-					lat: "",
-					lon: "",
+					geoLocation: {
+						coordinates: ["", ""],
+						type: "Point",
+					},
 					description: "",
 					imageUrl: "",
 					type: "",
@@ -224,14 +255,14 @@ function EditNeighbourhood() {
 				document.getElementById("img").value = "";
 			})
 			.catch((err) => console.error(err));
-	}, []);
+	};
 
 	function handleSubmit(event) {
 		event.preventDefault();
 		if (imgShow?.update && submitForm === false) {
 			window.alert("please upload selected image first");
 		} else {
-			EditApiCall(data);
+			EditApiCall({ ...response, ...data });
 		}
 	}
 
@@ -504,7 +535,10 @@ function EditNeighbourhood() {
 									<Box sx={{ position: "relative" }}>
 										<MyGoogleMap
 											handleGLocation={handleGLocation}
-											prevLocation={{ lat: data?.lat, lng: data?.lon }}
+											prevLocation={{
+												lat: data?.geoLocation?.coordinates[1],
+												lng: data?.geoLocation?.coordinates[0],
+											}}
 										/>
 									</Box>
 								</Grid>

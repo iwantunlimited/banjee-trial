@@ -100,8 +100,8 @@ export default function SocialFeed(props) {
 	);
 
 	React.useEffect(() => {
-		filterSocialFeedsApiCall(0, 10, startDate, endDate);
-	}, [filterSocialFeedsApiCall, startDate, endDate]);
+		filterSocialFeedsApiCall(0, 10);
+	}, [filterSocialFeedsApiCall]);
 
 	// function playPause(index) {
 	// 	if (document.getElementById(`video${index}`).paused)
@@ -481,7 +481,9 @@ export default function SocialFeed(props) {
 																</SwiperSlide>
 															</Box>
 														);
-													} else {
+													}
+													{
+														/* else {
 														return (
 															<SwiperSlide>
 																<Box
@@ -513,6 +515,7 @@ export default function SocialFeed(props) {
 																</Box>
 															</SwiperSlide>
 														);
+													} */
 													}
 												})
 											) : (

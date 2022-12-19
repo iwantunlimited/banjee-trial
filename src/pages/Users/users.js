@@ -99,19 +99,18 @@ function UserComp() {
 			flex: 0.2,
 			renderCell: (params) => (
 				<strong>
-					{/* <Link to={"/user/view/" + params.row.userObject.id} replace={true}> */}
 					<IconButton
 						onClick={() => {
+							// navigate(`/user/view/${params?.row?.userObject?.id}`);
+							navigate("/user/view/" + params?.row?.systemUserId);
 							// this.props.history.push(
 							// 	this.props.location.pathname +
 							// 		"/view/" +
 							// 		params.row.userObject.id
 							// );
-							navigate("/user/view/" + params.row.userObject.id);
 						}}>
 						<VisibilityIcon />
 					</IconButton>
-					{/* </Link> */}
 				</strong>
 			),
 		},
@@ -122,11 +121,11 @@ function UserComp() {
 		(data) => {
 			listCustomer({ ...customerFilter, keywords: keyword, ...data })
 				.then((res) => {
-					const customerRows = res.content.map((data) => {
+					const customerRows = res.content.map((item) => {
 						return (data = {
-							...data,
-							...data.userObject,
-							displayDate: data.createdOn ? moment(data.createdOn).format("DD-MM-YYYY") : null,
+							...item,
+							// ...data.userObject,
+							displayDate: item.createdOn ? moment(item.createdOn).format("DD-MM-YYYY") : null,
 							View: "View",
 						});
 					});

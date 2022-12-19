@@ -64,6 +64,14 @@ export const rejectRequest = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 
+export const deleteNeighbourhood = (requestLoad) => {
+	let url = urls.GEO_CLOUD.DELETE_NEIGHBOURHOOD + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "DELETE";
+	return executeGet(url, actionCode, payload, method);
+};
+
 export const findNeighbourhood = (requestLoad) => {
 	let url = urls.GEO_CLOUD.FIND_NEIGHBOURHOOD + requestLoad;
 	let actionCode = "";

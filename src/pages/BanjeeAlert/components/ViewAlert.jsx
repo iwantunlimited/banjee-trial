@@ -181,7 +181,12 @@ function ViewAlert() {
 							<Box sx={{ marginBottom: "10px" }}>
 								<Divider />
 							</Box>
-							<AlertLocation currentLocation={currentLocation} data={data} type={"object"} />
+							<AlertLocation
+								zoom={15}
+								currentLocation={currentLocation}
+								data={data}
+								type={"object"}
+							/>
 						</Card>
 					</Grid>
 				</Grid>
