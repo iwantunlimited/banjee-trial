@@ -14,8 +14,12 @@ function App() {
 	const { themeData, setThemeData } = React.useContext(MainContext);
 	const isDarkModeEnabled = useMediaQuery("(prefers-color-scheme: dark)");
 	// console.log("====================================");
-	// console.log("themeData", isDarkModeEnabled);
+	// console.log("themeData", isDarkModeEnabled, "----", themeData);
 	// console.log("====================================");
+
+	if (isDarkModeEnabled === true) {
+		setThemeData(true);
+	}
 
 	return (
 		<ThemeProvider theme={isDarkModeEnabled ? darkTheme : themeData ? darkTheme : theme}>

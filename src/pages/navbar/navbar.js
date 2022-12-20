@@ -178,7 +178,7 @@ function Navbar(props) {
 											<IconButton
 												onClick={() => {
 													console.log("clicked");
-													setThemeData();
+													setThemeData(!themeData);
 												}}>
 												{themeData ? <LightMode /> : <DarkMode />}
 											</IconButton>

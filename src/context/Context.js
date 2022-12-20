@@ -26,7 +26,7 @@ function ContextProvider({ children }) {
 	});
 
 	const handleThemeData = (msg) => {
-		setThemeData(!themeData);
+		setThemeData(msg);
 	};
 
 	const handleData = (message, severity) => {
