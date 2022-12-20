@@ -110,6 +110,8 @@ export const urls = {
 	USERPROFILE: {
 		CUSTOMER_LIST: services.USER_PROFILE + "profile/filter",
 		CUSTOMER_FIND_BY_ID: services.USER_PROFILE + "admin/findById/",
+		FIND_USER_BY_SYSTEMUSER_ID: services?.USER_PROFILE + "profile/findBySystemUserId/",
+		FIND_USER_BY_USER_ID: services?.USER_PROFILE + "profile/findyById/",
 		FIND_USER_CONNECTION_BY_ID: services.USER_PROFILE + "admin/userConnection/",
 		FIND_USER_BLOCK_LIST: services.USER_PROFILE + "admin/userBlockList/",
 		DASHBOARD_LIST_CUSTOMER: services.USER_PROFILE + "admin/registry/report",

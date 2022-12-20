@@ -20,6 +20,7 @@ import {
 	findCustomerConnection,
 	findBlockedCustomers,
 	penddingConnectionsList,
+	findUserBySystemUserId,
 } from "../User_Services/UserApiService";
 import { Male, Female, Transgender, ArrowBack } from "@mui/icons-material";
 import "../users.css";
@@ -89,7 +90,7 @@ function CustomerView(props) {
 	// ----------------------------------- find user api call --------------------------------------------
 
 	const findByUserApiCall = React.useCallback(() => {
-		findCustomer(id)
+		findUserBySystemUserId(id)
 			.then((response) => {
 				setState(response);
 				// setpenddingConIds(response.pendingConnections);

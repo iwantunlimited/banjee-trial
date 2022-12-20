@@ -39,6 +39,7 @@ import GroupsComp from "./pages/Groups/Groups";
 import GroupDetailPage from "./pages/Groups/components/GroupDetailPage";
 import UserComp from "./pages/Users/users";
 import CreateAlert from "./pages/BanjeeAlert/components/CreateAlert";
+import NotFound from "./pages/NotFound/NotFound";
 
 const Routes = () => {
 	return useRoutes([
@@ -94,18 +95,18 @@ const Routes = () => {
 					path: "/social-feeds/reported-feeds/:id",
 					element: <ViewRFeed />,
 				},
-				{
-					path: "/report",
-					element: <UsersReport />,
-				},
-				{
-					path: "/report/users",
-					element: <UsersReport />,
-				},
-				{
-					path: "/report/rooms",
-					element: <RoomsReport />,
-				},
+				// {
+				// 	path: "/report",
+				// 	element: <UsersReport />,
+				// },
+				// {
+				// 	path: "/report/users",
+				// 	element: <UsersReport />,
+				// },
+				// {
+				// 	path: "/report/rooms",
+				// 	element: <RoomsReport />,
+				// },
 				{
 					path: "/neighbourhood",
 					element: <Neighbourhood />,
@@ -203,6 +204,10 @@ const Routes = () => {
 		{
 			path: "login",
 			element: <Login />,
+		},
+		{
+			path: "*",
+			element: <NotFound />,
 		},
 	]);
 };

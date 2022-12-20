@@ -2,7 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Drawer, Hidden, Toolbar, List, Typography, IconButton } from "@mui/material";
+import { Drawer, Hidden, Toolbar, List, Typography, IconButton, Stack } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../assets/LogoWhite.svg";
 import { styled } from "@mui/material/styles";
@@ -15,6 +15,8 @@ import { useTheme } from "@mui/material/styles";
 import SidebarList from "./newSideBar";
 import SnackbarContext from "../../CustomComponents/SnackbarContext";
 import { MainContext } from "../../context/Context";
+import { DarkMode, Light, LightMode } from "@mui/icons-material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const LightTooltip = styled(({ className, ...props }) => (
 	<Tooltip {...props} classes={{ popper: className }} />
@@ -30,7 +32,9 @@ const LightTooltip = styled(({ className, ...props }) => (
 function Navbar(props) {
 	let navigate = useNavigate();
 	const theme = useTheme();
-	const { setModalOpen, setModalData } = React.useContext(MainContext);
+	const { setModalOpen, setModalData, setThemeData, themeData } = React.useContext(MainContext);
+
+	const isDarkModeEnabled = useMediaQuery("(prefers-color-scheme: dark)");
 
 	const [id, setId] = React.useState("");
 
@@ -56,7 +60,7 @@ function Navbar(props) {
 				"& > div": {
 					// background: "#1976D2",
 					// background: "#2787bd",
-					background: theme.palette.common.white,
+					// background: theme.palette.common.white,
 				},
 			}}>
 			<Toolbar />
@@ -115,7 +119,7 @@ function Navbar(props) {
 					sx={{
 						zIndex: (theme) => theme.zIndex.drawer + 1,
 						background: theme.palette.primary.main,
-						color: theme.palette.common.white,
+						// color: theme.palette.common.white,
 					}}>
 					<Toolbar>
 						<Hidden mdUp>
@@ -168,19 +172,31 @@ function Navbar(props) {
 								</Hidden>
 							</div>
 							<div style={{ display: "flex", justifyContent: "flex-end" }}>
-								<LightTooltip title='Logout'>
-									<IconButton
-										onClick={() => {
-											setModalOpen(true);
-											setModalData("Logout Successfully", "success");
-											localStorage.clear();
-										}}
-										style={{ paddingTop: "3px", paddingBottom: "3px" }}>
-										<Link to='/login'>
-											<LogoutIcon style={{ color: theme.palette.primary.contrastText }} />
-										</Link>
-									</IconButton>
-								</LightTooltip>
+								<Stack direction='row' spacing={2} sx={{ display: "flex", alignItems: "center" }}>
+									{isDarkModeEnabled === false && (
+										<LightTooltip title='theme'>
+											<IconButton
+												onClick={() => {
+													console.log("clicked");
+													setThemeData();
+												}}>
+												{themeData ? <LightMode /> : <DarkMode />}
+											</IconButton>
+										</LightTooltip>
+									)}
+									<LightTooltip title='Logout'>
+										<IconButton
+											onClick={() => {
+												setModalOpen(true);
+												setModalData("Logout Successfully", "success");
+												localStorage.clear();
+											}}>
+											<Link to='/login'>
+												<LogoutIcon style={{ color: theme.palette.primary.contrastText }} />
+											</Link>
+										</IconButton>
+									</LightTooltip>
+								</Stack>
 							</div>
 						</div>
 					</Toolbar>
@@ -193,7 +209,7 @@ function Navbar(props) {
 						width: "100%",
 						height: "100%",
 						minHeight: "100vh",
-						background: theme.palette.grey.A700,
+						// background: theme.palette.grey.A700,
 						padding: "20px",
 					}}>
 					<Toolbar />

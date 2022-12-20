@@ -36,7 +36,6 @@ function ReportedFeed(props) {
 
 	const [reportedFeed, setReportedFeed] = React.useState([]);
 
-
 	const [pagination, setPagination] = React.useState({
 		page: 0,
 		pageSize: 10,
@@ -147,7 +146,7 @@ function ReportedFeed(props) {
 				<Container maxWidth='xl'>
 					<Card
 						style={{
-							background: "white",
+							// background: "white",
 							padding: "25px",
 							border: "1px solid lightgrey",
 							marginTop: "30px",

@@ -7,6 +7,8 @@ const MainContext = React.createContext({
 	setModalOpen: () => {},
 	notificationPopup: false,
 	setNotificationPopup: () => {},
+	themeData: false,
+	setThemeData: () => {},
 });
 
 function ContextProvider({ children }) {
@@ -16,10 +18,16 @@ function ContextProvider({ children }) {
 		message: "",
 	});
 
+	const [themeData, setThemeData] = React.useState(false);
+
 	const [modalData, setModalData] = React.useState({
 		message: "",
 		severity: "",
 	});
+
+	const handleThemeData = (msg) => {
+		setThemeData(!themeData);
+	};
 
 	const handleData = (message, severity) => {
 		setModalData({
@@ -49,6 +57,8 @@ function ContextProvider({ children }) {
 				setModalOpen: handleSnackbar,
 				notificationPopup: notificationPopup,
 				setNotificationPopup: handleNotification,
+				themeData: themeData,
+				setThemeData: handleThemeData,
 			}}>
 			{children}
 		</MainContext.Provider>

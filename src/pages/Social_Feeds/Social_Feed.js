@@ -41,10 +41,12 @@ import { Pagination } from "swiper";
 
 import DeleteFeedModal from "./Components/DeleteFeedModal";
 import { useTheme } from "@mui/material/styles";
+import { MainContext } from "../../context/Context";
 
 export default function SocialFeed(props) {
 	const navigate = useNavigate();
 	const theme = useTheme();
+	const { themeData } = React.useContext(MainContext);
 	const [data, setData] = React.useState([]);
 	const [modal, setModal] = React.useState({ open: false });
 	//delete menu ------
@@ -221,10 +223,10 @@ export default function SocialFeed(props) {
 										boxShadow:
 											"rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset",
 										borderRadius: "8px",
-										background: "#FFF",
+										background: themeData === false ? "#FFF" : "default",
 										cursor: "pointer",
 										"&:hover": {
-											background: "#E0E0e0",
+											background: themeData === false ? theme.palette.grey.A700 : "#323232",
 										},
 									}}>
 									<Box
@@ -349,21 +351,6 @@ export default function SocialFeed(props) {
 																		alignItems: "center",
 																		position: "relative",
 																	}}>
-																	<Box
-																		variant='filled'
-																		sx={{
-																			position: "absolute",
-																			top: "20px",
-																			right: "20px",
-																			fontSize: "14px",
-																			background: "black",
-																			color: "white",
-																			borderRadius: "5px",
-																			paddingX: "0.5px",
-																		}}>
-																		{ele?.mediaContent?.length > 1 &&
-																			iIndex + 1 + "/" + ele?.mediaContent?.length}
-																	</Box>
 																	<video width='100%' height='200px' id={`video${index}`} controls>
 																		<source
 																			src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}
@@ -390,7 +377,7 @@ export default function SocialFeed(props) {
 																		alignItems: "center",
 																		position: "relative",
 																	}}>
-																	<Box
+																	{/* <Box
 																		variant='filled'
 																		sx={{
 																			position: "absolute",
@@ -404,7 +391,7 @@ export default function SocialFeed(props) {
 																		}}>
 																		{ele?.mediaContent?.length > 1 &&
 																			iIndex + 1 + "/" + ele?.mediaContent?.length}
-																	</Box>
+																	</Box> */}
 																	<audio width='100%' height='200px' id={`video${index}`} controls>
 																		<source
 																			src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}

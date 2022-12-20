@@ -77,9 +77,6 @@ function EditNeighbourhood() {
 			address: address,
 		}));
 	};
-	console.log("====================================");
-	console.log("121", data);
-	console.log("====================================");
 
 	const CityApi = React.useCallback((id) => {
 		findCity({ cityId: id })

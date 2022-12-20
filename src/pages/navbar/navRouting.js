@@ -59,29 +59,29 @@ const routing = [
 		icon: <ConnectWithoutContact fontSize='medium' />,
 		component: <SocialFeed />,
 	},
-	{
-		id: 6,
-		path: "/report",
-		name: "Report",
-		icon: <Report fontSize='medium' />,
-		component: <UsersReport />,
-		children: [
-			{
-				id: 7,
-				path: "/report",
-				name: "Users",
-				icon: <PeopleAlt fontSize='medium' />,
-				component: <UsersReport />,
-			},
-			// {
-			// 	id: 8,
-			// 	path: "/report/rooms",
-			// 	name: "Rooms",
-			// 	icon: <Groups fontSize='medium' />,
-			// 	component: <RoomsReport />,
-			// },
-		],
-	},
+	// {
+	// 	id: 6,
+	// 	path: "/report",
+	// 	name: "Report",
+	// 	icon: <Report fontSize='medium' />,
+	// 	component: <UsersReport />,
+	// 	children: [
+	// 		{
+	// 			id: 7,
+	// 			path: "/report",
+	// 			name: "Users",
+	// 			icon: <PeopleAlt fontSize='medium' />,
+	// 			component: <UsersReport />,
+	// 		},
+	// 		// {
+	// 		// 	id: 8,
+	// 		// 	path: "/report/rooms",
+	// 		// 	name: "Rooms",
+	// 		// 	icon: <Groups fontSize='medium' />,
+	// 		// 	component: <RoomsReport />,
+	// 		// },
+	// 	],
+	// },
 	{
 		id: 9,
 		path: "/neighbourhood",

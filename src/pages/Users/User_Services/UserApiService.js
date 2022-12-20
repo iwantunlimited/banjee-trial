@@ -31,6 +31,22 @@ let findCustomer = (requestLoad) => {
 	let method = "GET";
 	return executeGet(url, actionCode, payload, method);
 };
+// -----------------------------------------  FIND USER BY SYSTEM USER ID SERVICE ------------------------------------------------//
+let findUserBySystemUserId = (requestLoad) => {
+	let url = urls.USERPROFILE.FIND_USER_BY_SYSTEMUSER_ID + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
+// -----------------------------------------  FIND USER BY SYSTEM USER ID SERVICE ------------------------------------------------//
+let findUserByUserId = (requestLoad) => {
+	let url = urls.USERPROFILE.FIND_USER_BY_USER_ID + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
 
 // ----------------------------------------- CUSTOMER CONNECTIONS ------------------------------------------------//
 let findCustomerConnection = (requestLoad) => {
@@ -169,4 +185,6 @@ export {
 	deleteCategory,
 	deleteSubCategory,
 	DashboardlistCustomer,
+	findUserBySystemUserId,
+	findUserByUserId,
 };

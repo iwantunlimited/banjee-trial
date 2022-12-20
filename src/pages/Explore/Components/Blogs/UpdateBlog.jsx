@@ -369,7 +369,7 @@ function UpdateBlog() {
 																			...prev,
 																			loader: true,
 																		}));
-																		ImageApiCAll(imgShow);
+																		imgShow?.update === true && ImageApiCAll(imgShow);
 																	}}>
 																	upload
 																</Button>

@@ -16,7 +16,7 @@ import { DataGrid } from "@mui/x-data-grid";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FullScreenImageModal from "../FullScreenImageModal";
-import { findCustomer } from "../../../Users/User_Services/UserApiService";
+import { findCustomer, findUserByUserId } from "../../../Users/User_Services/UserApiService";
 import { makeStyles } from "@mui/styles";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -26,6 +26,7 @@ import { Pagination } from "swiper";
 import DeleteFeedModal from "../DeleteFeedModal";
 import { useNavigate, useParams } from "react-router";
 import { getReportedFeedDetail, getSocialFeedDetails } from "../../services/ApiServices";
+import { MainContext } from "../../../../context/Context";
 
 const useStyles = makeStyles({
 	root: {
@@ -50,6 +51,7 @@ const useStyles = makeStyles({
 
 function ViewRFeed() {
 	const navigate = useNavigate();
+	const { themeData } = React.useContext(MainContext);
 	const classes = useStyles();
 	const [rData, setRData] = React.useState("");
 
@@ -69,7 +71,7 @@ function ViewRFeed() {
 	const { id } = useParams();
 
 	const reportedProfile = React.useCallback((item) => {
-		findCustomer(item)
+		findUserByUserId(item)
 			.then((res) => {
 				setPRData((prev) => [...prev, res.userObject]);
 			})
@@ -89,7 +91,7 @@ function ViewRFeed() {
 				// });
 				res?.map((item) => {
 					reportedProfile(item?.reportedBy);
-					return null;
+					return item;
 				});
 				setRData(res);
 			})
@@ -195,10 +197,10 @@ function ViewRFeed() {
 										boxShadow:
 											"rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset",
 										borderRadius: "8px",
-										background: "#FFF",
+										// background: "#FFF",
 										cursor: "pointer",
 										"&:hover": {
-											background: "#E0E0e0",
+											background: themeData === false ? "#E0E0e0" : "#323232",
 										},
 									}}>
 									<Box
@@ -240,7 +242,7 @@ function ViewRFeed() {
 
 										<IconButton
 											onClick={() => {
-												setDFeedData({ feedId: data.id });
+												setDFeedData({ feedId: data?.id });
 												setOpenDModal(true);
 											}}
 											style={{ width: "40px", height: "40px" }}>
