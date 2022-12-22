@@ -187,8 +187,21 @@ function CreateFeed() {
 	};
 
 	const ImageApiCAll = React.useCallback((imgData, imageType, notifyMessage) => {
-		console.log(":1111", imgData);
+		// console.log(":1111", imgData);
+		const mimeTypeFun = () => {
+			switch (imgData?.type) {
+				case "image":
+					return "image/jpg";
+				case "audio":
+					return "audio/mp3";
+				case "video":
+					return "video/mp4";
+				default:
+					break;
+			}
+		};
 		const formData = new FormData();
+
 		formData.append("cloud_name", "banjee");
 		if (imageType === "image") {
 			formData.append("upload_preset", "feed_image");
@@ -220,7 +233,7 @@ function CreateFeed() {
 								...cloudinaryData,
 								src: res?.data?.public_id,
 								type: imgData?.type,
-								mimeType: imgData?.src?.type,
+								mimeType: mimeTypeFun(),
 							},
 						],
 					}));
@@ -258,7 +271,7 @@ function CreateFeed() {
 								...cloudinaryData,
 								src: res?.data?.public_id,
 								type: imgData?.type,
-								mimeType: imgData?.src?.type,
+								mimeType: mimeTypeFun(),
 							},
 						],
 					}));

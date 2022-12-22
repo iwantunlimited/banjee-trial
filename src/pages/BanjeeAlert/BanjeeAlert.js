@@ -83,35 +83,35 @@ function BanjeeAlert() {
 
 	const ListAlertApiCall = useCallback(
 		(page, pageSize) => {
-			if (currentLocation?.lat && currentLocation?.lon) {
-				listAlert({
-					// latitude: currentLocation?.lat,
-					// longitude: currentLocation?.lon,
-					page: page,
-					pageSize: pageSize,
+			// if (currentLocation?.lat && currentLocation?.lon) {
+			listAlert({
+				// latitude: currentLocation?.lat,
+				// longitude: currentLocation?.lon,
+				page: page,
+				pageSize: pageSize,
+			})
+				.then((res) => {
+					const resp = res?.content?.map((item) => {
+						return {
+							routingId: item?.id,
+							address: item?.metaInfo?.address,
+							cFirstName: item?.createdByUser?.firstName,
+							cLastName: item?.createdByUser?.lastName,
+							...item,
+						};
+					});
+					setData(resp);
+					setState((prev) => ({
+						...prev,
+						totalElement: res.totalElements,
+						pagination: {
+							page: res?.pageable?.pageNumber,
+							pageSize: res?.pageable?.pageSize,
+						},
+					}));
 				})
-					.then((res) => {
-						const resp = res?.content?.map((item) => {
-							return {
-								routingId: item?.id,
-								address: item?.metaInfo?.address,
-								cFirstName: item?.createdByUser?.firstName,
-								cLastName: item?.createdByUser?.lastName,
-								...item,
-							};
-						});
-						setData(resp);
-						setState((prev) => ({
-							...prev,
-							totalElement: res.totalElements,
-							pagination: {
-								page: res?.pageable?.pageNumber,
-								pageSize: res?.pageable?.pageSize,
-							},
-						}));
-					})
-					.catch((err) => console.error(err));
-			}
+				.catch((err) => console.error(err));
+			// }
 		},
 		[currentLocation]
 	);
@@ -130,12 +130,9 @@ function BanjeeAlert() {
 	}, []);
 
 	React.useEffect(() => {
-		listAllData();
-	}, [listAllData]);
-
-	React.useEffect(() => {
 		ListAlertApiCall(0, 10);
-	}, [ListAlertApiCall]);
+		listAllData();
+	}, [ListAlertApiCall, listAllData]);
 
 	return (
 		<Box>

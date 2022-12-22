@@ -40,6 +40,7 @@ import GroupDetailPage from "./pages/Groups/components/GroupDetailPage";
 import UserComp from "./pages/Users/users";
 import CreateAlert from "./pages/BanjeeAlert/components/CreateAlert";
 import NotFound from "./pages/NotFound/NotFound";
+import FeedDetail from "./pages/Social_Feeds/Components/DetailPage/FeedDetail";
 
 const Routes = () => {
 	return useRoutes([
@@ -82,6 +83,10 @@ const Routes = () => {
 				{
 					path: "social-feeds",
 					element: <SocialFeed />,
+				},
+				{
+					path: "social-feeds/:id",
+					element: <FeedDetail />,
 				},
 				{
 					path: "social-feeds/create",

@@ -27,7 +27,7 @@ function SwiperComp({ data }) {
 				modules={[Pagination]}
 				className='mySwiper'>
 				{data?.map((item, iIndex) => {
-					if (item?.mimeType === "video/mp4") {
+					if (item?.type === "video") {
 						return (
 							<SwiperSlide>
 								<Box
@@ -64,7 +64,7 @@ function SwiperComp({ data }) {
 								</Box>
 							</SwiperSlide>
 						);
-					} else if (item?.mimeType === "audio/mp3" || item?.mimeType === "audio/mpeg") {
+					} else if (item?.type === "audio" || item?.mimeType === "audio/mpeg") {
 						return (
 							<SwiperSlide>
 								<Box
@@ -100,7 +100,7 @@ function SwiperComp({ data }) {
 								</Box>
 							</SwiperSlide>
 						);
-					} else if (item?.mimeType === "image/jpg" || item?.mimeType === "image/png") {
+					} else if (item?.type === "image" || item?.mimeType === "image/png") {
 						return (
 							<Box key={iIndex}>
 								<SwiperSlide>
@@ -166,7 +166,7 @@ function SwiperComp({ data }) {
 								<Box
 									key={iIndex}
 									sx={{
-										height: "400px",
+										// height: "400px",
 										width: "100%",
 										display: "flex",
 										justifyContent: "center",

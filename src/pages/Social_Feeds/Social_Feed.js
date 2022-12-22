@@ -236,7 +236,10 @@ export default function SocialFeed(props) {
 											alignItems: "center",
 										}}>
 										<Box
-											onClick={() => setModal({ open: true, data: ele })}
+											onClick={() => {
+												navigate("/social-feeds/" + ele?.id);
+												// setModal({ open: true, data: ele });
+											}}
 											style={{
 												display: "flex",
 												alignItems: "center",
@@ -325,7 +328,10 @@ export default function SocialFeed(props) {
 											</Box>
 										)} */}
 										<Swiper
-											onClick={() => setModal({ open: true, data: ele })}
+											onClick={() => {
+												navigate("/social-feeds/" + ele?.id);
+												// setModal({ open: true, data: ele });
+											}}
 											pagination={
 												ele?.mediaContent?.length > 1
 													? {
@@ -337,7 +343,7 @@ export default function SocialFeed(props) {
 											className='mySwiper'>
 											{ele?.mediaContent?.length > 0 ? (
 												ele?.mediaContent?.map((item, iIndex) => {
-													if (item?.mimeType === "video/mp4") {
+													if (item?.type === "video") {
 														return (
 															<SwiperSlide>
 																<Box
@@ -361,10 +367,7 @@ export default function SocialFeed(props) {
 																</Box>
 															</SwiperSlide>
 														);
-													} else if (
-														item?.mimeType === "audio/mp3" ||
-														item?.mimeType === "audio/mpeg"
-													) {
+													} else if (item?.type === "audio" || item?.mimeType === "audio/mpeg") {
 														return (
 															<SwiperSlide>
 																<Box
@@ -402,10 +405,7 @@ export default function SocialFeed(props) {
 																</Box>
 															</SwiperSlide>
 														);
-													} else if (
-														item?.mimeType === "image/jpg" ||
-														item?.mimeType === "image/png"
-													) {
+													} else if (item?.type === "image" || item?.mimeType === "image/png") {
 														return (
 															<Box key={iIndex}>
 																<SwiperSlide>
@@ -535,7 +535,10 @@ export default function SocialFeed(props) {
 											display: "flex",
 											flexDirection: "column",
 										}}
-										onClick={() => setModal({ open: true, data: ele })}>
+										onClick={() => {
+											navigate("/social-feeds/" + ele?.id);
+											// setModal({ open: true, data: ele })
+										}}>
 										{ele?.text && ele?.mediaContent?.length > 0 ? (
 											<Typography noWrap={true}>
 												{ele?.text || <p style={{ height: "16px" }}> </p>}

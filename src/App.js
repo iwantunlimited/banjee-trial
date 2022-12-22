@@ -17,15 +17,12 @@ function App() {
 	// console.log("themeData", isDarkModeEnabled, "----", themeData);
 	// console.log("====================================");
 
-	const ApiCall = React.useCallback(() => {
-		if (isDarkModeEnabled === true) {
-			setThemeData(true);
-		}
-	}, []);
-
-	React.useEffect(() => {
-		ApiCall();
-	}, [ApiCall]);
+	// if (isDarkModeEnabled) {
+	// 	console.log("====================================");
+	// 	console.log("dark");
+	// 	console.log("====================================");
+	// 	setThemeData(true);
+	// }
 
 	return (
 		<ThemeProvider theme={themeData ? darkTheme : theme}>

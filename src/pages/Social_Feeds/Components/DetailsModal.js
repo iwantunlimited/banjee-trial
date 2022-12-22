@@ -121,9 +121,9 @@ export default function CommentsModal(props) {
 				console.error(err);
 			});
 	}, [data?.id]);
-	console.log("====================================");
-	console.log("modal", data);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("modal", data);
+	// console.log("====================================");
 
 	React.useEffect(() => {
 		feedCommentApiCall();
@@ -219,7 +219,7 @@ export default function CommentsModal(props) {
 									className='mySwiper'>
 									{data?.mediaContent?.length > 0 ? (
 										data?.mediaContent?.map((item, iIndex) => {
-											if (item?.mimeType === "video/mp4") {
+											if (item?.type === "video") {
 												return (
 													<SwiperSlide>
 														<Box
@@ -241,7 +241,7 @@ export default function CommentsModal(props) {
 														</Box>
 													</SwiperSlide>
 												);
-											} else if (item?.mimeType === "audio/mp3") {
+											} else if (item?.type === "audio") {
 												return (
 													<SwiperSlide>
 														<Box
