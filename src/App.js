@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import Routes from "./Routes";
 import { ThemeProvider } from "@mui/material/styles";
@@ -17,12 +17,18 @@ function App() {
 	// console.log("themeData", isDarkModeEnabled, "----", themeData);
 	// console.log("====================================");
 
-	if (isDarkModeEnabled === true) {
-		setThemeData(true);
-	}
+	const ApiCall = React.useCallback(() => {
+		if (isDarkModeEnabled === true) {
+			setThemeData(true);
+		}
+	}, []);
+
+	React.useEffect(() => {
+		ApiCall();
+	}, [ApiCall]);
 
 	return (
-		<ThemeProvider theme={isDarkModeEnabled ? darkTheme : themeData ? darkTheme : theme}>
+		<ThemeProvider theme={themeData ? darkTheme : theme}>
 			<BrowserRouter>
 				<Routes />
 				<SnackbarContext />

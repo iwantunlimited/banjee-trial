@@ -173,17 +173,17 @@ function Navbar(props) {
 							</div>
 							<div style={{ display: "flex", justifyContent: "flex-end" }}>
 								<Stack direction='row' spacing={2} sx={{ display: "flex", alignItems: "center" }}>
-									{isDarkModeEnabled === false && (
-										<LightTooltip title='theme'>
-											<IconButton
-												onClick={() => {
-													console.log("clicked");
-													setThemeData(!themeData);
-												}}>
-												{themeData ? <LightMode /> : <DarkMode />}
-											</IconButton>
-										</LightTooltip>
-									)}
+									{/* {isDarkModeEnabled === false && ( */}
+									<LightTooltip title='theme'>
+										<IconButton
+											onClick={() => {
+												console.log("themeData", themeData);
+												setThemeData(!themeData);
+											}}>
+											{themeData ? <LightMode /> : <DarkMode />}
+										</IconButton>
+									</LightTooltip>
+									{/* )} */}
 									<LightTooltip title='Logout'>
 										<IconButton
 											onClick={() => {

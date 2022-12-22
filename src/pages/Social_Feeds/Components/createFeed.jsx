@@ -192,49 +192,92 @@ function CreateFeed() {
 		formData.append("cloud_name", "banjee");
 		if (imageType === "image") {
 			formData.append("upload_preset", "feed_image");
+			formData.append("resource_type", "image");
 		} else if (imageType === "audio") {
 			formData.append("upload_preset", "feed_audio");
+			formData.append("resource_type", "video");
 		} else if (imageType === "video") {
 			formData.append("upload_preset", "feed_video");
+			formData.append("resource_type", "video");
 		}
 		formData.append("file", imgData?.src);
-		const url = `https://api.cloudinary.com/v1_1/banjee/${imageType}/upload/`;
-		axios
-			.post(url, formData)
-			.then((res) => {
-				if (notifyMessage === "Images Uploaded") {
-					setImageUploaded(true);
-					setModalOpen(true);
-					setModalData("Image Uploaded", "success");
-				}
-				setSubmitForm(true);
-				setFinalPayload((prev) => ({
-					...prev,
-					mediaContent: [
-						...prev.mediaContent,
-						{
-							...cloudinaryData,
-							src: res?.data?.public_id,
-							type: imgData?.type,
-							mimeType: imgData?.src?.type,
-						},
-					],
-				}));
-				setImgShow((prev) => {
-					return prev.map((item) => {
-						if (item?.id === imgData?.id) {
-							return {
-								...item,
-								loader: false,
-								done: true,
-							};
-						} else {
-							return item;
-						}
+		if (imageType === "audio") {
+			const url = `https://api.cloudinary.com/v1_1/banjee/video/upload/`;
+			axios
+				.post(url, formData)
+				.then((res) => {
+					if (notifyMessage === "Images Uploaded") {
+						setImageUploaded(true);
+						setModalOpen(true);
+						setModalData("audio Uploaded", "success");
+					}
+					setSubmitForm(true);
+					setFinalPayload((prev) => ({
+						...prev,
+						mediaContent: [
+							...prev.mediaContent,
+							{
+								...cloudinaryData,
+								src: res?.data?.public_id,
+								type: imgData?.type,
+								mimeType: imgData?.src?.type,
+							},
+						],
+					}));
+					setImgShow((prev) => {
+						return prev.map((item) => {
+							if (item?.id === imgData?.id) {
+								return {
+									...item,
+									loader: false,
+									done: true,
+								};
+							} else {
+								return item;
+							}
+						});
 					});
-				});
-			})
-			.catch((err) => console.error(err));
+				})
+				.catch((err) => console.error(err));
+		} else {
+			const url = `https://api.cloudinary.com/v1_1/banjee/${imageType}/upload/`;
+			axios
+				.post(url, formData)
+				.then((res) => {
+					if (notifyMessage === "Images Uploaded") {
+						setImageUploaded(true);
+						setModalOpen(true);
+						setModalData(imageType === "image" ? "Image Uploaded" : "Video Uploaded", "success");
+					}
+					setSubmitForm(true);
+					setFinalPayload((prev) => ({
+						...prev,
+						mediaContent: [
+							...prev.mediaContent,
+							{
+								...cloudinaryData,
+								src: res?.data?.public_id,
+								type: imgData?.type,
+								mimeType: imgData?.src?.type,
+							},
+						],
+					}));
+					setImgShow((prev) => {
+						return prev.map((item) => {
+							if (item?.id === imgData?.id) {
+								return {
+									...item,
+									loader: false,
+									done: true,
+								};
+							} else {
+								return item;
+							}
+						});
+					});
+				})
+				.catch((err) => console.error(err));
+		}
 	}, []);
 
 	const handleSubmit = (event) => {
@@ -377,6 +420,7 @@ function CreateFeed() {
 												multiple
 												id='img'
 												// accept='.jpg, .jpeg, .png'
+												accept='image/*, video/*, audio/*'
 												onChange={(event) => {
 													handleImageChange(event);
 												}}

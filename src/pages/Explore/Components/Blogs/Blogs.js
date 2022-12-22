@@ -83,7 +83,7 @@ function ExploreBlogs() {
 					<Grid item xs={12}>
 						<Card sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
 							<Box>
-								<Typography sx={{ fontWeight: 600, color: "#6b778c", fontSize: "22px" }}>
+								<Typography sx={{ fontWeight: 500, fontSize: "22px" }}>
 									Blogs({totalEle})
 								</Typography>
 							</Box>
@@ -105,7 +105,7 @@ function ExploreBlogs() {
 													display: "flex",
 													justifyContent: "space-between",
 													alignItems: "center",
-													background: "white",
+													// background: "white",
 												}}>
 												<Box
 													onClick={() => navigate("/explore/blogs/detail/" + item?.blogId)}
@@ -157,7 +157,7 @@ function ExploreBlogs() {
 															<RemoveRedEye />
 														</IconButton>
 													</Tooltip> */}
-													<Tooltip style={{ background: "white" }} title='delete'>
+													<Tooltip title='delete'>
 														<IconButton
 															onClick={() => {
 																setModal({
