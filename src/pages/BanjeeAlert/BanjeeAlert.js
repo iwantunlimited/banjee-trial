@@ -19,6 +19,7 @@ import AlertLocation from "./components/AlertMap";
 import ReportedAlertList from "./components/ReportedAlertList";
 import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router";
+import { MainContext } from "../../context/Context";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -50,6 +51,7 @@ function a11yProps(index) {
 
 function BanjeeAlert() {
 	const navigate = useNavigate();
+	const { themeData } = React.useContext(MainContext);
 	const [value, setValue] = React.useState(0);
 	const [currentLocation, setCurrentLocation] = React.useState({
 		lat: "",
@@ -81,40 +83,37 @@ function BanjeeAlert() {
 		ListAlertApiCall(0, 10);
 	};
 
-	const ListAlertApiCall = useCallback(
-		(page, pageSize) => {
-			// if (currentLocation?.lat && currentLocation?.lon) {
-			listAlert({
-				// latitude: currentLocation?.lat,
-				// longitude: currentLocation?.lon,
-				page: page,
-				pageSize: pageSize,
+	const ListAlertApiCall = useCallback((page, pageSize) => {
+		// if (currentLocation?.lat && currentLocation?.lon) {
+		listAlert({
+			// latitude: currentLocation?.lat,
+			// longitude: currentLocation?.lon,
+			page: page,
+			pageSize: pageSize,
+		})
+			.then((res) => {
+				const resp = res?.content?.map((item) => {
+					return {
+						routingId: item?.id,
+						address: item?.metaInfo?.address,
+						cFirstName: item?.createdByUser?.firstName,
+						cLastName: item?.createdByUser?.lastName,
+						...item,
+					};
+				});
+				setData(resp);
+				setState((prev) => ({
+					...prev,
+					totalElement: res.totalElements,
+					pagination: {
+						page: res?.pageable?.pageNumber,
+						pageSize: res?.pageable?.pageSize,
+					},
+				}));
 			})
-				.then((res) => {
-					const resp = res?.content?.map((item) => {
-						return {
-							routingId: item?.id,
-							address: item?.metaInfo?.address,
-							cFirstName: item?.createdByUser?.firstName,
-							cLastName: item?.createdByUser?.lastName,
-							...item,
-						};
-					});
-					setData(resp);
-					setState((prev) => ({
-						...prev,
-						totalElement: res.totalElements,
-						pagination: {
-							page: res?.pageable?.pageNumber,
-							pageSize: res?.pageable?.pageSize,
-						},
-					}));
-				})
-				.catch((err) => console.error(err));
-			// }
-		},
-		[currentLocation]
-	);
+			.catch((err) => console.error(err));
+		// }
+	}, []);
 
 	const listAllData = React.useCallback(() => {
 		if (navigator.geolocation) {
@@ -140,7 +139,12 @@ function BanjeeAlert() {
 				<Grid item xs={12}>
 					<Card sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
 						<Box>
-							<Typography sx={{ fontWeight: 500, color: "#6b778c", fontSize: "22px" }}>
+							<Typography
+								sx={{
+									fontWeight: 500,
+									color: themeData ? "default" : "#6b778c",
+									fontSize: "22px",
+								}}>
 								Alerts({state?.totalElement ? state?.totalElement : 0})
 							</Typography>
 						</Box>

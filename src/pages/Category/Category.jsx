@@ -222,7 +222,7 @@ function Category(props) {
 	if (categoryList?.content) {
 		return (
 			<Container maxWidth='xl'>
-				<div style={{ marginTop: "50px", background: "white", fontSize: "33px" }}>
+				<div style={{ marginTop: "50px", fontSize: "33px" }}>
 					<Card style={{ width: "auto", height: "100%", padding: "20px", borderRadius: "5px" }}>
 						{/* ---------------------- Refresh and Add Category button with modal start ------------------------- */}
 
@@ -267,7 +267,12 @@ function Category(props) {
 											<Grid item container xs={12}>
 												<Grid item xs={12}>
 													<Box style={{ display: "flex", justifyContent: "space-between" }}>
-														<span style={{ color: "grey", fontSize: "20px", fontWeight: "500" }}>
+														<span
+															style={{
+																color: context?.themeData ? "default" : "grey",
+																fontSize: "20px",
+																fontWeight: "500",
+															}}>
 															{toggleBtn === "parent" ? "Create Category" : "Create Sub-Category"}
 														</span>
 														{/* {props.categoryName === "ROOMS" && (

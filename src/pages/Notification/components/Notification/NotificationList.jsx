@@ -198,7 +198,12 @@ function NotificationList() {
 					<Grid item xs={12}>
 						<Card sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
 							<Box>
-								<Typography sx={{ fontWeight: 500, color: "#6b778c", fontSize: "22px" }}>
+								<Typography
+									sx={{
+										fontWeight: 500,
+										color: context?.themeData ? "default" : "#6b778c",
+										fontSize: "22px",
+									}}>
 									Notifications({totalEle ? totalEle : 0})
 								</Typography>
 							</Box>

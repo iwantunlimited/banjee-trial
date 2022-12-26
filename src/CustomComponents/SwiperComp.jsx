@@ -40,7 +40,7 @@ function SwiperComp({ data }) {
 										alignItems: "center",
 										position: "relative",
 									}}>
-									<Box
+									{/* <Box
 										variant='filled'
 										sx={{
 											position: "absolute",
@@ -53,7 +53,7 @@ function SwiperComp({ data }) {
 											paddingX: "0.5px",
 										}}>
 										{data?.length > 1 && iIndex + 1 + "/" + data?.length}
-									</Box>
+									</Box> */}
 									<video width='100%' height='100%' id={`video${iIndex}`} controls>
 										<source
 											src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}
@@ -76,7 +76,7 @@ function SwiperComp({ data }) {
 										alignItems: "center",
 										position: "relative",
 									}}>
-									<Box
+									{/* <Box
 										variant='filled'
 										sx={{
 											position: "absolute",
@@ -89,7 +89,7 @@ function SwiperComp({ data }) {
 											paddingX: "0.5px",
 										}}>
 										{data?.length > 1 && iIndex + 1 + "/" + data?.length}
-									</Box>
+									</Box> */}
 									<audio width='100%' height='200px' id={`video${iIndex}`} controls>
 										<source
 											src={`https://res.cloudinary.com/banjee/video/upload/br_128,q_auto/v1/${item?.src}.mp4`}
@@ -173,7 +173,7 @@ function SwiperComp({ data }) {
 										alignItems: "center",
 										position: "relative",
 									}}>
-									<Box
+									{/* <Box
 										variant='filled'
 										sx={{
 											position: "absolute",
@@ -186,7 +186,7 @@ function SwiperComp({ data }) {
 											paddingX: "0.5px",
 										}}>
 										{data?.length > 1 && iIndex + 1 + "/" + data?.length}
-									</Box>
+									</Box> */}
 									<Typography>{item?.text}</Typography>
 								</Box>
 							</SwiperSlide>

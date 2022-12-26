@@ -23,7 +23,7 @@ function UpdateAnnouncement() {
 	const params = useParams();
 	const navigate = useNavigate();
 	const context = useContext(MainContext);
-	const { setModalOpen, setModalData } = context;
+	const { setModalOpen, setModalData, themeData } = context;
 
 	const [businessData, setBusinessData] = React.useState("");
 	const [data, setData] = React.useState({
@@ -89,7 +89,8 @@ function UpdateAnnouncement() {
 				</Grid>
 				<Grid item xs={12}>
 					<Card sx={{ padding: "20px" }}>
-						<Typography sx={{ fontSize: "22px", color: "#666", fontWeight: 500 }}>
+						<Typography
+							sx={{ fontSize: "22px", color: themeData ? "default" : "#666", fontWeight: 500 }}>
 							Update Announcement
 						</Typography>
 					</Card>
@@ -113,6 +114,7 @@ function UpdateAnnouncement() {
 											}));
 										}}
 										placeholder='Enter Title'
+										label='Enter Title'
 									/>
 								</Grid>
 								<Grid item xs={12}>

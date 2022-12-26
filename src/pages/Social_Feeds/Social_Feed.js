@@ -126,7 +126,7 @@ export default function SocialFeed(props) {
 					<Box sx={{ marginBottom: { xs: "20px", sm: "0px" } }}>
 						<Typography
 							sx={{
-								color: "#6b778c",
+								color: themeData ? "default" : "#6b778c",
 								fontSize: "22px",
 								fontWeight: "500",
 								textAlign: "left",
@@ -347,7 +347,7 @@ export default function SocialFeed(props) {
 														return (
 															<SwiperSlide>
 																<Box
-																	onClick={() => setModal({ open: true, data: ele })}
+																	// onClick={() => setModal({ open: true, data: ele })}
 																	key={iIndex}
 																	sx={{
 																		height: "200px",
@@ -371,7 +371,7 @@ export default function SocialFeed(props) {
 														return (
 															<SwiperSlide>
 																<Box
-																	onClick={() => setModal({ open: true, data: ele })}
+																	// onClick={() => setModal({ open: true, data: ele })}
 																	key={iIndex}
 																	sx={{
 																		height: "200px",
@@ -410,10 +410,10 @@ export default function SocialFeed(props) {
 															<Box key={iIndex}>
 																<SwiperSlide>
 																	<Box
-																		onClick={() =>
-																			ele?.mediaContent?.length === 0 &&
-																			setModal({ open: true, data: ele })
-																		}
+																		// onClick={() =>
+																		// 	ele?.mediaContent?.length === 0 &&
+																		// 	setModal({ open: true, data: ele })
+																		// }
 																		sx={{
 																			position: "relative",
 																			height: "200px",

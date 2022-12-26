@@ -20,9 +20,21 @@
 .radio-button-icon {
 	width: 100% !important;
 }
+.radio-button-icon :hover {
+	background-color: transparent !important;
+	padding: 10px !important;
+	border-radius: 10px !important;
+}
 .css-jg12e5-MuiButtonBase-root-MuiRadio-root:hover {
-	background-color: white !important;
+	background-color: transparent !important;
+	margin-top: 0px !important;
+	border-radius: 10px !important;
+}
+.css-16t2c51-MuiButtonBase-root-MuiRadio-root:hover {
+	background-color: transparent !important;
+	border-radius: 10px !important;
 }
 .css-i7f0oy:hover {
-	background-color: white !important;
+	background-color: transparent !important;
+	border-radius: 10px !important;
 }

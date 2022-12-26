@@ -21,6 +21,7 @@ import {
 	findBlockedCustomers,
 	penddingConnectionsList,
 	findUserBySystemUserId,
+	findUserByUserId,
 } from "../User_Services/UserApiService";
 import { Male, Female, Transgender, ArrowBack } from "@mui/icons-material";
 import "../users.css";
@@ -100,10 +101,6 @@ function CustomerView(props) {
 			});
 	}, [id]);
 
-	console.log("====================================");
-	console.log("state", state);
-	console.log("====================================");
-
 	React.useEffect(() => {
 		findByUserApiCall();
 	}, [findByUserApiCall, id]);
@@ -141,13 +138,14 @@ function CustomerView(props) {
 									height: "auto",
 									paddingRight: "10px",
 								}}>
-								<Box
+								<Card
 									elevation={1}
 									style={{
 										boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
 										padding: "40px 10px 40px 10px",
-										background: "white ",
+										// background: "white ",
 										minHeight: "427px",
+										height: "100%",
 									}}>
 									<Box
 										style={{
@@ -173,9 +171,11 @@ function CustomerView(props) {
 												fontSize: "10px",
 												fontWeight: "400",
 											}}>
-											<Typography variant='h6' style={{ marginRight: "5px" }}>
-												{state?.name}
-											</Typography>
+											{state?.firstName && state?.lastName && (
+												<Typography variant='h6' style={{ marginRight: "5px" }}>
+													{state?.firstName + " " + state?.lastName}
+												</Typography>
+											)}
 											{state?.gender && (
 												<div>
 													{state?.gender.toLowerCase() === "male" ? (
@@ -199,7 +199,7 @@ function CustomerView(props) {
 											</Typography>
 										)}
 										<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-											{state?.userObject?.mcc + " " + state?.userObject?.mobile}
+											{state?.mcc + " " + state?.mobile}
 										</Typography>
 										<Box style={{ margin: "10px 0px 10px 0px" }}>
 											{state?.inactive ? (
@@ -213,7 +213,7 @@ function CustomerView(props) {
 											)}
 										</Box>
 									</Box>
-								</Box>
+								</Card>
 							</Grid>
 
 							{/* -------------------------------------------- Tab Panel ------------------------------------ */}
@@ -225,12 +225,14 @@ function CustomerView(props) {
 								md={8}
 								lg={8}
 								xl={9}
-								sx={{
-									background: "#FFF",
-									padding: "5px 5px 5px 20px",
-									boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
-								}}>
-								{/* <Card style={{ background: "white", padding: "20px", marginBottom: "20px" }}> */}
+								sx={
+									{
+										// background: "#FFF",
+										// padding: "5px 5px 5px 20px",
+										// boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
+									}
+								}>
+								{/* <>
 								<Box sx={{ paddingTop: "5px" }}>
 									<h4 style={{ color: "grey", marginBottom: "0rem" }}>User's Current Location</h4>
 								</Box>
@@ -238,103 +240,97 @@ function CustomerView(props) {
 								{state?.currentLocation && (
 									<Box style={{ width: "100%", height: "350px" }}>
 										<UserLocation
-											// googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk&v=3.exp&libraries=geometry,drawing,places"
-											// loadingElement={<div style={{ height: `100%` }} />}
-											// containerElement={<div style={{ height: `300px` }} />}
-											// mapElement={<div style={{ height: `100%` }} />}
 											data={state}
 										/>
 									</Box>
 								)}
-								{/* </Card> */}
+								</> */}
+								<Card
+									sx={{
+										borderRadius: "0px",
+										padding: "5px",
+										boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
+									}}>
+									<Tabs
+										value={value}
+										onChange={handleChange}
+										indicatorColor='primary'
+										textColor='inherit'
+										// variant="fullWidth"
+										aria-label='full width tabs example'
+										style={{ height: "10px!important" }}>
+										{/* <Tab label="Profile" {...a11yProps(0)} /> */}
+										<Tab label='Neighbourhood' {...a11yProps(0)} />
+										<Tab label='Business' {...a11yProps(1)} />
+										<Tab label='Blocked' {...a11yProps(2)} />
+									</Tabs>
+									{/* </AppBar> */}
+									<SwipeableViews
+										axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+										index={value}
+										onChangeIndex={handleChangeIndex}
+										// style={{ overflowY: "scroll", height: "355px" }}
+									>
+										{/* ------------------------- connections ---------------------------- */}
+										<TabPanel value={value} index={0} dir={theme.direction}>
+											<Grid item xs={12} sx={{ padding: { xs: "0px", sm: "10px" } }}>
+												<NeighrbourhoodList data={state?.id} />
+											</Grid>
+										</TabPanel>
+										{/* ------------------------- pendding connections ---------------------------- */}
+										<TabPanel value={value} index={1} dir={theme.direction}>
+											<Grid iitem xs={12} sx={{ padding: "10px" }}>
+												<BusinessList data={id} />
+											</Grid>
+										</TabPanel>
+										{/* ------------------------- blocked list ---------------------------- */}
+										<TabPanel value={value} index={2} dir={theme.direction}>
+											<Grid item container spacing={2}>
+												{blockCon?.content?.length > 0 ? (
+													blockCon?.content.map((ele, index) => (
+														<Grid
+															key={index}
+															onClick={() => navigate("/user/view/" + ele?.user?.id)}
+															item
+															xs={4}
+															sm={4}
+															md={2}
+															lg={2}
+															style={{
+																display: "flex",
+																justifyContent: "center",
+																alignItems: "center",
+																flexDirection: "column",
+															}}>
+															{/* <Grid item xs={4} sm={4} md={4} lg={4}>/ */}
+															<Avatar
+																alt={ele?.name?.length > 0 ? ele?.name.slice(0, 1) : "avatar"}
+																src={
+																	"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
+																	ele?.user?.avtarUrl
+																}
+																sx={{ width: 50, height: 50 }}
+															/>
+															{/* </Grid>/ */}
+															{/* <Grid item xs={8} sm={8} md={8} lg={8} >/ */}
+															<Typography style={{ textAlign: "center" }} variant='h5'>
+																{ele?.user?.firstName}
+															</Typography>
+															{/* </Grid> */}
+														</Grid>
+													))
+												) : (
+													<Grid item xs={12}>
+														<div style={{ fontSize: "20px" }}>There is no blocked user's</div>
+													</Grid>
+												)}
+											</Grid>
+										</TabPanel>
+									</SwipeableViews>
+								</Card>
 							</Grid>
 						</Grid>
 						{/* <Grid item container xs={12}> */}
-						<Grid item xs={12}>
-							<Card
-								sx={{
-									padding: "10px",
-									borderRadius: "0px",
-									boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
-								}}>
-								<Tabs
-									value={value}
-									onChange={handleChange}
-									indicatorColor='primary'
-									textColor='inherit'
-									// variant="fullWidth"
-									aria-label='full width tabs example'
-									style={{ height: "10px!important" }}>
-									{/* <Tab label="Profile" {...a11yProps(0)} /> */}
-									<Tab label='Neighbourhood' {...a11yProps(0)} />
-									<Tab label='Business' {...a11yProps(1)} />
-									<Tab label='Blocked' {...a11yProps(2)} />
-								</Tabs>
-								{/* </AppBar> */}
-								<SwipeableViews
-									axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-									index={value}
-									onChangeIndex={handleChangeIndex}
-									// style={{ overflowY: "scroll", height: "355px" }}
-								>
-									{/* ------------------------- connections ---------------------------- */}
-									<TabPanel value={value} index={0} dir={theme.direction}>
-										<Grid item xs={12} sx={{ padding: { xs: "0px", sm: "10px" } }}>
-											<NeighrbourhoodList data={id} />
-										</Grid>
-									</TabPanel>
-									{/* ------------------------- pendding connections ---------------------------- */}
-									<TabPanel value={value} index={1} dir={theme.direction}>
-										<Grid iitem xs={12} sx={{ padding: "10px" }}>
-											<BusinessList data={id} />
-										</Grid>
-									</TabPanel>
-									{/* ------------------------- blocked list ---------------------------- */}
-									<TabPanel value={value} index={2} dir={theme.direction}>
-										<Grid item container spacing={2}>
-											{blockCon?.content?.length > 0 ? (
-												blockCon?.content.map((ele, index) => (
-													<Grid
-														key={index}
-														onClick={() => navigate("/user/view/" + ele?.user?.id)}
-														item
-														xs={4}
-														sm={4}
-														md={2}
-														lg={2}
-														style={{
-															display: "flex",
-															justifyContent: "center",
-															alignItems: "center",
-															flexDirection: "column",
-														}}>
-														{/* <Grid item xs={4} sm={4} md={4} lg={4}>/ */}
-														<Avatar
-															alt={ele?.name?.length > 0 ? ele?.name.slice(0, 1) : "avatar"}
-															src={
-																"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
-																ele?.user?.avtarUrl
-															}
-															sx={{ width: 50, height: 50 }}
-														/>
-														{/* </Grid>/ */}
-														{/* <Grid item xs={8} sm={8} md={8} lg={8} >/ */}
-														<Typography style={{ textAlign: "center" }} variant='h5'>
-															{ele?.user?.firstName}
-														</Typography>
-														{/* </Grid> */}
-													</Grid>
-												))
-											) : (
-												<Grid item xs={12}>
-													<div style={{ fontSize: "20px" }}>There is no blocked user's</div>
-												</Grid>
-											)}
-										</Grid>
-									</TabPanel>
-								</SwipeableViews>
-							</Card>
-						</Grid>
 					</Grid>
 					{/* </Grid> */}
 					{/* </Paper> */}

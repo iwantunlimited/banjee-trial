@@ -30,8 +30,8 @@ import { v4 as uuidv4 } from "uuid";
 function CreatePushNotification() {
 	const context = React.useContext(MainContext);
 
-	console.log("context", context);
-	const { setNotificationPopup, setModalData, setModalOpen } = context;
+	// console.log("context", context);
+	const { setNotificationPopup, setModalData, setModalOpen, themeData } = context;
 	const navigate = useNavigate();
 	const [data, setData] = React.useState({
 		anonymous: false,
@@ -62,9 +62,6 @@ function CreatePushNotification() {
 	const NeighbourListApi = React.useCallback(() => {
 		filterNeighbourhood({ page: 0, size: 1000, online: true })
 			.then((res) => {
-				console.log("====================================");
-				console.log(res.content);
-				console.log("====================================");
 				setNeighbourList(res?.content);
 			})
 			.catch((err) => console.error(err));
@@ -151,9 +148,6 @@ function CreatePushNotification() {
 		} else {
 			const image = event.target.files[0];
 			const inputType = image.type.split("/")?.[0];
-			console.log("====================================");
-			console.log("inputType", inputType);
-			console.log("====================================");
 			if (inputType === "image") {
 				new Compressor(image, {
 					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
@@ -304,7 +298,8 @@ function CreatePushNotification() {
 					</Grid>
 					<Grid item xs={12}>
 						<Card sx={{ padding: "20px" }}>
-							<Typography sx={{ fontSize: "22px", color: "#666", fontWeight: 500 }}>
+							<Typography
+								sx={{ fontSize: "22px", color: themeData ? "default" : "#666", fontWeight: 500 }}>
 								Create Push Notification
 							</Typography>
 						</Card>
@@ -328,6 +323,7 @@ function CreatePushNotification() {
 												}));
 											}}
 											placeholder='Enter Title'
+											label='Enter Title'
 										/>
 									</Grid>
 									{/* <Grid item xs={12}>

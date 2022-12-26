@@ -55,7 +55,7 @@ export const urls = {
 
 	GEO_CLOUD: {
 		CREATE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud",
-		FILTER_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/social-cloud-list",
+		FILTER_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/filter",
 		PENDING_APPROVAL: services.GEO_CLOUD + "social-cloud/pending-approvals",
 		APPROVE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/approve",
 		REJECT_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/reject",
@@ -111,7 +111,7 @@ export const urls = {
 		CUSTOMER_LIST: services.USER_PROFILE + "profile/filter",
 		CUSTOMER_FIND_BY_ID: services.USER_PROFILE + "admin/findById/",
 		FIND_USER_BY_SYSTEMUSER_ID: services?.USER_PROFILE + "profile/findBySystemUserId/",
-		FIND_USER_BY_USER_ID: services?.USER_PROFILE + "profile/findyById/",
+		FIND_USER_BY_USER_ID: services?.USER_PROFILE + "profile/findById/",
 		FIND_USER_CONNECTION_BY_ID: services.USER_PROFILE + "admin/userConnection/",
 		FIND_USER_BLOCK_LIST: services.USER_PROFILE + "admin/userBlockList/",
 		DASHBOARD_LIST_CUSTOMER: services.USER_PROFILE + "admin/registry/report",

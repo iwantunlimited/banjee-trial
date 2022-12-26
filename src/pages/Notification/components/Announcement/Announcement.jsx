@@ -24,7 +24,7 @@ import ModalComp from "../../../../CustomComponents/ModalComp";
 function Announcement() {
 	const navigate = useNavigate();
 	const context = useContext(MainContext);
-	const { setModalOpen, setModalData } = context;
+	const { setModalOpen, setModalData, themeData } = context;
 
 	const [data, setData] = React.useState("");
 	const [modal, setModal] = React.useState({
@@ -187,7 +187,12 @@ function Announcement() {
 					<Grid item xs={12}>
 						<Card sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
 							<Box>
-								<Typography sx={{ fontWeight: 500, color: "#6b778c", fontSize: "22px" }}>
+								<Typography
+									sx={{
+										fontWeight: 500,
+										color: themeData ? "default" : "#6b778c",
+										fontSize: "22px",
+									}}>
 									Template({totalEle})
 								</Typography>
 							</Box>

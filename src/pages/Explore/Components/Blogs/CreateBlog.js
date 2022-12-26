@@ -180,6 +180,7 @@ function CreateBlog() {
 											}));
 										}}
 										placeholder='Enter Title'
+										label='Enter Title'
 									/>
 								</Grid>
 								{/* <Grid item xs={12}>

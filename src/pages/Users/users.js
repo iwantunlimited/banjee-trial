@@ -18,11 +18,12 @@ import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import "./users.css";
+import { MainContext } from "../../context/Context";
 
 function UserComp() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
-
+	const context = React.useContext(MainContext);
 	const decodeToken = jwt_decode(token);
 	const [userData, setUserData] = React.useState({
 		data: [],
@@ -125,6 +126,7 @@ function UserComp() {
 						return (data = {
 							...item,
 							// ...data.userObject,
+							userId: item?.id,
 							displayDate: item.createdOn ? moment(item.createdOn).format("DD-MM-YYYY") : null,
 							View: "View",
 						});
@@ -199,7 +201,12 @@ function UserComp() {
 						<Grid item xs={12}>
 							<Card className='main-card space-css'>
 								<div style={{ width: "100%" }}>
-									<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
+									<div
+										style={{
+											color: context?.themeData ? "default" : "#6b778c",
+											fontSize: "20px",
+											fontWeight: "500",
+										}}>
 										Users ({userData?.totalElement})
 									</div>
 									<hr />

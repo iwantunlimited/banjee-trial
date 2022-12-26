@@ -29,7 +29,7 @@ function DeleteFeedModal({
 				if (pathname === "/social-feeds/reported-feeds/" + dFeedData.feedId) {
 					navigate("/social-feeds/reported-feeds");
 				}
-				socialFilterApi(0, 12);
+				socialFilterApi(0, 10);
 			})
 			.catch((err) => {
 				console.error(err);

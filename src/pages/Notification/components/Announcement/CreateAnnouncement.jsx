@@ -21,7 +21,7 @@ import { MainContext } from "../../../../context/Context";
 function CreateAnnouncement() {
 	const navigate = useNavigate();
 	const context = useContext(MainContext);
-	const { setModalOpen, setModalData } = context;
+	const { setModalOpen, setModalData, themeData } = context;
 
 	const [data, setData] = React.useState({
 		title: "",
@@ -67,7 +67,8 @@ function CreateAnnouncement() {
 				</Grid>
 				<Grid item xs={12}>
 					<Card sx={{ padding: "20px" }}>
-						<Typography sx={{ fontSize: "22px", color: "#666", fontWeight: 500 }}>
+						<Typography
+							sx={{ fontSize: "22px", color: themeData ? "default" : "#666", fontWeight: 500 }}>
 							Create Announcement
 						</Typography>
 					</Card>
@@ -91,6 +92,7 @@ function CreateAnnouncement() {
 											}));
 										}}
 										placeholder='Enter Title'
+										label='Enter Title'
 									/>
 								</Grid>
 								<Grid item xs={12}>

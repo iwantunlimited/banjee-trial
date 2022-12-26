@@ -130,11 +130,17 @@ function CreateAlert() {
 	const context = React.useContext(MainContext);
 
 	console.log("context", context);
-	const { setModalOpen, setModalData, setNotificationPopup } = context;
+	const { setModalOpen, setModalData, setNotificationPopup, themeData } = context;
 	const navigate = useNavigate();
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [eventTitle, setEventTitle] = React.useState("");
+	const [dLocation, setDLocation] = React.useState({
+		location: {
+			coordinates: [0, 0],
+			type: "Point",
+		},
+	});
 	const [data, setData] = React.useState({
 		anonymous: true,
 		eventCode: "NEW_ALERT",
@@ -152,16 +158,13 @@ function CreateAlert() {
 			type: "Point",
 		},
 	});
-	const [dLocation, setDLocation] = React.useState({
-		location: {
-			coordinates: [0, 0],
-			type: "Point",
-		},
-	});
 
 	const [imgShow, setImgShow] = React.useState([]);
 
 	const handleGLocation = (lat, lng, address, cityName) => {
+		console.log("====================================");
+		console.log("lat,lng", lat, lng);
+		console.log("====================================");
 		setDLocation((prev) => ({
 			...prev,
 			location: {
@@ -180,12 +183,26 @@ function CreateAlert() {
 			metaInfo: {
 				address: address,
 			},
+			location: {
+				coordinates: [lng, lat],
+				type: "Point",
+			},
 			// address: address,
 		}));
 	};
 
 	const CreateAlertApiCall = React.useCallback((data) => {
-		createAlert({ ...data, ...dLocation })
+		const payload = {
+			...data,
+			location: {
+				coordinates: [dLocation?.location?.coordinates[0], dLocation?.location?.coordinates[1]],
+				type: "Point",
+			},
+		};
+		console.log("====================================");
+		console.log("payload", payload);
+		console.log("====================================");
+		createAlert(payload)
 			.then((res) => {
 				setNotificationPopup({ open: true, message: "Alert Created Successfully" });
 				navigate("/banjee-alert");
@@ -393,9 +410,9 @@ function CreateAlert() {
 		}
 	};
 
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("data", data);
+	// console.log("====================================");
 	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
 
 	if (data) {
@@ -409,7 +426,8 @@ function CreateAlert() {
 					</Grid>
 					<Grid item xs={12}>
 						<Card sx={{ padding: "20px" }}>
-							<Typography sx={{ fontSize: "22px", color: "#666", fontWeight: 500 }}>
+							<Typography
+								sx={{ fontSize: "22px", color: themeData ? "default" : "#666", fontWeight: 500 }}>
 								Create Alert
 							</Typography>
 						</Card>
@@ -482,7 +500,9 @@ function CreateAlert() {
 																			checkedIcon={
 																				<Paper
 																					sx={{
-																						background: "#e1e1e1",
+																						background: themeData
+																							? "rgb(209 209 209 / 44%)"
+																							: "#e1e1e1",
 																						borderRadius: "10px",
 																						padding: "10px",
 																						display: "flex",
@@ -535,7 +555,9 @@ function CreateAlert() {
 																			icon={
 																				<Paper
 																					sx={{
-																						background: "white",
+																						background: themeData
+																							? "rgba(255, 255, 255, 0.08)"
+																							: "white",
 																						borderRadius: "10px",
 																						padding: "10px",
 																						display: "flex",

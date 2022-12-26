@@ -6,6 +6,7 @@ import {
 	IconButton,
 	Tooltip,
 	Typography,
+	useTheme,
 } from "@mui/material";
 import React from "react";
 import { createReactions, getReactions } from "../../services/ApiServices";
@@ -20,6 +21,7 @@ import { useParams } from "react-router";
 
 function BlogReaction({ blogData }) {
 	const params = useParams();
+	const theme = useTheme();
 
 	const [reaction, setReaction] = React.useState([]);
 
@@ -121,7 +123,8 @@ function BlogReaction({ blogData }) {
 														key={index}
 														sx={{
 															maxWidth: "90%",
-															background: "#e8ebed",
+															// background: "#e8ebed",
+															background: theme?.palette?.grey?.A700,
 															borderRadius: "10px",
 															padding: "5px",
 															paddingX: "10px",

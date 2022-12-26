@@ -1,10 +1,11 @@
-import { Box, Button, TextField, Typography, Grid, Divider } from "@mui/material";
+import { Box, Button, TextField, Typography, Grid, Divider, useTheme } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router";
 import { createComments, getComments } from "../../services/ApiServices";
 
 function BlogComments({ blogData }) {
 	const params = useParams();
+	const theme = useTheme();
 	const [comment, setComment] = React.useState({
 		postId: params?.id,
 		text: "",
@@ -65,7 +66,8 @@ function BlogComments({ blogData }) {
 										key={index}
 										sx={{
 											maxWidth: "90%",
-											background: "#e8ebed",
+											// background: "#e8ebed",
+											background: theme?.palette?.grey?.A700,
 											borderRadius: "10px",
 											padding: "5px",
 											paddingX: "10px",

@@ -13,6 +13,7 @@ import {
 	Tabs,
 	Button,
 	TextField,
+	useTheme,
 } from "@mui/material";
 import React from "react";
 import SwiperComp from "../../../../CustomComponents/SwiperComp";
@@ -65,10 +66,12 @@ function a11yProps(index) {
 
 function FeedDetail(props) {
 	const params = useParams();
+	const theme = useTheme();
 	const navigate = useNavigate();
 	const { setModalData, setModalOpen } = React.useContext(MainContext);
 	const { pathname } = useLocation();
 	const [data, setData] = React.useState("");
+	const [textState, setTextState] = React.useState(false);
 	const [deleteModal, setDeleteModal] = React.useState({
 		open: false,
 		feedId: params?.id,
@@ -156,6 +159,36 @@ function FeedDetail(props) {
 			});
 	}, []);
 
+	const textFun = (text) => {
+		if (text?.length > 550) {
+			if (textState) {
+				return (
+					<Typography>
+						{text + " "}
+						<a
+							style={{ color: theme?.palette?.primary?.main, cursor: "pointer" }}
+							onClick={() => setTextState(!textState)}>
+							...less
+						</a>
+					</Typography>
+				);
+			} else {
+				return (
+					<Typography>
+						{text.slice(0, 550) + " "}
+						<a
+							style={{ color: theme?.palette?.primary?.main, cursor: "pointer" }}
+							onClick={() => setTextState(!textState)}>
+							...more
+						</a>
+					</Typography>
+				);
+			}
+		} else {
+			return <Typography>{text}</Typography>;
+		}
+	};
+
 	React.useEffect(() => {
 		ApiCall();
 		feedCommentApiCall();
@@ -175,6 +208,7 @@ function FeedDetail(props) {
 						<Card sx={{ padding: "10px" }}>
 							<Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 								<Box
+									onClick={() => navigate("/user/view/" + data?.authorId)}
 									style={{
 										width: "100%",
 										display: "flex",
@@ -230,9 +264,18 @@ function FeedDetail(props) {
 								<SwiperComp data={data?.mediaContent} />
 							</Box>
 							<Box>
-								{data?.text && data?.mediaContent?.length > 0 && (
-									<Typography>{data?.text}</Typography>
-								)}
+								{textFun(data?.text)}
+								{/* {data?.text?.length < 350 && textState === false ? (
+									<Typography>
+										{data?.text.slice(0, 350) + " "}
+										<a>more</a>
+									</Typography>
+								) : (
+									<Typography>
+										{data?.text + ""}
+										<a>less</a>
+									</Typography>
+								)} */}
 							</Box>
 							<Box
 								sx={{ borderBottom: 1, borderColor: "divider", width: "100%", marginTop: "10px" }}>

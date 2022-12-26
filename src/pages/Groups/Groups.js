@@ -6,9 +6,11 @@ import { Helmet } from "react-helmet";
 import { communityList } from "./services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router";
+import { MainContext } from "../../context/Context";
 
 function GroupsComp(props) {
 	const navigate = useNavigate();
+	const { themeData } = React.useContext(MainContext);
 	const [listData, setListData] = React.useState("");
 	const [pagination, setPagination] = React.useState({
 		totalElement: 0,
@@ -140,7 +142,12 @@ function GroupsComp(props) {
 					<Card sx={{ padding: "20px" }}>
 						{listData ? (
 							<div>
-								<div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
+								<div
+									style={{
+										color: themeData ? "default" : "#6b778c",
+										fontSize: "22px",
+										fontWeight: "500",
+									}}>
 									Groups ({pagination?.totalElement})
 								</div>
 								<hr />

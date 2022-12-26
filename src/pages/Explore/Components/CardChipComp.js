@@ -11,9 +11,11 @@ import {
 	AccordionDetails,
 } from "@mui/material";
 import React from "react";
+import { MainContext } from "../../../context/Context";
 import CreateBusiness from "./Business/CreateBusiness";
 
 function ChipComp({ listApiCall }) {
+	const { themeData } = React.useContext(MainContext);
 	const [expanded, setExpanded] = React.useState(false);
 
 	const handleExpanded = () => {
@@ -35,7 +37,7 @@ function ChipComp({ listApiCall }) {
 				<Box sx={{ padding: "20px" }}>
 					<Typography
 						sx={{
-							color: "#6b778c",
+							color: themeData ? "default" : "#6b778c",
 							fontSize: "22px",
 							fontWeight: "500",
 							textAlign: "left",

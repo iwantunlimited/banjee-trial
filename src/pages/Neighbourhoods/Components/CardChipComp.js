@@ -10,10 +10,12 @@ import {
 import React from "react";
 import CreateNeighbour from "./createNeighbour";
 import { useTheme } from "@mui/material/styles";
+import { MainContext } from "../../../context/Context";
 
 function ChipComp(props) {
 	const { listApiCAll } = props;
 	const theme = useTheme();
+	const { themeData } = React.useContext(MainContext);
 
 	const [expanded, setExpanded] = React.useState(false);
 
@@ -29,7 +31,7 @@ function ChipComp(props) {
 				<Box sx={{ padding: { xs: "10px", sm: "20px" } }}>
 					<Typography
 						sx={{
-							color: "#6b778c",
+							color: themeData ? "default" : "#6b778c",
 							fontSize: "22px",
 							fontWeight: "500",
 							textAlign: "left",
