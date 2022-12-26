@@ -24,6 +24,14 @@ function App() {
 	// 	setThemeData(true);
 	// }
 
+	navigator.geolocation.getCurrentPosition(function (position) {
+		console.log("Latitude is :", position.coords.latitude);
+		console.log("Longitude is :", position.coords.longitude);
+		localStorage?.setItem("lat", position.coords.latitude);
+		localStorage?.setItem("lng", position.coords.longitude);
+		return position;
+	});
+
 	return (
 		<ThemeProvider theme={themeData ? darkTheme : theme}>
 			<BrowserRouter>

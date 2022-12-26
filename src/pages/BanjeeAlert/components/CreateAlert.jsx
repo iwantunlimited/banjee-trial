@@ -162,9 +162,9 @@ function CreateAlert() {
 	const [imgShow, setImgShow] = React.useState([]);
 
 	const handleGLocation = (lat, lng, address, cityName) => {
-		console.log("====================================");
-		console.log("lat,lng", lat, lng);
-		console.log("====================================");
+		// console.log("====================================");
+		// console.log("lat,lng", lat, lng);
+		// console.log("====================================");
 		setDLocation((prev) => ({
 			...prev,
 			location: {
@@ -173,9 +173,6 @@ function CreateAlert() {
 			},
 		}));
 		const arr = cityName?.formatted_address?.split(",");
-		// console.log("====================================");
-		// console.log("11----", arr[arr?.length - 3]);
-		// console.log("====================================");
 		const city = arr[arr?.length - 3];
 		setData((prev) => ({
 			...prev,
@@ -192,17 +189,7 @@ function CreateAlert() {
 	};
 
 	const CreateAlertApiCall = React.useCallback((data) => {
-		const payload = {
-			...data,
-			location: {
-				coordinates: [dLocation?.location?.coordinates[0], dLocation?.location?.coordinates[1]],
-				type: "Point",
-			},
-		};
-		console.log("====================================");
-		console.log("payload", payload);
-		console.log("====================================");
-		createAlert(payload)
+		createAlert(data)
 			.then((res) => {
 				setNotificationPopup({ open: true, message: "Alert Created Successfully" });
 				navigate("/banjee-alert");
@@ -402,17 +389,32 @@ function CreateAlert() {
 		if (imgShow?.length > 0 && submitForm === false) {
 			window.alert("Please upload the selected image first");
 		} else {
-			if (data?.eventName === "Others") {
-				CreateAlertApiCall({ ...data, title: eventTitle });
+			if (data?.cityName === "") {
+				const currentLat = localStorage?.getItem("lat");
+				const currentLng = localStorage?.getItem("lng");
+				const location = {
+					location: {
+						coordinates: [currentLng, currentLat],
+						type: "Point",
+					},
+				};
+				CreateAlertApiCall({ ...data, ...location });
 			} else {
-				CreateAlertApiCall(data);
+				if (data?.eventName === "Others") {
+					CreateAlertApiCall({ ...data, title: eventTitle });
+				} else {
+					CreateAlertApiCall(data);
+				}
 			}
 		}
 	};
 
 	// console.log("====================================");
-	// console.log("data", data);
+	// console.log("dlocation", dLocation);
 	// console.log("====================================");
+	console.log("====================================");
+	console.log("data", data);
+	console.log("====================================");
 	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
 
 	if (data) {
