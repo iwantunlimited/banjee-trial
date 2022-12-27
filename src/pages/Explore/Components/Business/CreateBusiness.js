@@ -25,9 +25,10 @@ import { filterNeighbourhood } from "../../../Neighbourhoods/services/apiService
 import { MainContext } from "../../../../context/Context";
 import Compressor from "compressorjs";
 import { v4 as uuidv4 } from "uuid";
+import NewGoogleMap from "../../../Neighbourhoods/Map/NewGoogleMap";
 
 function CreateBusiness({ listApiCall, handleExpanded }) {
-	const { setModalOpen, setModalData } = React.useContext(MainContext);
+	const { setModalOpen, setModalData, locationData } = React.useContext(MainContext);
 
 	const [data, setData] = React.useState({
 		name: "",
@@ -254,15 +255,15 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 	}, []);
 
 	const NeighbourhoodListApiCall = React.useCallback(() => {
-		filterNeighbourhood({ page: 0, pageSize: 100 })
+		filterNeighbourhood({ page: 0, pageSize: 100, online: true })
 			.then((res) => {
 				setCloudList(res.content);
 			})
 			.catch((err) => console.error(err));
 	}, []);
 
-	const createApiCall = React.useCallback((data) => {
-		createBusiness(data)
+	const createApiCall = React.useCallback((payload) => {
+		createBusiness(payload)
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Business created successfully", "success");
@@ -298,7 +299,12 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		if (businessImgShow?.length > 0 && submitForm === false) {
 			window.alert("PLease upload the selected image first");
 		} else {
-			createApiCall(data);
+			createApiCall({
+				...data,
+				geoLocation: {
+					coordinates: [locationData?.lng, locationData?.lat],
+				},
+			});
 		}
 	}
 
@@ -717,7 +723,8 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 							</Grid>
 							<Grid item xs={12}>
 								<Box sx={{ position: "relative" }}>
-									<MyGoogleMap handleGLocation={handleGLocation} />
+									{/* <MyGoogleMap handleGLocation={handleGLocation} /> */}
+									<NewGoogleMap />
 								</Box>
 							</Grid>
 							<Grid item xs={12}>

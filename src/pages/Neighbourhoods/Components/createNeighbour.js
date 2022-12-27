@@ -18,11 +18,12 @@ import "../neighbourhood.css";
 import { createNeighbourhood, findCity, findCountry, findState } from "../services/apiServices";
 import { MainContext } from "../../../context/Context";
 import Compressor from "compressorjs";
+import NewGoogleMap from "../Map/NewGoogleMap";
 
 function CreateNeighbour(props) {
 	const { listApiCAll, handleExpanded } = props;
 
-	const { setModalOpen, setModalData } = React.useContext(MainContext);
+	const { setModalOpen, setModalData ,locationData} = React.useContext(MainContext);
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [data, setData] = React.useState({
@@ -130,10 +131,6 @@ function CreateNeighbour(props) {
 			.catch((err) => console.log(err));
 	}, []);
 
-	React.useEffect(() => {
-		CountryApi();
-	}, [CountryApi]);
-
 	function handleChange(event) {
 		const { name, value } = event.target;
 
@@ -145,14 +142,14 @@ function CreateNeighbour(props) {
 		});
 	}
 
-	const createApiCall = React.useCallback((data) => {
-		createNeighbourhood(data)
+	const createApiCall = React.useCallback((payload) => {
+		createNeighbourhood(payload)
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Neighbourhood created successfully", "success");
 				setImgShow("");
-
-				setData({
+				setData((prev) => ({
+					...prev,
 					name: "",
 					approvalType: "",
 					bannerImageUrls: [],
@@ -163,7 +160,7 @@ function CreateNeighbour(props) {
 					imageUrl: "",
 					type: "",
 					approvalType: "BY_ADMIN",
-				});
+				}));
 				handleExpanded();
 				listApiCAll();
 
@@ -196,7 +193,7 @@ function CreateNeighbour(props) {
 		if (imgShow && submitForm === false) {
 			window.alert("Please upload the selected image first");
 		} else {
-			createApiCall(data);
+			createApiCall({ ...data, lat: locationData?.lat, lon: locationData?.lng });
 		}
 	}
 
@@ -212,6 +209,10 @@ function CreateNeighbour(props) {
 		const base64 = await blobToBase64(data);
 		// console.log(base64);
 	};
+
+	React.useEffect(() => {
+		CountryApi();
+	}, [CountryApi]);
 
 	return (
 		<Grid item container xs={12} spacing={2}>
@@ -475,7 +476,8 @@ function CreateNeighbour(props) {
 							</Grid>
 							<Grid item xs={12}>
 								<Box sx={{ position: "relative" }}>
-									<MyGoogleMap handleGLocation={handleGLocation} />
+									{/* <MyGoogleMap handleGLocation={handleGLocation} /> */}
+									<NewGoogleMap />
 								</Box>
 							</Grid>
 							<Grid item xs={12}>

@@ -28,9 +28,10 @@ import { MainContext } from "../../../../context/Context";
 import Compressor from "compressorjs";
 
 import { v4 as uuidv4 } from "uuid";
+import NewGoogleMap from "../../../Neighbourhoods/Map/NewGoogleMap";
 
 function EditBusiness() {
-	const { setModalData, setModalOpen } = React.useContext(MainContext);
+	const { setModalData, setModalOpen, locationData } = React.useContext(MainContext);
 	const params = useParams();
 	const navigate = useNavigate();
 
@@ -321,7 +322,7 @@ function EditBusiness() {
 	}, []);
 
 	const NeighbourhoodListApiCall = React.useCallback(() => {
-		filterNeighbourhood({ page: 0, pageSize: 1000 })
+		filterNeighbourhood({ page: 0, pageSize: 1000, online: true })
 			.then((res) => {
 				setCloudList(res.content);
 			})
@@ -334,8 +335,11 @@ function EditBusiness() {
 		BusinessDetailApiCall();
 	}, [CategoryListApiCall, BusinessDetailApiCall, NeighbourhoodListApiCall]);
 
-	const EditApiCall = React.useCallback((data) => {
-		updateBusiness({ ...businessData, ...data })
+	const EditApiCall = React.useCallback((payload) => {
+		updateBusiness({
+			...businessData,
+			...payload,
+		})
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Business updated");
@@ -373,9 +377,21 @@ function EditBusiness() {
 		if (result?.length > 0 && submitForm === false) {
 			window.alert("Please upload the selected image first");
 		} else {
-			EditApiCall(data);
+			EditApiCall({
+				...data,
+				geoLocation: {
+					coordinates: [locationData?.lng, locationData?.lat],
+				},
+			});
 		}
 	}
+
+	console.log("====================================");
+	console.log("data", data);
+	console.log("====================================");
+	console.log("====================================");
+	console.log("locationdata", locationData);
+	console.log("====================================");
 
 	if (businessData && cloudList && categoryList) {
 		return (
@@ -802,8 +818,14 @@ function EditBusiness() {
 									</Grid>
 									<Grid item xs={12}>
 										<Box sx={{ position: "relative" }}>
-											<MyGoogleMap
+											{/* <MyGoogleMap
 												handleGLocation={handleGLocation}
+												prevLocation={{
+													lat: data?.geoLocation?.coordinates[0],
+													lng: data?.geoLocation?.coordinates[1],
+												}}
+											/> */}
+											<NewGoogleMap
 												prevLocation={{
 													lat: data?.geoLocation?.coordinates[0],
 													lng: data?.geoLocation?.coordinates[1],

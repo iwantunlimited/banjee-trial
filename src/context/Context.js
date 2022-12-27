@@ -9,6 +9,8 @@ const MainContext = React.createContext({
 	setNotificationPopup: () => {},
 	themeData: false,
 	setThemeData: () => {},
+	locationData: {},
+	setLocationData: () => {},
 });
 
 function ContextProvider({ children }) {
@@ -19,11 +21,27 @@ function ContextProvider({ children }) {
 	});
 
 	const [themeData, setThemeData] = React.useState(false);
+	const [location, setLocation] = React.useState({
+		lat: 0,
+		lng: 0,
+		address: "",
+		updated: false,
+	});
 
 	const [modalData, setModalData] = React.useState({
 		message: "",
 		severity: "",
 	});
+
+	const handleLocation = (data) => {
+		setLocation((prev) => ({
+			...prev,
+			lat: data?.lat,
+			lng: data?.lng,
+			address: data?.address,
+			updated: data?.updated ? data?.updated : false,
+		}));
+	};
 
 	const handleThemeData = (msg) => {
 		setThemeData(msg);
@@ -59,6 +77,8 @@ function ContextProvider({ children }) {
 				setNotificationPopup: handleNotification,
 				themeData: themeData,
 				setThemeData: handleThemeData,
+				locationData: location,
+				setLocationData: handleLocation,
 			}}>
 			{children}
 		</MainContext.Provider>

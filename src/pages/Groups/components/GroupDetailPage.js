@@ -16,6 +16,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
+import { MainContext } from "../../../context/Context";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { filterMembers } from "../../Neighbourhoods/services/apiServices";
 import { findCommunityById } from "../services/apiServices";
@@ -24,6 +25,7 @@ function GroupDetailPage(props) {
 	const params = useParams();
 	const navigate = useNavigate();
 	const theme = useTheme();
+	const { themeData } = React.useContext(MainContext);
 
 	const [state, setState] = React.useState();
 
@@ -187,6 +189,10 @@ function GroupDetailPage(props) {
 		filterMemberApiCall(0, 10);
 	}, [ApiCall, filterMemberApiCall]);
 
+	console.log("====================================");
+	console.log(modalData);
+	console.log("====================================");
+
 	if (state) {
 		return (
 			<Container maxWidth='lg' style={{ padding: "0px", margin: "auto" }}>
@@ -303,12 +309,12 @@ function GroupDetailPage(props) {
 						style={{ position: "absolute", top: "0px", right: "0px" }}>
 						<Cancel sx={{ color: "brown" }} />
 					</IconButton>
-					<Box
+					<Card
 						elevation={1}
 						style={{
 							boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
 							padding: "40px 10px 40px 10px",
-							background: "white ",
+							// background: "white ",
 							minHeight: "420px",
 						}}>
 						<Box
@@ -321,7 +327,7 @@ function GroupDetailPage(props) {
 							}}>
 							<Avatar
 								src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modalData?.data?.mavtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
-								alt={modalData?.data?.muserName}
+								alt={modalData?.data?.profile?.avtarUrl}
 								sx={{ width: "150px", height: "150px" }}
 							/>
 							{/* <Avatar
@@ -345,29 +351,40 @@ function GroupDetailPage(props) {
 									fontSize: "10px",
 									fontWeight: "400",
 								}}>
-								{modalData?.data?.firstName && (
+								{modalData?.data?.profile?.firstName && (
 									<Typography variant='h6' style={{ marginRight: "5px" }}>
-										{modalData?.data?.mfirstName + " " + modalData?.data?.mlastName}
+										{modalData?.data?.profile?.firstName + " " + modalData?.data?.profile?.lastName}
 									</Typography>
 								)}
 							</div>
-							<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
+							<Typography
+								style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
+								variant='h6'>
 								{window.innerWidth > 1282
-									? modalData?.data?.memail
-									: modalData?.data?.memail && modalData?.data?.memail.slice(0, 20)}
+									? modalData?.data?.profile?.email
+									: modalData?.data?.profile?.email && modalData?.data?.profile?.email.slice(0, 20)}
 							</Typography>
-							{window.innerWidth < 1282 && modalData && modalData?.data?.memail?.length > 10 && (
-								<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-									{modalData?.data?.memail?.slice(20, modalData?.data?.memail?.length + 1)}
-								</Typography>
-							)}
-							<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-								{modalData?.data?.mmcc
-									? +modalData?.data?.mmcc + " " + modalData?.data?.mmobile
-									: modalData?.data?.mmobile}
+							{window.innerWidth < 1282 &&
+								modalData &&
+								modalData?.data?.profile?.email?.length > 10 && (
+									<Typography
+										style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
+										variant='h6'>
+										{modalData?.data?.profile?.email?.slice(
+											20,
+											modalData?.data?.profile?.email?.length + 1
+										)}
+									</Typography>
+								)}
+							<Typography
+								style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
+								variant='h6'>
+								{modalData?.data?.profile?.mcc
+									? +modalData?.data?.profile?.mcc + " " + modalData?.data?.profile?.mobile
+									: modalData?.data?.profile?.mobile}
 							</Typography>
 						</Box>
-					</Box>
+					</Card>
 				</ModalComp>
 			</Container>
 		);

@@ -44,6 +44,7 @@ import fire from "../../../assets/alerticonset/fire.png";
 import thunder from "../../../assets/alerticonset/thunder.png";
 import pawprint from "../../../assets/alerticonset/pawprint.png";
 import edit from "../../../assets/alerticonset/edit.png";
+import NewGoogleMap from "../../Neighbourhoods/Map/NewGoogleMap";
 
 const eventData = [
 	{
@@ -130,17 +131,12 @@ function CreateAlert() {
 	const context = React.useContext(MainContext);
 
 	console.log("context", context);
-	const { setModalOpen, setModalData, setNotificationPopup, themeData } = context;
+	const { setModalOpen, setModalData, setNotificationPopup, themeData, locationData } = context;
 	const navigate = useNavigate();
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [eventTitle, setEventTitle] = React.useState("");
-	const [dLocation, setDLocation] = React.useState({
-		location: {
-			coordinates: [0, 0],
-			type: "Point",
-		},
-	});
+
 	const [data, setData] = React.useState({
 		anonymous: true,
 		eventCode: "NEW_ALERT",
@@ -154,42 +150,18 @@ function CreateAlert() {
 		},
 		sendTo: "TO_NEARBY",
 		location: {
-			coordinates: [0, 0],
+			coordinates: [localStorage?.getItem("lng"), localStorage?.getItem("lat")],
 			type: "Point",
 		},
 	});
 
 	const [imgShow, setImgShow] = React.useState([]);
 
-	const handleGLocation = (lat, lng, address, cityName) => {
-		// console.log("====================================");
-		// console.log("lat,lng", lat, lng);
-		// console.log("====================================");
-		setDLocation((prev) => ({
-			...prev,
-			location: {
-				coordinates: [lng, lat],
-				type: "Point",
-			},
-		}));
-		const arr = cityName?.formatted_address?.split(",");
-		const city = arr[arr?.length - 3];
-		setData((prev) => ({
-			...prev,
-			cityName: city ? city : "",
-			metaInfo: {
-				address: address,
-			},
-			location: {
-				coordinates: [lng, lat],
-				type: "Point",
-			},
-			// address: address,
-		}));
-	};
-
-	const CreateAlertApiCall = React.useCallback((data) => {
-		createAlert(data)
+	const CreateAlertApiCall = React.useCallback((payloadData) => {
+		console.log("====================================");
+		console.log("payload", payloadData);
+		console.log("====================================");
+		createAlert(payloadData)
 			.then((res) => {
 				setNotificationPopup({ open: true, message: "Alert Created Successfully" });
 				navigate("/banjee-alert");
@@ -398,20 +370,35 @@ function CreateAlert() {
 						type: "Point",
 					},
 				};
-				CreateAlertApiCall({ ...data, ...location });
+				CreateAlertApiCall({ ...data, ...location, cityName: locationData?.address });
 			} else {
 				if (data?.eventName === "Others") {
-					CreateAlertApiCall({ ...data, title: eventTitle });
+					CreateAlertApiCall({
+						...data,
+						title: eventTitle,
+						cityName: locationData?.address,
+						location: {
+							coordinates: [locationData?.lng, locationData?.lat],
+							type: "Point",
+						},
+					});
 				} else {
-					CreateAlertApiCall(data);
+					CreateAlertApiCall({
+						...data,
+						cityName: locationData?.address,
+						location: {
+							coordinates: [locationData?.lng, locationData?.lat],
+							type: "Point",
+						},
+					});
 				}
 			}
 		}
 	};
 
-	// console.log("====================================");
-	// console.log("dlocation", dLocation);
-	// console.log("====================================");
+	console.log("====================================");
+	console.log("locationData", locationData);
+	console.log("====================================");
 	console.log("====================================");
 	console.log("data", data);
 	console.log("====================================");
@@ -870,7 +857,8 @@ function CreateAlert() {
 									</Grid>
 									<Grid item xs={12}>
 										<Box sx={{ position: "relative" }}>
-											<MyGoogleMap handleGLocation={handleGLocation} />
+											{/* <MyGoogleMap handleGLocation={handleGLocation} /> */}
+											<NewGoogleMap />
 										</Box>
 									</Grid>
 									<Grid item xs={12}>

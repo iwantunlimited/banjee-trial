@@ -37,6 +37,12 @@ class MyGoogleMap extends Component {
 	}
 	componentWillMount() {
 		this.setCurrentLocation();
+		this.props.handleGLocation(
+			this.state.lat,
+			this.state.lng,
+			this?.state?.address,
+			this.state.places
+		);
 	}
 
 	onMarkerInteraction = (childKey, childProps, mouse) => {
@@ -44,6 +50,10 @@ class MyGoogleMap extends Component {
 			draggable: false,
 			lat: mouse.lat,
 			lng: mouse.lng,
+			newCenter: {
+				lat: mouse.lat,
+				lng: mouse.lng,
+			},
 		});
 		this.props.handleGLocation(
 			mouse?.lat,
@@ -51,6 +61,7 @@ class MyGoogleMap extends Component {
 			this?.state?.address,
 			this?.state?.places[0]
 		);
+		this._generateAddress();
 	};
 	onMarkerInteractionMouseUp = (childKey, childProps, mouse) => {
 		this.setState({ draggable: true });
@@ -69,6 +80,10 @@ class MyGoogleMap extends Component {
 		this.setState({
 			lat: value.lat,
 			lng: value.lng,
+			newCenter: {
+				lat: value.lat,
+				lng: value.lng,
+			},
 		});
 
 		this.props.handleGLocation(
@@ -77,24 +92,32 @@ class MyGoogleMap extends Component {
 			this?.state?.address,
 			this?.state?.places[0]
 		);
+		this.apiHasLoaded();
 	};
 
 	apiHasLoaded = (map, maps) => {
-		if (this?.props?.prevLocation) {
-			this.setState({
-				mapApiLoaded: true,
-				mapInstance: map,
-				mapApi: maps,
-				lat: this?.props?.prevLocation?.lat,
-				lng: this?.props?.prevLocation?.lng,
-			});
-		} else {
-			this.setState({
-				mapApiLoaded: true,
-				mapInstance: map,
-				mapApi: maps,
-			});
-		}
+		// if (this?.props?.prevLocation) {
+		// 	this.setState({
+		// 		mapApiLoaded: true,
+		// 		mapInstance: map,
+		// 		mapApi: maps,
+		// 		lat: this?.props?.prevLocation?.lat,
+		// 		lng: this?.props?.prevLocation?.lng,
+		// 	});
+		// } else {
+		// 	this.setState({
+		// 		mapApiLoaded: true,
+		// 		mapInstance: map,
+		// 		mapApi: maps,
+		// 	});
+		// }
+		this.setState({
+			mapApiLoaded: true,
+			mapInstance: map,
+			mapApi: maps,
+			lat: this.state?.lat,
+			lng: this.state?.lng,
+		});
 
 		this._generateAddress();
 	};
@@ -126,12 +149,15 @@ class MyGoogleMap extends Component {
 				// console.log(status);
 				if (status === "OK") {
 					if (results[0]) {
+						console.log("====================================");
+						console.log("result call", results);
+						console.log("====================================");
 						this.zoom = 12;
 						this.setState({ address: results[0].formatted_address });
 						this.props.handleGLocation(
 							this?.state?.lat,
 							this?.state?.lng,
-							results[0].formatted_address,
+							results,
 							this?.state?.places[0]
 						);
 					} else {
@@ -148,9 +174,6 @@ class MyGoogleMap extends Component {
 	setCurrentLocation() {
 		if ("geolocation" in navigator) {
 			navigator.geolocation.getCurrentPosition((position) => {
-				console.log("====================================");
-				console.log("position", position);
-				console.log("====================================");
 				this.setState({
 					center: [position.coords.latitude, position.coords.longitude],
 					newCenter: [position.coords.latitude, position.coords.longitude],
@@ -172,6 +195,11 @@ class MyGoogleMap extends Component {
 		console.log("map state", this.state);
 		console.log("====================================");
 		const { places, mapApiLoaded, mapInstance, mapApi } = this.state;
+		// mapApi?.places.Autocomplete.fe((a, b) => {
+		// 	console.log("====================================");
+		// 	console.log(a, b);
+		// 	console.log("====================================");
+		// });
 
 		return (
 			<Wrapper>

@@ -31,6 +31,7 @@ import {
 import Compressor from "compressorjs";
 import { useNavigate, useParams } from "react-router";
 import { MainContext } from "../../../context/Context";
+import NewGoogleMap from "../Map/NewGoogleMap";
 
 function EditNeighbourhood() {
 	const params = useParams();
@@ -48,7 +49,7 @@ function EditNeighbourhood() {
 		cityId: "",
 		countryId: "",
 		geoLocation: {
-			coordinates: ["", ""],
+			coordinates: [0, 0],
 			type: "Point",
 		},
 		description: "",
@@ -240,7 +241,7 @@ function EditNeighbourhood() {
 					bannerImageUrl: [],
 					cityId: "",
 					geoLocation: {
-						coordinates: ["", ""],
+						coordinates: [0, 0],
 						type: "Point",
 					},
 					description: "",
@@ -530,8 +531,14 @@ function EditNeighbourhood() {
 								</Grid>
 								<Grid item xs={12}>
 									<Box sx={{ position: "relative" }}>
-										<MyGoogleMap
+										{/* <MyGoogleMap
 											handleGLocation={handleGLocation}
+											prevLocation={{
+												lat: data?.geoLocation?.coordinates[1],
+												lng: data?.geoLocation?.coordinates[0],
+											}}
+										/> */}
+										<NewGoogleMap
 											prevLocation={{
 												lat: data?.geoLocation?.coordinates[1],
 												lng: data?.geoLocation?.coordinates[0],
