@@ -150,7 +150,7 @@ function CreateAlert() {
 		},
 		sendTo: "TO_NEARBY",
 		location: {
-			coordinates: [localStorage?.getItem("lng"), localStorage?.getItem("lat")],
+			coordinates: [0, 0],
 			type: "Point",
 		},
 	});
@@ -362,15 +362,14 @@ function CreateAlert() {
 			window.alert("Please upload the selected image first");
 		} else {
 			if (data?.cityName === "") {
-				const currentLat = localStorage?.getItem("lat");
-				const currentLng = localStorage?.getItem("lng");
-				const location = {
+				CreateAlertApiCall({
+					...data,
 					location: {
-						coordinates: [currentLng, currentLat],
+						coordinates: [locationData?.lng, locationData?.lat],
 						type: "Point",
 					},
-				};
-				CreateAlertApiCall({ ...data, ...location, cityName: locationData?.address });
+					cityName: locationData?.address,
+				});
 			} else {
 				if (data?.eventName === "Others") {
 					CreateAlertApiCall({
