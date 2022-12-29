@@ -24,14 +24,14 @@ function App() {
 	// 	setThemeData(true);
 	// }
 
-	// navigator.geolocation.getCurrentPosition(function (position) {
-	// 	console.log("Latitude is :", position.coords.latitude);
-	// 	console.log("Longitude is :", position.coords.longitude);
-	// 	localStorage?.setItem("lat", position.coords.latitude);
-	// 	localStorage?.setItem("lng", position.coords.longitude);
-	// 	setLocationData({ lat: position.coords.latitude, lng: position.coords.longitude, address: "" });
-	// 	return position;
-	// });
+	navigator.geolocation.getCurrentPosition(function (position) {
+		// console.log("Latitude is :", position.coords.latitude);
+		// console.log("Longitude is :", position.coords.longitude);
+		localStorage?.setItem("lat", position.coords.latitude);
+		localStorage?.setItem("lng", position.coords.longitude);
+		setLocationData({ lat: position.coords.latitude, lng: position.coords.longitude, address: "" });
+		return position;
+	});
 
 	return (
 		<ThemeProvider theme={themeData ? darkTheme : theme}>

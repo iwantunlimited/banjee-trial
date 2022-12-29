@@ -12,6 +12,12 @@ function NotificationDetail() {
 	const [data, setData] = React.useState("");
 	const [imageState, setImageState] = React.useState([]);
 	const [videoState, setVideoState] = React.useState([]);
+	const [audioState, setAudioState] = React.useState([]);
+	const [mediaState, setMediaState] = React.useState([]);
+
+	// console.log("====================================");
+	// console.log("mediaState", mediaState);
+	// console.log("====================================");
 
 	const DetailApiCall = React.useCallback(() => {
 		AlertById(params?.id)
@@ -23,22 +29,44 @@ function NotificationDetail() {
 						return {
 							src: item,
 							mimeType: "image/png",
+							type: "image",
 						};
 					});
 					setImageState(images);
+					setMediaState((prev) => [...prev, ...images]);
 				}
 				if (res?.videoUrl?.length > 0) {
 					const video = res?.videoUrl?.map((item) => {
 						return {
 							src: item,
 							mimeType: "video/mp4",
+							type: "video",
 						};
 					});
 					setVideoState(video);
+					setMediaState((prev) => [...prev, ...video]);
+				}
+				if (res?.audioSrc) {
+					setAudioState((prev) => [
+						...prev,
+						{
+							src: res?.audioSrc,
+							mimeType: "audio/mp3",
+							type: "audio",
+						},
+					]);
+					setMediaState((prev) => [
+						...prev,
+						{
+							src: res?.audioSrc,
+							mimeType: "audio/mp3",
+							type: "audio",
+						},
+					]);
 				}
 			})
 			.catch((err) => console.error(err));
-	}, []);
+	}, [params?.id]);
 
 	React.useEffect(() => {
 		DetailApiCall();
@@ -108,7 +136,7 @@ function NotificationDetail() {
 								</Grid>
 								{(imageState?.length > 0 || videoState?.length > 0) && (
 									<Grid item xs={4}>
-										<SwiperComp data={[...imageState, ...videoState]} />
+										<SwiperComp data={[...imageState, ...videoState, ...audioState]} />
 									</Grid>
 								)}
 							</Grid>

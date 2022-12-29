@@ -14,6 +14,9 @@ function SwiperComp({ data }) {
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
 	});
+	console.log("====================================");
+	console.log("swiper compo", data);
+	console.log("====================================");
 	return (
 		<React.Fragment>
 			<Swiper

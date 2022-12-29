@@ -41,6 +41,7 @@ import UserComp from "./pages/Users/users";
 import CreateAlert from "./pages/BanjeeAlert/components/CreateAlert";
 import NotFound from "./pages/NotFound/NotFound";
 import FeedDetail from "./pages/Social_Feeds/Components/DetailPage/FeedDetail";
+import GoogleMapCustom from "./CustomComponents/GoogleMap";
 
 const Routes = () => {
 	return useRoutes([
@@ -51,6 +52,10 @@ const Routes = () => {
 				{
 					path: "/",
 					element: <DashboardTrial />,
+				},
+				{
+					path: "/map",
+					element: <GoogleMapCustom isMarkerShown={true} />,
 				},
 				{
 					path: "/category",

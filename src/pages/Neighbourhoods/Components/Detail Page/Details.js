@@ -35,6 +35,7 @@ import axios from "axios";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
 import { MainContext } from "../../../../context/Context";
+import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
 
 function DetailPage() {
 	const params = useParams();
@@ -355,14 +356,16 @@ function DetailPage() {
 									<Divider />
 								</Box>
 								{state && (
-									<Box>
-										<UserLocation
+									<Box sx={{ width: "100%", height: "350px" }}>
+										<GoogleMapCustom
+											view={true}
+											prevLocation={{
+												lat: state?.geoLocation?.coordinates[1],
+												lng: state?.geoLocation?.coordinates[0],
+											}}
 											data={{
-												name: state?.name,
-												currentLocation: {
-													lat: state?.geoLocation?.coordinates[1],
-													lon: state?.geoLocation?.coordinates[0],
-												},
+												lat: state?.geoLocation?.coordinates[1],
+												lng: state?.geoLocation?.coordinates[0],
 												zoom: 15,
 											}}
 										/>

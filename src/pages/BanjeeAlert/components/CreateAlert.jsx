@@ -45,6 +45,7 @@ import thunder from "../../../assets/alerticonset/thunder.png";
 import pawprint from "../../../assets/alerticonset/pawprint.png";
 import edit from "../../../assets/alerticonset/edit.png";
 import NewGoogleMap from "../../Neighbourhoods/Map/NewGoogleMap";
+import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
 
 const eventData = [
 	{
@@ -138,7 +139,7 @@ function CreateAlert() {
 	const [eventTitle, setEventTitle] = React.useState("");
 
 	const [data, setData] = React.useState({
-		anonymous: true,
+		anonymous: false,
 		eventCode: "NEW_ALERT",
 		cityName: "",
 		eventName: null,
@@ -166,7 +167,7 @@ function CreateAlert() {
 				setNotificationPopup({ open: true, message: "Alert Created Successfully" });
 				navigate("/banjee-alert");
 				setData({
-					anonymous: true,
+					anonymous: false,
 					eventCode: "NEW_ALERT",
 					cityName: "",
 					eventName: "",
@@ -358,6 +359,16 @@ function CreateAlert() {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
+		// document.getElementById("form-id").onkeydown = function (e) {
+		// 	console.log("e", e);
+		// 	var key = e.charCode || e.keyCode || 0;
+		// 	if (key == 13) {
+		// 		e.preventDefault();
+		// 		return false;
+		// 	} else {
+		// 		e.preventDefault();
+		// 	}
+		// };
 		if (imgShow?.length > 0 && submitForm === false) {
 			window.alert("Please upload the selected image first");
 		} else {
@@ -423,7 +434,7 @@ function CreateAlert() {
 
 					<Grid item xs={12}>
 						<Card sx={{ padding: "20px" }}>
-							<form onSubmit={handleSubmit}>
+							<form id='form-id' onSubmit={handleSubmit}>
 								<Grid item container xs={12} spacing={2}>
 									{/* <Grid item xs={12}>
 										<FormControl fullWidth>
@@ -855,9 +866,9 @@ function CreateAlert() {
 										/>
 									</Grid>
 									<Grid item xs={12}>
-										<Box sx={{ position: "relative" }}>
+										<Box sx={{ position: "relative", height: "400px" }}>
 											{/* <MyGoogleMap handleGLocation={handleGLocation} /> */}
-											<NewGoogleMap />
+											<GoogleMapCustom />
 										</Box>
 									</Grid>
 									<Grid item xs={12}>

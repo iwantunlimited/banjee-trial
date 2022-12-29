@@ -26,6 +26,7 @@ import { MainContext } from "../../../../context/Context";
 import Compressor from "compressorjs";
 import { v4 as uuidv4 } from "uuid";
 import NewGoogleMap from "../../../Neighbourhoods/Map/NewGoogleMap";
+import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
 
 function CreateBusiness({ listApiCall, handleExpanded }) {
 	const { setModalOpen, setModalData, locationData } = React.useContext(MainContext);
@@ -722,9 +723,9 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<Box sx={{ position: "relative" }}>
+								<Box sx={{ position: "relative", height: "400px" }}>
 									{/* <MyGoogleMap handleGLocation={handleGLocation} /> */}
-									<NewGoogleMap />
+									<GoogleMapCustom />
 								</Box>
 							</Grid>
 							<Grid item xs={12}>

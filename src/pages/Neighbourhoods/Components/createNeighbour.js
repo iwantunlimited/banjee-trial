@@ -13,17 +13,16 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
-import MyGoogleMap from "../Map/GoogleMap";
 import "../neighbourhood.css";
 import { createNeighbourhood, findCity, findCountry, findState } from "../services/apiServices";
 import { MainContext } from "../../../context/Context";
 import Compressor from "compressorjs";
-import NewGoogleMap from "../Map/NewGoogleMap";
+import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
 
 function CreateNeighbour(props) {
 	const { listApiCAll, handleExpanded } = props;
 
-	const { setModalOpen, setModalData ,locationData} = React.useContext(MainContext);
+	const { setModalOpen, setModalData, locationData } = React.useContext(MainContext);
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [data, setData] = React.useState({
@@ -475,9 +474,8 @@ function CreateNeighbour(props) {
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
-								<Box sx={{ position: "relative" }}>
-									{/* <MyGoogleMap handleGLocation={handleGLocation} /> */}
-									<NewGoogleMap />
+								<Box sx={{ position: "relative", height: "400px" }}>
+									<GoogleMapCustom />
 								</Box>
 							</Grid>
 							<Grid item xs={12}>

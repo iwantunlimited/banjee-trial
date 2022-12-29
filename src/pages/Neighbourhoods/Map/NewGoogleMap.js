@@ -7,7 +7,7 @@ import styled from "styled-components";
 import AutoComplete from "./AutoComplete";
 import Marker from "./Marker";
 import "./map.css";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { MainContext } from "../../../context/Context";
 
 const Wrapper = styled.main`
@@ -216,53 +216,114 @@ function NewGoogleMap(props) {
 		}
 	}, [generateAddress]);
 
-	// console.log("====================================");
-	// console.log("state", state);
-	// console.log("====================================");
-
 	React.useEffect(() => {
 		setCurrentLocation();
 	}, [setCurrentLocation]);
 
-	return (
-		<Wrapper>
-			{state?.mapApiLoaded && (
-				<div>
-					<AutoComplete
-						required={false}
-						map={state?.mapInstance}
-						mapApi={state?.mapApi}
-						addplace={addPlace}
-					/>
-				</div>
-			)}
-			<Box sx={{ position: "relative" }}>
-				<GoogleMapReact
-					style={{ width: "100%", height: "500px" }}
-					center={state.newCenter}
-					defaultCenter={{ lat: state?.center[0], lng: state?.center[1] }}
-					zoom={state.zoom}
-					draggable={state.draggable}
-					onChange={onChange}
-					onChildMouseDown={onMarkerInteraction}
-					onChildMouseUp={onMarkerInteractionMouseUp}
-					onChildMouseMove={onMarkerInteraction}
-					onChildClick={() => console.log("child click")}
-					onClick={onClick}
-					bootstrapURLKeys={{
-						key: "AIzaSyAM9uE4Sy2nWFfP-Ha6H8ZC6ghAMKJEKps",
-						libraries: ["places", "geometry", "drawing", "visualization"],
-					}}
-					yesIWantToUseGoogleMapApiInternals
-					onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}>
-					{/* <Box sx={{ p: 2, maxWidth: "200px", background: "grey" }}>
+	if (props?.view === true && props?.data) {
+		if (props?.data?.lat && props?.data?.lng) {
+			return (
+				<Box sx={{ position: "relative" }}>
+					<GoogleMapReact
+						// key={"AIzaSyAM9uE4Sy2nWFfP-Ha6H8ZC6ghAMKJEKps"}
+						options={{
+							streetViewControl: true,
+							mapTypeControl: true,
+						}}
+						style={{ width: "100%", height: "500px" }}
+						center={{ lat: props?.data?.lat, lng: props?.data?.lng }}
+						defaultCenter={{ lat: props?.data?.lat, lng: props?.data?.lng }}
+						zoom={props?.data?.zoom ? props?.data?.zoom : 12}
+						// draggable={state.draggable}
+						// bootstrapURLKeys={{
+						// 	key: "AIzaSyAM9uE4Sy2nWFfP-Ha6H8ZC6ghAMKJEKps",
+						// 	libraries: "places",
+						// 	// libraries: ["geocoding", "Routes", "places", "geometry", "drawing", "visualization"],
+						// }}
+					>
+						{/* <Box sx={{ p: 2, maxWidth: "200px", background: "grey" }}>
 							<p>{this.state.address}</p>
 						</Box> */}
-					<Marker text={state.address} lat={state.lat} lng={state.lng} />
-				</GoogleMapReact>
-			</Box>
-		</Wrapper>
-	);
+						<Marker text={props?.data?.text} lat={props?.data?.lat} lng={props?.data?.lng} />
+					</GoogleMapReact>
+				</Box>
+			);
+		} else {
+			return (
+				<Box
+					sx={{
+						height: "30vh",
+						width: "100%",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					}}>
+					<CircularProgress />
+				</Box>
+			);
+		}
+	} else {
+		if (state?.lat && state?.lng) {
+			return (
+				<Wrapper>
+					{state?.mapApiLoaded && (
+						<div>
+							<AutoComplete
+								required={false}
+								map={state?.mapInstance}
+								mapApi={state?.mapApi}
+								addplace={addPlace}
+							/>
+						</div>
+					)}
+					<Box sx={{ position: "relative" }}>
+						<GoogleMapReact
+							options={{
+								streetViewControl: true,
+								mapTypeControl: true,
+							}}
+							style={{ width: "100%", height: "500px" }}
+							center={state.newCenter}
+							defaultCenter={{ lat: state?.center[0], lng: state?.center[1] }}
+							zoom={state.zoom}
+							draggable={state.draggable}
+							onChange={onChange}
+							onChildMouseDown={onMarkerInteraction}
+							onChildMouseUp={onMarkerInteractionMouseUp}
+							onChildMouseMove={onMarkerInteraction}
+							onChildClick={() => console.log("child click")}
+							onClick={onClick}
+							key={"AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk"}
+							bootstrapURLKeys={{
+								key: "AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk",
+								libraries: "geometry",
+								// libraries: ["places", "geometry", "drawing", "visualization"],
+							}}
+							yesIWantToUseGoogleMapApiInternals
+							onGoogleApiLoaded={({ map, maps }) => apiHasLoaded(map, maps)}>
+							{/* <Box sx={{ p: 2, maxWidth: "200px", background: "grey" }}>
+							<p>{this.state.address}</p>
+						</Box> */}
+							<Marker text={state.address} lat={state.lat} lng={state.lng} />
+						</GoogleMapReact>
+					</Box>
+				</Wrapper>
+			);
+		} else {
+			return (
+				<Box
+					sx={{
+						height: "30vh",
+						width: "100%",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+					}}>
+					<CircularProgress />
+				</Box>
+			);
+		}
+	}
 }
 
 export default NewGoogleMap;

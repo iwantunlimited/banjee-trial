@@ -13,6 +13,7 @@ import {
 	InputLabel,
 	Select,
 	CircularProgress,
+	Switch,
 } from "@mui/material";
 import "../../../Explore/business.css";
 import { ArrowBack, Cancel, CheckBox, CheckBoxOutlineBlank, Done } from "@mui/icons-material";
@@ -33,17 +34,17 @@ function CreatePushNotification() {
 	// console.log("context", context);
 	const { setNotificationPopup, setModalData, setModalOpen, themeData } = context;
 	const navigate = useNavigate();
+	const [selectTemplate, setSelectTemplate] = React.useState(false);
 	const [data, setData] = React.useState({
 		anonymous: false,
 		eventCode: "ADMIN_NOTIFICATION",
 		eventName: "",
 		// cloudIds: [],
 		description: "",
+		audioSrc: "",
 		imageUrl: [],
 		videoUrl: [],
 		metaInfo: {
-			templateId: "",
-			templateName: "",
 			detail: false,
 		},
 		sendTo: "TO_NEARBY",
@@ -54,10 +55,15 @@ function CreatePushNotification() {
 	});
 
 	const [imgShow, setImgShow] = React.useState([]);
+	const [audioShow, setAudioShow] = React.useState([]);
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
+	const [audioUploaded, setAudioUploaded] = React.useState(false);
 	const [neighbourList, setNeighbourList] = React.useState("");
 	const [blogList, setBLogList] = React.useState("");
+
+	const localLat = localStorage.getItem("lat");
+	const localLng = localStorage.getItem("lng");
 
 	const NeighbourListApi = React.useCallback(() => {
 		filterNeighbourhood({ page: 0, size: 1000, online: true })
@@ -75,8 +81,8 @@ function CreatePushNotification() {
 			.catch((err) => console.error(err));
 	}, []);
 
-	const CreateAlertApiCall = React.useCallback((data) => {
-		createAlert(data)
+	const CreateAlertApiCall = React.useCallback((payload) => {
+		createAlert(payload)
 			.then((res) => {
 				setNotificationPopup({ open: true, message: "Notification Created Successfully" });
 				navigate("/notification");
@@ -86,16 +92,15 @@ function CreatePushNotification() {
 					eventName: "",
 					// cloudIds: [],
 					description: "",
+					audioSrc: "",
 					imageUrl: [],
 					videoUrl: [],
 					metaInfo: {
-						templateId: "",
-						templateName: "",
 						detail: false,
 					},
 					sendTo: "TO_NEARBY",
 					location: {
-						coordinates: [72.51113723963499, 23.069438702322635],
+						coordinates: [localLng, localLat],
 						type: "Point",
 					},
 				});
@@ -106,6 +111,25 @@ function CreatePushNotification() {
 			.catch((err) => console.error(err));
 	}, []);
 
+	const handleAudioChange = (event) => {
+		for (let index = 0; index < event?.target?.files?.length; index++) {
+			const image = event.target.files[index];
+			const inputType = image.type.split("/")?.[0];
+			if (inputType === "audio") {
+				setAudioShow((prev) => [
+					...prev,
+					{
+						type: inputType,
+						id: uuidv4(),
+						data: URL.createObjectURL(image),
+						src: image,
+						loader: false,
+						done: false,
+					},
+				]);
+			}
+		}
+	};
 	const handleImageChange = (event) => {
 		if (event?.target?.files?.length > 0) {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
@@ -114,7 +138,6 @@ function CreatePushNotification() {
 				if (inputType === "image") {
 					new Compressor(image, {
 						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-						convertTypes: inputType === "video" ? ["video/mp4"] : ["image/png"],
 						success: (compressedResult) => {
 							// compressedResult has the compressed file.
 							// Use the compressed file to upload the images to your server.
@@ -183,7 +206,7 @@ function CreatePushNotification() {
 	};
 
 	const ImageApiCAll = React.useCallback((data, dataType, notifyMessage) => {
-		if (dataType === "video") {
+		if (dataType === "video" || dataType === "audio") {
 			const mime = "video";
 			const formData = new FormData();
 
@@ -202,14 +225,40 @@ function CreatePushNotification() {
 					if (notifyMessage === "Images Uploaded") {
 						setImageUploaded(true);
 						setModalOpen(true);
-						setModalData("Image Uploaded", "success");
+						setModalData("Video Uploaded", "success");
 					}
 					setSubmitForm(true);
-					setData((prev) => ({
-						...prev,
-						// imageUrl: res?.data?.data[0]?.data?.id,
-						videoUrl: [...prev.videoUrl, res?.data?.public_id],
-					}));
+					if (dataType === "audio") {
+						if (notifyMessage === "Audio Uploaded") {
+							setAudioUploaded(true);
+							setModalOpen(true);
+							setModalData("Audio Uploaded", "success");
+						}
+						setData((prev) => ({
+							...prev,
+							// imageUrl: res?.data?.data[0]?.data?.id,
+							audioSrc: res?.data?.public_id,
+						}));
+						setAudioShow((prev) => {
+							return prev.map((item) => {
+								if (item?.id === data?.id) {
+									return {
+										...item,
+										loader: false,
+										done: true,
+									};
+								} else {
+									return item;
+								}
+							});
+						});
+					} else {
+						setData((prev) => ({
+							...prev,
+							// imageUrl: res?.data?.data[0]?.data?.id,
+							videoUrl: [...prev.videoUrl, res?.data?.public_id],
+						}));
+					}
 					setImgShow((prev) => {
 						return prev.map((item) => {
 							if (item?.id === data?.id) {
@@ -274,9 +323,17 @@ function CreatePushNotification() {
 		event.preventDefault();
 		// setFinalData(data);
 		if (imgShow?.length > 0 && submitForm === false) {
-			window.alert("Please upload the selected image first");
+			window.alert("Please upload the selected image or video first");
+		} else if (audioShow?.length > 0 && submitForm === false) {
+			window.alert("Please upload the selected audio first");
 		} else {
-			CreateAlertApiCall(data);
+			CreateAlertApiCall({
+				...data,
+				location: {
+					coordinates: [localLng, localLat],
+					type: "Point",
+				},
+			});
 		}
 	};
 
@@ -364,41 +421,57 @@ function CreatePushNotification() {
 										/>
 									</Grid> */}
 									<Grid item xs={12}>
-										<FormControl fullWidth>
-											<InputLabel id='demo-simple-select-label'>Select Template</InputLabel>
-											<Select
-												required
-												labelId='demo-simple-select-label'
-												id='demo-simple-select'
-												name='templateId'
-												label='Select Template'
-												value={data?.metaInfo.templateId}
-												onChange={(event, data) => {
-													setData((prev) => ({
-														...prev,
-														metaInfo: {
-															templateId: event.target.value,
-															templateName: data?.props?.children,
-															detail: true,
-														},
+										<Box
+											sx={{
+												display: "flex",
+												alignItems: "center",
+												marginBottom: selectTemplate ? "20px" : "0px",
+											}}>
+											<Switch
+												checked={selectTemplate}
+												onChange={(event) => {
+													setSelectTemplate(!selectTemplate);
+												}}
+											/>
+											<Typography>Select Template</Typography>
+										</Box>
+										{selectTemplate && (
+											<FormControl fullWidth>
+												<InputLabel id='demo-simple-select-label'>Select Template</InputLabel>
+												<Select
+													required
+													labelId='demo-simple-select-label'
+													id='demo-simple-select'
+													name='templateId'
+													label='Select Template'
+													value={data?.metaInfo.templateId}
+													onChange={(event, data) => {
+														setData((prev) => ({
+															...prev,
+															metaInfo: {
+																templateId: event.target.value,
+																templateName: data?.props?.children,
+																detail: true,
+															},
 
-														// categoryName: data?.props?.children,
-													}));
-												}}>
-												{blogList &&
-													blogList?.map((item, index) => {
-														return (
-															<MenuItem key={index} value={item?.id}>
-																{item?.title}
-															</MenuItem>
-														);
-													})}
-											</Select>
-										</FormControl>
+															// categoryName: data?.props?.children,
+														}));
+													}}>
+													{blogList &&
+														blogList?.map((item, index) => {
+															return (
+																<MenuItem key={index} value={item?.id}>
+																	{item?.title}
+																</MenuItem>
+															);
+														})}
+												</Select>
+											</FormControl>
+										)}
 									</Grid>
 									<Grid item xs={12}>
 										<Box>
-											<Typography sx={{ marginLeft: "0.3px" }}>Select Image</Typography>
+											<Typography sx={{ marginLeft: "0.3px" }}>Select Image or Video</Typography>
 											<Box
 												sx={{
 													display: "flex",
@@ -430,8 +503,8 @@ function CreatePushNotification() {
 																	key={index}
 																	sx={{
 																		position: "relative",
-																		width: "80px",
-																		height: "80px",
+																		width: "100px",
+																		height: "100px",
 																		border: "0.5px solid lightgrey",
 																		padding: "5px",
 																		borderRadius: "5px",
@@ -506,8 +579,8 @@ function CreatePushNotification() {
 																	key={index}
 																	sx={{
 																		position: "relative",
-																		width: "80px",
-																		height: "80px",
+																		width: "100px",
+																		height: "100px",
 																		border: "0.5px solid lightgrey",
 																		padding: "5px",
 																		borderRadius: "5px",
@@ -599,6 +672,140 @@ function CreatePushNotification() {
 																	} else {
 																		ImageApiCAll(item, item?.type, "");
 																	}
+																	return item;
+																});
+															}}>
+															upload
+														</Button>
+													</Box>
+												)}
+											</Box>
+										</Box>
+									</Grid>
+									<Grid item xs={12}>
+										<Box>
+											<Typography sx={{ marginLeft: "0.3px" }}>Select Audio</Typography>
+											<Box
+												sx={{
+													display: "flex",
+													alignItems: "center",
+													// justifyContent: "space-around",
+													width: "100%",
+													height: "100%",
+													border: "0.5px solid lightgrey",
+													padding: "10px",
+													borderRadius: "5px",
+												}}>
+												<input
+													className='neighbourhood-form-textField'
+													type='file'
+													name='audioSrc'
+													id='audioSrc'
+													// accept='.jpg, .jpeg, .png .mp4, .mov, .webm'
+													accept='audio/*'
+													onChange={(event) => {
+														handleAudioChange(event);
+													}}
+												/>
+												{audioShow &&
+													audioShow?.map((item, index) => {
+														if (item?.type === "audio") {
+															return (
+																<Box
+																	key={index}
+																	sx={{
+																		position: "relative",
+																		width: "200px",
+																		height: "150px",
+																		border: "0.5px solid lightgrey",
+																		padding: "5px",
+																		borderRadius: "5px",
+																		marginRight: "10px",
+																		display: "flex",
+																		alignItems: "center",
+																		justifyContent: "center",
+																	}}>
+																	{item?.loader && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<CircularProgress />
+																		</Box>
+																	)}
+																	{item?.done && (
+																		<Box
+																			sx={{
+																				position: "absolute",
+																				top: "0px",
+																				right: "0px",
+																				padding: "0px",
+																				width: "100%",
+																				height: "100%",
+																				display: "flex",
+																				justifyContent: "center",
+																				alignItems: "center",
+																			}}>
+																			<IconButton disabled>
+																				<Done color='secondary' fontSize='large' />
+																			</IconButton>
+																		</Box>
+																	)}
+																	<IconButton
+																		disabled={item?.done}
+																		onClick={() => {
+																			audioShow?.map((item, index) => {
+																				if (audioShow?.length - 1 === index) {
+																					document.getElementById("audioSrc").value = "";
+																				}
+																				return item;
+																			});
+																			setAudioShow((prev) =>
+																				prev?.filter((data) => data?.id !== item?.id)
+																			);
+																		}}
+																		sx={{
+																			position: "absolute",
+																			top: "0px",
+																			right: "0px",
+																			padding: "0px",
+																			background: "white",
+																		}}>
+																		<Cancel fontSize='small' style={{ color: "brown" }} />
+																	</IconButton>
+																	<iframe
+																		title={item.id}
+																		src={item?.data}
+																		alt='video'
+																		style={{ width: "100%", height: "100%" }}
+																	/>
+																</Box>
+															);
+														}
+													})}
+												{audioShow?.length > 0 && audioUploaded === false && (
+													<Box sx={{ marginLeft: "20px" }}>
+														<Button
+															onClick={() => {
+																setAudioShow((prev) => {
+																	return prev.map((item) => {
+																		return {
+																			...item,
+																			loader: true,
+																			done: false,
+																		};
+																	});
+																});
+																audioShow?.map((item, index) => {
+																	ImageApiCAll(item, item?.type, "Audio Uploaded");
 																	return item;
 																});
 															}}>

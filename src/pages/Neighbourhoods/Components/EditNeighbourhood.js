@@ -32,6 +32,7 @@ import Compressor from "compressorjs";
 import { useNavigate, useParams } from "react-router";
 import { MainContext } from "../../../context/Context";
 import NewGoogleMap from "../Map/NewGoogleMap";
+import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
 
 function EditNeighbourhood() {
 	const params = useParams();
@@ -129,28 +130,31 @@ function EditNeighbourhood() {
 	}
 
 	const ImageApiCAll = React.useCallback((data) => {
-		const header = {
-			"Content-Type": "multipart/form-data",
-			Authorization: `Bearer ${token}`,
-		};
+		const mime = "image";
+		// const header = {
+		// 	"Content-Type": "multipart/form-data",
+		// 	Authorization: `Bearer ${token}`,
+		// };
 
 		const formData = new FormData();
-		formData.append("directoryId", "root");
-		formData.append("domain", "banjee");
-		formData.append("actionCode", "ACTION_UPLOAD_RESOURCE");
-		formData.append("files", data?.src, "[PROXY]");
+		formData.append("cloud_name", "banjee");
+		formData.append("upload_preset", "blog_image");
+		formData.append("file", data?.src);
+		// { headers: { "Content-Type": "multipart/form-data" }
 
-		const url = "https://gateway.banjee.org/services/media-service/api/resources/bulk";
-
+		const url = `https://api.cloudinary.com/v1_1/banjee/${mime}/upload`;
 		axios
-			.post(url, formData, { headers: header })
+			.post(url, formData)
 			.then((res) => {
+				console.log("====================================");
+				console.log("res", res);
+				console.log("====================================");
 				setSubmitForm(true);
 				setModalOpen(true);
 				setModalData("Image Uploaded", "success");
 				setData((prev) => ({
 					...prev,
-					imageUrl: res?.data?.data[0]?.data?.id,
+					imageUrl: res?.data?.public_id,
 					// imageUrl: res?.data[0].data.id,
 				}));
 				setImgShow((prev) => ({
@@ -218,14 +222,14 @@ function EditNeighbourhood() {
 		});
 	}
 
-	const EditApiCall = (data) => {
+	const EditApiCall = (payloadData) => {
 		const payload = {
-			categoryId: data?.categoryId,
-			categoryName: data?.categoryName,
-			description: data?.description,
-			name: data?.name,
-			id: data?.id,
-			imageUrl: data?.imageUrl,
+			// categoryId: payloadData?.categoryId,
+			// categoryName: payloadData?.categoryName,
+			description: payloadData?.description,
+			name: payloadData?.name,
+			id: payloadData?.id,
+			imageUrl: payloadData?.imageUrl,
 		};
 		updateNeighbourhood(payload)
 			.then((res) => {
@@ -264,6 +268,9 @@ function EditNeighbourhood() {
 		}
 	}
 
+	console.log("====================================");
+	console.log("data", data);
+	console.log("====================================");
 	return (
 		<Container maxWidth='xl'>
 			<Grid item container xs={12} spacing={2}>
@@ -507,7 +514,7 @@ function EditNeighbourhood() {
 														style={{ width: "100%", height: "100%", objectFit: "contain" }}
 													/>
 												</Box>
-												{imgShow?.done === false && (
+												{imgShow?.done === false && imgShow?.update === true && (
 													<Box sx={{ marginLeft: "20px" }}>
 														<Button
 															onClick={() => {
@@ -515,11 +522,11 @@ function EditNeighbourhood() {
 																	...prev,
 																	loader: true,
 																}));
-																if (imgShow) {
-																	ImageApiCAll(imgShow);
-																} else {
-																	ImageApiCAll(imgShow);
-																}
+																// if (imgShow) {
+																ImageApiCAll(imgShow);
+																// } else {
+																// 	ImageApiCAll(imgShow);
+																// }
 															}}>
 															upload
 														</Button>
@@ -530,15 +537,26 @@ function EditNeighbourhood() {
 									</Box>
 								</Grid>
 								<Grid item xs={12}>
-									<Box sx={{ position: "relative" }}>
-										{/* <MyGoogleMap
-											handleGLocation={handleGLocation}
+									<Box sx={{ position: "relative", height: "400px" }}>
+										{/* <NewGoogleMap
+											view={true}
+											data={{
+												zoom: 15,
+												lat: data?.geoLocation?.coordinates[1],
+												lng: data?.geoLocation?.coordinates[0],
+											}}
 											prevLocation={{
 												lat: data?.geoLocation?.coordinates[1],
 												lng: data?.geoLocation?.coordinates[0],
 											}}
 										/> */}
-										<NewGoogleMap
+										<GoogleMapCustom
+											view={true}
+											data={{
+												zoom: 15,
+												lat: data?.geoLocation?.coordinates[1],
+												lng: data?.geoLocation?.coordinates[0],
+											}}
 											prevLocation={{
 												lat: data?.geoLocation?.coordinates[1],
 												lng: data?.geoLocation?.coordinates[0],

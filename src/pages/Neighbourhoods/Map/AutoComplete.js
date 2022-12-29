@@ -25,13 +25,14 @@ class AutoComplete extends Component {
 			// restrict your search to a specific country, or an array of countries
 			// componentRestrictions: { country: ['gb', 'us'] },
 		};
-		this.autoComplete = new mapApi.places.Autocomplete(this.searchInput, options);
+		// this.autoComplete = new mapApi.places.Autocomplete(this.searchInput, options);
+		this.autoComplete = new window.google.maps.places.Autocomplete(this.searchInput, options);
 		this.autoComplete.addListener("place_changed", this.onPlaceChanged);
 		this.autoComplete.bindTo("bounds", map);
 	}
 
 	componentWillUnmount({ mapApi } = this.props) {
-		mapApi.event.clearInstanceListeners(this.searchInput);
+		mapApi?.event?.clearInstanceListeners(this.searchInput);
 	}
 
 	onPlaceChanged = ({ map, addplace } = this.props) => {

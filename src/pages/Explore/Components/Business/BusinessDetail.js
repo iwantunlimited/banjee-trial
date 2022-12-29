@@ -29,6 +29,8 @@ import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
 import { MainContext } from "../../../../context/Context";
 import FullScreenImageModal from "../../../Social_Feeds/Components/FullScreenImageModal";
+import NewGoogleMap from "../../../Neighbourhoods/Map/NewGoogleMap";
+import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
 
 function BusinessDetail() {
 	const params = useParams();
@@ -261,14 +263,27 @@ function BusinessDetail() {
 									<Divider />
 								</Box>
 								{state && (
-									<Box>
-										<UserLocation
+									<Box sx={{ position: "relative", height: "400px" }}>
+										{/* <NewGoogleMap
+											view={true}
 											data={{
-												name: state?.name,
-												currentLocation: {
-													lat: state?.geoLocation?.coordinates[1],
-													lon: state?.geoLocation?.coordinates[0],
-												},
+												lat: state?.geoLocation?.coordinates[0],
+												lng: state?.geoLocation?.coordinates[1],
+												text: state?.name,
+												zoom: 15,
+											}}
+										/> */}
+										<GoogleMapCustom
+											view={true}
+											prevLocation={{
+												lat: state?.geoLocation?.coordinates[0],
+												lng: state?.geoLocation?.coordinates[1],
+											}}
+											data={{
+												lat: state?.geoLocation?.coordinates[0],
+												lng: state?.geoLocation?.coordinates[1],
+												text: state?.name,
+												zoom: 15,
 											}}
 										/>
 									</Box>

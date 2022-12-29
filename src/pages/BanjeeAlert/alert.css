@@ -22,7 +22,7 @@
 }
 .radio-button-icon :hover {
 	background-color: transparent !important;
-	padding: 10px !important;
+	/* padding: 10px !important; */
 	border-radius: 10px !important;
 }
 .css-jg12e5-MuiButtonBase-root-MuiRadio-root:hover {
@@ -35,6 +35,10 @@
 	border-radius: 10px !important;
 }
 .css-i7f0oy:hover {
+	background-color: transparent !important;
+	border-radius: 10px !important;
+}
+.css-1hphsll:hover {
 	background-color: transparent !important;
 	border-radius: 10px !important;
 }

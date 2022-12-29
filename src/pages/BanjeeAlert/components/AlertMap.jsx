@@ -3,6 +3,7 @@ import ".././alert.css";
 import { compose, withProps } from "recompose";
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps";
 import { Box, CircularProgress } from "@mui/material";
+
 const AlertLocation = compose(
 	withProps({
 		googleMapURL:
@@ -109,6 +110,7 @@ const AlertLocation = compose(
 						lng: props?.data?.location?.coordinates[0],
 					}}
 				/>
+
 				{state === props?.data?.id && (
 					<InfoWindow
 						// children={

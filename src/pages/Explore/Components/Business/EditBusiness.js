@@ -29,6 +29,7 @@ import Compressor from "compressorjs";
 
 import { v4 as uuidv4 } from "uuid";
 import NewGoogleMap from "../../../Neighbourhoods/Map/NewGoogleMap";
+import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
 
 function EditBusiness() {
 	const { setModalData, setModalOpen, locationData } = React.useContext(MainContext);
@@ -817,7 +818,7 @@ function EditBusiness() {
 										</Box>
 									</Grid>
 									<Grid item xs={12}>
-										<Box sx={{ position: "relative" }}>
+										<Box sx={{ position: "relative", height: "400px", marginTop: "40px" }}>
 											{/* <MyGoogleMap
 												handleGLocation={handleGLocation}
 												prevLocation={{
@@ -825,7 +826,13 @@ function EditBusiness() {
 													lng: data?.geoLocation?.coordinates[1],
 												}}
 											/> */}
-											<NewGoogleMap
+											{/* <NewGoogleMap
+												prevLocation={{
+													lat: data?.geoLocation?.coordinates[0],
+													lng: data?.geoLocation?.coordinates[1],
+												}}
+											/> */}
+											<GoogleMapCustom
 												prevLocation={{
 													lat: data?.geoLocation?.coordinates[0],
 													lng: data?.geoLocation?.coordinates[1],

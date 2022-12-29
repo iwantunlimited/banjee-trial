@@ -12,6 +12,10 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+.uv-map > div > div > div > div {
+	touch-action: pan-x pan-y !important;
+}
+
 .markerCss {
 	background-color: #5664d2;
 	margin-bottom: 60px;

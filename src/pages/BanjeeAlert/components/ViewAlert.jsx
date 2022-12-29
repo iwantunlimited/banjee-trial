@@ -18,6 +18,7 @@ import ModalComp from "../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../context/Context";
 
 import SwiperComp from "../../../CustomComponents/SwiperComp";
+import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
 
 function ViewAlert() {
 	const params = useParams();
@@ -181,12 +182,20 @@ function ViewAlert() {
 							<Box sx={{ marginBottom: "10px" }}>
 								<Divider />
 							</Box>
-							<AlertLocation
-								zoom={15}
-								currentLocation={currentLocation}
-								data={data}
-								type={"object"}
-							/>
+							<Box sx={{ height: "350px" }}>
+								<GoogleMapCustom
+									view={true}
+									data={{
+										lat: data?.location?.coordinates[1],
+										lng: data?.location?.coordinates[0],
+										zoom: 16,
+									}}
+									prevLocation={{
+										lat: data?.location?.coordinates[1],
+										lng: data?.location?.coordinates[0],
+									}}
+								/>
+							</Box>
 						</Card>
 					</Grid>
 				</Grid>
