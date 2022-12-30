@@ -17,7 +17,7 @@ function TabPanel(props) {
 			id={`simple-tabpanel-${index}`}
 			aria-labelledby={`simple-tab-${index}`}
 			{...other}>
-			{value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+			{value === index && <Box>{children}</Box>}
 		</div>
 	);
 }
@@ -39,28 +39,40 @@ function Explore() {
 	const [value, setValue] = React.useState(0);
 
 	const [listData, setListData] = React.useState("");
+	const [pendingListData, setPendingListData] = React.useState("");
 	const [state, setState] = React.useState({
-		totalElement: 0,
-		pagination: {
-			page: 0,
-			pageSize: 10,
-		},
+		page: 0,
+		pageSize: 10,
 	});
+	const [pendingListPagination, setPendingListPagination] = React.useState({
+		page: 0,
+		pageSize: 10,
+	});
+
+	const [totalElement, setTotalElement] = React.useState(0);
+	const [totalPendingElement, setTotalPendingElement] = React.useState(0);
 
 	const handlePagination = (data) => {
 		setState((prev) => ({
 			...prev,
-			pagination: data,
+			page: data?.page,
+			pageSize: data?.pageSize,
+		}));
+	};
+	const handlePendingListPagination = (data) => {
+		setPendingListPagination((prev) => ({
+			...prev,
+			page: data?.page,
+			pageSize: data?.pageSize,
 		}));
 	};
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
-		listApiCAll(0, 10);
 	};
 
-	const listApiCAll = React.useCallback((page, pageSize) => {
-		filterBusiness({ page: page, pageSize: pageSize, approved: true })
+	const listApiCAll = React.useCallback(() => {
+		filterBusiness({ page: state?.page, pageSize: state?.pageSize, approved: true })
 			.then((res) => {
 				const resp = res.content.map((ele) => {
 					return {
@@ -75,21 +87,38 @@ function Explore() {
 					};
 				});
 				setListData(resp);
-				setState((prev) => ({
-					...prev,
-					totalElement: res.totalElements,
-					pagination: {
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					},
-				}));
+				setTotalElement(res.totalElements);
 			})
 			.catch((err) => console.error(err));
-	}, []);
+	}, [state]);
+
+	const pendingListAPiCAll = React.useCallback(() => {
+		filterBusiness({
+			page: pendingListPagination?.page,
+			pageSize: pendingListPagination?.pageSize,
+			approved: false,
+		})
+			.then((res) => {
+				const resp = res.content.map((ele) => {
+					return {
+						routingId: ele.id,
+						...ele,
+						mfirstName: ele?.userObject?.firstName,
+						mlastName: ele?.userObject?.lastName,
+						// ...ele?.name,
+						// ...ele?.createdOn,
+					};
+				});
+				setTotalPendingElement(res?.totalElements);
+				setPendingListData(resp);
+			})
+			.catch((err) => console.error(err));
+	}, [pendingListPagination]);
 
 	React.useEffect(() => {
-		listApiCAll(0, 10);
-	}, [listApiCAll]);
+		listApiCAll();
+		pendingListAPiCAll();
+	}, [listApiCAll, pendingListAPiCAll]);
 
 	return (
 		<Container maxWidth='xl' style={{ padding: "0px", margin: "auto" }}>
@@ -109,20 +138,40 @@ function Explore() {
 								value={value}
 								onChange={handleChange}
 								aria-label='basic tabs example'>
-								<Tab label='Business' {...a11yProps(0)} />
-								<Tab label='Pending Request' {...a11yProps(1)} />
+								<Tab
+									sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+									label={`Business (${totalElement})`}
+									{...a11yProps(0)}
+								/>
+								<Tab
+									sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+									label={`Pending Request (${totalPendingElement})`}
+									{...a11yProps(1)}
+								/>
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
-							<BusinessList
-								handlePagination={handlePagination}
-								data={listData}
-								paginationState={state}
-								listApiCall={listApiCAll}
-							/>
+							<Box sx={{ paddingY: "15px" }}>
+								<BusinessList
+									totalElement={totalElement}
+									handlePagination={handlePagination}
+									data={listData}
+									paginationState={state}
+									listApiCall={listApiCAll}
+								/>
+							</Box>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<BusinessApprovalList handleTabChange={handleChange} listApiCall={listApiCAll} />
+							<Box sx={{ paddingY: "15px" }}>
+								<BusinessApprovalList
+									data={pendingListData}
+									totalElement={totalPendingElement}
+									paginationState={pendingListPagination}
+									handlePagination={handlePendingListPagination}
+									handleTabChange={handleChange}
+									listApiCall={listApiCAll}
+								/>
+							</Box>
 						</TabPanel>
 					</Card>
 				</Grid>

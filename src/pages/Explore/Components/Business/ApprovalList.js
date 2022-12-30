@@ -7,21 +7,18 @@ import moment from "moment";
 import { useNavigate } from "react-router";
 import { MainContext } from "../../../../context/Context";
 
-export function BusinessApprovalList({ handleTabChange, listApiCall }) {
+export function BusinessApprovalList({
+	handleTabChange,
+	listApiCall,
+	paginationState,
+	handlePagination,
+	data,
+	totalElement,
+}) {
 	const navigate = useNavigate();
 
 	const context = useContext(MainContext);
 	const { setModalOpen, setModalData } = context;
-
-	const [data, setData] = React.useState();
-
-	const [state, setState] = React.useState({
-		totalElement: 0,
-		pagination: {
-			page: 0,
-			pageSize: 10,
-		},
-	});
 
 	let rows = data ? data : [];
 
@@ -110,7 +107,6 @@ export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 							onClick={(event) => {
 								// navigate("/rooms/view/" + params.row.routingId);
 								ApproveApiCAll(params?.row?.routingId);
-								pendingAPiCAll(0, 10);
 								handleTabChange(event, 0);
 								// listApiCall(0, 10);
 							}}
@@ -120,32 +116,6 @@ export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 			},
 		},
 	];
-
-	const pendingAPiCAll = React.useCallback((page, pageSize) => {
-		filterBusiness({ page: page, pageSize: pageSize, approved: false })
-			.then((res) => {
-				const resp = res.content.map((ele) => {
-					return {
-						routingId: ele.id,
-						...ele,
-						mfirstName: ele?.userObject?.firstName,
-						mlastName: ele?.userObject?.lastName,
-						// ...ele?.name,
-						// ...ele?.createdOn,
-					};
-				});
-				setData(resp);
-				setState((prev) => ({
-					...prev,
-					totalElement: res.totalElements,
-					pagination: {
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					},
-				}));
-			})
-			.catch((err) => console.error(err));
-	}, []);
 
 	const ApproveApiCAll = React.useCallback((data) => {
 		approveRequest({ id: data, approved: true })
@@ -157,61 +127,44 @@ export function BusinessApprovalList({ handleTabChange, listApiCall }) {
 			.catch((err) => console.error(err));
 	}, []);
 
-	React.useEffect(() => {
-		pendingAPiCAll(0, 10);
-	}, [pendingAPiCAll]);
-
 	return (
 		<Box>
 			{data ? (
 				<div>
-					<div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
-						In Approval ({state?.totalElement})
+					{/* <div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
+						In Approval ({totalElement})
 					</div>
-					<hr />
-					<div style={{ width: "100%" }}>
-						<Box
-							className='root'
-							sx={{
-								"& .app-header-live": {
-									bgcolor: "#76e060",
-								},
-							}}>
-							<DataGrid
-								autoHeight
-								disableSelectionOnClick
-								getRowClassName={(params) => `app-header-${params.row.status}`}
-								page={state?.pagination?.page}
-								pageSize={state?.pagination?.pageSize}
-								onPageSizeChange={(event) => {
-									setState((prev) => ({
-										...prev,
-										pagination: {
-											pageSize: event,
-										},
-									}));
-									pendingAPiCAll(state?.pagination?.page, event);
-								}}
-								rowCount={state?.totalElement}
-								rows={rows}
-								columns={columns}
-								paginationMode='server'
-								// autoPageSize
-								pagination
-								onPageChange={(event) => {
-									setState((prev) => ({
-										...prev,
-										pagination: {
-											page: event,
-										},
-									}));
-									pendingAPiCAll(event, state?.pagination?.pageSize);
-								}}
-								rowsPerPageOptions={[5, 10, 20]}
-								className='dataGridFooter'
-							/>
-						</Box>
-					</div>
+					<hr /> */}
+					<Box
+						className='root'
+						sx={{
+							width: "100%",
+							"& .app-header-live": {
+								bgcolor: "#76e060",
+							},
+						}}>
+						<DataGrid
+							autoHeight
+							disableSelectionOnClick
+							getRowClassName={(params) => `app-header-${params.row.status}`}
+							page={paginationState?.page}
+							pageSize={paginationState?.pageSize}
+							onPageSizeChange={(event) => {
+								handlePagination({ page: paginationState?.page, pageSize: event });
+							}}
+							rowCount={totalElement}
+							rows={rows}
+							columns={columns}
+							paginationMode='server'
+							// autoPageSize
+							pagination
+							onPageChange={(event) => {
+								handlePagination({ page: event, pageSize: paginationState?.pageSize });
+							}}
+							rowsPerPageOptions={[5, 10, 20]}
+							className='dataGridFooter'
+						/>
+					</Box>
 				</div>
 			) : (
 				<div

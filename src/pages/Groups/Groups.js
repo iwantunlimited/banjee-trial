@@ -12,23 +12,22 @@ function GroupsComp(props) {
 	const navigate = useNavigate();
 	const { themeData } = React.useContext(MainContext);
 	const [listData, setListData] = React.useState("");
+	const [totalElement, setTotalElement] = React.useState(0);
 	const [pagination, setPagination] = React.useState({
-		totalElement: 0,
-		pagination: {
-			page: 0,
-			pageSize: 10,
-		},
+		page: 0,
+		pageSize: 10,
 	});
 
 	const handlePagination = (data) => {
 		setPagination((prev) => ({
 			...prev,
-			pagination: data,
+			page: data?.page,
+			pageSize: data?.pageSize,
 		}));
 	};
 
-	const CommunityListApiCall = React.useCallback((page, pageSize) => {
-		communityList({ page: page, pageSize: pageSize })
+	const CommunityListApiCall = React.useCallback(() => {
+		communityList({ page: pagination?.page, pageSize: pagination?.pageSize })
 			.then((res) => {
 				console.log(res);
 				const resp = res.content.map((ele) => {
@@ -40,20 +39,13 @@ function GroupsComp(props) {
 					};
 				});
 				setListData(resp);
-				setPagination((prev) => ({
-					...prev,
-					totalElement: res.totalElements,
-					pagination: {
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					},
-				}));
+				setTotalElement(res?.totalElements);
 			})
 			.catch((err) => console.log(err));
-	}, []);
+	}, [pagination]);
 
 	React.useEffect(() => {
-		CommunityListApiCall(0, 10);
+		CommunityListApiCall();
 	}, [CommunityListApiCall]);
 
 	let rows = listData ? listData : [];
@@ -148,47 +140,44 @@ function GroupsComp(props) {
 										fontSize: "22px",
 										fontWeight: "500",
 									}}>
-									Groups ({pagination?.totalElement})
+									Groups ({totalElement})
 								</div>
 								<hr />
-								<div style={{ width: "100%" }}>
-									<Box
-										className='root'
-										sx={{
-											"& .app-header-live": {
-												bgcolor: "#76e060",
-											},
-										}}>
-										<DataGrid
-											autoHeight
-											getRowClassName={(params) => `app-header-${params.row.status}`}
-											page={pagination?.pagination?.page}
-											pageSize={pagination?.pagination?.pageSize}
-											onPageSizeChange={(event) => {
-												handlePagination({
-													page: pagination?.pagination?.page,
-													pageSize: event,
-												});
-												CommunityListApiCall(pagination?.pagination?.page, event);
-											}}
-											rowCount={pagination?.totalElement}
-											rows={rows}
-											columns={columns}
-											paginationMode='server'
-											// autoPageSize
-											pagination
-											onPageChange={(event) => {
-												handlePagination({
-													page: event,
-													pageSize: pagination?.pagination?.page,
-												});
-												CommunityListApiCall(event, pagination?.pagination?.pageSize);
-											}}
-											rowsPerPageOptions={[5, 10, 20]}
-											className='dataGridFooter'
-										/>
-									</Box>
-								</div>
+								<Box
+									className='root'
+									sx={{
+										width: "100%",
+										"& .app-header-live": {
+											bgcolor: "#76e060",
+										},
+									}}>
+									<DataGrid
+										autoHeight
+										getRowClassName={(params) => `app-header-${params.row.status}`}
+										page={pagination?.page}
+										pageSize={pagination?.pageSize}
+										onPageSizeChange={(event) => {
+											handlePagination({
+												page: pagination?.page,
+												pageSize: event,
+											});
+										}}
+										rowCount={totalElement}
+										rows={rows}
+										columns={columns}
+										paginationMode='server'
+										// autoPageSize
+										pagination
+										onPageChange={(event) => {
+											handlePagination({
+												page: event,
+												pageSize: pagination?.page,
+											});
+										}}
+										rowsPerPageOptions={[5, 10, 20]}
+										className='dataGridFooter'
+									/>
+								</Box>
 							</div>
 						) : (
 							<div

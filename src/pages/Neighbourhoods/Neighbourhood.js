@@ -6,7 +6,7 @@ import ChipComp from "./Components/CardChipComp";
 import "./neighbourhood.css";
 import NeighbourList from "./Components/NeighbourList";
 import { ApprovalList } from "./Components/ApprovalList";
-import { filterNeighbourhood } from "./services/apiServices";
+import { filterNeighbourhood, pendingApproval } from "./services/apiServices";
 
 import { useTheme } from "@mui/material/styles";
 
@@ -20,7 +20,7 @@ function TabPanel(props) {
 			id={`simple-tabpanel-${index}`}
 			aria-labelledby={`simple-tab-${index}`}
 			{...other}>
-			{value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+			{value === index && <Box>{children}</Box>}
 		</div>
 	);
 }
@@ -43,18 +43,31 @@ function Neighbourhood() {
 	const theme = useTheme();
 
 	const [listData, setListData] = React.useState("");
+	const [pendingListData, setPendingListData] = React.useState([]);
 	const [state, setState] = React.useState({
-		totalElement: 0,
-		pagination: {
-			page: 0,
-			pageSize: 10,
-		},
+		page: 0,
+		pageSize: 10,
 	});
+	const [pendingListPagination, setPendingListPagination] = React.useState({
+		page: 0,
+		pageSize: 10,
+	});
+
+	const [totalElement, setTotalElement] = React.useState(0);
+	const [totalPendingElement, setTotalPendingElement] = React.useState(0);
 
 	const handlePagination = (data) => {
 		setState((prev) => ({
 			...prev,
-			pagination: data,
+			page: data?.page,
+			pageSize: data?.pageSize,
+		}));
+	};
+	const handlePendingListPagination = (data) => {
+		setPendingListPagination((prev) => ({
+			...prev,
+			page: data?.page,
+			pageSize: data?.pageSize,
 		}));
 	};
 
@@ -62,34 +75,62 @@ function Neighbourhood() {
 		setValue(newValue);
 	};
 
-	const listApiCAll = React.useCallback((page, pageSize) => {
-		filterNeighbourhood({ page: page, pageSize: pageSize, online: true })
+	const listApiCAll = React.useCallback(
+		(data) => {
+			const payload =
+				data?.keyword !== ""
+					? { page: state?.page, pageSize: state?.pageSize, online: true, keywords: data?.keyword }
+					: { page: state?.page, pageSize: state?.pageSize, online: true };
+			filterNeighbourhood(payload)
+				.then((res) => {
+					console.log("--------", res);
+					const resp = res.content.map((ele) => {
+						return {
+							routingId: ele.id,
+							...ele,
+							// ...ele?.name,
+							// ...ele?.createdOn,
+						};
+					});
+					setListData(resp);
+					// setState((prev) => ({
+					// 	...prev,
+					// 	page: res?.pageable?.pageNumber,
+					// 	pageSize: res?.pageable?.pageSize,
+					// }));
+					setTotalElement(res?.totalElements);
+				})
+				.catch((err) => console.log(err));
+		},
+		[state]
+	);
+
+	const pendingAPiCAll = React.useCallback(() => {
+		pendingApproval({
+			page: pendingListPagination?.page,
+			pageSize: pendingListPagination?.pageSize,
+			processed: false,
+		})
 			.then((res) => {
-				console.log("--------", res);
 				const resp = res.content.map((ele) => {
 					return {
 						routingId: ele.id,
 						...ele,
+						...ele?.payload,
 						// ...ele?.name,
 						// ...ele?.createdOn,
 					};
 				});
-				setListData(resp);
-				setState((prev) => ({
-					...prev,
-					totalElement: res.totalElements,
-					pagination: {
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					},
-				}));
+				setTotalPendingElement(res?.totalElements);
+				setPendingListData(resp);
 			})
-			.catch((err) => console.log(err));
-	}, []);
+			.catch((err) => console.error(err));
+	}, [pendingListPagination?.page, pendingListPagination?.pageSize]);
 
 	React.useEffect(() => {
-		listApiCAll(0, 10);
-	}, [listApiCAll]);
+		listApiCAll();
+		pendingAPiCAll();
+	}, [listApiCAll, pendingAPiCAll, state, pendingListPagination]);
 
 	return (
 		<Container maxWidth='xl' style={{ padding: "0px", margin: "auto" }}>
@@ -101,7 +142,7 @@ function Neighbourhood() {
 					<ChipComp listApiCAll={listApiCAll} />
 				</Grid>
 				<Grid item xs={12}>
-					<Card sx={{ padding: { xs: "10px", sm: "20px" } }}>
+					<Card sx={{ padding: { xs: "10px", lg: "20px" } }}>
 						<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
 							<Tabs
 								indicatorColor='primary'
@@ -109,23 +150,40 @@ function Neighbourhood() {
 								value={value}
 								onChange={handleChange}
 								aria-label='basic tabs example'>
-								<Tab label='Neighbourhood List' {...a11yProps(0)} />
-								<Tab label='Pending List' {...a11yProps(1)} />
+								<Tab
+									sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+									label={`Neighbourhood (${totalElement})`}
+									{...a11yProps(0)}
+								/>
+								<Tab
+									sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+									label={`Pending List (${totalPendingElement})`}
+									{...a11yProps(1)}
+								/>
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
-							<Box sx={{ padding: { xs: "10px", sm: "10px" } }}>
+							<Box sx={{ paddingY: "15px" }}>
 								<NeighbourList
 									listApiCAll={listApiCAll}
 									data={listData}
+									totalElement={totalElement}
 									pagination={state}
 									handlePagination={handlePagination}
 								/>
 							</Box>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<Box sx={{ padding: "10px" }}>
-								<ApprovalList listApiCAll={listApiCAll} handleTabChange={handleChange} />
+							<Box sx={{ paddingY: "15px" }}>
+								<ApprovalList
+									listApiCAll={listApiCAll}
+									pendingListApiCall={pendingAPiCAll}
+									data={pendingListData}
+									totalElement={totalPendingElement}
+									pagination={pendingListPagination}
+									handlePagination={handlePendingListPagination}
+									handleTabChange={handleChange}
+								/>
 							</Box>
 						</TabPanel>
 					</Card>

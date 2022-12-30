@@ -208,7 +208,7 @@ function FeedDetail(props) {
 						<Card sx={{ padding: "10px" }}>
 							<Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 								<Box
-									onClick={() => navigate("/user/view/" + data?.authorId)}
+									onClick={() => navigate("/user/" + data?.authorId)}
 									style={{
 										width: "100%",
 										display: "flex",

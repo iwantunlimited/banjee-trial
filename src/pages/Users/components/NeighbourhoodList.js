@@ -9,31 +9,33 @@ import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
 function NeighrbourhoodList(props) {
 	const navigate = useNavigate();
 	const [pagination, setPagination] = React.useState({
-		page: "",
-		pageSize: "",
+		page: 0,
+		pageSize: 5,
 	});
 
-	const [totalEle, setTotalEle] = React.useState("");
+	const [totalEle, setTotalEle] = React.useState(0);
 
 	const [state, setState] = React.useState("");
 
 	//find neighbourhood by user id
 
-	const findNeighbourhoodApiCall = React.useCallback(
-		(page, pageSize) => {
-			filterNeighbourhood({ page: page, pageSize: pageSize, userId: props?.data, online: true })
-				.then((res) => {
-					setState(res.content);
-					setPagination({
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					});
-					setTotalEle(res?.totalElements);
-				})
-				.catch((err) => console.error(err));
-		},
-		[props?.data]
-	);
+	const findNeighbourhoodApiCall = React.useCallback(() => {
+		filterNeighbourhood({
+			page: pagination?.page,
+			pageSize: pagination?.pageSize,
+			userId: props?.data,
+			online: true,
+		})
+			.then((res) => {
+				setState(res.content);
+				// setPagination({
+				// 	page: res?.pageable?.pageNumber,
+				// 	pageSize: res?.pageable?.pageSize,
+				// });
+				setTotalEle(res?.totalElements);
+			})
+			.catch((err) => console.error(err));
+	}, [props?.data, pagination]);
 
 	let rows = state ? state : [];
 
@@ -92,7 +94,7 @@ function NeighrbourhoodList(props) {
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/neighbourhood/detail/" + params.row.id);
+								navigate("/neighbourhood/" + params.row.id);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -103,7 +105,7 @@ function NeighrbourhoodList(props) {
 	];
 
 	React.useEffect(() => {
-		findNeighbourhoodApiCall(0, 10);
+		findNeighbourhoodApiCall();
 	}, [findNeighbourhoodApiCall]);
 
 	return (
@@ -133,7 +135,7 @@ function NeighrbourhoodList(props) {
 											page: pagination?.page,
 											pageSize: event,
 										});
-										findNeighbourhoodApiCall(pagination?.page, event);
+										// findNeighbourhoodApiCall(pagination?.page, event);
 									}}
 									rowCount={totalEle}
 									rows={rows}
@@ -144,9 +146,9 @@ function NeighrbourhoodList(props) {
 									onPageChange={(event) => {
 										setPagination({
 											page: event,
-											pageSize: pagination?.page,
+											pageSize: pagination?.pageSize,
 										});
-										findNeighbourhoodApiCall(event, pagination?.pageSize);
+										// findNeighbourhoodApiCall(event, pagination?.pageSize);
 									}}
 									rowsPerPageOptions={[5, 10, 20]}
 									className='dataGridFooter'

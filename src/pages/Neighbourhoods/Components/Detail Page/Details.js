@@ -26,8 +26,6 @@ import {
 	updateNeighbourhood,
 } from "../../services/apiServices";
 import { useNavigate, useParams } from "react-router";
-import MyGoogleMap from "../../Map/GoogleMap";
-import UserLocation from "../../../Users/components/UserLocation";
 import moment from "moment";
 import { ArrowBack, Cancel, Visibility } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
@@ -175,7 +173,7 @@ function DetailPage() {
 						<IconButton
 							onClick={() => {
 								setModal({ open: true, data: params?.row, modalId: 2 });
-								// navigate("/neighbourhood/detail/" + params?.row?.routingId);
+								// navigate("/neighbourhood/" + params?.row?.routingId);
 							}}>
 							<Visibility />
 						</IconButton>

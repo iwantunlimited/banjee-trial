@@ -140,7 +140,7 @@ function GroupDetailPage(props) {
 						<IconButton
 							onClick={() => {
 								setModalData({ open: true, data: params?.row });
-								// navigate("/neighbourhood/detail/" + params?.row?.routingId);
+								// navigate("/neighbourhood/" + params?.row?.routingId);
 							}}>
 							<Visibility />
 						</IconButton>

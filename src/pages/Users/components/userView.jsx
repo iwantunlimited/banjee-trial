@@ -125,34 +125,30 @@ function CustomerView(props) {
 					{/* <ViewDetailGrid config='Hello'> */}
 					{/* ---------------------------------- This Paper is for Two fields  -------------------------------- */}
 					{/* <Paper elevation={1}> */}
-					<Grid container spacing={2} style={{ marginTop: "15px" }}>
-						<Grid item container xs={12} sm={12} md={12} lg={12}>
-							<Grid
-								item
-								xs={12}
-								sm={5}
-								md={4}
-								lg={4}
-								xl={3}
-								style={{
-									height: "auto",
-									paddingRight: "10px",
-								}}>
+					<Grid container style={{ marginTop: "15px" }}>
+						<Grid item container xs={12} sm={12} md={12} lg={12} spacing={2}>
+							<Grid item xs={12} sm={12} md={12} lg={12} xl={3.5}>
 								<Card
 									elevation={1}
-									style={{
+									sx={{
 										boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
-										padding: "40px 10px 40px 10px",
+										paddingY: { xs: "20px", xl: "40px" },
+										paddingX: "10px",
 										// background: "white ",
-										minHeight: "427px",
-										height: "100%",
+										// minHeight: { lg: "427px" },
+										height: { xl: "100%" },
+										// width: "100%",
 									}}>
 									<Box
-										style={{
+										sx={{
 											display: "flex",
-											justifyContent: "center",
+											justifyContent: {
+												xs: "center",
+												sm: "flex-start",
+												lg: "center",
+											},
 											alignItems: "center",
-											flexDirection: "column",
+											flexDirection: { xs: "column", sm: "row", xl: "column" },
 											padding: "0 10px 0 10px",
 										}}>
 										<Avatar
@@ -161,56 +157,65 @@ function CustomerView(props) {
 												"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
 												state?.avtarUrl
 											}
-											sx={{ width: 150, height: 150 }}
+											sx={{
+												width: 150,
+												height: 150,
+												marginRight: { xs: "0px", sm: "20px", xl: "0px" },
+											}}
 										/>
-										<div
-											style={{
-												display: "flex",
-												alignItems: "center",
-												marginTop: "10px",
-												fontSize: "10px",
-												fontWeight: "400",
-											}}>
-											{state?.firstName && state?.lastName && (
-												<Typography variant='h6' style={{ marginRight: "5px" }}>
-													{state?.firstName + " " + state?.lastName}
+										<Box sx={{ textAlign: { xs: "center", sm: "left", xl: "center" } }}>
+											<Box
+												sx={{
+													display: "flex",
+													alignItems: "center",
+													justifyContent: { xs: "center", sm: "left", xl: "center" },
+													marginTop: "10px",
+													fontSize: "10px",
+													fontWeight: "400",
+												}}>
+												{state?.firstName && state?.lastName && (
+													<Typography variant='h6' style={{ marginRight: "5px" }}>
+														{state?.firstName + " " + state?.lastName}
+													</Typography>
+												)}
+												{state?.gender && (
+													<div>
+														{state?.gender.toLowerCase() === "male" ? (
+															<Male style={{ color: "blue" }} />
+														) : state?.gender.toLowerCase() === "female" ? (
+															<Female style={{ color: "#B73BA4" }} />
+														) : (
+															<Transgender style={{ color: "rgb(246,191,188)" }} />
+														)}
+													</div>
+												)}
+											</Box>
+											{state.email && (
+												<Typography
+													sx={{
+														marginTop: "5px",
+														color: "grey",
+														textOverflow: "ellipsis",
+														whiteSpace: "break-spaces",
+													}}
+													variant='h6'>
+													{state?.email}
 												</Typography>
 											)}
-											{state?.gender && (
-												<div>
-													{state?.gender.toLowerCase() === "male" ? (
-														<Male style={{ color: "blue" }} />
-													) : state?.gender.toLowerCase() === "female" ? (
-														<Female style={{ color: "#B73BA4" }} />
-													) : (
-														<Transgender style={{ color: "rgb(246,191,188)" }} />
-													)}
-												</div>
-											)}
-										</div>
-										<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-											{window.innerWidth > 1282
-												? state?.email
-												: state?.email && state?.email.slice(0, 20)}
-										</Typography>
-										{window.innerWidth < 1282 && state && state.email.length > 10 && (
-											<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-												{state?.email?.slice(20, state.email.length + 1)}
+											<Typography sx={{ marginTop: "5px", color: "grey" }} variant='h6'>
+												{state?.mcc + " " + state?.mobile}
 											</Typography>
-										)}
-										<Typography style={{ marginTop: "5px", color: "grey" }} variant='h6'>
-											{state?.mcc + " " + state?.mobile}
-										</Typography>
-										<Box style={{ margin: "10px 0px 10px 0px" }}>
-											{state?.inactive ? (
-												<Button size='small' variant='outlined'>
-													Activate
-												</Button>
-											) : (
-												<Button size='small' variant='outlined'>
-													Deactivate
-												</Button>
-											)}
+											<Box style={{ margin: "10px 0px 10px 0px" }}>
+												{state?.inactive ? (
+													<Button size='small' variant='outlined'>
+														Activate
+													</Button>
+												) : (
+													<Button size='small' variant='outlined'>
+														Deactivate
+													</Button>
+												)}
+											</Box>
 										</Box>
 									</Box>
 								</Card>
@@ -221,10 +226,10 @@ function CustomerView(props) {
 							<Grid
 								item
 								xs={12}
-								sm={7}
-								md={8}
-								lg={8}
-								xl={9}
+								sm={12}
+								md={12}
+								lg={12}
+								xl={8.5}
 								sx={
 									{
 										// background: "#FFF",
@@ -290,7 +295,7 @@ function CustomerView(props) {
 													blockCon?.content.map((ele, index) => (
 														<Grid
 															key={index}
-															onClick={() => navigate("/user/view/" + ele?.user?.id)}
+															onClick={() => navigate("/user/" + ele?.user?.id)}
 															item
 															xs={4}
 															sm={4}

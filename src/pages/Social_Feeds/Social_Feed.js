@@ -71,7 +71,7 @@ export default function SocialFeed(props) {
 	});
 
 	const filterSocialFeedsApiCall = React.useCallback(
-		(page, pageSize, startDate, endDate) => {
+		(startDate, endDate) => {
 			// setData();
 			filterSocialFeeds({
 				deleted: null,
@@ -80,29 +80,25 @@ export default function SocialFeed(props) {
 				finishDate: endDate && moment(endDate).format(),
 				inactive: null,
 				keywords: null,
-				page: page,
-				pageSize: pageSize,
+				page: pagination?.page,
+				pageSize: pagination?.pageSize,
 				sortBy: null,
 				startDate: startDate && moment(startDate).format(),
 			})
 				.then((res) => {
 					setData(res);
 					setTotalEle(res.totalElements);
-					setPagination({
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					});
 				})
 				.catch((err) => {
 					console.error(err);
 				});
 		},
 		// remove dependecies startDate and endDate
-		[]
+		[pagination]
 	);
 
 	React.useEffect(() => {
-		filterSocialFeedsApiCall(0, 10);
+		filterSocialFeedsApiCall();
 	}, [filterSocialFeedsApiCall]);
 
 	// function playPause(index) {
@@ -145,7 +141,11 @@ export default function SocialFeed(props) {
 										setStartDate(newValue);
 									}}
 									renderInput={(params) => (
-										<TextField helperText={params?.InputProps?.placeholder} {...params} />
+										<TextField
+											size='small'
+											helperText={params?.InputProps?.placeholder}
+											{...params}
+										/>
 									)}
 								/>
 							</LocalizationProvider>
@@ -159,7 +159,7 @@ export default function SocialFeed(props) {
 									onChange={(newValue) => {
 										setEndDate(newValue);
 									}}
-									renderInput={(params) => <TextField {...params} />}
+									renderInput={(params) => <TextField size='small' {...params} />}
 								/>
 							</LocalizationProvider>
 						</Box>
@@ -173,7 +173,7 @@ export default function SocialFeed(props) {
 										color: theme.palette.primary.contrastText,
 									}}
 									onClick={() => {
-										filterSocialFeedsApiCall(0, 10, startDate, endDate);
+										filterSocialFeedsApiCall(startDate, endDate);
 									}}>
 									<Search />
 								</IconButton>
@@ -588,19 +588,12 @@ export default function SocialFeed(props) {
 											...prev,
 											page: data,
 										}));
-										filterSocialFeedsApiCall(data, pagination.pageSize, startDate, endDate);
 									}}
 									onRowsPerPageChange={(event) => {
 										setPagination((prev) => ({
 											...prev,
 											pageSize: event.target.value,
 										}));
-										filterSocialFeedsApiCall(
-											pagination.page,
-											event.target.value,
-											startDate,
-											endDate
-										);
 									}}
 								/>
 							</Box>

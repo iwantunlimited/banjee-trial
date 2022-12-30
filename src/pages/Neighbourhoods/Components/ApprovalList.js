@@ -8,25 +8,23 @@ import { useNavigate } from "react-router";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../context/Context";
 
-export function ApprovalList({ handleTabChange, listApiCAll }) {
+export function ApprovalList({
+	pendingListApiCall,
+	handleTabChange,
+	listApiCAll,
+	totalElement,
+	handlePagination,
+	data,
+	pagination,
+}) {
 	const navigate = useNavigate();
 
 	const { setModalData, setModalOpen } = React.useContext(MainContext);
-
-	const [data, setData] = React.useState();
 
 	const [modal, setModal] = React.useState({
 		open: false,
 		data: "",
 		event: "",
-	});
-
-	const [state, setState] = React.useState({
-		totalElement: 0,
-		pagination: {
-			page: 0,
-			pageSize: 10,
-		},
 	});
 
 	const handleModal = (data) => {
@@ -88,13 +86,13 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "View",
 			align: "center",
-			flex: 0.2,
+			flex: 0.15,
 			renderCell: (params) => {
 				return (
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/neighbourhood/detail/" + params.row.objectId);
+								navigate("/neighbourhood/" + params.row.objectId);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -121,7 +119,7 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 
 									ApproveApiCAll(params?.row?.routingId);
 									handleTabChange(event, 0);
-									pendingAPiCAll(0, 10);
+									// pendingAPiCAll(0, 10);
 									listApiCAll(0, 10);
 								}}
 							/>
@@ -144,31 +142,6 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 		},
 	];
 
-	const pendingAPiCAll = React.useCallback((page, pageSize) => {
-		pendingApproval({ page: page, pageSize: pageSize, processed: false })
-			.then((res) => {
-				const resp = res.content.map((ele) => {
-					return {
-						routingId: ele.id,
-						...ele,
-						...ele?.payload,
-						// ...ele?.name,
-						// ...ele?.createdOn,
-					};
-				});
-				setData(resp);
-				setState((prev) => ({
-					...prev,
-					totalElement: res.totalElements,
-					pagination: {
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					},
-				}));
-			})
-			.catch((err) => console.error(err));
-	}, []);
-
 	const ApproveApiCAll = React.useCallback((data) => {
 		approveRequest({ id: data })
 			.then((res) => {
@@ -187,18 +160,14 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 			.catch((err) => console.error(err));
 	}, []);
 
-	React.useEffect(() => {
-		pendingAPiCAll(0, 10);
-	}, [pendingAPiCAll]);
-
 	return (
 		<Box>
 			{data ? (
 				<div>
-					<div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
-						Pending Neighrbourhood ({state?.totalElement})
+					{/* <div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
+						Pending Neighrbourhood ({totalElement})
 					</div>
-					<hr />
+					<hr /> */}
 					<div style={{ width: "100%" }}>
 						<Box
 							className='root'
@@ -211,31 +180,19 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 								autoHeight
 								disableSelectionOnClick
 								getRowClassName={(params) => `app-header-${params.row.status}`}
-								page={state?.pagination?.page}
-								pageSize={state?.pagination?.pageSize}
+								page={pagination?.page}
+								pageSize={pagination?.pageSize}
 								onPageSizeChange={(event) => {
-									setState((prev) => ({
-										...prev,
-										pagination: {
-											pageSize: event,
-										},
-									}));
-									pendingAPiCAll(state?.pagination?.page, event);
+									handlePagination({ page: pagination?.page, pageSize: event });
 								}}
-								rowCount={state?.totalElement}
+								rowCount={totalElement}
 								rows={rows}
 								columns={columns}
 								paginationMode='server'
 								// autoPageSize
 								pagination
 								onPageChange={(event) => {
-									setState((prev) => ({
-										...prev,
-										pagination: {
-											page: event,
-										},
-									}));
-									pendingAPiCAll(event, state?.pagination?.pageSize);
+									handlePagination({ page: event, pageSize: pagination?.pageSize });
 								}}
 								rowsPerPageOptions={[5, 10, 20]}
 								className='dataGridFooter'
@@ -267,7 +224,6 @@ export function ApprovalList({ handleTabChange, listApiCAll }) {
 						variant='contained'
 						onClick={() => {
 							RejectApiCAll(modal?.data);
-							pendingAPiCAll(0, 10);
 							handleTabChange(modal?.event, 0);
 							listApiCAll(0, 10);
 						}}>

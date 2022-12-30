@@ -67,7 +67,7 @@ function SidebarList({ handleId, handleClick }) {
 											? theme.palette.secondary.main
 											: theme.palette.primary.main,
 									borderRadius: "10px",
-									marginY: "2.5px",
+									marginTop: "2.5px",
 									marginX: "5px",
 									":hover": {
 										background:
@@ -120,7 +120,7 @@ function SidebarList({ handleId, handleClick }) {
 								{open && item?.id === id ? <ExpandLess /> : <ExpandMore />}
 							</ListItemButton>
 							<Collapse in={open && item?.id === id}>
-								<List sx={{ paddingTop: "0px", paddingBottom: "0px" }}>
+								<List className='urvik' sx={{ paddingTop: "0px", paddingBottom: "0px" }}>
 									{item?.children?.map((text, index) => {
 										return (
 											<ListItemButton
@@ -145,7 +145,8 @@ function SidebarList({ handleId, handleClick }) {
 															? theme.palette.secondary.main
 															: theme.palette.primary.main,
 													borderRadius: "10px",
-													margin: "5px",
+													marginY: "5px",
+													marginX: "5px",
 													ml: 3,
 													":hover": {
 														background:

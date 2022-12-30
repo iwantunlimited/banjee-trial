@@ -70,7 +70,7 @@ const Routes = () => {
 					element: <Room />,
 				},
 				{
-					path: "/user/view/:id",
+					path: "/user/:id",
 					element: <CustomerView />,
 				},
 				{
@@ -126,7 +126,7 @@ const Routes = () => {
 					element: <EditNeighbourhood />,
 				},
 				{
-					path: "/neighbourhood/detail/:id",
+					path: "/neighbourhood/:id",
 					element: <DetailPage />,
 				},
 				{

@@ -89,7 +89,7 @@ function BusinessList(props) {
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/neighbourhood/detail/" + params.row.id);
+								navigate("/neighbourhood/" + params.row.id);
 							}}>
 							<Visibility />
 						</IconButton>

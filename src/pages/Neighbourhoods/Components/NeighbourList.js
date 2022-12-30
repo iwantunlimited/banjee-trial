@@ -1,5 +1,15 @@
 import React from "react";
-import { Card, CircularProgress, Box, IconButton, Chip, Typography, Button } from "@mui/material";
+import {
+	Card,
+	CircularProgress,
+	Box,
+	IconButton,
+	Chip,
+	Typography,
+	Button,
+	Stack,
+	TextField,
+} from "@mui/material";
 import { deleteNeighbourhood, filterNeighbourhood } from "../services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
@@ -9,7 +19,7 @@ import ModalComp from "../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../context/Context";
 
 function NeighbourList(props) {
-	const { listApiCAll, data, handlePagination, pagination } = props;
+	const { listApiCAll, data, handlePagination, pagination, totalElement } = props;
 	const navigate = useNavigate();
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
 
@@ -17,6 +27,8 @@ function NeighbourList(props) {
 		open: false,
 		id: "",
 	});
+
+	const [keywords, setKeywords] = React.useState(null);
 
 	function handleModal(data) {
 		setModal((prev) => ({
@@ -100,13 +112,13 @@ function NeighbourList(props) {
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "View",
 			// align: 'center',
-			flex: 0.25,
+			flex: 0.15,
 			renderCell: (params) => {
 				return (
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/neighbourhood/detail/" + params.row.routingId);
+								navigate("/neighbourhood/" + params.row.routingId);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -154,10 +166,26 @@ function NeighbourList(props) {
 		<Box>
 			{data ? (
 				<div>
-					<div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
-						Neighrbourhood ({pagination?.totalElement})
-					</div>
-					<hr />
+					<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+						{/* <div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
+							Neighrbourhood ({totalElement})
+						</div> */}
+						<Box sx={{ marginBottom: "15px" }}>
+							{/* <Stack> */}
+							<TextField
+								fullWidth
+								size='small'
+								variant='outlined'
+								label='Search'
+								name='keywords'
+								value={keywords}
+								onChange={(e) => listApiCAll({ keyword: e.target.value })}
+								className='search-field'
+							/>
+							{/* </Stack> */}
+						</Box>
+					</Box>
+					{/* <hr /> */}
 					<div style={{ width: "100%" }}>
 						<Box
 							className='root'
@@ -169,27 +197,27 @@ function NeighbourList(props) {
 							<DataGrid
 								autoHeight
 								getRowClassName={(params) => `app-header-${params.row.status}`}
-								page={pagination?.pagination?.page}
-								pageSize={pagination?.pagination?.pageSize}
+								page={pagination?.page}
+								pageSize={pagination?.pageSize}
 								onPageSizeChange={(event) => {
+									// console.log("page size change", event);
 									handlePagination({
-										page: pagination?.pagination?.page,
+										page: pagination?.page,
 										pageSize: event,
 									});
-									listApiCAll(pagination?.pagination?.page, event);
 								}}
-								rowCount={pagination?.totalElement}
+								rowCount={totalElement}
 								rows={rows}
 								columns={columns}
 								paginationMode='server'
 								// autoPageSize
 								pagination
 								onPageChange={(event) => {
+									// console.log("page change", event);
 									handlePagination({
 										page: event,
-										pageSize: pagination?.pagination?.page,
+										pageSize: pagination?.pageSize,
 									});
-									listApiCAll(event, pagination?.pagination?.pageSize);
 								}}
 								rowsPerPageOptions={[5, 10, 20]}
 								className='dataGridFooter'

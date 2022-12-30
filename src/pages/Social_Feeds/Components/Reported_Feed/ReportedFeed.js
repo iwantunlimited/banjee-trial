@@ -1,12 +1,13 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import { Container, Card, Button, IconButton, CircularProgress } from "@mui/material";
+import { Container, Card, Button, IconButton, CircularProgress, Box, Grid } from "@mui/material";
 // import { ReportedUserList } from "../../../Users/User_Services/UserApiService";
 import { DataGrid } from "@mui/x-data-grid";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import { filterSocialFeeds } from "../../services/ApiServices";
+import { ArrowBack } from "@mui/icons-material";
 
 const useStyles = makeStyles({
 	root: {
@@ -51,8 +52,8 @@ function ReportedFeed(props) {
 			field: "username",
 			headerClassName: "app-header",
 			headerName: "UserName",
-			flex: 0.2,
-			align: "center",
+			flex: 0.3,
+			// align: "center",
 			// renderCell: (params) => (
 			// 	<Avatar src={params.row.toUser.avtarUrl} alt={params.row.toUser.name} />
 			// ),
@@ -131,59 +132,58 @@ function ReportedFeed(props) {
 	if (reportedFeed && rows.length > 0) {
 		return (
 			<div style={{ marginBottom: "20px" }}>
-				<Button
-					variant='contained'
-					onClick={() => navigate(-1)}
-					sx={{
-						mt: "1em",
-						ml: "1em",
-						width: "8em",
-						height: "2em",
-						textTransform: "none",
-					}}>
-					Go Back
-				</Button>
 				<Container maxWidth='xl'>
-					<Card
-						style={{
-							// background: "white",
-							padding: "25px",
-							border: "1px solid lightgrey",
-							marginTop: "30px",
-							borderRadius: "10px",
-						}}>
-						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
-							Reported Feeds ({totalEle})
-						</div>
-						<hr />
-						<div style={{ width: "100%" }}>
-							<div className={classes.DataGridBackground}>
-								<DataGrid
-									autoHeight
-									page={pagination.page}
-									pageSize={pagination.pageSize}
-									onPageSizeChange={(event) => {
-										setPagination((prev) => ({
-											...prev,
-											pageSize: event,
-										}));
-										feedListApiCall(pagination.page, event);
-									}}
-									rowCount={totalEle}
-									rows={rows}
-									columns={columns}
-									paginationMode='server'
-									// autoPageSize
-									pagination
-									onPageChange={(event) => {
-										feedListApiCall(event, pagination.pageSize);
-									}}
-									rowsPerPageOptions={[5, 10, 20]}
-									className={classes.dataGridFooter}
-								/>
-							</div>
-						</div>
-					</Card>
+					<Grid item container spacing={2}>
+						<Grid item xs={12}>
+							<Box>
+								<IconButton onClick={() => navigate(-1)}>
+									<ArrowBack color='primary' />
+								</IconButton>
+							</Box>
+						</Grid>
+						<Grid item xs={12}>
+							<Card
+								style={{
+									// background: "white",
+									padding: "25px",
+									border: "1px solid lightgrey",
+									marginTop: "30px",
+									borderRadius: "10px",
+								}}>
+								<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
+									Reported Feeds ({totalEle})
+								</div>
+								<hr />
+								<div style={{ width: "100%" }}>
+									<div className={classes.DataGridBackground}>
+										<DataGrid
+											autoHeight
+											page={pagination.page}
+											pageSize={pagination.pageSize}
+											onPageSizeChange={(event) => {
+												setPagination((prev) => ({
+													...prev,
+													pageSize: event,
+												}));
+												feedListApiCall(pagination.page, event);
+											}}
+											rowCount={totalEle}
+											rows={rows}
+											columns={columns}
+											paginationMode='server'
+											// autoPageSize
+											pagination
+											onPageChange={(event) => {
+												feedListApiCall(event, pagination.pageSize);
+											}}
+											rowsPerPageOptions={[5, 10, 20]}
+											className={classes.dataGridFooter}
+										/>
+									</div>
+								</div>
+							</Card>
+						</Grid>
+					</Grid>
 				</Container>
 			</div>
 		);

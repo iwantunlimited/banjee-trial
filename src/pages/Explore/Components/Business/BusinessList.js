@@ -6,7 +6,7 @@ import { Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 
 function BusinessList(props) {
-	const { data, handlePagination, listApiCall, paginationState } = props;
+	const { data, handlePagination, listApiCall, paginationState, totalElement } = props;
 	const navigate = useNavigate();
 
 	let rows = data ? data : [];
@@ -97,10 +97,10 @@ function BusinessList(props) {
 		<Box>
 			{data ? (
 				<div>
-					<div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
-						Business ({paginationState?.totalElement})
+					{/* <div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
+						Business ({totalElement})
 					</div>
-					<hr />
+					<hr /> */}
 					<div style={{ width: "100%" }}>
 						<Box
 							className='root'
@@ -113,16 +113,16 @@ function BusinessList(props) {
 								autoHeight
 								disableSelectionOnClick
 								getRowClassName={(params) => `app-header-${params.row.status}`}
-								page={paginationState?.pagination?.page}
-								pageSize={paginationState?.pagination?.pageSize}
+								page={paginationState?.page}
+								pageSize={paginationState?.pageSize}
 								onPageSizeChange={(event) => {
 									handlePagination({
-										page: paginationState?.pagination?.page,
+										page: paginationState?.page,
 										pageSize: event,
 									});
-									listApiCall(paginationState?.pagination?.page, event);
+									// listApiCall(paginationState?.page, event);
 								}}
-								rowCount={paginationState?.totalElement}
+								rowCount={totalElement}
 								rows={rows}
 								columns={columns}
 								paginationMode='server'
@@ -131,9 +131,9 @@ function BusinessList(props) {
 								onPageChange={(event) => {
 									handlePagination({
 										page: event,
-										pageSize: paginationState?.pagination?.page,
+										pageSize: paginationState?.page,
 									});
-									listApiCall(event, paginationState?.pagination?.pageSize);
+									// listApiCall(event, paginationState?.pageSize);
 								}}
 								rowsPerPageOptions={[5, 10, 20]}
 								className='dataGridFooter'

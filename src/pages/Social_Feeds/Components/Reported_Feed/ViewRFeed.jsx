@@ -1,5 +1,11 @@
 import React from "react";
-import { ChatBubbleOutline, Delete, FavoriteBorder, Fullscreen } from "@mui/icons-material";
+import {
+	ArrowBack,
+	ChatBubbleOutline,
+	Delete,
+	FavoriteBorder,
+	Fullscreen,
+} from "@mui/icons-material";
 import {
 	Container,
 	Grid,
@@ -89,16 +95,16 @@ function ViewRFeed() {
 				// 	});
 				// 	return data;
 				// });
-				res?.map((item) => {
-					reportedProfile(item?.reportedBy);
-					return item;
-				});
+				// res?.map((item) => {
+				// 	reportedProfile(item?.reportedBy);
+				// 	return item;
+				// });
 				setRData(res);
 			})
 			.catch((err) => {
 				console.error(err);
 			});
-	}, [id, reportedProfile]);
+	}, [id]);
 
 	const filterFeedApiCall = React.useCallback(() => {
 		getSocialFeedDetails(id)
@@ -109,9 +115,9 @@ function ViewRFeed() {
 	}, [id]);
 
 	React.useEffect(() => {
-		apiCall();
+		// apiCall();
 		filterFeedApiCall();
-	}, [apiCall, filterFeedApiCall]);
+	}, [filterFeedApiCall]);
 
 	const rows = pRData ? pRData : [];
 
@@ -169,23 +175,18 @@ function ViewRFeed() {
 		},
 	];
 
-	if (rData?.length > 0) {
+	if (data) {
 		return (
 			<>
-				<Button
-					variant='contained'
-					onClick={() => navigate(-1)}
-					sx={{
-						marginTop: "1em",
-						marginLeft: "1em",
-						width: "8em",
-						height: "2em",
-						textTransform: "none",
-					}}>
-					Go Back
-				</Button>
 				<Container maxWidth='xl'>
 					<Grid container xs={12} spacing={2}>
+						<Grid item xs={12}>
+							<Box>
+								<IconButton onClick={() => navigate(-1)}>
+									<ArrowBack color='primary' />
+								</IconButton>
+							</Box>
+						</Grid>
 						<Grid item xs={12}>
 							<Container maxWidth='sm'>
 								{/* <Card> */}
@@ -446,42 +447,50 @@ function ViewRFeed() {
 										</Typography>
 										<hr />
 									</Grid>
-									<Grid item xs={12}>
+									{rData?.length > 0 ? (
+										<React.Fragment>
+											{/* <Grid item xs={12}>
 										<div style={{ width: "100%" }}>
 											<div className={classes.DataGridBackground}>
 												<DataGrid
 													autoHeight
-													// page={pagination.page}
-													// pageSize={pagination.pageSize}
-													// onPageSizeChange={(event) => {
-													// 	setPagination((prev) => ({
-													// 		...prev,
-													// 		pageSize: event,
-													// 	}));
-													// 	feedListApiCall(pagination.page, event);
-													// }}
-													// rowCount={totalEle}
+													page={pagination.page}
+													pageSize={pagination.pageSize}
+													onPageSizeChange={(event) => {
+														setPagination((prev) => ({
+															...prev,
+															pageSize: event,
+														}));
+														feedListApiCall(pagination.page, event);
+													}}
+													rowCount={totalEle}
 													rows={rows}
 													columns={columns}
-													// paginationMode='server'
-													// // autoPageSize
-													// pagination
-													// onPageChange={(event) => {
-													// 	feedListApiCall(event, pagination.pageSize);
-													// }}
-													// rowsPerPageOptions={[5, 10, 20]}
+													paginationMode='server'
+													// autoPageSize
+													pagination
+													onPageChange={(event) => {
+														feedListApiCall(event, pagination.pageSize);
+													}}
+													rowsPerPageOptions={[5, 10, 20]}
 													className={classes.dataGridFooter}
 												/>
 											</div>
 										</div>
-									</Grid>
-									{/* {rData.map((ele, index) => {
+									</Grid> */}
+											{/* {rData.map((ele, index) => {
 										return (
 											<Grid item xs={12}>
 												<Typography>{ele.reportedBy}</Typography>
 											</Grid>
 										);
 									})} */}
+										</React.Fragment>
+									) : (
+										<Grid item xs={12}>
+											<Typography sx={{ textAlign: "center" }}>No Data Available</Typography>
+										</Grid>
+									)}
 								</Grid>
 							</Card>
 						</Grid>

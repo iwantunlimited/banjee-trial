@@ -13,7 +13,6 @@ import {
 	CircularProgress,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router";
-import UserLocation from "../../../Users/components/UserLocation";
 import moment from "moment";
 import { ArrowBack, Fullscreen } from "@mui/icons-material";
 import { deleteBusiness, findByIdBusiness } from "../../services/ApiServices";
@@ -29,7 +28,6 @@ import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
 import { MainContext } from "../../../../context/Context";
 import FullScreenImageModal from "../../../Social_Feeds/Components/FullScreenImageModal";
-import NewGoogleMap from "../../../Neighbourhoods/Map/NewGoogleMap";
 import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
 
 function BusinessDetail() {
@@ -264,15 +262,6 @@ function BusinessDetail() {
 								</Box>
 								{state && (
 									<Box sx={{ position: "relative", height: "400px" }}>
-										{/* <NewGoogleMap
-											view={true}
-											data={{
-												lat: state?.geoLocation?.coordinates[0],
-												lng: state?.geoLocation?.coordinates[1],
-												text: state?.name,
-												zoom: 15,
-											}}
-										/> */}
 										<GoogleMapCustom
 											view={true}
 											prevLocation={{

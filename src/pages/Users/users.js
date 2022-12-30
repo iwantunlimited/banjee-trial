@@ -102,8 +102,8 @@ function UserComp() {
 				<strong>
 					<IconButton
 						onClick={() => {
-							// navigate(`/user/view/${params?.row?.userObject?.id}`);
-							navigate("/user/view/" + params?.row?.systemUserId);
+							// navigate(`/user/${params?.row?.userObject?.id}`);
+							navigate("/user/" + params?.row?.systemUserId);
 							// this.props.history.push(
 							// 	this.props.location.pathname +
 							// 		"/view/" +
