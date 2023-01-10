@@ -102,9 +102,6 @@ function CreateBusiness({ listApiCall, pendingListApiCall, handleExpanded }) {
 		} else {
 			const image = event.target.files[0];
 			const inputType = image.type.split("/")?.[0];
-			console.log("====================================");
-			console.log("inputType", inputType);
-			console.log("====================================");
 			if (inputType === "image") {
 				new Compressor(image, {
 					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.

@@ -42,9 +42,9 @@ function BusinessDetail() {
 		open: false,
 		data: "",
 	});
-	console.log("====================================");
-	console.log("location detail", location);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("location detail", location);
+	// console.log("====================================");
 
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,

@@ -152,7 +152,7 @@ function UpdateBlog() {
 				setModalData("blog updated", "success");
 				navigate(-1);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const handleSubmit = (event) => {

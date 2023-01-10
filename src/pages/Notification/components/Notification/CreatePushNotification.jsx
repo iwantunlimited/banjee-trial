@@ -31,7 +31,6 @@ import { v4 as uuidv4 } from "uuid";
 function CreatePushNotification() {
 	const context = React.useContext(MainContext);
 
-	// console.log("context", context);
 	const { setNotificationPopup, setModalData, setModalOpen, themeData } = context;
 	const navigate = useNavigate();
 	const [selectTemplate, setSelectTemplate] = React.useState(false);

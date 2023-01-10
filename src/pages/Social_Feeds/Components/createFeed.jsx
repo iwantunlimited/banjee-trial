@@ -97,7 +97,6 @@ function CreateFeed() {
 	const listNeighbourApiCAll = React.useCallback((page, pageSize) => {
 		filterNeighbourhood({ page: page, pageSize: pageSize, online: true })
 			.then((res) => {
-				console.log("--------", res);
 				const resp = res.content.map((ele) => {
 					return {
 						routingId: ele.id,
@@ -113,7 +112,7 @@ function CreateFeed() {
 					pageSize: res?.pageable?.pageSize,
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const CreateFeedApiCall = React.useCallback(
@@ -146,7 +145,6 @@ function CreateFeed() {
 				const image = event.target.files[index];
 
 				const inputType = image.type.split("/")?.[0];
-				// console.log("dataTYpe", dataType);
 				if (inputType === "image") {
 					new Compressor(image, {
 						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
@@ -400,7 +398,7 @@ function CreateFeed() {
 											}}
 											sx={{ width: "100%" }}
 											renderInput={(params) => {
-												console.log("params", params);
+												// console.log("params", params);
 												return (
 													<TextField
 														required={postType?.neighbourhood}

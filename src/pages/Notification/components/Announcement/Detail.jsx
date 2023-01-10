@@ -22,7 +22,6 @@ function AnnouncementDetail() {
 	const DetailApiCall = React.useCallback(() => {
 		findByIdBlog(params?.id)
 			.then((res) => {
-				console.log("res");
 				setData(res);
 			})
 			.catch((err) => console.error(err));

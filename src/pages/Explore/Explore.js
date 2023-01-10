@@ -38,9 +38,9 @@ function a11yProps(index) {
 
 function Explore() {
 	const location = useLocation();
-	console.log("====================================");
-	console.log("location", location);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("location", location);
+	// console.log("====================================");
 	const [value, setValue] = React.useState(location?.state?.approved === false ? 1 : 0);
 
 	const [listData, setListData] = React.useState("");

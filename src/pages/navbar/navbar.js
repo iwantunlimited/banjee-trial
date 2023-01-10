@@ -177,7 +177,7 @@ function Navbar(props) {
 									<LightTooltip title='theme'>
 										<IconButton
 											onClick={() => {
-												console.log("themeData", themeData);
+												// console.log("themeData", themeData);
 												setThemeData(!themeData);
 											}}>
 											{themeData ? <LightMode /> : <DarkMode />}

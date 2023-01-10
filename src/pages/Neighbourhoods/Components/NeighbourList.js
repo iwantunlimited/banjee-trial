@@ -43,7 +43,6 @@ function NeighbourList(props) {
 					open: false,
 					id: "",
 				}));
-				console.log(res);
 				setModalOpen(true);
 				setModalData("neighbourhood deleted", "success");
 				listApiCall();
@@ -200,7 +199,6 @@ function NeighbourList(props) {
 								page={pagination?.page}
 								pageSize={pagination?.pageSize}
 								onPageSizeChange={(event) => {
-									// console.log("page size change", event);
 									handlePagination({
 										page: pagination?.page,
 										pageSize: event,
@@ -213,7 +211,6 @@ function NeighbourList(props) {
 								// autoPageSize
 								pagination
 								onPageChange={(event) => {
-									// console.log("page change", event);
 									handlePagination({
 										page: event,
 										pageSize: pagination?.pageSize,

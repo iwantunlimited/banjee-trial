@@ -69,7 +69,6 @@ function DetailPage() {
 					modalId: 1,
 					data: "",
 				}));
-				console.log(res);
 				setModalOpen(true);
 				setModalData("neighbourhood deleted", "success");
 			})
@@ -272,7 +271,7 @@ function DetailPage() {
 				setModalData("New Admin Assigned", "success");
 				filterMemberApiCall();
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	};
 	const AssignMemberApiCall = (payload) => {
 		assignMemberToCloud(payload)
@@ -287,7 +286,7 @@ function DetailPage() {
 				setModalData("Member Assigned", "success");
 				filterMemberApiCall();
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	};
 
 	function modalFunction(modalId) {
@@ -457,26 +456,28 @@ function DetailPage() {
 						}>
 						<ArrowBack style={{ color: theme.palette.primary.main }} />
 					</IconButton>
-					<Stack spacing={1} direction='row'>
-						<Button
-							variant='contained'
-							onClick={() => {
-								setModal(() => ({
-									open: true,
-									modalId: 1,
-									data: params?.id,
-								}));
-							}}>
-							Delete
-						</Button>
-						<Button
-							variant='contained'
-							onClick={() => {
-								navigate("/neighbourhood/update/" + params.id);
-							}}>
-							Edit
-						</Button>
-					</Stack>
+					{location?.state?.inApprove === false && (
+						<Stack spacing={1} direction='row'>
+							<Button
+								variant='contained'
+								onClick={() => {
+									setModal(() => ({
+										open: true,
+										modalId: 1,
+										data: params?.id,
+									}));
+								}}>
+								Delete
+							</Button>
+							<Button
+								variant='contained'
+								onClick={() => {
+									navigate("/neighbourhood/update/" + params.id);
+								}}>
+								Edit
+							</Button>
+						</Stack>
+					)}
 				</Box>
 				<Card sx={{ padding: "20px" }}>
 					<Grid item container xs={12}>

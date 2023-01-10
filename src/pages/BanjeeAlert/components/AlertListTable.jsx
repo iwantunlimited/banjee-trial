@@ -45,7 +45,7 @@ function AlertListTable({
 					id: "",
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	};
 
 	let rows = data ? data : [];

@@ -15,14 +15,11 @@ function NotificationDetail() {
 	const [audioState, setAudioState] = React.useState([]);
 	const [mediaState, setMediaState] = React.useState([]);
 
-	// console.log("====================================");
-	// console.log("mediaState", mediaState);
-	// console.log("====================================");
 
 	const DetailApiCall = React.useCallback(() => {
 		AlertById(params?.id)
 			.then((res) => {
-				console.log("res");
+				// console.log("res");
 				setData(res);
 				if (res?.imageUrl?.length > 0) {
 					const images = res?.imageUrl?.map((item) => {

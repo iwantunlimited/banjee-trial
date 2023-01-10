@@ -29,7 +29,6 @@ function GroupsComp(props) {
 	const CommunityListApiCall = React.useCallback(() => {
 		communityList({ page: pagination?.page, pageSize: pagination?.pageSize })
 			.then((res) => {
-				console.log(res);
 				const resp = res.content.map((ele) => {
 					return {
 						routingId: ele.id,
@@ -41,7 +40,7 @@ function GroupsComp(props) {
 				setListData(resp);
 				setTotalElement(res?.totalElements);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, [pagination]);
 
 	React.useEffect(() => {

@@ -89,7 +89,6 @@ function Neighbourhood() {
 					: { page: pagination?.page, pageSize: pagination?.pageSize, online: true };
 			filterNeighbourhood(payload)
 				.then((res) => {
-					console.log("--------", res);
 					const resp = res.content.map((ele) => {
 						return {
 							routingId: ele.id,
@@ -106,7 +105,7 @@ function Neighbourhood() {
 					// }));
 					setTotalElement(res?.totalElements);
 				})
-				.catch((err) => console.log(err));
+				.catch((err) => console.error(err));
 		},
 		[pagination]
 	);

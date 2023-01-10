@@ -76,7 +76,6 @@ function ReportedFeed(props) {
 			headerName: "Text",
 			flex: 0.5,
 			renderCell: (params) => {
-				console.log("params", params?.row);
 				return params?.row?.text;
 			},
 		},

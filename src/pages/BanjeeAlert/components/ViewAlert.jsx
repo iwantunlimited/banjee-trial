@@ -75,15 +75,12 @@ function ViewAlert() {
 					state: { reportedDetail: location?.state?.reported ? true : false },
 				});
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const alertApiCall = React.useCallback(() => {
 		listMyAlert(params?.id)
 			.then((res) => {
-				console.log("====================================");
-				console.log(res);
-				console.log("====================================");
 				if (res?.imageUrl?.length > 0) {
 					res?.imageUrl?.map((item) => {
 						setFinalData((prev) => [...prev, { src: item, mimeType: "image/jpg", type: "image" }]);
@@ -126,7 +123,7 @@ function ViewAlert() {
 				setTotalElement(res?.length);
 				setReportedList(resp);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	let rows = reportedList ? reportedList : [];
@@ -180,13 +177,6 @@ function ViewAlert() {
 			},
 		},
 	];
-
-	console.log("====================================");
-	console.log("reportedList", reportedList);
-	console.log("====================================");
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
 
 	const getCurrentLocation = React.useCallback(() => {
 		if (navigator.geolocation) {

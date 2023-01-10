@@ -135,9 +135,6 @@ function EditNeighbourhood() {
 		axios
 			.post(url, formData)
 			.then((res) => {
-				console.log("====================================");
-				console.log("res", res);
-				console.log("====================================");
 				setSubmitForm(true);
 				setModalOpen(true);
 				setModalData("Image Uploaded", "success");
@@ -152,7 +149,7 @@ function EditNeighbourhood() {
 					done: true,
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const ApiCall = React.useCallback(() => {

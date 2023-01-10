@@ -193,9 +193,9 @@ function GroupDetailPage(props) {
 		filterMemberApiCall();
 	}, [ApiCall, filterMemberApiCall]);
 
-	console.log("====================================");
-	console.log(modalData);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log(modalData);
+	// console.log("====================================");
 
 	if (state) {
 		return (

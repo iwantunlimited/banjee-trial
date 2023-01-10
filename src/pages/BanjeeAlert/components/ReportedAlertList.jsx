@@ -80,7 +80,7 @@ function ReportedAlertList() {
 					id: "",
 				}));
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	React.useEffect(() => {

@@ -389,12 +389,12 @@ function EditBusiness() {
 		}
 	}
 
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
-	console.log("====================================");
-	console.log("locationdata", locationData);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("data", data);
+	// console.log("====================================");
+	// console.log("====================================");
+	// console.log("locationdata", locationData);
+	// console.log("====================================");
 
 	if (businessData && cloudList && categoryList) {
 		return (
@@ -494,8 +494,8 @@ function EditBusiness() {
 												return <ListItem {...props}>{option?.name}</ListItem>;
 											}}
 											onBeforeInput={(event, option) => {
-												console.log("on before", event);
-												console.log("on before option", option);
+												// console.log("on before", event);
+												// console.log("on before option", option);
 											}}
 											getOptionLabel={(item) => item?.name}
 											renderInput={(params) => (

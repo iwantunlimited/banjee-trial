@@ -137,7 +137,7 @@ function FeedDetail(props) {
 			.then((res) => {
 				setData(res);
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 	}, []);
 
 	const deleteFeedApiCall = React.useCallback(() => {
@@ -189,9 +189,9 @@ function FeedDetail(props) {
 		}
 	};
 
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("data", data);
+	// console.log("====================================");
 
 	React.useEffect(() => {
 		ApiCall();

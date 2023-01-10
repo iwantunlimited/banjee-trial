@@ -144,7 +144,7 @@ function UserComp() {
 					// }));
 				})
 				.catch((err) => {
-					console.log(err);
+					console.warn(err);
 				});
 		},
 		[keyword, customerFilter]

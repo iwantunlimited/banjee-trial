@@ -131,7 +131,6 @@ const eventData = [
 function CreateAlert() {
 	const context = React.useContext(MainContext);
 
-	console.log("context", context);
 	const { setModalOpen, setModalData, setNotificationPopup, themeData, locationData } = context;
 	const navigate = useNavigate();
 	const [submitForm, setSubmitForm] = React.useState(false);
@@ -159,9 +158,6 @@ function CreateAlert() {
 	const [imgShow, setImgShow] = React.useState([]);
 
 	const CreateAlertApiCall = React.useCallback((payloadData) => {
-		console.log("====================================");
-		console.log("payload", payloadData);
-		console.log("====================================");
 		createAlert(payloadData)
 			.then((res) => {
 				setNotificationPopup({ open: true, message: "Alert Created Successfully" });
@@ -234,9 +230,6 @@ function CreateAlert() {
 		} else {
 			const image = event.target.files[0];
 			const inputType = image.type.split("/")?.[0];
-			console.log("====================================");
-			console.log("inputType", inputType);
-			console.log("====================================");
 			if (inputType === "image") {
 				new Compressor(image, {
 					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
@@ -406,12 +399,12 @@ function CreateAlert() {
 		}
 	};
 
-	console.log("====================================");
-	console.log("locationData", locationData);
-	console.log("====================================");
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("locationData", locationData);
+	// console.log("====================================");
+	// console.log("====================================");
+	// console.log("data", data);
+	// console.log("====================================");
 	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
 
 	if (data) {
