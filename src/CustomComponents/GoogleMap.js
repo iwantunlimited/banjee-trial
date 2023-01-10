@@ -179,6 +179,9 @@ const GoogleMapCustom = compose(
 	}, [setCurrentLocation]);
 
 	console.log("====================================");
+	console.log("prevLocation", props?.prevLocation);
+	console.log("====================================");
+	console.log("====================================");
 	console.log("locationData", locationData);
 	console.log("====================================");
 	console.log("====================================");

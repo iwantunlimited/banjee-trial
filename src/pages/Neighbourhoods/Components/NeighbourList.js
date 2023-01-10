@@ -1,25 +1,23 @@
 import React from "react";
 import {
-	Card,
 	CircularProgress,
 	Box,
 	IconButton,
 	Chip,
 	Typography,
 	Button,
-	Stack,
 	TextField,
+	Stack,
 } from "@mui/material";
-import { deleteNeighbourhood, filterNeighbourhood } from "../services/apiServices";
+import { deleteNeighbourhood } from "../services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
-import moment from "moment";
-import { Visibility } from "@mui/icons-material";
+import { Delete, Edit, Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../context/Context";
 
 function NeighbourList(props) {
-	const { listApiCAll, data, handlePagination, pagination, totalElement } = props;
+	const { listData, totalElement, listApiCall, handlePagination, pagination } = props;
 	const navigate = useNavigate();
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
 
@@ -37,7 +35,7 @@ function NeighbourList(props) {
 		}));
 	}
 
-	const deleteAlertApiCall = React.useCallback((id) => {
+	const deleteAlertApiCall = (id) => {
 		deleteNeighbourhood(id)
 			.then((res) => {
 				setModal((prev) => ({
@@ -48,11 +46,12 @@ function NeighbourList(props) {
 				console.log(res);
 				setModalOpen(true);
 				setModalData("neighbourhood deleted", "success");
+				listApiCall();
 			})
 			.catch((err) => console.warn(err));
-	}, []);
+	};
 
-	let rows = data ? data : [];
+	let rows = listData ? listData : [];
 
 	let columns = [
 		{
@@ -96,58 +95,56 @@ function NeighbourList(props) {
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.25,
-			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return 0;
-				}
-			},
+			type: "date",
+			valueGetter: ({ value }) => value && new Date(value),
+			// renderCell: (params) => {
+			// 	if (params.row && params.row.createdOn) {
+			// 		const date = moment(params.row.createdOn).format("L");
+			// 		return date;
+			// 	} else {
+			// 		return 0;
+			// 	}
+			// },
 		},
 		{
 			id: "8",
-			field: "id",
+			field: "routingId",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "View",
+			headerName: "Action",
 			// align: 'center',
-			flex: 0.15,
+			flex: 0.3,
 			renderCell: (params) => {
 				return (
 					<strong>
-						<IconButton
-							onClick={() => {
-								navigate("/neighbourhood/" + params.row.routingId);
-							}}>
-							<Visibility />
-						</IconButton>
-					</strong>
-				);
-			},
-		},
-		{
-			id: "9",
-			field: "routingId",
-			headerClassName: "app-header",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "Delete",
-			// align: "center",
-			flex: 0.2,
-			renderCell: (params) => {
-				return (
-					<strong>
-						<Chip
-							label='Delete'
-							style={{ background: "red", color: "white" }}
-							onClick={(event) => {
-								setModal((prev) => ({
-									...prev,
-									open: true,
-									id: params?.row?.routingId,
-								}));
-							}}
-						/>
+						<Stack direction={"row"} spacing={1}>
+							<IconButton
+								onClick={() => {
+									navigate("/neighbourhood/" + params.row.routingId, {
+										state: { inApprove: false },
+									});
+								}}>
+								<Visibility />
+							</IconButton>
+							<IconButton
+								onClick={() => {
+									navigate("/neighbourhood/update/" + params.row.routingId, {
+										state: { inApprove: false },
+									});
+								}}>
+								<Edit />
+							</IconButton>
+							<IconButton
+								onClick={(event) => {
+									setModal((prev) => ({
+										...prev,
+										open: true,
+										id: params?.row?.routingId,
+									}));
+								}}>
+								<Delete />
+							</IconButton>
+						</Stack>
 					</strong>
 				);
 			},
@@ -164,7 +161,7 @@ function NeighbourList(props) {
 		// 		justifyContent: "left",
 		// 	}}>
 		<Box>
-			{data ? (
+			{listData ? (
 				<div>
 					<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 						{/* <div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
@@ -179,7 +176,10 @@ function NeighbourList(props) {
 								label='Search'
 								name='keywords'
 								value={keywords}
-								onChange={(e) => listApiCAll({ keyword: e.target.value })}
+								onChange={(e) => {
+									listApiCall({ keyword: e.target.value });
+									setKeywords(e.target.value);
+								}}
 								className='search-field'
 							/>
 							{/* </Stack> */}

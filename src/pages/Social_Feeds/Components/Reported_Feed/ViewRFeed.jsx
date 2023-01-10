@@ -115,9 +115,9 @@ function ViewRFeed() {
 	}, [id]);
 
 	React.useEffect(() => {
-		// apiCall();
+		apiCall();
 		filterFeedApiCall();
-	}, [filterFeedApiCall]);
+	}, [filterFeedApiCall, apiCall]);
 
 	const rows = pRData ? pRData : [];
 

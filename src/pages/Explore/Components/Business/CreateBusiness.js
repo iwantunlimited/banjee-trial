@@ -14,6 +14,8 @@ import {
 	IconButton,
 	Typography,
 	CircularProgress,
+	Autocomplete,
+	ListItem,
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
@@ -28,7 +30,7 @@ import { v4 as uuidv4 } from "uuid";
 import NewGoogleMap from "../../../Neighbourhoods/Map/NewGoogleMap";
 import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
 
-function CreateBusiness({ listApiCall, handleExpanded }) {
+function CreateBusiness({ listApiCall, pendingListApiCall, handleExpanded }) {
 	const { setModalOpen, setModalData, locationData } = React.useContext(MainContext);
 
 	const [data, setData] = React.useState({
@@ -56,16 +58,6 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [imgShow, setImgShow] = React.useState("");
 	const [businessImgShow, setBusinessImgShow] = React.useState([]);
-
-	const handleGLocation = (lat, lng, address) => {
-		setData((prev) => ({
-			...prev,
-			geoLocation: {
-				coordinates: [lng, lat],
-			},
-			// address: address,
-		}));
-	};
 
 	const handleImageChange = (event) => {
 		if (event?.target?.files?.length > 0) {
@@ -291,6 +283,7 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 				document.getElementById("img").value = "";
 				document.getElementById("businessImage").value = "";
 				listApiCall(0, 10);
+				pendingListApiCall();
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -321,6 +314,10 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 		const base64 = await blobToBase64(data);
 		// console.log(base64);
 	};
+
+	// console.log("====================================");
+	// console.log("data", data);
+	// console.log("====================================");
 
 	React.useEffect(() => {
 		CategoryListApiCall();
@@ -378,9 +375,9 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 								</FormControl>
 							</Grid>
 							<Grid item xs={12} sm={4}>
-								<FormControl fullWidth>
-									<InputLabel id='demo-simple-select-label'>Cloud Type</InputLabel>
-									<Select
+								{/* <FormControl fullWidth> */}
+								{/* <InputLabel id='demo-simple-select-label'>Cloud Type</InputLabel> */}
+								{/* <Select
 										required
 										labelId='demo-simple-select-label'
 										id='demo-simple-select'
@@ -402,8 +399,24 @@ function CreateBusiness({ listApiCall, handleExpanded }) {
 													</MenuItem>
 												);
 											})}
-									</Select>
-								</FormControl>
+									</Select> */}
+								<Autocomplete
+									value={data?.categoryName}
+									options={cloudList}
+									renderOption={(props, option) => {
+										return <ListItem {...props}>{option?.name}</ListItem>;
+									}}
+									getOptionLabel={(item) => item?.name}
+									renderInput={(params) => <TextField required {...params} label='Cloud Type' />}
+									onChange={(event, option) => {
+										setData((prev) => ({
+											...prev,
+											cloudId: option?.id,
+											cloudName: option?.name,
+										}));
+									}}
+								/>
+								{/* </FormControl> */}
 							</Grid>
 							<Grid item xs={12} sm={6}>
 								<TextField

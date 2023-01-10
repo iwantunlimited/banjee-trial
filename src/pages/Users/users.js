@@ -137,17 +137,17 @@ function UserComp() {
 						totalElement: res.totalElements,
 						customerRows: customerRows,
 					}));
-					setCustomerFilter((prev) => ({
-						...prev,
-						page: res.pageable.pageNumber,
-						pageSize: res.pageable.pageSize,
-					}));
+					// setCustomerFilter((prev) => ({
+					// 	...prev,
+					// 	page: res.pageable.pageNumber,
+					// 	pageSize: res.pageable.pageSize,
+					// }));
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		},
-		[keyword]
+		[keyword, customerFilter]
 	);
 
 	React.useEffect(() => {

@@ -47,8 +47,8 @@ function EditNeighbourhood() {
 		name: "",
 		approvalType: "",
 		bannerImageUrl: [],
-		cityId: "",
-		countryId: "",
+		cityId: "6308a58eea0553e25b9d0a25",
+		countryId: "611a116fa2d3c765b9338dad",
 		geoLocation: {
 			coordinates: [0, 0],
 			type: "Point",
@@ -67,47 +67,36 @@ function EditNeighbourhood() {
 	const [response, setResponse] = React.useState("");
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imgShow, setImgShow] = React.useState("");
-	const [payload, setPayload] = React.useState("");
+	const [prevLocation, setPrevLocation] = React.useState(null);
 
-	const handleGLocation = (lat, lng, address) => {
-		setData((prev) => ({
-			...prev,
-			geoLocation: {
-				coordinates: [lng, lat],
-				type: "Point",
-			},
-			address: address,
-		}));
-	};
+	// const CityApi = React.useCallback((id) => {
+	// 	findCity({ cityId: id })
+	// 		.then((res) => {
+	// 			setCity(res.content);
+	// 		})
+	// 		.catch((err) => console.error(err));
+	// });
 
-	const CityApi = React.useCallback((id) => {
-		findCity({ cityId: id })
-			.then((res) => {
-				setCity(res.content);
-			})
-			.catch((err) => console.error(err));
-	});
+	// const StateApi = React.useCallback((countryId) => {
+	// 	findState({ countryId: countryId })
+	// 		.then((res) => {
+	// 			setState(res.content);
+	// 		})
+	// 		.catch((err) => console.error(err));
+	// }, []);
 
-	const StateApi = React.useCallback((countryId) => {
-		findState({ countryId: countryId })
-			.then((res) => {
-				setState(res.content);
-			})
-			.catch((err) => console.error(err));
-	}, []);
-
-	const CountryApi = React.useCallback(() => {
-		findCountry()
-			.then((res) => {
-				setCountry(res);
-				setData((prev) => ({
-					...prev,
-					countryId: res.length > 0 ? res?.[0]?.id : false,
-				}));
-				StateApi(res?.[0]?.id || "");
-			})
-			.catch((err) => console.error(err));
-	}, []);
+	// const CountryApi = React.useCallback(() => {
+	// 	findCountry()
+	// 		.then((res) => {
+	// 			setCountry(res);
+	// 			setData((prev) => ({
+	// 				...prev,
+	// 				countryId: res.length > 0 ? res?.[0]?.id : false,
+	// 			}));
+	// 			StateApi(res?.[0]?.id || "");
+	// 		})
+	// 		.catch((err) => console.error(err));
+	// }, []);
 
 	function handleImageChange(event) {
 		const image = event.target.files[0];
@@ -175,8 +164,8 @@ function EditNeighbourhood() {
 					name: res?.name ? res?.name : "",
 					approvalType: "",
 					bannerImageUrl: res?.bannerImageUrl ? res?.bannerImageUrl : [],
-					cityId: res?.cityId ? res.cityId : "",
-					countryId: res?.countryId ? res.countryId : "",
+					cityId: res?.cityId ? res.cityId : "6308a58eea0553e25b9d0a25",
+					countryId: res?.countryId ? res.countryId : "611a116fa2d3c765b9338dad",
 					geoLocation: {
 						coordinates: [
 							res?.geoLocation?.coordinates ? res?.geoLocation?.coordinates[0] : "",
@@ -191,6 +180,10 @@ function EditNeighbourhood() {
 					type: res?.cloudType ? res?.cloudType : "",
 					approvalType: "BY_ADMIN",
 				}));
+				setPrevLocation({
+					lat: res?.geoLocation?.coordinates[1],
+					lng: res?.geoLocation?.coordinates[0],
+				});
 				setImgShow({
 					data: res?.imageUrl
 						? `https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.imageUrl}.png`
@@ -205,11 +198,11 @@ function EditNeighbourhood() {
 	}, []);
 
 	React.useEffect(() => {
-		CountryApi();
-		setTimeout(() => {
-			ApiCall();
-		}, 2000);
-	}, [CountryApi]);
+		// CountryApi();
+		// setTimeout(() => {
+		ApiCall();
+		// }, 2000);
+	}, []);
 
 	function handleChange(event) {
 		const { name, value } = event.target;
@@ -227,15 +220,18 @@ function EditNeighbourhood() {
 			// categoryId: payloadData?.categoryId,
 			// categoryName: payloadData?.categoryName,
 			description: payloadData?.description,
+			// countryId: payloadData?.countryId,
+			// cloudType: payloadData?.cloudType,
+			// approvalType: "BY_ANY_MEMBER",
 			name: payloadData?.name,
+			// lat: payloadData?.geoLocation.coordinates[1],
+			// lon: payloadData?.geoLocation.coordinates[0],
 			id: payloadData?.id,
 			imageUrl: payloadData?.imageUrl,
 		};
 		updateNeighbourhood(payload)
 			.then((res) => {
-				console.log("====================================");
-				console.log("updated", res);
-				console.log("====================================");
+				navigate(-1);
 				setModalOpen(true);
 				setModalData("Neighbourhood updated successfully", "success");
 				setImgShow("");
@@ -243,7 +239,8 @@ function EditNeighbourhood() {
 					name: "",
 					approvalType: "",
 					bannerImageUrl: [],
-					cityId: "",
+					cityId: "6308a58eea0553e25b9d0a25",
+					countryId: "611a116fa2d3c765b9338dad",
 					geoLocation: {
 						coordinates: [0, 0],
 						type: "Point",
@@ -268,9 +265,9 @@ function EditNeighbourhood() {
 		}
 	}
 
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("data", data);
+	// console.log("====================================");
 	return (
 		<Container maxWidth='xl'>
 			<Grid item container xs={12} spacing={2}>
@@ -317,7 +314,7 @@ function EditNeighbourhood() {
 										</Select>
 									</FormControl>
 								</Grid>
-								{data.countryId && (
+								{/* {data.countryId && (
 									<Grid item xs={4}>
 										<FormControl fullWidth>
 											<InputLabel id='demo-simple-select-label'>Country</InputLabel>
@@ -409,7 +406,7 @@ function EditNeighbourhood() {
 											</Select>
 										</FormControl>
 									</Grid>
-								)}
+								)} */}
 
 								<Grid item xs={6}>
 									<TextField
@@ -550,18 +547,20 @@ function EditNeighbourhood() {
 												lng: data?.geoLocation?.coordinates[0],
 											}}
 										/> */}
-										<GoogleMapCustom
-											view={true}
-											data={{
-												zoom: 15,
-												lat: data?.geoLocation?.coordinates[1],
-												lng: data?.geoLocation?.coordinates[0],
-											}}
-											prevLocation={{
-												lat: data?.geoLocation?.coordinates[1],
-												lng: data?.geoLocation?.coordinates[0],
-											}}
-										/>
+										{prevLocation?.lat && (
+											<GoogleMapCustom
+												view={true}
+												data={{
+													zoom: 15,
+													lat: prevLocation?.lat,
+													lng: prevLocation?.lng,
+												}}
+												prevLocation={{
+													lat: prevLocation?.lat,
+													lng: prevLocation?.lng,
+												}}
+											/>
+										)}
 									</Box>
 								</Grid>
 								<Grid item xs={12}>

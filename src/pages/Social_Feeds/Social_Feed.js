@@ -107,7 +107,7 @@ export default function SocialFeed(props) {
 	// 	else document.getElementById(`video${index}`).pause();
 	// }
 
-	if (data) {
+	if (data?.content) {
 		return (
 			<Container sx={{ padding: "0px !important", margin: "auto" }} maxWidth='xl'>
 				<Card

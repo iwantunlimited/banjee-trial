@@ -9,7 +9,7 @@ import { MainContext } from "../../../../context/Context";
 
 export function BusinessApprovalList({
 	handleTabChange,
-	listApiCall,
+	pendingListApiCall,
 	paginationState,
 	handlePagination,
 	data,
@@ -61,14 +61,16 @@ export function BusinessApprovalList({
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.3,
-			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return 0;
-				}
-			},
+			type: "date",
+			valueGetter: ({ value }) => value && new Date(value),
+			// renderCell: (params) => {
+			// 	if (params.row && params.row.createdOn) {
+			// 		const date = moment(params.row.createdOn).format("L");
+			// 		return date;
+			// 	} else {
+			// 		return 0;
+			// 	}
+			// },
 		},
 		{
 			id: "5",
@@ -83,7 +85,7 @@ export function BusinessApprovalList({
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/explore/detail/" + params.row.routingId);
+								navigate("/explore/detail/" + params.row.routingId, { state: { inApprove: true } });
 							}}>
 							<Visibility />
 						</IconButton>
@@ -107,8 +109,6 @@ export function BusinessApprovalList({
 							onClick={(event) => {
 								// navigate("/rooms/view/" + params.row.routingId);
 								ApproveApiCAll(params?.row?.routingId);
-								handleTabChange(event, 0);
-								// listApiCall(0, 10);
 							}}
 						/>
 					</strong>
@@ -122,7 +122,8 @@ export function BusinessApprovalList({
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Business Approved", "success");
-				listApiCall();
+				handleTabChange(0, 1);
+				pendingListApiCall();
 			})
 			.catch((err) => console.error(err));
 	}, []);

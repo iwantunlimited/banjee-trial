@@ -43,7 +43,7 @@ function TabPanel(props) {
 			aria-labelledby={`simple-tab-${index}`}
 			{...other}>
 			{value === index && (
-				<Box sx={{ padding: "30px" }}>
+				<Box sx={{ padding: "10px" }}>
 					<Typography>{children}</Typography>
 				</Box>
 			)}
@@ -189,6 +189,10 @@ function FeedDetail(props) {
 		}
 	};
 
+	console.log("====================================");
+	console.log("data", data);
+	console.log("====================================");
+
 	React.useEffect(() => {
 		ApiCall();
 		feedCommentApiCall();
@@ -260,10 +264,12 @@ function FeedDetail(props) {
 									</IconButton>
 								</Box>
 							</Box>
+							{data?.mediaContent?.length > 0 && (
+								<Box sx={{ marginY: "10px" }}>
+									<SwiperComp data={data?.mediaContent} />
+								</Box>
+							)}
 							<Box sx={{ marginY: "10px" }}>
-								<SwiperComp data={data?.mediaContent} />
-							</Box>
-							<Box>
 								{textFun(data?.text)}
 								{/* {data?.text?.length < 350 && textState === false ? (
 									<Typography>
@@ -304,32 +310,51 @@ function FeedDetail(props) {
 												reaction?.map((ele, index) => {
 													const userLength = ele?.user?.username.length;
 													return (
-														<React.Fragment key={index}>
-															<Grid item xs={6}>
-																<span
-																	style={{
-																		height: "100%",
-																		width: "100%",
-																		display: "flex",
-																		alignItems: "center",
+														<Grid item xs={12}>
+															<Box
+																sx={{
+																	display: "flex",
+																	justifyContent:
+																		data?.authorId === ele?.userId ? "flex-end" : "flex-start",
+																}}>
+																<Box
+																	sx={{
+																		background: theme?.palette?.grey?.A700,
+																		boxShadow: 0,
+																		maxWidth: "90%",
+																		borderRadius: "10px",
+																		padding: "5px",
+																		paddingX: "10px",
+																		// textAlign:
+																		// 	blogData?.authorId === item?.author?.id ? "right" : "left",
 																	}}>
-																	{userLength > 15
-																		? ele?.user?.username.slice(0, 15) + " ..."
-																		: ele?.user?.username}
-																</span>
-															</Grid>
-															<Grid item xs={6}>
-																<img
-																	src={getEmoji(ele?.reactionType)}
-																	alt=''
-																	style={{
-																		height: "25px",
-																		width: "25px",
-																		objectFit: "contain",
-																	}}
-																/>
-															</Grid>
-														</React.Fragment>
+																	<Typography sx={{ fontSize: "10px" }}>
+																		{userLength > 20
+																			? ele?.user?.username.slice(0, 20) + "... :"
+																			: ele?.user?.username}
+																	</Typography>
+																	<Box
+																		sx={{
+																			display: "flex",
+																			justifyContent:
+																				data?.authorId === ele?.userId ? "flex-start" : "flex-end",
+
+																			marginLeft: data?.authorId === ele?.userId ? "0px" : "20px",
+																			marginRight: data?.authorId === ele?.userId ? "20px" : "0px",
+																		}}>
+																		<img
+																			src={getEmoji(ele?.reactionType)}
+																			alt=''
+																			style={{
+																				height: "25px",
+																				width: "25px",
+																				objectFit: "contain",
+																			}}
+																		/>
+																	</Box>
+																</Box>
+															</Box>
+														</Grid>
 													);
 												})
 											) : (
@@ -359,22 +384,31 @@ function FeedDetail(props) {
 													<React.Fragment key={index}>
 														<Grid item xs={12}>
 															{/* <span>{ele?.createdByUser?.username}</span> */}
-															<Card
+															<Box
 																sx={{
-																	width: "100%",
-																	p: 1,
-																	background: "#f2eeee",
-																	boxShadow: 0,
+																	display: "flex",
+																	justifyContent:
+																		data?.authorId === ele?.createdBy ? "flex-end" : "flex-start",
 																}}>
-																<Box sx={{ width: "100%" }}>
-																	<Typography sx={{ fontSize: "12px" }}>
+																<Box
+																	sx={{
+																		background: theme?.palette?.grey?.A700,
+																		boxShadow: 0,
+																		maxWidth: "90%",
+																		borderRadius: "10px",
+																		padding: "5px",
+																		paddingX: "10px",
+																		// textAlign:
+																		// 	blogData?.authorId === item?.author?.id ? "right" : "left",
+																	}}>
+																	<Typography sx={{ fontSize: "10px" }}>
 																		{userLength > 20
 																			? ele?.createdByUser?.username.slice(0, 20) + "... :"
 																			: ele?.createdByUser?.username}
 																	</Typography>
 																	<Typography>{ele?.text}</Typography>
 																</Box>
-															</Card>
+															</Box>
 														</Grid>
 														{/* <Grid item xs={8}>
 													<span>{ele?.text}</span>

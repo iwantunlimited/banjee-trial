@@ -50,3 +50,11 @@ export let filterReportList = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+
+export let reportedByUserAlertList = (requestLoad) => {
+	let url = urls.GEO_CLOUD.GEO_ALERT + "/reports/" + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};

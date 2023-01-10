@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import { Container, Card, Button, IconButton, CircularProgress, Box, Grid } from "@mui/material";
+import { Container, Card, IconButton, CircularProgress, Box, Grid } from "@mui/material";
 // import { ReportedUserList } from "../../../Users/User_Services/UserApiService";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -51,8 +51,12 @@ function ReportedFeed(props) {
 			id: "1",
 			field: "username",
 			headerClassName: "app-header",
-			headerName: "UserName",
+			headerName: "Name",
 			flex: 0.3,
+			renderCell: (params) => {
+				const fullname = params?.row?.author?.firstName + " " + params?.row?.author?.lastName;
+				return fullname;
+			},
 			// align: "center",
 			// renderCell: (params) => (
 			// 	<Avatar src={params.row.toUser.avtarUrl} alt={params.row.toUser.name} />
@@ -71,14 +75,19 @@ function ReportedFeed(props) {
 			headerClassName: "app-header",
 			headerName: "Text",
 			flex: 0.5,
+			renderCell: (params) => {
+				console.log("params", params?.row);
+				return params?.row?.text;
+			},
 		},
 		{
 			id: "4",
-			field: "remark",
+			field: "createdOn",
 			headerClassName: "app-header",
-			headerName: "Remark",
-			flex: 0.5,
-			// align: "center",
+			headerName: "Created On",
+			type: "date",
+			valueGetter: ({ value }) => value && new Date(value),
+			flex: 0.3,
 		},
 		{
 			id: "5",
@@ -86,7 +95,7 @@ function ReportedFeed(props) {
 			headerClassName: "app-header",
 			headerName: "View",
 			align: "center",
-			flex: 0.3,
+			flex: 0.2,
 			renderCell: (params) => (
 				<strong>
 					<IconButton
@@ -108,6 +117,7 @@ function ReportedFeed(props) {
 					return {
 						...ele,
 						mainId: ele.id,
+						description: ele?.text,
 						...ele.author,
 						reports: ele?.reportedCount ? ele?.reportedCount : null,
 					};

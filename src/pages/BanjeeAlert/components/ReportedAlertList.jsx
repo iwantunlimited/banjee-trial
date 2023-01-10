@@ -48,8 +48,8 @@ function ReportedAlertList() {
 				const resp = res?.content?.map((item) => {
 					return {
 						routingId: item?.id,
-						rFirstName: item?.reportedByUser?.firstName,
-						rLastName: item?.reportedByUser?.lastName,
+						rFirstName: item?.createdByUser?.firstName,
+						rLastName: item?.createdByUser?.lastName,
 						cloudName: item?.content?.cloudName,
 						eventName: item?.content?.eventName,
 						description: item?.content?.description,
@@ -90,14 +90,14 @@ function ReportedAlertList() {
 	let rows = data ? data : [];
 
 	let columns = [
-		{
-			id: "1",
-			field: "cloudName",
-			headerClassName: "app-header",
-			headerName: "Cloud Name",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			flex: 0.3,
-		},
+		// {
+		// 	id: "1",
+		// 	field: "cloudName",
+		// 	headerClassName: "app-header",
+		// 	headerName: "Cloud Name",
+		// 	// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+		// 	flex: 0.3,
+		// },
 		{
 			id: "2",
 			field: "eventName",
@@ -117,35 +117,28 @@ function ReportedAlertList() {
 		},
 		{
 			id: "4",
-			field: "comment",
-			headerClassName: "app-header",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "Comment",
-			// align: "center",
-			flex: 0.4,
-		},
-		{
-			id: "5",
 			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.2,
-			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return 0;
-				}
-			},
+			type: "date",
+			valueGetter: ({ value }) => value && new Date(value),
+			// renderCell: (params) => {
+			// 	if (params.row && params.row.createdOn) {
+			// 		const date = moment(params.row.createdOn).format("L");
+			// 		return date;
+			// 	} else {
+			// 		return 0;
+			// 	}
+			// },
 		},
 		{
-			id: "6",
+			id: "5",
 			field: "rFirstName",
 			headerClassName: "app-header",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "Reported By",
+			headerName: "Created By",
 			// align: "center",
 			flex: 0.3,
 			renderCell: (params) => {
@@ -155,7 +148,7 @@ function ReportedAlertList() {
 		},
 
 		{
-			id: "7",
+			id: "6",
 			field: "id",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
@@ -167,7 +160,7 @@ function ReportedAlertList() {
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/banjee-alert/" + params.row.id);
+								navigate("/banjee-alert/" + params.row.id, { state: { reported: true } });
 							}}>
 							<Visibility />
 						</IconButton>

@@ -84,6 +84,7 @@ function GroupsComp(props) {
 			headerName: "Members",
 			// align: "center",
 			flex: 0.3,
+			// type: "number",
 		},
 		{
 			id: "5",
@@ -92,14 +93,16 @@ function GroupsComp(props) {
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.4,
-			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return 0;
-				}
-			},
+			type: "date",
+			valueGetter: ({ value }) => value && new Date(value),
+			// renderCell: (params) => {
+			// 	if (params.row && params.row.createdOn) {
+			// 		const date = moment(params.row.createdOn).format("L");
+			// 		return date;
+			// 	} else {
+			// 		return 0;
+			// 	}
+			// },
 		},
 		{
 			id: "6",
@@ -171,7 +174,7 @@ function GroupsComp(props) {
 										onPageChange={(event) => {
 											handlePagination({
 												page: event,
-												pageSize: pagination?.page,
+												pageSize: pagination?.pageSize,
 											});
 										}}
 										rowsPerPageOptions={[5, 10, 20]}

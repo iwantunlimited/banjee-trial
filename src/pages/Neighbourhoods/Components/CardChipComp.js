@@ -13,7 +13,7 @@ import { useTheme } from "@mui/material/styles";
 import { MainContext } from "../../../context/Context";
 
 function ChipComp(props) {
-	const { listApiCAll } = props;
+	const { listApiCall, pendingListApiCall } = props;
 	const theme = useTheme();
 	const { themeData } = React.useContext(MainContext);
 
@@ -41,7 +41,11 @@ function ChipComp(props) {
 				</Box>
 			</AccordionSummary>
 			<AccordionDetails>
-				<CreateNeighbour listApiCAll={listApiCAll} handleExpanded={handleExpanded} />
+				<CreateNeighbour
+					listApiCall={listApiCall}
+					pendingListApiCall={pendingListApiCall}
+					handleExpanded={handleExpanded}
+				/>
 			</AccordionDetails>
 		</Accordion>
 	);

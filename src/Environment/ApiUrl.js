@@ -57,6 +57,8 @@ export const urls = {
 		CREATE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud",
 		// FILTER_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/filter",
 		FILTER_NEIGHBOURHOOD: services.GEO_CLOUD + "api/admin-filter",
+		Assign_Admin_To_Cloud: services.GEO_CLOUD + "api/assignAdmin",
+		Assign_Member_To_Cloud: services.GEO_CLOUD + "api/assignMember",
 		PENDING_APPROVAL: services.GEO_CLOUD + "social-cloud/pending-approvals",
 		APPROVE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/approve",
 		REJECT_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/reject",

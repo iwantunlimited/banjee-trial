@@ -9,6 +9,7 @@ import { ApprovalList } from "./Components/ApprovalList";
 import { filterNeighbourhood, pendingApproval } from "./services/apiServices";
 
 import { useTheme } from "@mui/material/styles";
+import { useLocation } from "react-router";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -39,48 +40,53 @@ function a11yProps(index) {
 }
 
 function Neighbourhood() {
-	const [value, setValue] = React.useState(0);
 	const theme = useTheme();
 
+	const location = useLocation();
+	const [value, setValue] = React.useState(location?.state?.pending ? 1 : 0);
 	const [listData, setListData] = React.useState("");
-	const [pendingListData, setPendingListData] = React.useState([]);
-	const [state, setState] = React.useState({
-		page: 0,
-		pageSize: 10,
-	});
-	const [pendingListPagination, setPendingListPagination] = React.useState({
-		page: 0,
-		pageSize: 10,
-	});
-
 	const [totalElement, setTotalElement] = React.useState(0);
+	const [pagination, setPagination] = React.useState({
+		page: 0,
+		pageSize: 10,
+	});
+	const [pendingListData, setPendingListData] = React.useState("");
 	const [totalPendingElement, setTotalPendingElement] = React.useState(0);
-
-	const handlePagination = (data) => {
-		setState((prev) => ({
-			...prev,
-			page: data?.page,
-			pageSize: data?.pageSize,
-		}));
-	};
-	const handlePendingListPagination = (data) => {
-		setPendingListPagination((prev) => ({
-			...prev,
-			page: data?.page,
-			pageSize: data?.pageSize,
-		}));
-	};
+	const [pendingPagination, setPendingPagination] = React.useState({
+		page: 0,
+		pageSize: 10,
+	});
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
 
-	const listApiCAll = React.useCallback(
+	const handlePagination = (item) => {
+		setPagination((prev) => ({
+			...prev,
+			page: item?.page,
+			pageSize: item?.pageSize,
+		}));
+	};
+	const handlePendingPagination = (item) => {
+		setPendingPagination((prev) => ({
+			...prev,
+			page: item?.page,
+			pageSize: item?.pageSize,
+		}));
+	};
+
+	const listApiCall = React.useCallback(
 		(data) => {
 			const payload =
 				data?.keyword !== ""
-					? { page: state?.page, pageSize: state?.pageSize, online: true, keywords: data?.keyword }
-					: { page: state?.page, pageSize: state?.pageSize, online: true };
+					? {
+							page: pagination?.page,
+							pageSize: pagination?.pageSize,
+							online: true,
+							keywords: data?.keyword,
+					  }
+					: { page: pagination?.page, pageSize: pagination?.pageSize, online: true };
 			filterNeighbourhood(payload)
 				.then((res) => {
 					console.log("--------", res);
@@ -102,13 +108,13 @@ function Neighbourhood() {
 				})
 				.catch((err) => console.log(err));
 		},
-		[state]
+		[pagination]
 	);
 
-	const pendingAPiCAll = React.useCallback(() => {
+	const pendingListApiCall = React.useCallback(() => {
 		pendingApproval({
-			page: pendingListPagination?.page,
-			pageSize: pendingListPagination?.pageSize,
+			page: pendingPagination?.page,
+			pageSize: pendingPagination?.pageSize,
 			processed: false,
 		})
 			.then((res) => {
@@ -121,16 +127,19 @@ function Neighbourhood() {
 						// ...ele?.createdOn,
 					};
 				});
-				setTotalPendingElement(res?.totalElements);
 				setPendingListData(resp);
+				setTotalPendingElement(res?.totalElements);
 			})
 			.catch((err) => console.error(err));
-	}, [pendingListPagination?.page, pendingListPagination?.pageSize]);
+	}, [pendingPagination]);
 
 	React.useEffect(() => {
-		listApiCAll();
-		pendingAPiCAll();
-	}, [listApiCAll, pendingAPiCAll, state, pendingListPagination]);
+		listApiCall();
+	}, [listApiCall]);
+
+	React.useEffect(() => {
+		pendingListApiCall();
+	}, [pendingListApiCall]);
 
 	return (
 		<Container maxWidth='xl' style={{ padding: "0px", margin: "auto" }}>
@@ -139,7 +148,7 @@ function Neighbourhood() {
 			</Helmet>
 			<Grid item container xs={12} spacing={2}>
 				<Grid item xs={12}>
-					<ChipComp listApiCAll={listApiCAll} />
+					<ChipComp listApiCall={listApiCall} pendingListApiCall={pendingListApiCall} />
 				</Grid>
 				<Grid item xs={12}>
 					<Card sx={{ padding: { xs: "10px", lg: "20px" } }}>
@@ -165,23 +174,23 @@ function Neighbourhood() {
 						<TabPanel value={value} index={0}>
 							<Box sx={{ paddingY: "15px" }}>
 								<NeighbourList
-									listApiCAll={listApiCAll}
-									data={listData}
+									listData={listData}
+									listApiCall={listApiCall}
 									totalElement={totalElement}
-									pagination={state}
+									pagination={pagination}
 									handlePagination={handlePagination}
+									handleTabChange={handleChange}
 								/>
 							</Box>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
 							<Box sx={{ paddingY: "15px" }}>
 								<ApprovalList
-									listApiCAll={listApiCAll}
-									pendingListApiCall={pendingAPiCAll}
 									data={pendingListData}
+									pendingListApiCall={pendingListApiCall}
 									totalElement={totalPendingElement}
-									pagination={pendingListPagination}
-									handlePagination={handlePendingListPagination}
+									pagination={pendingPagination}
+									handlePagination={handlePendingPagination}
 									handleTabChange={handleChange}
 								/>
 							</Box>

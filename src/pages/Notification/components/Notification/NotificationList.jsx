@@ -10,7 +10,6 @@ import {
 	Tooltip,
 	Typography,
 } from "@mui/material";
-import moment from "moment";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router";
 import { Visibility } from "@mui/icons-material";
@@ -23,7 +22,7 @@ import ModalComp from "../../../../CustomComponents/ModalComp";
 function NotificationList() {
 	const navigate = useNavigate();
 	const context = useContext(MainContext);
-	const { setModalOpen, setModalData, setNotificationPopup } = context;
+	const { setModalOpen, setModalData } = context;
 	const [data, setData] = React.useState("");
 
 	const [modal, setModal] = React.useState({
@@ -99,14 +98,16 @@ function NotificationList() {
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.3,
-			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return 0;
-				}
-			},
+			type: "date",
+			valueGetter: ({ value }) => value && new Date(value),
+			// renderCell: (params) => {
+			// 	if (params.row && params.row.createdOn) {
+			// 		const date = moment(params.row.createdOn).format("L");
+			// 		return date;
+			// 	} else {
+			// 		return 0;
+			// 	}
+			// },
 		},
 		{
 			id: "5",
@@ -177,7 +178,7 @@ function NotificationList() {
 			.catch((err) => console.error(err));
 	}, []);
 
-	const DeleteAlertApiCall = React.useCallback((data) => {
+	const DeleteAlertApiCall = (data) => {
 		deleteAlert(data)
 			.then((res) => {
 				setModalOpen(true);
@@ -185,7 +186,7 @@ function NotificationList() {
 				NotificationListApiCall(0, 10);
 			})
 			.catch((err) => console.error(err));
-	}, []);
+	};
 
 	React.useEffect(() => {
 		NotificationListApiCall(0, 10);

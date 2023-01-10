@@ -75,14 +75,16 @@ function AlertListTable({
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.2,
-			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return 0;
-				}
-			},
+			type: "date",
+			valueGetter: ({ value }) => value && new Date(value),
+			// renderCell: (params) => {
+			// 	if (params.row && params.row.createdOn) {
+			// 		const date = moment(params.row.createdOn).format("L");
+			// 		return date;
+			// 	} else {
+			// 		return 0;
+			// 	}
+			// },
 		},
 		{
 			id: "4",
@@ -111,7 +113,7 @@ function AlertListTable({
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/banjee-alert/" + params.row.id);
+								navigate("/banjee-alert/" + params.row.id, { state: { reported: false } });
 							}}>
 							<Visibility />
 						</IconButton>

@@ -1,25 +1,34 @@
 import { Visibility } from "@mui/icons-material";
-import { Box, Button, Chip, CircularProgress, IconButton, Stack, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	Chip,
+	CircularProgress,
+	IconButton,
+	Stack,
+	TextField,
+	Typography,
+} from "@mui/material";
 import React from "react";
 import { approveRequest, pendingApproval, rejectRequest } from "../services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../context/Context";
 
 export function ApprovalList({
-	pendingListApiCall,
 	handleTabChange,
-	listApiCAll,
-	totalElement,
-	handlePagination,
+	pendingListApiCall,
 	data,
 	pagination,
+	handlePagination,
+	totalElement,
 }) {
 	const navigate = useNavigate();
 
 	const { setModalData, setModalOpen } = React.useContext(MainContext);
+	const [review, setReview] = React.useState("");
 
 	const [modal, setModal] = React.useState({
 		open: false,
@@ -70,14 +79,16 @@ export function ApprovalList({
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.3,
-			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return 0;
-				}
-			},
+			type: "date",
+			valueGetter: ({ value }) => value && new Date(value),
+			// renderCell: (params) => {
+			// 	if (params.row && params.row.createdOn) {
+			// 		const date = moment(params.row.createdOn).format("L");
+			// 		return date;
+			// 	} else {
+			// 		return 0;
+			// 	}
+			// },
 		},
 		{
 			id: "5",
@@ -92,7 +103,9 @@ export function ApprovalList({
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/neighbourhood/" + params.row.objectId);
+								navigate("/neighbourhood/" + params.row.objectId, {
+									state: { inApprove: true },
+								});
 							}}>
 							<Visibility />
 						</IconButton>
@@ -120,7 +133,6 @@ export function ApprovalList({
 									ApproveApiCAll(params?.row?.routingId);
 									handleTabChange(event, 0);
 									// pendingAPiCAll(0, 10);
-									listApiCAll(0, 10);
 								}}
 							/>
 							<Chip
@@ -147,15 +159,20 @@ export function ApprovalList({
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Neighbourhood approved", "success");
+				handleTabChange(modal?.event, 1);
+				pendingListApiCall();
 			})
 			.catch((err) => console.error(err));
 	}, []);
 
 	const RejectApiCAll = React.useCallback((data) => {
-		rejectRequest({ id: data })
+		rejectRequest({ id: data, reviewComment: review })
 			.then((res) => {
+				handleModal(false);
 				setModalOpen(true);
 				setModalData("Neighbourhood Rejected", "success");
+				handleTabChange(modal?.event, 1);
+				pendingListApiCall();
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -213,8 +230,17 @@ export function ApprovalList({
 			)}
 			<ModalComp handleModal={handleModal} data={modal} width={500}>
 				<Typography sx={{ fontSize: { xs: "16px", sm: "20px", fontWeight: 500 } }}>
-					Are You Sure To Delete The Neighbourhood ?
+					Are You Sure To Reject The Neighbourhood ?
 				</Typography>
+				<Box sx={{ marginY: "10px" }}>
+					<TextField
+						fullWidth
+						label='Review'
+						name='review'
+						value={review}
+						onChange={(event) => setReview(event?.target?.value)}
+					/>
+				</Box>
 				<Box sx={{ display: "flex", justifyContent: "center", marginTop: "30px" }}>
 					<Button variant='outlined' onClick={() => handleModal(false)}>
 						cancel
@@ -224,8 +250,6 @@ export function ApprovalList({
 						variant='contained'
 						onClick={() => {
 							RejectApiCAll(modal?.data);
-							handleTabChange(modal?.event, 0);
-							listApiCAll(0, 10);
 						}}>
 						confirm
 					</Button>

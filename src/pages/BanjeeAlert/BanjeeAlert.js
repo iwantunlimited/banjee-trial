@@ -1,24 +1,12 @@
-import {
-	Box,
-	Card,
-	Divider,
-	Grid,
-	Tabs,
-	Tab,
-	IconButton,
-	Typography,
-	Tooltip,
-} from "@mui/material";
+import { Box, Card, Grid, Tabs, Tab, IconButton, Typography, Tooltip } from "@mui/material";
 import React from "react";
-import AlertMap from "./components/AlertMap";
-import { filterReportList, listAlert } from "./api-services/apiServices";
+import { listAlert } from "./api-services/apiServices";
 import AlertListTable from "./components/AlertListTable";
 import { useCallback } from "react";
 import PropTypes from "prop-types";
-import AlertLocation from "./components/AlertMap";
 import ReportedAlertList from "./components/ReportedAlertList";
 import { Add } from "@mui/icons-material";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { MainContext } from "../../context/Context";
 
 function TabPanel(props) {
@@ -51,12 +39,9 @@ function a11yProps(index) {
 
 function BanjeeAlert() {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { themeData } = React.useContext(MainContext);
-	const [value, setValue] = React.useState(0);
-	const [currentLocation, setCurrentLocation] = React.useState({
-		lat: "",
-		lon: "",
-	});
+	const [value, setValue] = React.useState(location?.state?.reportedDetail ? 1 : 0);
 
 	const [data, setData] = React.useState("");
 
@@ -115,23 +100,22 @@ function BanjeeAlert() {
 		// }
 	}, []);
 
-	const listAllData = React.useCallback(() => {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition((position) => {
-				setCurrentLocation(() => ({
-					lat: position.coords.latitude,
-					lon: position.coords.longitude,
-				}));
-			});
-		} else {
-			console.error("Geolocation is not supported by this browser.");
-		}
-	}, []);
+	// const listAllData = React.useCallback(() => {
+	// 	if (navigator.geolocation) {
+	// 		navigator.geolocation.getCurrentPosition((position) => {
+	// 			setCurrentLocation(() => ({
+	// 				lat: position.coords.latitude,
+	// 				lon: position.coords.longitude,
+	// 			}));
+	// 		});
+	// 	} else {
+	// 		console.error("Geolocation is not supported by this browser.");
+	// 	}
+	// }, []);
 
 	React.useEffect(() => {
 		ListAlertApiCall(0, 10);
-		listAllData();
-	}, [ListAlertApiCall, listAllData]);
+	}, [ListAlertApiCall]);
 
 	return (
 		<Box>

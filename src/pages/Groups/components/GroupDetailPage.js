@@ -35,12 +35,20 @@ function GroupDetailPage(props) {
 	});
 	const [members, setMembers] = React.useState({
 		data: [],
-		pagination: {
-			page: 0,
-			pageSize: 10,
-		},
 		totalMembers: 0,
 	});
+	const [pagination, setPagination] = React.useState({
+		page: 0,
+		pageSize: 10,
+	});
+
+	const handlePagination = (data) => {
+		setPagination((prev) => ({
+			...prev,
+			page: data?.page,
+			pageSize: data?.pageSize,
+		}));
+	};
 
 	const handleModal = (data) => {
 		setModalData((prev) => ({
@@ -158,8 +166,8 @@ function GroupDetailPage(props) {
 			.catch((err) => console.error(err));
 	}, []);
 
-	const filterMemberApiCall = React.useCallback((page, pageSize) => {
-		filterMembers({ cloudId: params?.id, page: page, pageSize: pageSize })
+	const filterMemberApiCall = React.useCallback(() => {
+		filterMembers({ cloudId: params?.id, page: pagination?.page, pageSize: pagination?.pageSize })
 			.then((res) => {
 				const resp = res?.content?.map((item, index) => ({
 					...item,
@@ -175,18 +183,14 @@ function GroupDetailPage(props) {
 					...prev,
 					data: resp,
 					totalMembers: res?.totalElements,
-					pagination: {
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					},
 				}));
 			})
 			.catch((err) => console.error(err));
-	}, []);
+	}, [pagination]);
 
 	React.useEffect(() => {
 		ApiCall();
-		filterMemberApiCall(0, 10);
+		filterMemberApiCall();
 	}, [ApiCall, filterMemberApiCall]);
 
 	console.log("====================================");
@@ -265,33 +269,27 @@ function GroupDetailPage(props) {
 											<DataGrid
 												autoHeight
 												getRowClassName={(params) => `app-header-${params.row.status}`}
-												page={members?.pagination?.page}
-												pageSize={members?.pagination?.pageSize}
+												page={pagination?.page}
+												pageSize={pagination?.pageSize}
 												onPageSizeChange={(event) => {
-													setMembers((prev) => ({
+													setPagination((prev) => ({
 														...prev,
-														pagination: {
-															page: members?.pagination?.page,
-															pageSize: event,
-														},
+														page: pagination?.page,
+														pageSize: event,
 													}));
-													filterMemberApiCall(members?.pagination?.page, event);
 												}}
-												rowCount={members?.pagination?.totalMembers}
+												rowCount={members?.totalMembers}
 												rows={rows}
 												columns={columns}
 												paginationMode='server'
 												// autoPageSize
 												pagination
 												onPageChange={(event) => {
-													setMembers((prev) => ({
+													setPagination((prev) => ({
 														...prev,
-														pagination: {
-															page: event,
-															pageSize: members?.pagination?.page,
-														},
+														page: event,
+														pageSize: pagination?.pageSize,
 													}));
-													filterMemberApiCall(event, members?.pagination?.page);
 												}}
 												rowsPerPageOptions={[5, 10, 20]}
 												className='dataGridFooter'

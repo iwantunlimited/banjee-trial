@@ -14,7 +14,7 @@ import React from "react";
 import { MainContext } from "../../../context/Context";
 import CreateBusiness from "./Business/CreateBusiness";
 
-function ChipComp({ listApiCall }) {
+function ChipComp({ listApiCall, pendingListApiCall }) {
 	const { themeData } = React.useContext(MainContext);
 	const [expanded, setExpanded] = React.useState(false);
 
@@ -64,7 +64,11 @@ function ChipComp({ listApiCall }) {
 				{/* </Card> */}
 			</AccordionSummary>
 			<AccordionDetails>
-				<CreateBusiness listApiCall={listApiCall} handleExpanded={handleExpanded} />
+				<CreateBusiness
+					listApiCall={listApiCall}
+					pendingListApiCall={pendingListApiCall}
+					handleExpanded={handleExpanded}
+				/>
 			</AccordionDetails>
 		</Accordion>
 	);

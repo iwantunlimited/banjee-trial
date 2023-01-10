@@ -1,6 +1,5 @@
 import { Add, Delete } from "@mui/icons-material";
 import {
-	Avatar,
 	Box,
 	Card,
 	CircularProgress,
@@ -11,7 +10,6 @@ import {
 	Tooltip,
 	Typography,
 } from "@mui/material";
-import moment from "moment";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router";
 import { Visibility } from "@mui/icons-material";
@@ -92,14 +90,16 @@ function Announcement() {
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.2,
-			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return 0;
-				}
-			},
+			type: "date",
+			valueGetter: ({ value }) => value && new Date(value),
+			// renderCell: (params) => {
+			// 	if (params.row && params.row.createdOn) {
+			// 		const date = moment(params.row.createdOn).format("L");
+			// 		return date;
+			// 	} else {
+			// 		return 0;
+			// 	}
+			// },
 		},
 		{
 			id: "5",
@@ -166,15 +166,15 @@ function Announcement() {
 			.catch((err) => console.error(err));
 	}, []);
 
-	const DeleteBlogApiCall = React.useCallback((data) => {
-		deleteBlog(data)
+	const DeleteBlogApiCall = (customData) => {
+		deleteBlog(customData)
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Announcement Deleted Successfully", "success");
 				BlogsListApiCall();
 			})
 			.catch((err) => console.error(err));
-	}, []);
+	};
 
 	React.useEffect(() => {
 		BlogsListApiCall(0, 10);

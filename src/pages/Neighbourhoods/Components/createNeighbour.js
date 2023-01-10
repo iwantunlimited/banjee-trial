@@ -20,17 +20,16 @@ import Compressor from "compressorjs";
 import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
 
 function CreateNeighbour(props) {
-	const { listApiCAll, handleExpanded } = props;
+	const { listApiCall, pendingListApiCall, handleExpanded } = props;
 
 	const { setModalOpen, setModalData, locationData } = React.useContext(MainContext);
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [data, setData] = React.useState({
 		name: "",
-		approvalType: "",
 		bannerImageUrls: [],
-		cityId: "",
-		countryId: "",
+		cityId: "6308a58eea0553e25b9d0a25",
+		countryId: "611a116fa2d3c765b9338dad",
 		lat: "",
 		lon: "",
 		description: "",
@@ -43,54 +42,46 @@ function CreateNeighbour(props) {
 	const [state, setState] = React.useState();
 	const [city, setCity] = React.useState();
 	const [sState, setSState] = React.useState();
-	const [defaultLocation, setDefaultLocation] = React.useState();
 
 	const [imgShow, setImgShow] = React.useState("");
 
-	const [loc, setLoc] = React.useState({
-		lat: -34.59,
-		lng: 150.66,
-	});
+	// const handleGLocation = (lat, lng, address) => {
+	// 	setData((prev) => ({
+	// 		...prev,
+	// 		lat: lat,
+	// 		lon: lng,
+	// 		address: address,
+	// 	}));
+	// };
 
-	const token = localStorage?.getItem("token");
+	// const CityApi = React.useCallback((id) => {
+	// 	findCity({ cityId: id })
+	// 		.then((res) => {
+	// 			setCity(res.content);
+	// 		})
+	// 		.catch((err) => console.error(err));
+	// });
 
-	const handleGLocation = (lat, lng, address) => {
-		setData((prev) => ({
-			...prev,
-			lat: lat,
-			lon: lng,
-			address: address,
-		}));
-	};
+	// const StateApi = React.useCallback((countryId) => {
+	// 	findState({ countryId: countryId })
+	// 		.then((res) => {
+	// 			setState(res.content);
+	// 		})
+	// 		.catch((err) => console.error(err));
+	// }, []);
 
-	const CityApi = React.useCallback((id) => {
-		findCity({ cityId: id })
-			.then((res) => {
-				setCity(res.content);
-			})
-			.catch((err) => console.error(err));
-	});
-
-	const StateApi = React.useCallback((countryId) => {
-		findState({ countryId: countryId })
-			.then((res) => {
-				setState(res.content);
-			})
-			.catch((err) => console.error(err));
-	}, []);
-
-	const CountryApi = React.useCallback(() => {
-		findCountry()
-			.then((res) => {
-				setCountry(res);
-				setData((prev) => ({
-					...prev,
-					countryId: res.length > 0 ? res?.[0]?.id : false,
-				}));
-				StateApi(res?.[0]?.id || "");
-			})
-			.catch((err) => console.error(err));
-	}, []);
+	// const CountryApi = React.useCallback(() => {
+	// 	findCountry()
+	// 		.then((res) => {
+	// 			setCountry(res);
+	// 			setData((prev) => ({
+	// 				...prev,
+	// 				countryId: res.length > 0 ? res?.[0]?.id : false,
+	// 			}));
+	// 			StateApi(res?.[0]?.id || "");
+	// 		})
+	// 		.catch((err) => console.error(err));
+	// }, [StateApi]);
 
 	const ImageApiCAll = React.useCallback((data, notifyMessage) => {
 		const mime = "image";
@@ -150,9 +141,9 @@ function CreateNeighbour(props) {
 				setData((prev) => ({
 					...prev,
 					name: "",
-					approvalType: "",
 					bannerImageUrls: [],
-					cityId: "",
+					cityId: "6308a58eea0553e25b9d0a25",
+					countryId: "611a116fa2d3c765b9338dad",
 					lat: "",
 					lon: "",
 					description: "",
@@ -161,7 +152,8 @@ function CreateNeighbour(props) {
 					approvalType: "BY_ADMIN",
 				}));
 				handleExpanded();
-				listApiCAll();
+				listApiCall();
+				pendingListApiCall();
 
 				document.getElementById("img").value = "";
 			})
@@ -209,9 +201,9 @@ function CreateNeighbour(props) {
 		// console.log(base64);
 	};
 
-	React.useEffect(() => {
-		CountryApi();
-	}, [CountryApi]);
+	// React.useEffect(() => {
+	// 	CountryApi();
+	// }, [CountryApi]);
 
 	return (
 		<Grid item container xs={12} spacing={2}>
@@ -247,7 +239,7 @@ function CreateNeighbour(props) {
 									</Select>
 								</FormControl>
 							</Grid>
-							{data.countryId && (
+							{/* {data.countryId && (
 								<Grid item xs={12} sm={4}>
 									<FormControl fullWidth>
 										<InputLabel id='demo-simple-select-label'>Country</InputLabel>
@@ -311,18 +303,6 @@ function CreateNeighbour(props) {
 											label='City'
 											value={data?.cityId}
 											onChange={(event) => {
-												const defaultLatLon = city.filter((item) => {
-													if (item.id === event.target.value) {
-														setDefaultLocation({
-															...item?.gpsLocation,
-															lng: item?.gpsLocation?.lon,
-														});
-														setLoc({
-															...item?.gpsLocation,
-															lng: item?.gpsLocation?.lon,
-														});
-													} else return null;
-												});
 												setData((prevData) => {
 													return {
 														...prevData,
@@ -339,7 +319,7 @@ function CreateNeighbour(props) {
 										</Select>
 									</FormControl>
 								</Grid>
-							)}
+							)} */}
 
 							<Grid item xs={12} sm={6}>
 								<TextField

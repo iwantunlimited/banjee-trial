@@ -41,6 +41,20 @@ export const filterMembers = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+export const assignAdminToCloud = (requestLoad) => {
+	let url = urls.GEO_CLOUD.Assign_Admin_To_Cloud;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export const assignMemberToCloud = (requestLoad) => {
+	let url = urls.GEO_CLOUD.Assign_Member_To_Cloud;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
 
 export const pendingApproval = (requestLoad) => {
 	let url = urls.GEO_CLOUD.PENDING_APPROVAL;

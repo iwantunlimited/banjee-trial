@@ -1,5 +1,14 @@
 import * as React from "react";
-import { Modal, Typography, Box, Button, IconButton, makeStyles, Grid } from "@mui/material";
+import {
+	Modal,
+	Typography,
+	Box,
+	Button,
+	IconButton,
+	makeStyles,
+	Grid,
+	useTheme,
+} from "@mui/material";
 import moment from "moment";
 import { getSocialFeedsComments } from "../services/ApiServices";
 
@@ -21,6 +30,7 @@ export default function CommentsModal(props) {
 		handleClose,
 	} = props;
 
+	const theme = useTheme();
 	const [result, setResult] = React.useState([]);
 
 	React.useEffect(() => {

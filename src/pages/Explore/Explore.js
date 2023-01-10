@@ -6,6 +6,7 @@ import { BusinessApprovalList } from "./Components/Business/ApprovalList";
 import BusinessList from "./Components/Business/BusinessList";
 import ChipComp from "./Components/CardChipComp";
 import { filterBusiness } from "./services/ApiServices";
+import { useLocation } from "react-router";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -36,7 +37,11 @@ function a11yProps(index) {
 }
 
 function Explore() {
-	const [value, setValue] = React.useState(0);
+	const location = useLocation();
+	console.log("====================================");
+	console.log("location", location);
+	console.log("====================================");
+	const [value, setValue] = React.useState(location?.state?.approved === false ? 1 : 0);
 
 	const [listData, setListData] = React.useState("");
 	const [pendingListData, setPendingListData] = React.useState("");
@@ -92,7 +97,7 @@ function Explore() {
 			.catch((err) => console.error(err));
 	}, [state]);
 
-	const pendingListAPiCAll = React.useCallback(() => {
+	const pendingListApiCall = React.useCallback(() => {
 		filterBusiness({
 			page: pendingListPagination?.page,
 			pageSize: pendingListPagination?.pageSize,
@@ -117,8 +122,11 @@ function Explore() {
 
 	React.useEffect(() => {
 		listApiCAll();
-		pendingListAPiCAll();
-	}, [listApiCAll, pendingListAPiCAll]);
+	}, [listApiCAll]);
+
+	React.useEffect(() => {
+		pendingListApiCall();
+	}, [pendingListApiCall]);
 
 	return (
 		<Container maxWidth='xl' style={{ padding: "0px", margin: "auto" }}>
@@ -127,7 +135,7 @@ function Explore() {
 			</Helmet>
 			<Grid item container xs={12} spacing={2}>
 				<Grid item xs={12}>
-					<ChipComp listApiCall={listApiCAll} />
+					<ChipComp listApiCall={listApiCAll} pendingListApiCall={pendingListApiCall} />
 				</Grid>
 				<Grid item xs={12}>
 					<Card sx={{ padding: "20px" }}>
@@ -169,7 +177,7 @@ function Explore() {
 									paginationState={pendingListPagination}
 									handlePagination={handlePendingListPagination}
 									handleTabChange={handleChange}
-									listApiCall={listApiCAll}
+									pendingListApiCall={pendingListApiCall}
 								/>
 							</Box>
 						</TabPanel>

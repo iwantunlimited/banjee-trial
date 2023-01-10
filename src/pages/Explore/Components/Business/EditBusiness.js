@@ -14,6 +14,8 @@ import {
 	IconButton,
 	Typography,
 	CircularProgress,
+	Autocomplete,
+	ListItem,
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
@@ -422,8 +424,8 @@ function EditBusiness() {
 												name='name'
 												className='neighbourhood-form-textField2'
 												fullWidth
-												// label='Enter Business Name'
-												placeholder='Enter Business Name'
+												label='Business Name'
+												// placeholder='Enter Business Name'
 												onChange={handleChange}
 											/>
 										</Box>
@@ -458,7 +460,7 @@ function EditBusiness() {
 										</FormControl>
 									</Grid>
 									<Grid item xs={4}>
-										<FormControl fullWidth>
+										{/* <FormControl fullWidth>
 											<InputLabel id='cloud-select-label'>Cloud Type</InputLabel>
 											<Select
 												required
@@ -483,7 +485,35 @@ function EditBusiness() {
 														);
 													})}
 											</Select>
-										</FormControl>
+										</FormControl> */}
+										<Autocomplete
+											inputValue={data?.cloudName}
+											autoHighlight
+											options={cloudList}
+											renderOption={(props, option) => {
+												return <ListItem {...props}>{option?.name}</ListItem>;
+											}}
+											onBeforeInput={(event, option) => {
+												console.log("on before", event);
+												console.log("on before option", option);
+											}}
+											getOptionLabel={(item) => item?.name}
+											renderInput={(params) => (
+												<TextField
+													helperText="can't change cloud"
+													required
+													{...params}
+													label='Cloud Type'
+												/>
+											)}
+											onChange={(event, option) => {
+												setData((prev) => ({
+													...prev,
+													cloudId: option?.id,
+													cloudName: option?.name,
+												}));
+											}}
+										/>
 									</Grid>
 									<Grid item xs={6}>
 										<TextField

@@ -12,7 +12,7 @@ import {
 	Stack,
 	CircularProgress,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useLocation } from "react-router";
 import moment from "moment";
 import { ArrowBack, Fullscreen } from "@mui/icons-material";
 import { deleteBusiness, findByIdBusiness } from "../../services/ApiServices";
@@ -32,6 +32,7 @@ import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
 
 function BusinessDetail() {
 	const params = useParams();
+	const location = useLocation();
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const context = useContext(MainContext);
@@ -41,6 +42,9 @@ function BusinessDetail() {
 		open: false,
 		data: "",
 	});
+	console.log("====================================");
+	console.log("location detail", location);
+	console.log("====================================");
 
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
@@ -70,7 +74,7 @@ function BusinessDetail() {
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Business Deleted Successfully", "success");
-				navigate("/explore");
+				navigate("/explore", { state: { approved: location?.state?.inApprove ? false : true } });
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -83,7 +87,12 @@ function BusinessDetail() {
 		return (
 			<Container maxWidth='lg' style={{ padding: "0px", margin: "auto" }}>
 				<Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
-					<IconButton onClick={() => navigate("/explore")}>
+					<IconButton
+						onClick={() =>
+							navigate("/explore", {
+								state: { approved: location?.state?.inApprove ? false : true },
+							})
+						}>
 						<ArrowBack color='primary' />
 					</IconButton>
 					<Box style={{ display: "flex", flexDirection: "row" }}>
