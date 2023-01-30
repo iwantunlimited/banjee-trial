@@ -46,7 +46,7 @@ function CreatePushNotification() {
 		metaInfo: {
 			detail: false,
 		},
-		sendTo: "TO_NEARBY",
+		sendTo: "ELSE",
 		location: {
 			coordinates: [72.51113723963499, 23.069438702322635],
 			type: "Point",
@@ -97,7 +97,7 @@ function CreatePushNotification() {
 					metaInfo: {
 						detail: false,
 					},
-					sendTo: "TO_NEARBY",
+					sendTo: "ELSE",
 					location: {
 						coordinates: [localLng, localLat],
 						type: "Point",
