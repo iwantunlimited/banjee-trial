@@ -43,6 +43,10 @@ let postApiCall = (url, actionCode, payload, method, noToken) => {
 				resolve(response);
 			})
 			.catch((err) => {
+				if (err?.response?.status === 401) {
+					localStorage?.removeItem("token");
+					window.location.reload();
+				}
 				console.error(`[${actionCode}]Api Call Failed : ${err}`);
 				reject(err);
 			});

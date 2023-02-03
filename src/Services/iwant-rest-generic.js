@@ -1,5 +1,5 @@
 import axios from "axios";
-import {urls} from "../Environment/ApiUrl";
+import { urls } from "../Environment/ApiUrl";
 import Setting from "../Environment/Setting";
 
 let setting = new Setting();
@@ -18,17 +18,12 @@ let http = (method) => {
 let httpRest = (url, actionCode, payload, method, noToken) => {
 	let promise = new Promise((resolve, reject) => {
 		let tid = Date.now() + 30000;
-		let sid = setting.setSecurity(
-			urls.headers["itpl-client-id"],
-			Date.now() + 30000
-		);
+		let sid = setting.setSecurity(urls.headers["itpl-client-id"], Date.now() + 30000);
 
 		// let queryString = `?tid=${tid}&sid=${sid}&actionCode=${actionCode}`;
 
 		let queryString = `?tid=${tid}&sid=${sid}${
-			actionCode === "" || actionCode === null
-				? ""
-				: "&actionCode=" + actionCode
+			actionCode === "" || actionCode === null ? "" : "&actionCode=" + actionCode
 		}`;
 		url = url + queryString;
 		http(method)(url, {
@@ -43,9 +38,11 @@ let httpRest = (url, actionCode, payload, method, noToken) => {
 				resolve(response);
 			})
 			.catch((err) => {
-				console.error(
-					`Failed => HTTP/${method}, ${actionCode}: url :${url}, error: ${err}`
-				);
+				if (err?.response?.status === 401) {
+					localStorage?.removeItem("token");
+					window.location.reload();
+				}
+				console.error(`Failed => HTTP/${method}, ${actionCode}: url :${url}, error: ${err}`);
 				reject(err);
 			});
 	});
@@ -56,7 +53,7 @@ let executeGet = (url, actionCode, payload, method, noToken) => {
 	let promise = new Promise((resolve, reject) => {
 		httpRest(url, actionCode, payload, method, noToken)
 			.then((response) => {
-				let {statusCode, data, message} = response.data;
+				let { statusCode, data, message } = response.data;
 				if (statusCode === 0) {
 					resolve(data);
 				} else {
@@ -73,4 +70,4 @@ let executeGet = (url, actionCode, payload, method, noToken) => {
 };
 
 export default httpRest;
-export {executeGet};
+export { executeGet };

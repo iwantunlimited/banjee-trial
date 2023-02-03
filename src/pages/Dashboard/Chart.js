@@ -18,6 +18,8 @@ const Chart = ({ filter, chartId, height, width }) => {
 			width: width,
 			theme: "dark",
 			showAttribution: false,
+			maxDataAge: 10,
+			autoRefresh: true,
 
 			// filter: {gender: {$eq: "Male"}},
 			// filter={{createdOn: {$gte: "2022-05-03T07:06:18.579+00:00"}}}

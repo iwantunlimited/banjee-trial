@@ -9,6 +9,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MainContext } from "../../context/Context";
 import SnackbarContext from "../../CustomComponents/SnackbarContext";
+import jwt_decode from "jwt-decode";
 
 function Login() {
 	const context = React.useContext(MainContext);
@@ -41,6 +42,19 @@ function Login() {
 		setState((prevState) => ({ ...prevState, [name]: value }));
 	};
 
+	const handleTokenExpired = (exp) => {
+		let expiredTimer;
+		window.clearTimeout(expiredTimer);
+		const currentTime = Date.now();
+		const timeLeft = exp * 1000 - currentTime;
+		console.log(timeLeft);
+		expiredTimer = window.setTimeout(() => {
+			localStorage.removeItem("token");
+			window.location.reload();
+			// You can do what ever you want here, like show a notification
+		}, timeLeft);
+	};
+
 	const handleSubmit = (event) => {
 		const { formType } = state;
 
@@ -69,6 +83,8 @@ function Login() {
 					setModalData("Login Success", "success");
 
 					const { access_token } = response && response.data ? response.data : null;
+					const { exp } = jwt_decode.decode(access_token);
+					handleTokenExpired(exp);
 					//   const {firstName}  = response && response.data ? response.data : null ;
 					//   const {lastName}  = response && response.data ? response.data : null ;
 					//   const {mobile}  = response && response.data ? response.data : null ;
