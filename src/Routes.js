@@ -46,7 +46,7 @@ import GoogleMapCustom from "./CustomComponents/GoogleMap";
 const Routes = () => {
 	return useRoutes([
 		{
-			path: "",
+			path: "/",
 			element: <Navbar />,
 			children: [
 				{

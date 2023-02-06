@@ -190,8 +190,11 @@ function GroupDetailPage(props) {
 
 	React.useEffect(() => {
 		ApiCall();
+	}, [ApiCall]);
+
+	React.useEffect(() => {
 		filterMemberApiCall();
-	}, [ApiCall, filterMemberApiCall]);
+	}, [filterMemberApiCall]);
 
 	// console.log("====================================");
 	// console.log(modalData);

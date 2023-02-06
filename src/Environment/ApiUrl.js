@@ -64,11 +64,13 @@ export const urls = {
 		REJECT_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/reject",
 		DELETE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/delete/",
 		FIND_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/findById/",
+		FIND_NEIGHBOURHOOD_BY_USER_ID: services.GEO_CLOUD + "social-cloud/byUserId/",
 		FILTER_MEMBERS: services.GEO_CLOUD + "social-cloud/members/filter",
 		FIND_MEMBERS_BY_CLOUDID: services.GEO_CLOUD + "social-cloud/members/byCloudId/",
 		GEO_ALERT: services.GEO_CLOUD + "api/geo-alert/",
 		FILTER_REPORTED_ALERT: services.GEO_CLOUD + "api/geo-alert/report/filter",
 		COMMUNITY: services.GEO_CLOUD + "community",
+		COMMUNITY_BY_USER_ID: services.GEO_CLOUD + "community/byUserId/",
 	},
 
 	LOCAL_DISCOVERY: {
@@ -79,6 +81,7 @@ export const urls = {
 		FIND_BUSINESS_BY_USER_ID: services.LOCAL_DISCOVERY + "business/byUserId/",
 		GET_ALL_BLOGS: services.LOCAL_DISCOVERY + "blogs/filter/",
 		FIND_BLOGS_BYID: services.LOCAL_DISCOVERY + "blogs/",
+		FIND_BLOGS_BY_USER_ID: services.LOCAL_DISCOVERY + "blogs/byUserId",
 		CREATE_BLOG: services.LOCAL_DISCOVERY + "blogs",
 		CREATE_COMMENTS: services.LOCAL_DISCOVERY_V2 + "blog/comments",
 		GET_COMMENTS: services.LOCAL_DISCOVERY_V2 + "blog/comments/byPost/",

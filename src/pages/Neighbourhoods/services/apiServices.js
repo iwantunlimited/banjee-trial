@@ -93,6 +93,21 @@ export const findNeighbourhood = (requestLoad) => {
 	let method = "GET";
 	return executeGet(url, actionCode, payload, method);
 };
+export const findNeighbourhoodByUserId = (requestLoad) => {
+	let url = urls.GEO_CLOUD.FIND_NEIGHBOURHOOD_BY_USER_ID + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
+
+export const findCommunityByUserId = (requestLoad) => {
+	let url = urls.GEO_CLOUD.COMMUNITY_BY_USER_ID + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
 
 export const findCountry = (requestLoad) => {
 	let url = urls.COUNTRY_LIST;

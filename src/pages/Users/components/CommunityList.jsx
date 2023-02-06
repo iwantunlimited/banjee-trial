@@ -6,10 +6,11 @@ import { Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import {
 	filterNeighbourhood,
+	findCommunityByUserId,
 	findNeighbourhoodByUserId,
 } from "../../Neighbourhoods/services/apiServices";
 
-function NeighrbourhoodList(props) {
+function CommunityList(props) {
 	const navigate = useNavigate();
 	const [pagination, setPagination] = React.useState({
 		page: 0,
@@ -22,8 +23,8 @@ function NeighrbourhoodList(props) {
 
 	//find neighbourhood by user id
 
-	const findNeighbourhoodApiCall = React.useCallback(() => {
-		findNeighbourhoodByUserId(props?.data)
+	const findCommunityApiCall = React.useCallback(() => {
+		findCommunityByUserId(props?.data)
 			.then((res) => {
 				setState(res);
 				// setPagination({
@@ -33,7 +34,7 @@ function NeighrbourhoodList(props) {
 				setTotalEle(res?.totalElements);
 			})
 			.catch((err) => console.error(err));
-	}, [pagination]);
+	}, [props?.data, pagination]);
 
 	let rows = state ? state : [];
 
@@ -42,15 +43,15 @@ function NeighrbourhoodList(props) {
 			id: "1",
 			field: "name",
 			headerClassName: "app-header",
-			headerName: "Neighbourhood Name",
+			headerName: "Community Name",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.5,
 		},
 		{
 			id: "2",
-			field: "countryName",
+			field: "totalMembers",
 			headerClassName: "app-header",
-			headerName: "Country",
+			headerName: "Total Members",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.5,
 		},
@@ -92,7 +93,7 @@ function NeighrbourhoodList(props) {
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/neighbourhood/" + params.row.id);
+								navigate("/groups/" + params.row.id);
 							}}>
 							<Visibility />
 						</IconButton>
@@ -103,8 +104,8 @@ function NeighrbourhoodList(props) {
 	];
 
 	React.useEffect(() => {
-		props?.data && findNeighbourhoodApiCall();
-	}, [findNeighbourhoodApiCall]);
+		findCommunityApiCall();
+	}, [findCommunityApiCall]);
 
 	return (
 		<Box>
@@ -133,7 +134,7 @@ function NeighrbourhoodList(props) {
 											page: pagination?.page,
 											pageSize: event,
 										});
-										// findNeighbourhoodApiCall(pagination?.page, event);
+										// findCommunityApiCall(pagination?.page, event);
 									}}
 									rowCount={totalEle}
 									rows={rows}
@@ -146,7 +147,7 @@ function NeighrbourhoodList(props) {
 											page: event,
 											pageSize: pagination?.pageSize,
 										});
-										// findNeighbourhoodApiCall(event, pagination?.pageSize);
+										// findCommunityApiCall(event, pagination?.pageSize);
 									}}
 									rowsPerPageOptions={[5, 10, 20]}
 									className='dataGridFooter'
@@ -170,4 +171,4 @@ function NeighrbourhoodList(props) {
 	);
 }
 
-export default NeighrbourhoodList;
+export default CommunityList;

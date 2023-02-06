@@ -190,10 +190,11 @@ function Navbar(props) {
 												setModalOpen(true);
 												setModalData("Logout Successfully", "success");
 												localStorage.clear();
+												navigate("/login");
 											}}>
-											<Link to='/login'>
-												<LogoutIcon style={{ color: theme.palette.primary.contrastText }} />
-											</Link>
+											{/* <Link to='/login'> */}
+											<LogoutIcon style={{ color: theme.palette.primary.contrastText }} />
+											{/* </Link> */}
 										</IconButton>
 									</LightTooltip>
 								</Stack>

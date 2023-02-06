@@ -41,6 +41,9 @@ function Login() {
 		const { name, value } = event.target;
 		setState((prevState) => ({ ...prevState, [name]: value }));
 	};
+	console.log("====================================");
+	console.log("state", state);
+	console.log("====================================");
 
 	const handleTokenExpired = (exp) => {
 		let expiredTimer;
@@ -82,15 +85,28 @@ function Login() {
 					setModalOpen(true);
 					setModalData("Login Success", "success");
 
-					const { access_token } = response && response.data ? response.data : null;
-					const { exp } = jwt_decode.decode(access_token);
-					handleTokenExpired(exp);
+					const access_token =
+						response && response.data?.access_token ? response.data?.access_token : null;
+					console.log("====================================");
+					console.log("access_token", access_token);
+					console.log("====================================");
+					if (access_token !== null) {
+						localStorage.setItem("token", access_token);
+						setState({
+							isLoggedIn: true,
+							token: access_token,
+							currentItem: localStorage.setItem("currentItem", "Dashboard"),
+						});
+						navigate("/");
+						const { exp } = jwt_decode.decode(access_token);
+						handleTokenExpired(exp);
+					}
+
 					//   const {firstName}  = response && response.data ? response.data : null ;
 					//   const {lastName}  = response && response.data ? response.data : null ;
 					//   const {mobile}  = response && response.data ? response.data : null ;
 					//   const {email}  = response && response.data ? response.data : null ;
 					//   const {externalReferenceId} = response && response.data ? response.data : null ;
-					localStorage.setItem("token", access_token);
 					//   localStorage.setItem('id', externalReferenceId);
 					//   localStorage.setItem('firstName', firstName);
 					//   localStorage.setItem('lastName', lastName);
@@ -99,12 +115,6 @@ function Login() {
 					// console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + response.data.externalReferenceId);
 					const resCode = response.status;
 					// console.log(resCode);
-					setState({
-						isLoggedIn: true,
-						token: access_token,
-						currentItem: localStorage.setItem("currentItem", "Dashboard"),
-					});
-					navigate("/");
 				})
 				.catch((error) => {
 					console.error(error);

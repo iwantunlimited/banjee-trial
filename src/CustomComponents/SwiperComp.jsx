@@ -131,7 +131,7 @@ function SwiperComp({ data }) {
 											}}
 											key={iIndex}>
 											<img
-												loading='lazy'
+												loading='eager'
 												alt='#'
 												src={
 													item?.src &&

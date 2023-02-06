@@ -15,20 +15,16 @@ import {
 	Button,
 	IconButton,
 } from "@mui/material";
-import {
-	findCustomer,
-	findCustomerConnection,
-	findBlockedCustomers,
-	penddingConnectionsList,
-	findUserBySystemUserId,
-	findUserByUserId,
-} from "../User_Services/UserApiService";
+import { findUserBySystemUserId } from "../User_Services/UserApiService";
 import { Male, Female, Transgender, ArrowBack } from "@mui/icons-material";
 import "../users.css";
 import { useNavigate, useParams } from "react-router-dom";
 import UserLocation from "./UserLocation";
 import NeighrbourhoodList from "./NeighbourhoodList";
 import BusinessList from "./BusinessList";
+import CommunityList from "./CommunityList";
+import AlertList from "./AlertList";
+import BlogList from "./BlogList";
 
 function CustomerView(props) {
 	const { id } = useParams();
@@ -255,6 +251,7 @@ function CustomerView(props) {
 										borderRadius: "0px",
 										padding: "5px",
 										boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
+										height: "100%",
 									}}>
 									<Tabs
 										value={value}
@@ -266,8 +263,10 @@ function CustomerView(props) {
 										style={{ height: "10px!important" }}>
 										{/* <Tab label="Profile" {...a11yProps(0)} /> */}
 										<Tab label='Neighbourhood' {...a11yProps(0)} />
-										<Tab label='Business' {...a11yProps(1)} />
-										<Tab label='Blocked' {...a11yProps(2)} />
+										<Tab label='Community' {...a11yProps(1)} />
+										<Tab label='Alerts' {...a11yProps(2)} />
+										<Tab label='BLogs' {...a11yProps(3)} />
+										{/* <Tab label='Blocked' {...a11yProps(4)} /> */}
 									</Tabs>
 									{/* </AppBar> */}
 									<SwipeableViews
@@ -279,17 +278,29 @@ function CustomerView(props) {
 										{/* ------------------------- connections ---------------------------- */}
 										<TabPanel value={value} index={0} dir={theme.direction}>
 											<Grid item xs={12} sx={{ padding: { xs: "0px", sm: "10px" } }}>
-												<NeighrbourhoodList data={state?.id} />
+												<NeighrbourhoodList data={state?.systemUserId} />
 											</Grid>
 										</TabPanel>
 										{/* ------------------------- pendding connections ---------------------------- */}
 										<TabPanel value={value} index={1} dir={theme.direction}>
 											<Grid iitem xs={12} sx={{ padding: "10px" }}>
-												<BusinessList data={id} />
+												<CommunityList data={id} />
+											</Grid>
+										</TabPanel>
+										{/* ------------------------- pendding connections ---------------------------- */}
+										<TabPanel value={value} index={2} dir={theme.direction}>
+											<Grid iitem xs={12} sx={{ padding: "10px" }}>
+												<AlertList data={id} />
+											</Grid>
+										</TabPanel>
+										{/* ------------------------- pendding connections ---------------------------- */}
+										<TabPanel value={value} index={3} dir={theme.direction}>
+											<Grid iitem xs={12} sx={{ padding: "10px" }}>
+												<BlogList data={id} />
 											</Grid>
 										</TabPanel>
 										{/* ------------------------- blocked list ---------------------------- */}
-										<TabPanel value={value} index={2} dir={theme.direction}>
+										{/* <TabPanel value={value} index={4} dir={theme.direction}>
 											<Grid item container spacing={2}>
 												{blockCon?.content?.length > 0 ? (
 													blockCon?.content.map((ele, index) => (
@@ -307,7 +318,6 @@ function CustomerView(props) {
 																alignItems: "center",
 																flexDirection: "column",
 															}}>
-															{/* <Grid item xs={4} sm={4} md={4} lg={4}>/ */}
 															<Avatar
 																alt={ele?.name?.length > 0 ? ele?.name.slice(0, 1) : "avatar"}
 																src={
@@ -316,12 +326,9 @@ function CustomerView(props) {
 																}
 																sx={{ width: 50, height: 50 }}
 															/>
-															{/* </Grid>/ */}
-															{/* <Grid item xs={8} sm={8} md={8} lg={8} >/ */}
 															<Typography style={{ textAlign: "center" }} variant='h5'>
 																{ele?.user?.firstName}
 															</Typography>
-															{/* </Grid> */}
 														</Grid>
 													))
 												) : (
@@ -330,7 +337,7 @@ function CustomerView(props) {
 													</Grid>
 												)}
 											</Grid>
-										</TabPanel>
+										</TabPanel> */}
 									</SwipeableViews>
 								</Card>
 							</Grid>

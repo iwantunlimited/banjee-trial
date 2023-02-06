@@ -6,10 +6,12 @@ import { Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import {
 	filterNeighbourhood,
+	findCommunityByUserId,
 	findNeighbourhoodByUserId,
 } from "../../Neighbourhoods/services/apiServices";
+import { findAlertByUserId } from "../../BanjeeAlert/api-services/apiServices";
 
-function NeighrbourhoodList(props) {
+function AlertList(props) {
 	const navigate = useNavigate();
 	const [pagination, setPagination] = React.useState({
 		page: 0,
@@ -22,10 +24,17 @@ function NeighrbourhoodList(props) {
 
 	//find neighbourhood by user id
 
-	const findNeighbourhoodApiCall = React.useCallback(() => {
-		findNeighbourhoodByUserId(props?.data)
+	const findAlertApiCall = React.useCallback(() => {
+		findAlertByUserId({
+			userId: props?.data,
+			page: 0,
+			pageSize: 10,
+		})
 			.then((res) => {
-				setState(res);
+				console.log("====================================");
+				console.log("alert response", res);
+				console.log("====================================");
+				setState(res?.content);
 				// setPagination({
 				// 	page: res?.pageable?.pageNumber,
 				// 	pageSize: res?.pageable?.pageSize,
@@ -33,38 +42,29 @@ function NeighrbourhoodList(props) {
 				setTotalEle(res?.totalElements);
 			})
 			.catch((err) => console.error(err));
-	}, [pagination]);
+	}, [props?.data, pagination]);
 
 	let rows = state ? state : [];
 
 	let columns = [
 		{
 			id: "1",
-			field: "name",
+			field: "eventName",
 			headerClassName: "app-header",
-			headerName: "Neighbourhood Name",
+			headerName: "Event Name",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.5,
 		},
 		{
 			id: "2",
-			field: "countryName",
+			field: "description",
 			headerClassName: "app-header",
-			headerName: "Country",
+			headerName: "Description",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.5,
 		},
 		{
 			id: "3",
-			field: "cloudType",
-			headerClassName: "app-header",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "Type",
-			// align: "center",
-			flex: 0.3,
-		},
-		{
-			id: "4",
 			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
@@ -80,19 +80,33 @@ function NeighrbourhoodList(props) {
 			},
 		},
 		{
-			id: "8",
+			id: "4",
+			field: "mFirstName",
+			headerClassName: "app-header",
+			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+			headerName: "Created By",
+			// align: "center",
+			flex: 0.3,
+			renderCell: (params) => {
+				const fullname =
+					params?.row?.createdByUser?.firstName + " " + params?.row?.createdByUser?.lastName;
+				return fullname;
+			},
+		},
+		{
+			id: "5",
 			field: "id",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "View",
 			// align: 'center',
-			flex: 0.3,
+			flex: 0.2,
 			renderCell: (params) => {
 				return (
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/neighbourhood/" + params.row.id);
+								navigate("/banjee-alert/" + params.row.id, { state: { reported: false } });
 							}}>
 							<Visibility />
 						</IconButton>
@@ -103,8 +117,8 @@ function NeighrbourhoodList(props) {
 	];
 
 	React.useEffect(() => {
-		props?.data && findNeighbourhoodApiCall();
-	}, [findNeighbourhoodApiCall]);
+		findAlertApiCall();
+	}, [findAlertApiCall]);
 
 	return (
 		<Box>
@@ -133,7 +147,7 @@ function NeighrbourhoodList(props) {
 											page: pagination?.page,
 											pageSize: event,
 										});
-										// findNeighbourhoodApiCall(pagination?.page, event);
+										// findCommunityApiCall(pagination?.page, event);
 									}}
 									rowCount={totalEle}
 									rows={rows}
@@ -146,7 +160,7 @@ function NeighrbourhoodList(props) {
 											page: event,
 											pageSize: pagination?.pageSize,
 										});
-										// findNeighbourhoodApiCall(event, pagination?.pageSize);
+										// findCommunityApiCall(event, pagination?.pageSize);
 									}}
 									rowsPerPageOptions={[5, 10, 20]}
 									className='dataGridFooter'
@@ -170,4 +184,4 @@ function NeighrbourhoodList(props) {
 	);
 }
 
-export default NeighrbourhoodList;
+export default AlertList;

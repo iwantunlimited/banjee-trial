@@ -98,6 +98,14 @@ export const createBlog = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 
+export const findBlogByUserId = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.FIND_BLOGS_BY_USER_ID;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
 export const updateBlog = (requestLoad) => {
 	let url = urls.LOCAL_DISCOVERY.CREATE_BLOG;
 	let actionCode = "";
