@@ -63,27 +63,31 @@ export default function SocialFeed(props) {
 	});
 	const [totalEle, setTotalEle] = React.useState();
 
-	const [startDate, setStartDate] = React.useState(new Date(2022, 1, 1, 1, 33, 30, 0));
-	const [endDate, setEndDate] = React.useState(new Date());
+	const [startDate, setStartDate] = React.useState(null);
+	const [endDate, setEndDate] = React.useState(null);
+	const [dateFilter, setDateFilter] = React.useState({
+		startDate: null,
+		endDate: null,
+	});
 
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
 	});
 
 	const filterSocialFeedsApiCall = React.useCallback(
-		(startDate, endDate) => {
+		() => {
 			// setData();
 			filterSocialFeeds({
 				deleted: null,
 				domain: null,
 				fields: null,
-				finishDate: endDate && moment(endDate).format(),
+				finishDate: dateFilter?.endDate,
 				inactive: null,
 				keywords: null,
 				page: pagination?.page,
 				pageSize: pagination?.pageSize,
 				sortBy: null,
-				startDate: startDate && moment(startDate).format(),
+				startDate: dateFilter?.startDate,
 			})
 				.then((res) => {
 					setData(res);
@@ -94,7 +98,7 @@ export default function SocialFeed(props) {
 				});
 		},
 		// remove dependecies startDate and endDate
-		[pagination]
+		[pagination, dateFilter]
 	);
 
 	React.useEffect(() => {
@@ -134,6 +138,7 @@ export default function SocialFeed(props) {
 						<Box>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
+									inputFormat='dd/MM/yyyy'
 									name='startDate'
 									label='Start Date'
 									value={startDate}
@@ -153,6 +158,8 @@ export default function SocialFeed(props) {
 						<Box sx={{ paddingX: "20px" }}>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
+									minDate={startDate !== null && startDate}
+									inputFormat='dd/MM/yyyy'
 									name='endDate'
 									label='End Date'
 									value={endDate}
@@ -173,7 +180,10 @@ export default function SocialFeed(props) {
 										color: theme.palette.primary.contrastText,
 									}}
 									onClick={() => {
-										filterSocialFeedsApiCall(startDate, endDate);
+										setDateFilter({
+											startDate: startDate,
+											endDate: endDate,
+										});
 									}}>
 									<Search />
 								</IconButton>

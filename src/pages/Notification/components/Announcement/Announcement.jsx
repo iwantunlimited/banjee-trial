@@ -18,6 +18,7 @@ import "../../../Explore/Components/component.css";
 import { DataGrid } from "@mui/x-data-grid";
 import { MainContext } from "../../../../context/Context";
 import ModalComp from "../../../../CustomComponents/ModalComp";
+import moment from "moment";
 
 function Announcement() {
 	const navigate = useNavigate();
@@ -90,16 +91,16 @@ function Announcement() {
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.2,
-			type: "date",
-			valueGetter: ({ value }) => value && new Date(value),
-			// renderCell: (params) => {
-			// 	if (params.row && params.row.createdOn) {
-			// 		const date = moment(params.row.createdOn).format("L");
-			// 		return date;
-			// 	} else {
-			// 		return 0;
-			// 	}
-			// },
+			// type: "date",
+			// valueGetter: ({ value }) => value && new Date(value),
+			renderCell: (params) => {
+				if (params.row && params.row.createdOn) {
+					const date = moment(params.row.createdOn).format("DD/MM/YYYY");
+					return date;
+				} else {
+					return "-";
+				}
+			},
 		},
 		{
 			id: "5",

@@ -4,7 +4,7 @@ import { Card, IconButton, Stack, TextField, Tooltip, Box } from "@mui/material"
 import { useNavigate } from "react-router-dom";
 import "../users.css";
 import { useTheme } from "@mui/material/styles";
-import { LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { DateRangePicker } from "@mui/x-date-pickers-pro";
 import moment from "moment";
@@ -13,13 +13,14 @@ function ChipComp({ refreshApi, keyword, handleKey, handleDate }) {
 	const navigate = useNavigate();
 	const theme = useTheme();
 
-	const [sDate, setSDate] = React.useState([null, null]);
+	const [startDate, setStartDate] = React.useState(null);
+	const [endDate, setEndDate] = React.useState(null);
 
 	return (
 		<Card className='main-card space-css'>
 			<div style={{ display: "flex", alignItems: "center" }}>
 				<IconButton
-					onClick={() => refreshApi()}
+					onClick={() => refreshApi({ startDate: null, endDate: null })}
 					style={{
 						borderRadius: "50px",
 						marginRight: window.innerWidth < 501 ? "10px" : "30px",
@@ -43,25 +44,41 @@ function ChipComp({ refreshApi, keyword, handleKey, handleDate }) {
 				<form
 					onSubmit={(event) => {
 						event.preventDefault();
-						handleDate(sDate);
+						handleDate({
+							startDate: startDate,
+							endDate: endDate,
+						});
 					}}>
 					<Stack direction={"row"} spacing={3}>
-						<LocalizationProvider
-							dateAdapter={AdapterDateFns}
-							localeText={{ start: "from-date", end: "to-date" }}>
-							<DateRangePicker
+						<LocalizationProvider dateAdapter={AdapterDateFns}>
+							<DatePicker
 								inputFormat='dd/MM/yyyy'
-								value={sDate}
+								name='startDate'
+								label='Start Date'
+								value={startDate}
 								onChange={(newValue) => {
-									setSDate(newValue);
+									setStartDate(newValue);
 								}}
-								renderInput={(startProps, endProps) => (
-									<React.Fragment>
-										<TextField size='small' required {...startProps} />
-										<Box sx={{ mx: 2 }}> to </Box>
-										<TextField size='small' required {...endProps} />
-									</React.Fragment>
+								renderInput={(params) => (
+									<TextField
+										size='small'
+										helperText={params?.InputProps?.placeholder}
+										{...params}
+									/>
 								)}
+							/>
+						</LocalizationProvider>
+						<LocalizationProvider dateAdapter={AdapterDateFns}>
+							<DatePicker
+								minDate={startDate !== null && startDate}
+								inputFormat='dd/MM/yyyy'
+								name='endDate'
+								label='End Date'
+								value={endDate}
+								onChange={(newValue) => {
+									setEndDate(newValue);
+								}}
+								renderInput={(params) => <TextField size='small' {...params} />}
 							/>
 						</LocalizationProvider>
 						<Box sx={{ display: "flex", alignItems: "center" }}>

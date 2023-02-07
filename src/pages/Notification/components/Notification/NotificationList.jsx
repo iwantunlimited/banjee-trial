@@ -18,6 +18,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { deleteAlert, listNotification } from "../../ApiServices/apiServices";
 import { MainContext } from "../../../../context/Context";
 import ModalComp from "../../../../CustomComponents/ModalComp";
+import moment from "moment";
 
 function NotificationList() {
 	const navigate = useNavigate();
@@ -56,14 +57,6 @@ function NotificationList() {
 			flex: 0.4,
 		},
 		{
-			id: "2",
-			field: "cloudName",
-			headerClassName: "app-header",
-			headerName: "Neighbourhood",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			flex: 0.5,
-		},
-		{
 			id: "3",
 			field: "templateName",
 			headerClassName: "app-header",
@@ -98,16 +91,17 @@ function NotificationList() {
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.3,
-			type: "date",
-			valueGetter: ({ value }) => value && new Date(value),
-			// renderCell: (params) => {
-			// 	if (params.row && params.row.createdOn) {
-			// 		const date = moment(params.row.createdOn).format("L");
-			// 		return date;
-			// 	} else {
-			// 		return 0;
-			// 	}
-			// },
+			// type: "date",
+			// formate: "DD-MM-YYYY",
+			// valueGetter: ({ value }) => value && new Date(value),
+			renderCell: (params) => {
+				if (params.row && params.row.createdOn) {
+					const date = moment(params.row.createdOn).format("DD/MM/YYYY");
+					return date;
+				} else {
+					return "-";
+				}
+			},
 		},
 		{
 			id: "5",

@@ -27,7 +27,7 @@ function UserComp() {
 	const decodeToken = jwt_decode(token);
 	const [userData, setUserData] = React.useState({
 		data: [],
-		customerRows: [],
+		customerRows: null,
 		snackbar: {
 			message: "",
 			open: false,
@@ -40,6 +40,8 @@ function UserComp() {
 		page: 0,
 		pageSize: 10,
 		domain: decodeToken.domain,
+		fromDate: null,
+		toDate: null,
 	});
 
 	const [keyword, setKeyword] = React.useState("");
@@ -47,12 +49,20 @@ function UserComp() {
 		setKeyword(event.target.value);
 	}
 
+	function handleCustomFilter(data) {
+		setCustomerFilter((prev) => ({
+			...prev,
+			fromDate: data?.fromDate,
+			toDate: data?.endDate,
+		}));
+	}
+
 	function handleDate(data) {
-		const payload = {
-			fromdate: moment(data[0]).format(),
-			toDate: moment(data[1]).format(),
-		};
-		UserApiCall(payload);
+		setCustomerFilter((prev) => ({
+			...prev,
+			fromDate: data?.startDate,
+			toDate: data?.endDate,
+		}));
 	}
 
 	function sanckbarClose() {
@@ -92,6 +102,14 @@ function UserComp() {
 			headerClassName: "app-header",
 			headerName: "Created On",
 			flex: 0.5,
+			renderCell: (params) => {
+				if (params.row && params.row.createdOn) {
+					const date = moment(params.row.createdOn).format("DD/MM/YYYY");
+					return date;
+				} else {
+					return "-";
+				}
+			},
 		},
 		{
 			field: "View",
@@ -167,7 +185,11 @@ function UserComp() {
 				>
 					<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 						<Grid item xs={12}>
-							<ChipComp refreshApi={UserApiCall} keyword={keyword} handleKey={handleKeyword} />
+							<ChipComp
+								refreshApi={handleCustomFilter}
+								keyword={keyword}
+								handleKey={handleKeyword}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -192,7 +214,7 @@ function UserComp() {
 					<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 						<Grid item xs={12}>
 							<ChipComp
-								refreshApi={UserApiCall}
+								refreshApi={handleCustomFilter}
 								keyword={keyword}
 								handleKey={handleKeyword}
 								handleDate={handleDate}

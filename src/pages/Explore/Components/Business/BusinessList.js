@@ -53,16 +53,16 @@ function BusinessList(props) {
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.4,
-			type: "date",
-			valueGetter: ({ value }) => value && new Date(value),
-			// renderCell: (params) => {
-			// 	if (params.row && params.row.createdOn) {
-			// 		const date = moment(params.row.createdOn).format("L");
-			// 		return date;
-			// 	} else {
-			// 		return "-";
-			// 	}
-			// },
+			// type: "date",
+			// valueGetter: ({ value }) => value && new Date(value),
+			renderCell: (params) => {
+				if (params.row && params.row.createdOn) {
+					const date = moment(params.row.createdOn).format("DD/MM/YYYY");
+					return date;
+				} else {
+					return "-";
+				}
+			},
 		},
 		{
 			id: "8",

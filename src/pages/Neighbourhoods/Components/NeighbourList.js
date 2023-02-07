@@ -15,6 +15,7 @@ import { Delete, Edit, Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../context/Context";
+import moment from "moment";
 
 function NeighbourList(props) {
 	const { listData, totalElement, listApiCall, handlePagination, pagination } = props;
@@ -94,16 +95,16 @@ function NeighbourList(props) {
 			headerName: "Created On",
 			// align: "center",
 			flex: 0.25,
-			type: "date",
-			valueGetter: ({ value }) => value && new Date(value),
-			// renderCell: (params) => {
-			// 	if (params.row && params.row.createdOn) {
-			// 		const date = moment(params.row.createdOn).format("L");
-			// 		return date;
-			// 	} else {
-			// 		return 0;
-			// 	}
-			// },
+			// type: "date",
+			// valueGetter: ({ value }) => value && new Date(value),
+			renderCell: (params) => {
+				if (params.row && params.row.createdOn) {
+					const date = moment(params.row.createdOn).format("DD/MM/YYYY");
+					return date;
+				} else {
+					return "-";
+				}
+			},
 		},
 		{
 			id: "8",
