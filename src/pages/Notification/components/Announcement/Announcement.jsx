@@ -90,12 +90,12 @@ function Announcement() {
 			headerClassName: "app-header",
 			headerName: "Created On",
 			// align: "center",
-			flex: 0.2,
+			flex: 0.3,
 			// type: "date",
 			// valueGetter: ({ value }) => value && new Date(value),
 			renderCell: (params) => {
 				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("DD/MM/YYYY");
+					const date = moment(params.row.createdOn).format("LLL");
 					return date;
 				} else {
 					return "-";

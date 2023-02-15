@@ -1,6 +1,7 @@
 import {
 	Alert,
 	Box,
+	Button,
 	Card,
 	CircularProgress,
 	Container,
@@ -12,14 +13,18 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router";
 import ChipComp from "./components/chipComp";
-import { listCustomer } from "./User_Services/UserApiService";
+import { getUserCsvData, listCustomer } from "./User_Services/UserApiService";
 import jwt_decode from "jwt-decode";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import "./users.css";
 import { MainContext } from "../../context/Context";
-
+import { Download } from "@mui/icons-material";
+import { ExportToCsv } from "export-to-csv";
+import axios from "axios";
+import * as XLSX from "sheetjs-style";
+import * as FileSaver from "file-saver";
 function UserComp() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
@@ -168,6 +173,39 @@ function UserComp() {
 		[keyword, customerFilter]
 	);
 
+	const UserCsvDataApi = React.useCallback((data) => {
+		fetch("https://gateway.banjee.org/services/userprofile-service/api/remote/user/csvdownload", {
+			method: "post",
+			body: JSON.stringify({
+				payload:
+					data?.fromDate && data?.toDate
+						? { userType: 0, fromDate: data?.fromDate, toDate: data?.toDate }
+						: { userType: 0 },
+			}),
+			headers: {
+				"Content-Type": "application/json;",
+				authorization: `Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJsYXN0TmFtZSI6IiIsImRvbWFpblNzaWQiOiIyMDg5OTEiLCJnZW5kZXIiOm51bGwsInVzZXJfbmFtZSI6IjYxMTExZTQyYmNjNjhiMmExZmEzNDMyYyIsImluY29nbml0byI6ZmFsc2UsIm1jYyI6bnVsbCwidHlwZSI6IlNZU19BRE1JTiIsImxvY2FsZSI6ImVuLVVTIiwiY2xpZW50X2lkIjoiaXRwbCIsImV4dGVybmFsUmVmZXJlbmNlSWQiOm51bGwsInNjb3BlIjpbIlJlYWQiLCJXcml0ZSJdLCJhdnRhckltYWdlVXJsIjoiNjNhMDFlYTVkZGVmYjM3ZjY5MjFiMmU4IiwiaWQiOiI2MTExMWU0MmJjYzY4YjJhMWZhMzQzMmMiLCJleHAiOjE2NzkyODc3MDAsImp0aSI6ImEyOTFjMGE2LWQ2YzMtNDUzNy05ZDg5LTg3MTMzZGFjNGVlMiIsImVtYWlsIjoicm9vdEBpdHBsLmlvIiwiR3JhbnRlZC1BdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9TWVNURU1fQURNSU4ifV0sInRpbWVab25lSWQiOiJBc2lhL0pha2FydGEiLCJtb2JpbGUiOiIxMjM0NTY3ODkwIiwiZXh0ZXJuYWxTeXN0ZW1Db2RlIjpudWxsLCJ1c2VyTmFtZSI6InJvb3QiLCJiaXJ0aERhdGUiOm51bGwsImF1dGhvcml0aWVzIjpbIlJPTEVfU1lTVEVNX0FETUlOIl0sImZpcnN0TmFtZSI6IkJhbmplZSIsImV4dGVybmFsVXNlcklkIjpudWxsLCJkb21haW4iOiIyMDg5OTEiLCJyZWFsbSI6ImJhbmplZSIsInVzZXJUeXBlIjotMSwidXNlcm5hbWUiOiJyb290In0.ABSYC8llKHnoskHltFynTlaKUwMhea-bnbnQDJ61lHf2NJljQpMlpmzQ0pt12FePbyPbS1KwKUwms8NDmMCByeKAQwbUbZU6u9EqTQIh8Ig4b8aGNavsMfjXuG2qbcFYFS3H-OLR5kCFAd0UxU8IZtcyZGK7C4oFWpCM2C-FMYR0zImqn2CaZV3RgKPzUpbSkTb0zCG14NAQ0tcQ_7bosorzjtppDhKYltRc2rg6uK-N-BHQytoiCY85Vxute9P8dGIt5zQfyEKdSzoLXjur91MmlIufPtbqSRF4KzgA4HF1z2TTU22qhF65qVoo8yDygsONEuqS8xq_GDYOUA`,
+			},
+		})
+			.then((response) => response.blob())
+			.then((blob) => {
+				// Create blob link to download
+				const url = window.URL.createObjectURL(new Blob([blob]));
+				const link = document.createElement("a");
+				link.href = url;
+				link.setAttribute("download", `userData.xls`);
+
+				// Append to html link element page
+				document.body.appendChild(link);
+
+				// Start download
+				link.click();
+
+				// Clean up and remove the link
+				link.parentNode.removeChild(link);
+			});
+	}, []);
+
 	React.useEffect(() => {
 		UserApiCall();
 	}, [UserApiCall]);
@@ -223,14 +261,31 @@ function UserComp() {
 						<Grid item xs={12}>
 							<Card className='main-card space-css'>
 								<div style={{ width: "100%" }}>
-									<div
-										style={{
-											color: context?.themeData ? "default" : "#6b778c",
-											fontSize: "20px",
-											fontWeight: "500",
-										}}>
-										Users ({userData?.totalElement})
-									</div>
+									<Box
+										sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+										<div
+											style={{
+												color: context?.themeData ? "default" : "#6b778c",
+												fontSize: "20px",
+												fontWeight: "500",
+											}}>
+											Users ({userData?.totalElement})
+										</div>
+										<Button
+											onClick={() => {
+												UserCsvDataApi({
+													fromDate: customerFilter?.fromDate
+														? moment(customerFilter?.fromDate).format()
+														: undefined,
+													toDate: customerFilter?.toDate
+														? moment(customerFilter?.toDate).format()
+														: undefined,
+												});
+											}}
+											startIcon={<Download />}>
+											csv
+										</Button>
+									</Box>
 									<hr />
 									<div className='root' style={{ width: "100%" }}>
 										<DataGrid

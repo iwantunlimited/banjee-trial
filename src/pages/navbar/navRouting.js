@@ -22,6 +22,7 @@ import { Notifications } from "@mui/icons-material";
 import GroupComp from "../Groups/Groups";
 import UserComp from "../Users/users";
 import DashboardTrial from "../Dashboard/DashboardChart";
+import Room from "../Rooms/Rooms";
 
 const routing = [
 	{

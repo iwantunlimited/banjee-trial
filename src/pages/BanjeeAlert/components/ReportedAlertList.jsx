@@ -121,17 +121,17 @@ function ReportedAlertList() {
 			headerClassName: "app-header",
 			headerName: "Created On",
 			// align: "center",
-			flex: 0.2,
+			flex: 0.3,
 			type: "date",
-			valueGetter: ({ value }) => value && new Date(value),
-			// renderCell: (params) => {
-			// 	if (params.row && params.row.createdOn) {
-			// 		const date = moment(params.row.createdOn).format("L");
-			// 		return date;
-			// 	} else {
-			// 		return 0;
-			// 	}
-			// },
+			// valueGetter: ({ value }) => value && new Date(value),
+			renderCell: (params) => {
+				if (params.row && params.row.createdOn) {
+					const date = moment(params.row.createdOn).format("LLL");
+					return date;
+				} else {
+					return 0;
+				}
+			},
 		},
 		{
 			id: "5",
@@ -140,7 +140,7 @@ function ReportedAlertList() {
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "Created By",
 			// align: "center",
-			flex: 0.3,
+			flex: 0.25,
 			renderCell: (params) => {
 				const fullName = params?.row?.rFirstName + " " + params?.row?.rLastName;
 				return fullName;

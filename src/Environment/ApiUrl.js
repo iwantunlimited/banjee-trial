@@ -1,3 +1,4 @@
+import { DATA_GRID_DEFAULT_SLOTS_COMPONENTS } from "@mui/x-data-grid";
 import { services } from "./Environment.dev";
 
 let token = "Basic aXRwbDppd2FudHVubGltaXRlZA==";
@@ -114,6 +115,7 @@ export const urls = {
 	},
 
 	USERPROFILE: {
+		USER_CSV_DATA: services?.USER_PROFILE + "remote/user/csvdownload",
 		CUSTOMER_LIST: services.USER_PROFILE + "profile/filter",
 		CUSTOMER_FIND_BY_ID: services.USER_PROFILE + "admin/findById/",
 		FIND_USER_BY_SYSTEMUSER_ID: services?.USER_PROFILE + "profile/findBySystemUserId/",

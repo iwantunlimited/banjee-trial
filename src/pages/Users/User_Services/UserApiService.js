@@ -12,6 +12,14 @@ let listCustomer = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+// ----------------------------------------- CUSTOMER LIST SERVICE ---------------------------------------------------
+let getUserCsvData = (requestLoad) => {
+	let url = urls.USERPROFILE.USER_CSV_DATA;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
 
 //------------------------------------------ AVATAR FIND URL-----------------------------------------//
 
@@ -187,4 +195,5 @@ export {
 	DashboardlistCustomer,
 	findUserBySystemUserId,
 	findUserByUserId,
+	getUserCsvData,
 };

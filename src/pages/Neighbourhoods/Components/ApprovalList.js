@@ -54,14 +54,14 @@ export function ApprovalList({
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.5,
 		},
-		{
-			id: "2",
-			field: "countryName",
-			headerClassName: "app-header",
-			headerName: "Country",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			flex: 0.3,
-		},
+		// {
+		// 	id: "2",
+		// 	field: "countryName",
+		// 	headerClassName: "app-header",
+		// 	headerName: "Country",
+		// 	// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+		// 	flex: 0.3,
+		// },
 		{
 			id: "3",
 			field: "cloudType",

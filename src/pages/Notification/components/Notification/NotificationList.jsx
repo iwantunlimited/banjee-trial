@@ -56,14 +56,14 @@ function NotificationList() {
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.4,
 		},
-		{
-			id: "3",
-			field: "templateName",
-			headerClassName: "app-header",
-			headerName: "Template",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			flex: 0.5,
-		},
+		// {
+		// 	id: "3",
+		// 	field: "templateName",
+		// 	headerClassName: "app-header",
+		// 	headerName: "Template",
+		// 	// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+		// 	flex: 0.5,
+		// },
 		// {
 		// 	id: "3",
 		// 	field: "createdBy",
@@ -96,7 +96,7 @@ function NotificationList() {
 			// valueGetter: ({ value }) => value && new Date(value),
 			renderCell: (params) => {
 				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("DD/MM/YYYY");
+					const date = moment(params.row.createdOn).format("LLL");
 					return date;
 				} else {
 					return "-";
