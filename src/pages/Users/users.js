@@ -9,9 +9,9 @@ import {
 	IconButton,
 	Snackbar,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import ChipComp from "./components/chipComp";
 import { getUserCsvData, listCustomer } from "./User_Services/UserApiService";
 import jwt_decode from "jwt-decode";
@@ -25,8 +25,10 @@ import { ExportToCsv } from "export-to-csv";
 import axios from "axios";
 import * as XLSX from "sheetjs-style";
 import * as FileSaver from "file-saver";
+import { PaginationContext } from "../../context/PaginationContext";
 function UserComp() {
 	const navigate = useNavigate();
+	const { userPagination, setUserPagination } = useContext(PaginationContext);
 	const token = localStorage.getItem("token");
 	const context = React.useContext(MainContext);
 	const decodeToken = jwt_decode(token);
@@ -42,8 +44,8 @@ function UserComp() {
 	});
 
 	const [customerFilter, setCustomerFilter] = React.useState({
-		page: 0,
-		pageSize: 10,
+		page: userPagination?.page ? userPagination?.page : 0,
+		pageSize: userPagination?.pageSize ? userPagination?.pageSize : 10,
 		domain: decodeToken.domain,
 		fromDate: null,
 		toDate: null,
@@ -57,6 +59,8 @@ function UserComp() {
 	function handleCustomFilter(data) {
 		setCustomerFilter((prev) => ({
 			...prev,
+			page: data?.page,
+			pageSize: data?.pageSize,
 			fromDate: data?.fromDate,
 			toDate: data?.endDate,
 		}));
@@ -126,6 +130,7 @@ function UserComp() {
 					<IconButton
 						onClick={() => {
 							// navigate(`/user/${params?.row?.userObject?.id}`);
+							setUserPagination({ page: customerFilter?.page, pageSize: customerFilter?.pageSize });
 							navigate("/user/" + params?.row?.systemUserId);
 							// this.props.history.push(
 							// 	this.props.location.pathname +

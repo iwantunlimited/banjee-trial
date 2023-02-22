@@ -4,10 +4,13 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ContextProvider } from "./context/Context";
+import { ContextHandler } from "./context/PaginationContext";
 
 ReactDOM.render(
 	<ContextProvider>
-		<App />
+		<ContextHandler>
+			<App />
+		</ContextHandler>
 	</ContextProvider>,
 	document.getElementById("root")
 );

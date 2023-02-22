@@ -20,6 +20,7 @@ import {
 	Delete,
 	Report,
 	Add,
+	Refresh,
 } from "@mui/icons-material";
 import moment from "moment";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -42,10 +43,12 @@ import { Pagination } from "swiper";
 import DeleteFeedModal from "./Components/DeleteFeedModal";
 import { useTheme } from "@mui/material/styles";
 import { MainContext } from "../../context/Context";
+import { PaginationContext } from "../../context/PaginationContext";
 
 export default function SocialFeed(props) {
 	const navigate = useNavigate();
 	const theme = useTheme();
+	const { feedPagination, setFeedPagination } = React.useContext(PaginationContext);
 	const { themeData } = React.useContext(MainContext);
 	const [data, setData] = React.useState([]);
 	const [modal, setModal] = React.useState({ open: false });
@@ -58,8 +61,8 @@ export default function SocialFeed(props) {
 
 	// pagination state
 	const [pagination, setPagination] = React.useState({
-		page: 0,
-		pageSize: 10,
+		page: feedPagination?.page ? feedPagination?.page : 0,
+		pageSize: feedPagination?.pageSize ? feedPagination?.pageSize : 10,
 	});
 	const [totalEle, setTotalEle] = React.useState();
 
@@ -180,6 +183,7 @@ export default function SocialFeed(props) {
 										color: theme.palette.primary.contrastText,
 									}}
 									onClick={() => {
+										setPagination({ page: 0, pageSize: 10 });
 										setDateFilter({
 											startDate: startDate,
 											endDate: endDate,
@@ -200,6 +204,23 @@ export default function SocialFeed(props) {
 										color: theme.palette.primary.contrastText,
 									}}>
 									<Add />
+								</IconButton>
+							</Tooltip>
+						</Box>
+						<Box sx={{ marginLeft: "10px" }}>
+							<Tooltip title='Refresh Feeds'>
+								<IconButton
+									onClick={() => {
+										setFeedPagination({ page: undefined, pageSize: undefined });
+										setPagination({ page: 0, pageSize: 10 });
+									}}
+									style={{
+										borderRadius: "50px",
+										background: theme.palette.primary.main,
+										padding: window.innerWidth < 501 ? "5px" : "10px",
+										color: theme.palette.primary.contrastText,
+									}}>
+									<Refresh />
 								</IconButton>
 							</Tooltip>
 						</Box>
@@ -226,7 +247,8 @@ export default function SocialFeed(props) {
 							<Grid item xs={12} sm={6} md={4} lg={3} xl={2.4} key={index}>
 								<Box
 									sx={{
-										padding: "7px 14px",
+										paddingX: "14px",
+										paddingBottom: "7px",
 										width: "100%",
 										// height: "100%",
 										// minHeight: "250px",
@@ -239,6 +261,34 @@ export default function SocialFeed(props) {
 											background: themeData === false ? theme.palette.grey.A700 : "#323232",
 										},
 									}}>
+									{/* <Box sx={{ display: "flex", justifyContent: "center" }}>
+										{ele?.scheduled === true && (
+											<Typography
+												sx={{
+													width: "fitContent",
+													background: "skyblue",
+													paddingX: "10px",
+													borderBottomLeftRadius: "5px",
+													borderBottomRightRadius: "5px",
+													fontSize: "12px",
+												}}>
+												scheduled
+											</Typography>
+										)}
+										{ele?.published === true && (
+											<Typography
+												sx={{
+													width: "fitContent",
+													background: "skyblue",
+													paddingX: "10px",
+													borderBottomLeftRadius: "5px",
+													borderBottomRightRadius: "5px",
+													fontSize: "12px",
+												}}>
+												published
+											</Typography>
+										)}
+									</Box> */}
 									<Box
 										style={{
 											display: "flex",
@@ -247,6 +297,10 @@ export default function SocialFeed(props) {
 										}}>
 										<Box
 											onClick={() => {
+												setFeedPagination({
+													page: pagination?.page,
+													pageSize: pagination?.pageSize,
+												});
 												navigate("/social-feeds/" + ele?.id);
 												// setModal({ open: true, data: ele });
 											}}
@@ -294,9 +348,16 @@ export default function SocialFeed(props) {
 														{ele?.author?.username ? ele?.author?.username : "username"}
 													</span>
 												)}
-												<span style={{ fontSize: "12px" }}>
-													{moment(ele?.createdOn).format("lll")}
-												</span>
+												{ele?.scheduled === true ? (
+													<span style={{ fontSize: "12px" }}>
+														{/* scheduled */}
+														{"Scheduled at " + moment(ele?.dateTime).format("dddd")}
+													</span>
+												) : (
+													<span style={{ fontSize: "12px" }}>
+														{moment(ele?.createdOn).format("lll")}
+													</span>
+												)}
 											</Typography>
 										</Box>
 										<IconButton
@@ -339,6 +400,10 @@ export default function SocialFeed(props) {
 										)} */}
 										<Swiper
 											onClick={() => {
+												setFeedPagination({
+													page: pagination?.page,
+													pageSize: pagination?.pageSize,
+												});
 												navigate("/social-feeds/" + ele?.id);
 												// setModal({ open: true, data: ele });
 											}}
@@ -546,6 +611,7 @@ export default function SocialFeed(props) {
 											flexDirection: "column",
 										}}
 										onClick={() => {
+											setFeedPagination({ page: pagination?.page, pageSize: pagination?.pageSize });
 											navigate("/social-feeds/" + ele?.id);
 											// setModal({ open: true, data: ele })
 										}}>

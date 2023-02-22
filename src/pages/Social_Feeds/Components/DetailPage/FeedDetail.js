@@ -231,6 +231,7 @@ function FeedDetail(props) {
 										}}
 									/>
 									<Typography
+										noWrap
 										style={{
 											padding: "0 15px",
 											display: "flex",
@@ -246,9 +247,16 @@ function FeedDetail(props) {
 										) : (
 											<span>{`${data?.author?.userName || "userName"}`}</span>
 										)}
-										<span style={{ fontSize: "14px" }}>
-											{moment(data?.createdOn).format("lll")}
-										</span>
+										{data?.scheduled === true ? (
+											<span style={{ fontSize: "14px" }}>
+												{/* scheduled */}
+												{"Scheduled at " + moment(data?.dateTime).format("dddd")}
+											</span>
+										) : (
+											<span style={{ fontSize: "14px" }}>
+												{moment(data?.createdOn).format("lll")}
+											</span>
+										)}
 									</Typography>
 								</Box>
 								<Box>
@@ -328,10 +336,16 @@ function FeedDetail(props) {
 																		// textAlign:
 																		// 	blogData?.authorId === item?.author?.id ? "right" : "left",
 																	}}>
-																	<Typography sx={{ fontSize: "10px" }}>
-																		{userLength > 20
-																			? ele?.user?.username.slice(0, 20) + "... :"
-																			: ele?.user?.username}
+																	<Typography noWrap sx={{ fontSize: "10px" }}>
+																		{ele?.user?.firstName ? (
+																			<span>{`${
+																				ele?.user?.firstName +
+																				" " +
+																				(ele?.user?.lastName ? ele?.user?.lastName : "")
+																			}`}</span>
+																		) : (
+																			<span>{`${ele?.user?.userName || "userName"}`}</span>
+																		)}
 																	</Typography>
 																	<Box
 																		sx={{
@@ -342,7 +356,8 @@ function FeedDetail(props) {
 																			marginLeft: data?.authorId === ele?.userId ? "0px" : "20px",
 																			marginRight: data?.authorId === ele?.userId ? "20px" : "0px",
 																		}}>
-																		<img
+																		<Typography>{ele?.reactionType}</Typography>
+																		{/* <img
 																			src={getEmoji(ele?.reactionType)}
 																			alt=''
 																			style={{
@@ -350,7 +365,7 @@ function FeedDetail(props) {
 																				width: "25px",
 																				objectFit: "contain",
 																			}}
-																		/>
+																		/> */}
 																	</Box>
 																</Box>
 															</Box>
@@ -401,10 +416,18 @@ function FeedDetail(props) {
 																		// textAlign:
 																		// 	blogData?.authorId === item?.author?.id ? "right" : "left",
 																	}}>
-																	<Typography sx={{ fontSize: "10px" }}>
-																		{userLength > 20
-																			? ele?.createdByUser?.username.slice(0, 20) + "... :"
-																			: ele?.createdByUser?.username}
+																	<Typography noWrap sx={{ fontSize: "10px" }}>
+																		{ele?.createdByUser?.firstName ? (
+																			<span>{`${
+																				ele?.createdByUser?.firstName +
+																				" " +
+																				(ele?.createdByUser?.lastName
+																					? ele?.createdByUser?.lastName
+																					: "")
+																			}`}</span>
+																		) : (
+																			<span>{`${ele?.createdByUser?.userName || "userName"}`}</span>
+																		)}
 																	</Typography>
 																	<Typography>{ele?.text}</Typography>
 																</Box>

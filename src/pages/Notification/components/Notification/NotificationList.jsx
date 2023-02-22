@@ -1,4 +1,4 @@
-import { Add, Delete } from "@mui/icons-material";
+import { Add, Delete, Refresh } from "@mui/icons-material";
 import {
 	Box,
 	Button,
@@ -19,10 +19,12 @@ import { deleteAlert, listNotification } from "../../ApiServices/apiServices";
 import { MainContext } from "../../../../context/Context";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 import moment from "moment";
+import { PaginationContext } from "../../../../context/PaginationContext";
 
 function NotificationList() {
 	const navigate = useNavigate();
 	const context = useContext(MainContext);
+	const { notificationPagination, setNotificationPagination } = React.useContext(PaginationContext);
 	const { setModalOpen, setModalData } = context;
 	const [data, setData] = React.useState("");
 
@@ -33,8 +35,8 @@ function NotificationList() {
 
 	// pagination state
 	const [pagination, setPagination] = React.useState({
-		page: 0,
-		pageSize: 12,
+		page: notificationPagination?.page ? notificationPagination?.page : 0,
+		pageSize: notificationPagination?.pageSize ? notificationPagination?.pageSize : 10,
 	});
 	const [totalEle, setTotalEle] = React.useState();
 
@@ -140,6 +142,10 @@ function NotificationList() {
 					<strong>
 						<IconButton
 							onClick={() => {
+								setNotificationPagination({
+									page: pagination?.page,
+									pageSize: pagination?.pageSize,
+								});
 								navigate("/notification/" + params?.row?.notificationId);
 							}}>
 							<Visibility />
@@ -150,8 +156,12 @@ function NotificationList() {
 		},
 	];
 
-	const NotificationListApiCall = React.useCallback((page, pageSize) => {
-		listNotification({ page: page, pageSize: pageSize, eventCode: "ADMIN_NOTIFICATION" })
+	const NotificationListApiCall = React.useCallback(() => {
+		listNotification({
+			page: pagination?.page,
+			pageSize: pagination?.pageSize,
+			eventCode: "ADMIN_NOTIFICATION",
+		})
 			.then((res) => {
 				const resp = res?.content?.map((item, index) => ({
 					...item,
@@ -164,13 +174,9 @@ function NotificationList() {
 
 				setData(resp);
 				setTotalEle(res.totalElements);
-				setPagination({
-					page: res?.pageable?.pageNumber,
-					pageSize: res?.pageable?.pageSize,
-				});
 			})
 			.catch((err) => console.error(err));
-	}, []);
+	}, [pagination]);
 
 	const DeleteAlertApiCall = (data) => {
 		deleteAlert(data)
@@ -183,7 +189,7 @@ function NotificationList() {
 	};
 
 	React.useEffect(() => {
-		NotificationListApiCall(0, 10);
+		NotificationListApiCall();
 	}, [NotificationListApiCall]);
 
 	if (data) {
@@ -202,14 +208,28 @@ function NotificationList() {
 									Notifications({totalEle ? totalEle : 0})
 								</Typography>
 							</Box>
-							<Tooltip
-								title='Create Notification'
-								arrow
-								sx={{ bacground: "white", color: "black" }}>
-								<IconButton onClick={() => navigate("/notification/create-notification")}>
-									<Add color='primary' />
-								</IconButton>
-							</Tooltip>
+							<Box>
+								<Tooltip
+									title='Create Notification'
+									arrow
+									sx={{ bacground: "white", color: "black" }}>
+									<IconButton onClick={() => navigate("/notification/create-notification")}>
+										<Add color='primary' />
+									</IconButton>
+								</Tooltip>
+								<Tooltip
+									title='Refresh Notification'
+									arrow
+									sx={{ bacground: "white", color: "black" }}>
+									<IconButton
+										onClick={() => {
+											setNotificationPagination({ page: undefined, pageSize: undefined });
+											setPagination({ page: 0, pageSize: 10 });
+										}}>
+										<Refresh color='primary' />
+									</IconButton>
+								</Tooltip>
+							</Box>
 						</Card>
 					</Grid>
 					<Grid item xs={12}>
@@ -227,16 +247,15 @@ function NotificationList() {
 											<DataGrid
 												autoHeight
 												getRowClassName={(params) => `app-header-${params.row.status}`}
-												page={pagination?.pagination?.page}
-												pageSize={pagination?.pagination?.pageSize}
+												page={pagination?.page}
+												pageSize={pagination?.pageSize}
 												onPageSizeChange={(event) => {
 													setPagination({
-														page: pagination?.pagination?.page,
+														page: pagination?.page,
 														pageSize: event,
 													});
-													NotificationListApiCall(pagination?.pagination?.page, event);
 												}}
-												rowCount={pagination?.totalElement}
+												rowCount={totalEle}
 												rows={rows}
 												columns={columns}
 												paginationMode='server'
@@ -245,9 +264,8 @@ function NotificationList() {
 												onPageChange={(event) => {
 													setPagination({
 														page: event,
-														pageSize: pagination?.pagination?.page,
+														pageSize: pagination?.pageSize,
 													});
-													NotificationListApiCall(event, pagination?.pagination?.pageSize);
 												}}
 												rowsPerPageOptions={[5, 10, 20]}
 												className='dataGridFooter'

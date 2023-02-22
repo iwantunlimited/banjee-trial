@@ -1,5 +1,5 @@
-import { Visibility } from "@mui/icons-material";
-import { Container, Grid, IconButton, Card, CircularProgress, Box } from "@mui/material";
+import { Refresh, Visibility } from "@mui/icons-material";
+import { Container, Grid, IconButton, Card, CircularProgress, Box, Tooltip } from "@mui/material";
 import moment from "moment";
 import React from "react";
 import { Helmet } from "react-helmet";
@@ -7,15 +7,17 @@ import { communityList } from "./services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router";
 import { MainContext } from "../../context/Context";
+import { PaginationContext } from "../../context/PaginationContext";
 
 function GroupsComp(props) {
 	const navigate = useNavigate();
 	const { themeData } = React.useContext(MainContext);
+	const { groupPagination, setGroupPagination } = React.useContext(PaginationContext);
 	const [listData, setListData] = React.useState("");
 	const [totalElement, setTotalElement] = React.useState(0);
 	const [pagination, setPagination] = React.useState({
-		page: 0,
-		pageSize: 10,
+		page: groupPagination?.page ? groupPagination?.page : 0,
+		pageSize: groupPagination?.pageSize ? groupPagination?.pageSize : 10,
 	});
 
 	const handlePagination = (data) => {
@@ -116,6 +118,7 @@ function GroupsComp(props) {
 					<strong>
 						<IconButton
 							onClick={() => {
+								setGroupPagination({ page: pagination?.page, pageSize: pagination?.pageSize });
 								navigate("/groups/" + params.row.routingId);
 							}}>
 							<Visibility />
@@ -136,14 +139,26 @@ function GroupsComp(props) {
 					<Card sx={{ padding: "20px" }}>
 						{listData ? (
 							<div>
-								<div
-									style={{
-										color: themeData ? "default" : "#6b778c",
-										fontSize: "22px",
-										fontWeight: "500",
-									}}>
-									Groups ({totalElement})
-								</div>
+								<Box
+									sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+									<div
+										style={{
+											color: themeData ? "default" : "#6b778c",
+											fontSize: "22px",
+											fontWeight: "500",
+										}}>
+										Groups ({totalElement})
+									</div>
+									<Tooltip title='Refresh Groups' arrow sx={{ bacground: "white", color: "black" }}>
+										<IconButton
+											onClick={() => {
+												setGroupPagination({ page: undefined, pageSize: undefined });
+												setPagination({ page: 0, pageSize: 10 });
+											}}>
+											<Refresh color='primary' />
+										</IconButton>
+									</Tooltip>
+								</Box>
 								<hr />
 								<Box
 									className='root'

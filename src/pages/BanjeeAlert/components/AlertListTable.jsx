@@ -5,10 +5,12 @@ import moment from "moment";
 import React from "react";
 import { useNavigate } from "react-router";
 import { MainContext } from "../../../context/Context";
+import { PaginationContext } from "../../../context/PaginationContext";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { deleteAlert } from "../api-services/apiServices";
 
 function AlertListTable({
+	totalElement,
 	data,
 	handlePagination,
 	pagination,
@@ -18,6 +20,7 @@ function AlertListTable({
 	const navigate = useNavigate();
 
 	const context = React.useContext(MainContext);
+	const { setAlertPagination } = React.useContext(PaginationContext);
 
 	const [modalData, setModalData] = React.useState({
 		open: false,
@@ -113,6 +116,7 @@ function AlertListTable({
 					<strong>
 						<IconButton
 							onClick={() => {
+								setAlertPagination({ page: pagination?.page, pageSize: pagination?.pageSize });
 								navigate("/banjee-alert/" + params.row.id, { state: { reported: false } });
 							}}>
 							<Visibility />
@@ -157,16 +161,15 @@ function AlertListTable({
 						<DataGrid
 							autoHeight
 							getRowClassName={(params) => `app-header-${params.row.status}`}
-							page={pagination?.pagination?.page}
-							pageSize={pagination?.pagination?.pageSize}
+							page={pagination?.page}
+							pageSize={pagination?.pageSize}
 							onPageSizeChange={(event) => {
 								handlePagination({
-									page: pagination?.pagination?.page,
+									page: pagination?.page,
 									pageSize: event,
 								});
-								listApiCall(pagination?.pagination?.page, event);
 							}}
-							rowCount={pagination?.totalElement}
+							rowCount={totalElement}
 							rows={rows}
 							columns={columns}
 							paginationMode='server'
@@ -175,9 +178,8 @@ function AlertListTable({
 							onPageChange={(event) => {
 								handlePagination({
 									page: event,
-									pageSize: pagination?.pagination?.page,
+									pageSize: pagination?.pageSize,
 								});
-								listApiCall(event, pagination?.pagination?.pageSize);
 							}}
 							rowsPerPageOptions={[5, 10, 20]}
 							className='dataGridFooter'

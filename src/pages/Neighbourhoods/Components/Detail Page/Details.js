@@ -449,11 +449,11 @@ function DetailPage() {
 			<Container maxWidth='lg' style={{ padding: "0px", margin: "auto" }}>
 				<Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
 					<IconButton
-						onClick={() =>
+						onClick={() => {
 							navigate("/neighbourhood", {
 								state: { pending: location?.state?.inApprove ? true : false },
-							})
-						}>
+							});
+						}}>
 						<ArrowBack style={{ color: theme.palette.primary.main }} />
 					</IconButton>
 					{location?.state?.inApprove === false && (

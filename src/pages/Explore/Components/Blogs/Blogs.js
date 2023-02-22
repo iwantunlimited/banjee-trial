@@ -1,4 +1,11 @@
-import { Add, ChatBubbleOutline, Delete, FavoriteBorder, RemoveRedEye } from "@mui/icons-material";
+import {
+	Add,
+	ChatBubbleOutline,
+	Delete,
+	FavoriteBorder,
+	Refresh,
+	RemoveRedEye,
+} from "@mui/icons-material";
 import {
 	Avatar,
 	Box,
@@ -19,9 +26,11 @@ import { blogsList, deleteBlog } from "../../services/ApiServices";
 import ".././component.css";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../../context/Context";
+import { PaginationContext } from "../../../../context/PaginationContext";
 
 function ExploreBlogs() {
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
+	const { blogPagination, setBlogPagination } = React.useContext(PaginationContext);
 	const navigate = useNavigate();
 	const [data, setData] = React.useState("");
 	const [modal, setModal] = React.useState({
@@ -30,8 +39,8 @@ function ExploreBlogs() {
 	});
 	// pagination state
 	const [pagination, setPagination] = React.useState({
-		page: 0,
-		pageSize: 12,
+		page: blogPagination?.page ? blogPagination?.page : 0,
+		pageSize: blogPagination?.pageSize ? blogPagination?.pageSize : 12,
 	});
 	const [totalEle, setTotalEle] = React.useState();
 
@@ -43,8 +52,8 @@ function ExploreBlogs() {
 		}));
 	};
 
-	const BlogsListApiCall = React.useCallback((page, pageSize) => {
-		blogsList({ page: page, pageSize: pageSize, blogType: "BLOG" })
+	const BlogsListApiCall = React.useCallback(() => {
+		blogsList({ page: pagination?.page, pageSize: pagination?.pageSize, blogType: "BLOG" })
 			.then((res) => {
 				const resp = res?.content?.map((item, index) => ({
 					...item,
@@ -55,13 +64,9 @@ function ExploreBlogs() {
 
 				setData(resp);
 				setTotalEle(res.totalElements);
-				setPagination({
-					page: res?.pageable?.pageNumber,
-					pageSize: res?.pageable?.pageSize,
-				});
 			})
 			.catch((err) => console.error(err));
-	}, []);
+	}, [pagination]);
 
 	const DeleteBlogApiCall = React.useCallback((data) => {
 		deleteBlog(data)
@@ -73,7 +78,7 @@ function ExploreBlogs() {
 	}, []);
 
 	React.useEffect(() => {
-		BlogsListApiCall(0, 10);
+		BlogsListApiCall();
 	}, [BlogsListApiCall]);
 
 	if (data) {
@@ -87,11 +92,22 @@ function ExploreBlogs() {
 									Blogs({totalEle})
 								</Typography>
 							</Box>
-							<Tooltip title='Create Blog' arrow sx={{ bacground: "white", color: "black" }}>
-								<IconButton onClick={() => navigate("/explore/blogs/createblog")}>
-									<Add color='primary' />
-								</IconButton>
-							</Tooltip>
+							<Box>
+								<Tooltip title='Create Blog' arrow sx={{ bacground: "white", color: "black" }}>
+									<IconButton onClick={() => navigate("/explore/blogs/createblog")}>
+										<Add color='primary' />
+									</IconButton>
+								</Tooltip>
+								<Tooltip title='Refresh Blog' arrow sx={{ bacground: "white", color: "black" }}>
+									<IconButton
+										onClick={() => {
+											setPagination({ page: 0, pageSize: 12 });
+											setBlogPagination({ page: undefined, pageSize: undefined });
+										}}>
+										<Refresh color='primary' />
+									</IconButton>
+								</Tooltip>
+							</Box>
 						</Card>
 					</Grid>
 					{data?.length > 0 ? (
@@ -108,7 +124,13 @@ function ExploreBlogs() {
 													// background: "white",
 												}}>
 												<Box
-													onClick={() => navigate("/explore/blogs/detail/" + item?.blogId)}
+													onClick={() => {
+														setBlogPagination({
+															page: pagination?.page,
+															pageSize: pagination?.pageSize,
+														});
+														navigate("/explore/blogs/detail/" + item?.blogId);
+													}}
 													style={{
 														display: "flex",
 														alignItems: "center",
@@ -195,7 +217,7 @@ function ExploreBlogs() {
 																DeleteBlogApiCall(modal?.data);
 																handleModal(false);
 																setTimeout(() => {
-																	BlogsListApiCall(0, 10);
+																	BlogsListApiCall();
 																}, [2000]);
 															}}
 															// onClick={() => {
@@ -210,7 +232,14 @@ function ExploreBlogs() {
 												</ModalComp>
 											</Box>
 											<Box
-												onClick={() => navigate("/explore/blogs/detail/" + item?.blogId)}
+												onClick={() => {
+													setBlogPagination({
+														page: pagination?.page,
+														pageSize: pagination?.pageSize,
+													});
+
+													navigate("/explore/blogs/detail/" + item?.blogId);
+												}}
 												sx={{
 													width: "100%",
 													maxHeight: "250px",
@@ -255,7 +284,13 @@ function ExploreBlogs() {
 												)}
 											</Box> */}
 											<Box
-												onClick={() => navigate("/explore/blogs/detail/" + item?.blogId)}
+												onClick={() => {
+													setBlogPagination({
+														page: pagination?.page,
+														pageSize: pagination?.pageSize,
+													});
+													navigate("/explore/blogs/detail/" + item?.blogId);
+												}}
 												style={{
 													marginTop: "15px",
 													padding: "0 10px",
@@ -330,14 +365,12 @@ function ExploreBlogs() {
 										...prev,
 										page: data,
 									}));
-									BlogsListApiCall(data, pagination.pageSize);
 								}}
 								onRowsPerPageChange={(event) => {
 									setPagination((prev) => ({
 										...prev,
 										pageSize: event.target.value,
 									}));
-									BlogsListApiCall(pagination.page, event.target.value);
 								}}
 							/>
 						</Box>

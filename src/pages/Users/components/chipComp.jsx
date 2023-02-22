@@ -8,11 +8,12 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { DateRangePicker } from "@mui/x-date-pickers-pro";
 import moment from "moment";
+import { PaginationContext } from "../../../context/PaginationContext";
 
 function ChipComp({ refreshApi, keyword, handleKey, handleDate }) {
 	const navigate = useNavigate();
 	const theme = useTheme();
-
+	const { setUserPagination } = React.useContext(PaginationContext);
 	const [startDate, setStartDate] = React.useState(null);
 	const [endDate, setEndDate] = React.useState(null);
 
@@ -20,7 +21,10 @@ function ChipComp({ refreshApi, keyword, handleKey, handleDate }) {
 		<Card className='main-card space-css'>
 			<div style={{ display: "flex", alignItems: "center" }}>
 				<IconButton
-					onClick={() => refreshApi({ startDate: null, endDate: null })}
+					onClick={() => {
+						setUserPagination({ page: undefined, pageSize: undefined });
+						refreshApi({ startDate: null, endDate: null, page: 0, pageSize: 10 });
+					}}
 					style={{
 						borderRadius: "50px",
 						marginRight: window.innerWidth < 501 ? "10px" : "30px",

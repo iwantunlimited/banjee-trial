@@ -29,6 +29,10 @@ import { MainContext } from "../../../context/Context";
 import Compressor from "compressorjs";
 import { filterNeighbourhood } from "../../Neighbourhoods/services/apiServices";
 import { v4 as uuidv4 } from "uuid";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import moment from "moment";
 
 function CreateFeed() {
 	const navigate = useNavigate();
@@ -60,10 +64,11 @@ function CreateFeed() {
 		global: false,
 		neighbourhood: false,
 	});
+	const [scheduled, setScheduled] = React.useState(false);
+	const [scheduleTime, setScheduleTime] = React.useState(null);
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [listData, setListData] = React.useState([]);
-	const [uploadData, setUploadData] = React.useState([]);
 	const [finalPayload, setFinalPayload] = React.useState({
 		geoLocation: {
 			x: 0,
@@ -74,6 +79,7 @@ function CreateFeed() {
 		pageId: "",
 		pageName: "Anyone",
 		visibility: "PUBLIC",
+		scheduled: false,
 	});
 
 	const [imgShow, setImgShow] = React.useState([]);
@@ -94,47 +100,52 @@ function CreateFeed() {
 		}
 	};
 
-	const listNeighbourApiCAll = React.useCallback((page, pageSize) => {
-		filterNeighbourhood({ page: page, pageSize: pageSize, online: true })
+	const listNeighbourApiCAll = React.useCallback((data) => {
+		const payload =
+			data?.keyword !== ""
+				? {
+						page: pagination?.page,
+						pageSize: pagination?.pageSize,
+						online: true,
+						keywords: data?.keyword,
+				  }
+				: { page: pagination?.page, pageSize: pagination?.pageSize, online: true };
+		filterNeighbourhood(payload)
 			.then((res) => {
 				const resp = res.content.map((ele) => {
 					return {
 						routingId: ele.id,
 						...ele,
-						// ...ele?.name,
-						// ...ele?.createdOn,
 					};
 				});
 				setListData(resp);
-				setPagination((prev) => ({
-					...prev,
-					page: res?.pageable?.pageNumber,
-					pageSize: res?.pageable?.pageSize,
-				}));
 			})
 			.catch((err) => console.error(err));
 	}, []);
 
 	const CreateFeedApiCall = React.useCallback(
 		(data) => {
-			createSocialFeeds(data)
-				.then((res) => {
-					setModalOpen(true);
-					setModalData("Feed Created Successfully", "success");
-					navigate("/social-feeds");
-					// setData({
-					// 	title: "",
-					// 	bannerImageUrl: "",
-					// 	categoryId: "",
-					// 	categoryName: "",
-					// 	description: "",
-					// 	shortDescription: "",
-					// 	publishOnFeed: true,
-					// 	slug: "",
-					// });
-					setImgShow("");
-				})
-				.catch((err) => console.error(err));
+			console.log("====================================");
+			console.log("payload", data);
+			console.log("====================================");
+			// createSocialFeeds(data)
+			// 	.then((res) => {
+			// 		setModalOpen(true);
+			// 		setModalData("Feed Created Successfully", "success");
+			// 		navigate("/social-feeds");
+			// 		// setData({
+			// 		// 	title: "",
+			// 		// 	bannerImageUrl: "",
+			// 		// 	categoryId: "",
+			// 		// 	categoryName: "",
+			// 		// 	description: "",
+			// 		// 	shortDescription: "",
+			// 		// 	publishOnFeed: true,
+			// 		// 	slug: "",
+			// 		// });
+			// 		setImgShow("");
+			// 	})
+			// 	.catch((err) => console.error(err));
 		},
 		[navigate]
 	);
@@ -301,7 +312,7 @@ function CreateFeed() {
 	};
 
 	React.useEffect(() => {
-		listNeighbourApiCAll(0, 100);
+		listNeighbourApiCAll();
 	}, [listNeighbourApiCAll]);
 
 	// const descriptionText = <div dangerouslySetInnerHTML={{ __html: state }} />;
@@ -401,6 +412,9 @@ function CreateFeed() {
 												// console.log("params", params);
 												return (
 													<TextField
+														onChange={(event) => {
+															listNeighbourApiCAll({ keyword: event?.target?.value });
+														}}
 														required={postType?.neighbourhood}
 														{...params}
 														label='Neighbourhood'
@@ -408,6 +422,62 @@ function CreateFeed() {
 												);
 											}}
 										/>
+									</Grid>
+								)}
+								<Grid item xs={12}>
+									<Box>
+										<FormControl component='fieldset' variant='standard'>
+											<FormLabel component='legend'>Schedule</FormLabel>
+											<FormGroup>
+												<FormControlLabel
+													control={
+														<Checkbox
+															checked={scheduled}
+															onChange={(event) => {
+																setScheduled(event?.target?.checked);
+																setFinalPayload((prev) => ({
+																	...prev,
+																	scheduled: event?.target?.checked,
+																}));
+															}}
+															name={scheduled}
+														/>
+													}
+													label='scheduled'
+												/>
+											</FormGroup>
+										</FormControl>
+									</Box>
+								</Grid>
+								{scheduled === true && (
+									<Grid item xs={12}>
+										<LocalizationProvider dateAdapter={AdapterDayjs}>
+											<DateTimePicker
+												// ampm={false}
+												// ampmInClock={false}
+												disablePast
+												maxDate={new Date().setDate(new Date().getDate() + 30)}
+												inputFormat='DD/MM/YYYY HH:mm:ss'
+												renderInput={(props) => <TextField size='small' fullWidth {...props} />}
+												label='DateTimePicker'
+												value={scheduleTime}
+												onChange={(newValue) => {
+													// console.log("newdate", newValue.toISOString());
+													const da = new Date(newValue);
+													const date = moment(da).format("DD/MM/YYYY").split("/").join("-");
+													const time = moment(da).format("HH:mm:ss");
+													// console.log("date", date);
+													// console.log("time", time);
+													setScheduleTime(newValue);
+													if (scheduled) {
+														setFinalPayload((prev) => ({
+															...prev,
+															dateTime: date + " " + time,
+														}));
+													}
+												}}
+											/>
+										</LocalizationProvider>
 									</Grid>
 								)}
 								<Grid item xs={12}>

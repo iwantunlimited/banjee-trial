@@ -18,7 +18,7 @@ import {
 import { findUserBySystemUserId } from "../User_Services/UserApiService";
 import { Male, Female, Transgender, ArrowBack } from "@mui/icons-material";
 import "../users.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import UserLocation from "./UserLocation";
 import NeighrbourhoodList from "./NeighbourhoodList";
 import BusinessList from "./BusinessList";
@@ -27,7 +27,9 @@ import AlertList from "./AlertList";
 import BlogList from "./BlogList";
 
 function CustomerView(props) {
-	const { id } = useParams();
+	const params = useParams();
+
+	const { id } = params;
 
 	let navigate = useNavigate();
 

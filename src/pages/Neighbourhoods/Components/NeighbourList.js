@@ -8,17 +8,20 @@ import {
 	Button,
 	TextField,
 	Stack,
+	Tooltip,
 } from "@mui/material";
 import { deleteNeighbourhood } from "../services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit, Refresh, Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../context/Context";
 import moment from "moment";
+import { PaginationContext } from "../../../context/PaginationContext";
 
 function NeighbourList(props) {
 	const { listData, totalElement, listApiCall, handlePagination, pagination } = props;
+	const { setNeighbourhoodPagination } = React.useContext(PaginationContext);
 	const navigate = useNavigate();
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
 
@@ -120,6 +123,10 @@ function NeighbourList(props) {
 						<Stack direction={"row"} spacing={1}>
 							<IconButton
 								onClick={() => {
+									setNeighbourhoodPagination({
+										page: pagination?.page,
+										pageSize: pagination?.pageSize,
+									});
 									navigate("/neighbourhood/" + params.row.routingId, {
 										state: { inApprove: false },
 									});
@@ -167,21 +174,40 @@ function NeighbourList(props) {
 						{/* <div style={{ color: "#6b778c", fontSize: "22px", fontWeight: "500" }}>
 							Neighrbourhood ({totalElement})
 						</div> */}
-						<Box sx={{ marginBottom: "15px" }}>
+						<Box
+							sx={{
+								marginBottom: "15px",
+								width: "100%",
+								display: "flex",
+								justifyContent: "space-between",
+								alignItems: "center",
+							}}>
 							{/* <Stack> */}
-							<TextField
-								fullWidth
-								size='small'
-								variant='outlined'
-								label='Search'
-								name='keywords'
-								value={keywords}
-								onChange={(e) => {
-									listApiCall({ keyword: e.target.value });
-									setKeywords(e.target.value);
-								}}
-								className='search-field'
-							/>
+							<Box>
+								<TextField
+									fullWidth
+									size='small'
+									variant='outlined'
+									label='Search'
+									name='keywords'
+									value={keywords}
+									onChange={(e) => {
+										listApiCall({ keyword: e.target.value });
+										setKeywords(e.target.value);
+									}}
+									className='search-field'
+								/>
+							</Box>
+
+							<Tooltip title='Refresh Neighbourhood'>
+								<IconButton
+									onClick={() => {
+										handlePagination({ page: 0, pageSize: 10 });
+										setNeighbourhoodPagination({ page: undefined, pageSize: undefined });
+									}}>
+									<Refresh color='primary' />
+								</IconButton>
+							</Tooltip>
 							{/* </Stack> */}
 						</Box>
 					</Box>

@@ -10,6 +10,7 @@ import { filterNeighbourhood, pendingApproval } from "./services/apiServices";
 
 import { useTheme } from "@mui/material/styles";
 import { useLocation } from "react-router";
+import { PaginationContext } from "../../context/PaginationContext";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -41,14 +42,16 @@ function a11yProps(index) {
 
 function Neighbourhood() {
 	const theme = useTheme();
+	const { neighbourhoodPagination, setNeighbourhoodPagination } =
+		React.useContext(PaginationContext);
 
 	const location = useLocation();
 	const [value, setValue] = React.useState(location?.state?.pending ? 1 : 0);
 	const [listData, setListData] = React.useState("");
 	const [totalElement, setTotalElement] = React.useState(0);
 	const [pagination, setPagination] = React.useState({
-		page: 0,
-		pageSize: 10,
+		page: neighbourhoodPagination?.page ? neighbourhoodPagination?.page : 0,
+		pageSize: neighbourhoodPagination?.pageSize ? neighbourhoodPagination?.pageSize : 10,
 	});
 	const [pendingListData, setPendingListData] = React.useState("");
 	const [totalPendingElement, setTotalPendingElement] = React.useState(0);

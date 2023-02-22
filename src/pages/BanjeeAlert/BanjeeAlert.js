@@ -5,9 +5,10 @@ import AlertListTable from "./components/AlertListTable";
 import { useCallback } from "react";
 import PropTypes from "prop-types";
 import ReportedAlertList from "./components/ReportedAlertList";
-import { Add } from "@mui/icons-material";
+import { Add, Refresh } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router";
 import { MainContext } from "../../context/Context";
+import { PaginationContext } from "../../context/PaginationContext";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -41,22 +42,22 @@ function BanjeeAlert() {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { themeData } = React.useContext(MainContext);
+	const { alertPagination, setAlertPagination } = React.useContext(PaginationContext);
 	const [value, setValue] = React.useState(location?.state?.reportedDetail ? 1 : 0);
 
 	const [data, setData] = React.useState("");
 
-	const [state, setState] = React.useState({
-		totalElement: 0,
-		pagination: {
-			page: 0,
-			pageSize: 10,
-		},
+	const [totalElements, setTotalElements] = React.useState(0);
+	const [pagination, setPagination] = React.useState({
+		page: alertPagination?.page ? alertPagination?.page : 0,
+		pageSize: alertPagination?.pageSize ? alertPagination?.pageSize : 10,
 	});
 
 	const handlePagination = (data) => {
-		setState((prev) => ({
+		setPagination((prev) => ({
 			...prev,
-			pagination: data,
+			page: data?.page,
+			pageSize: data?.pageSize,
 		}));
 	};
 
@@ -65,16 +66,16 @@ function BanjeeAlert() {
 	};
 
 	const handleAlertListApiCall = () => {
-		ListAlertApiCall(0, 10);
+		ListAlertApiCall();
 	};
 
-	const ListAlertApiCall = useCallback((page, pageSize) => {
+	const ListAlertApiCall = useCallback(() => {
 		// if (currentLocation?.lat && currentLocation?.lon) {
 		listAlert({
 			// latitude: currentLocation?.lat,
 			// longitude: currentLocation?.lon,
-			page: page,
-			pageSize: pageSize,
+			page: pagination?.page,
+			pageSize: pagination?.pageSize,
 		})
 			.then((res) => {
 				const resp = res?.content?.map((item) => {
@@ -87,18 +88,11 @@ function BanjeeAlert() {
 					};
 				});
 				setData(resp);
-				setState((prev) => ({
-					...prev,
-					totalElement: res.totalElements,
-					pagination: {
-						page: res?.pageable?.pageNumber,
-						pageSize: res?.pageable?.pageSize,
-					},
-				}));
+				setTotalElements(res.totalElements);
 			})
 			.catch((err) => console.error(err));
 		// }
-	}, []);
+	}, [pagination]);
 
 	// const listAllData = React.useCallback(() => {
 	// 	if (navigator.geolocation) {
@@ -114,7 +108,7 @@ function BanjeeAlert() {
 	// }, []);
 
 	React.useEffect(() => {
-		ListAlertApiCall(0, 10);
+		ListAlertApiCall();
 	}, [ListAlertApiCall]);
 
 	return (
@@ -129,14 +123,25 @@ function BanjeeAlert() {
 									color: themeData ? "default" : "#6b778c",
 									fontSize: "22px",
 								}}>
-								Alerts({state?.totalElement ? state?.totalElement : 0})
+								Alerts({totalElements ? totalElements : 0})
 							</Typography>
 						</Box>
-						<Tooltip title='Create Alert' arrow sx={{ bacground: "white", color: "black" }}>
-							<IconButton onClick={() => navigate("/banjee-alert/create")}>
-								<Add color='primary' />
-							</IconButton>
-						</Tooltip>
+						<Box>
+							<Tooltip title='Create Alert' arrow sx={{ bacground: "white", color: "black" }}>
+								<IconButton onClick={() => navigate("/banjee-alert/create")}>
+									<Add color='primary' />
+								</IconButton>
+							</Tooltip>
+							<Tooltip title='Refresh Alerts' arrow sx={{ bacground: "white", color: "black" }}>
+								<IconButton
+									onClick={() => {
+										setAlertPagination({ page: undefined, pageSize: undefined });
+										setPagination({ page: 0, pageSize: 10 });
+									}}>
+									<Refresh color='primary' />
+								</IconButton>
+							</Tooltip>
+						</Box>
 					</Card>
 				</Grid>
 				{/* <Grid item xs={12}>
@@ -181,9 +186,10 @@ function BanjeeAlert() {
 							<AlertListTable
 								handleAlertListApiCall={handleAlertListApiCall}
 								listApiCall={ListAlertApiCall}
-								pagination={state}
+								pagination={pagination}
 								handlePagination={handlePagination}
 								data={data}
+								totalElement={totalElements}
 							/>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
