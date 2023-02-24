@@ -42,6 +42,7 @@ import CreateAlert from "./pages/BanjeeAlert/components/CreateAlert";
 import NotFound from "./pages/NotFound/NotFound";
 import FeedDetail from "./pages/Social_Feeds/Components/DetailPage/FeedDetail";
 import GoogleMapCustom from "./CustomComponents/GoogleMap";
+import Reports from "./pages/Report/Report";
 
 const Routes = () => {
 	return useRoutes([
@@ -105,10 +106,10 @@ const Routes = () => {
 					path: "/social-feeds/reported-feeds/:id",
 					element: <ViewRFeed />,
 				},
-				// {
-				// 	path: "/report",
-				// 	element: <UsersReport />,
-				// },
+				{
+					path: "/report",
+					element: <Reports />,
+				},
 				// {
 				// 	path: "/report/users",
 				// 	element: <UsersReport />,

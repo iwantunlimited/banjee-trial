@@ -9,6 +9,7 @@ export const services = {
 	SOCIAL_CONNECTIONS: host + "/services/social-connections/api/",
 	SOCIAL_FEEDS: host + "/services/social-feeds/",
 	USER_PROFILE: host + "/services/userprofile-service/api/",
+	USER_PROFILE_MEMBERSHIP: host + "/services/userprofile-service/",
 	GEO_CLOUD: host + "/services/geo-cloud/",
 	CDN_SERVICE: host + "/services/media-service/api/",
 	PAYMENTMODE: host + "/services/payment-service/api/paymentMode/v2/",

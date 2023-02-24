@@ -63,28 +63,69 @@ function CreateBusiness({ listApiCall, pendingListApiCall, handleExpanded }) {
 		if (event?.target?.files?.length > 0) {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
 				const image = event.target.files[index];
+
+				const imageSize = event.target.files[index]?.size * 0.000001;
 				const inputType = image.type.split("/")?.[0];
 				if (inputType === "image") {
-					new Compressor(image, {
-						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-						convertTypes: ["image/png"],
-						success: (compressedResult) => {
-							// compressedResult has the compressed file.
-							// Use the compressed file to upload the images to your server.
-							// setImages(compressedResult);
-							setBusinessImgShow((prev) => [
-								...prev,
-								{
-									type: inputType,
-									data: URL.createObjectURL(compressedResult),
-									id: uuidv4(),
-									src: compressedResult,
-									loader: false,
-									done: false,
-								},
-							]);
-						},
-					});
+					var reader = new FileReader();
+
+					//Read the contents of Image File.
+					reader.readAsDataURL(image);
+					reader.onload = function (e) {
+						//Initiate the JavaScript Image object.
+						var imageReader = new Image();
+
+						//Set the Base64 string return from FileReader as source.
+						imageReader.src = e.target.result;
+
+						//Validate the File Height and Width.
+						imageReader.onload = function () {
+							var height = this.height;
+							var width = this.width;
+							if (height > 1024 || width > 1024 || imageSize > 1) {
+								if (imageSize > 1) {
+									setModalOpen(true);
+									setModalData("Size of image is not greater than 1MB", "error");
+
+									document.getElementById("businessImage").value = "";
+									return false;
+								} else {
+									setModalOpen(true);
+									setModalData("Height and Width must not exceed 1024px.", "error");
+
+									document.getElementById("businessImage").value = "";
+									return false;
+								}
+								// window.alert("Height and Width must not exceed 1024px.");
+							} else {
+								new Compressor(image, {
+									quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+									convertTypes: ["image/png"],
+									success: (compressedResult) => {
+										// compressedResult has the compressed file.
+										// Use the compressed file to upload the images to your server.
+										// setImages(compressedResult);
+										setBusinessImgShow((prev) => [
+											...prev,
+											{
+												type: inputType,
+												data: URL.createObjectURL(compressedResult),
+												id: uuidv4(),
+												src: compressedResult,
+												loader: false,
+												done: false,
+											},
+										]);
+									},
+									error: (error) => {
+										window.alert(error);
+									},
+								});
+							}
+
+							return true;
+						};
+					};
 				} else {
 					setBusinessImgShow((prev) => [
 						...prev,
@@ -98,42 +139,6 @@ function CreateBusiness({ listApiCall, pendingListApiCall, handleExpanded }) {
 						},
 					]);
 				}
-			}
-		} else {
-			const image = event.target.files[0];
-			const inputType = image.type.split("/")?.[0];
-			if (inputType === "image") {
-				new Compressor(image, {
-					quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-					convertTypes: ["image/png"],
-					success: (compressedResult) => {
-						// compressedResult has the compressed file.
-						// Use the compressed file to upload the images to your server.
-						setBusinessImgShow((prev) => [
-							...prev,
-							{
-								type: inputType,
-								data: URL.createObjectURL(compressedResult),
-								id: uuidv4(),
-								src: image,
-								loader: true,
-								done: false,
-							},
-						]);
-					},
-				});
-			} else {
-				setBusinessImgShow((prev) => [
-					...prev,
-					{
-						type: inputType,
-						data: URL.createObjectURL(image),
-						id: uuidv4(),
-						src: image,
-						loader: true,
-						done: false,
-					},
-				]);
 			}
 		}
 	};
@@ -731,6 +736,9 @@ function CreateBusiness({ listApiCall, pendingListApiCall, handleExpanded }) {
 										)}
 									</Box>
 								</Box>
+								<label for='businessImage' style={{ color: "rgb(108 108 108)" }}>
+									*Required image dimension 1024 x 1024px and shoud be less than 1MB
+								</label>
 							</Grid>
 							<Grid item xs={12}>
 								<Box sx={{ position: "relative", height: "400px" }}>

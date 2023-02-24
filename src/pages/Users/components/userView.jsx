@@ -25,8 +25,10 @@ import BusinessList from "./BusinessList";
 import CommunityList from "./CommunityList";
 import AlertList from "./AlertList";
 import BlogList from "./BlogList";
+import { MainContext } from "../../../context/Context";
 
 function CustomerView(props) {
+	const { setModalOpen, setModalData } = React.useContext(MainContext);
 	const params = useParams();
 
 	const { id } = params;

@@ -212,7 +212,17 @@ function FeedDetail(props) {
 						<Card sx={{ padding: "10px" }}>
 							<Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 								<Box
-									onClick={() => navigate("/user/" + data?.authorId)}
+									onClick={() => {
+										if (
+											data?.authorId === "61111e42bcc68b2a1fa3432c" ||
+											data?.authorId === "63f75ffa4c16dbbb155fc380"
+										) {
+											// setModalOpen(true);
+											// setModalData("Admin User", "warning");
+										} else {
+											navigate("/user/" + data?.authorId);
+										}
+									}}
 									style={{
 										width: "100%",
 										display: "flex",

@@ -213,7 +213,7 @@ const GoogleMapCustom = compose(
 			return (
 				<Box
 					sx={{
-						height: "30vh",
+						height: "20vh",
 						width: "100%",
 						display: "flex",
 						justifyContent: "center",
@@ -327,7 +327,7 @@ const GoogleMapCustom = compose(
 				return (
 					<Box
 						sx={{
-							height: "30vh",
+							height: "20vh",
 							width: "100%",
 							display: "flex",
 							justifyContent: "center",

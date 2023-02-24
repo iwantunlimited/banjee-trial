@@ -190,9 +190,9 @@ function CreateAlert() {
 		if (event?.target?.files?.length > 0) {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
 				const image = event.target.files[index];
-				console.log("====================================");
-				console.log("image height", image?.size);
-				console.log("====================================");
+				// console.log("====================================");
+				// console.log("image height", image?.size);
+				// console.log("====================================");
 				const imageSize = event.target.files[index]?.size * 0.000001;
 				const inputType = image.type.split("/")?.[0];
 				if (inputType === "image") {
@@ -880,7 +880,7 @@ function CreateAlert() {
 												)}
 											</Box>
 											<label for='img' style={{ color: "rgb(108 108 108)" }}>
-												*required image dimension 1024 x 1024px and shoud be less than 1MB
+												*Required image dimension 1024 x 1024px and shoud be less than 1MB
 											</label>
 										</Box>
 									</Grid>

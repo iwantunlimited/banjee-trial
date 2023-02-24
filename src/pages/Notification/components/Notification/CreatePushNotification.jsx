@@ -113,8 +113,10 @@ function CreatePushNotification() {
 	const handleAudioChange = (event) => {
 		for (let index = 0; index < event?.target?.files?.length; index++) {
 			const image = event.target.files[index];
+
+			const imageSize = event.target.files[index]?.size * 0.000001;
 			const inputType = image.type.split("/")?.[0];
-			if (inputType === "audio") {
+			if (inputType === "audio" && imageSize < 10) {
 				setAudioShow((prev) => [
 					...prev,
 					{
@@ -126,6 +128,11 @@ function CreatePushNotification() {
 						done: false,
 					},
 				]);
+			} else {
+				setModalOpen(true);
+				setModalData("Size of audio is not greater than 10MB", "error");
+				document.getElementById("audioSrc").value = "";
+				return false;
 			}
 		}
 	};
@@ -134,37 +141,82 @@ function CreatePushNotification() {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
 				const image = event.target.files[index];
 				const inputType = image.type.split("/")?.[0];
+				const imageSize = event.target.files[index]?.size * 0.000001;
 				if (inputType === "image") {
-					new Compressor(image, {
-						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-						success: (compressedResult) => {
-							// compressedResult has the compressed file.
-							// Use the compressed file to upload the images to your server.
-							setImgShow((prev) => [
-								...prev,
-								{
-									type: inputType,
-									id: uuidv4(),
-									data: URL.createObjectURL(compressedResult),
-									src: compressedResult,
-									loader: false,
-									done: false,
-								},
-							]);
-						},
-					});
+					var reader = new FileReader();
+
+					//Read the contents of Image File.
+					reader.readAsDataURL(image);
+					reader.onload = function (e) {
+						//Initiate the JavaScript Image object.
+						var imageReader = new Image();
+
+						//Set the Base64 string return from FileReader as source.
+						imageReader.src = e.target.result;
+
+						//Validate the File Height and Width.
+						imageReader.onload = function () {
+							var height = this.height;
+							var width = this.width;
+							if (height > 1024 || width > 1024 || imageSize > 1) {
+								if (imageSize > 1) {
+									setModalOpen(true);
+									setModalData("Size of image is not greater than 1MB", "error");
+
+									document.getElementById("img").value = "";
+									return false;
+								} else {
+									setModalOpen(true);
+									setModalData("Height and Width must not exceed 1024px.", "error");
+
+									document.getElementById("img").value = "";
+									return false;
+								}
+								// window.alert("Height and Width must not exceed 1024px.");
+							} else {
+								new Compressor(image, {
+									quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+									success: (compressedResult) => {
+										// compressedResult has the compressed file.
+										// Use the compressed file to upload the images to your server.
+										setImgShow((prev) => [
+											...prev,
+											{
+												type: inputType,
+												id: uuidv4(),
+												data: URL.createObjectURL(compressedResult),
+												src: compressedResult,
+												loader: false,
+												done: false,
+											},
+										]);
+									},
+									error: (error) => {
+										window.alert(error);
+									},
+								});
+							}
+
+							return true;
+						};
+					};
 				} else {
-					setImgShow((prev) => [
-						...prev,
-						{
-							type: inputType,
-							id: uuidv4(),
-							data: URL.createObjectURL(image),
-							src: image,
-							loader: false,
-							done: false,
-						},
-					]);
+					if (imageSize > 10) {
+						setModalOpen(true);
+						setModalData("Size of video is not greater than 10MB", "error");
+					} else {
+						setImgShow((prev) => [
+							...prev,
+							{
+								type: inputType,
+								id: uuidv4(),
+								data: URL.createObjectURL(image),
+								src: image,
+								loader: false,
+								done: false,
+							},
+						]);
+					}
 				}
 			}
 		} else {
@@ -680,6 +732,9 @@ function CreatePushNotification() {
 												)}
 											</Box>
 										</Box>
+										<label for='img' style={{ color: "rgb(108 108 108)" }}>
+											*Required image dimension 1024 x 1024px and shoud be less than 1MB
+										</label>
 									</Grid>
 									<Grid item xs={12}>
 										<Box>
@@ -813,6 +868,9 @@ function CreatePushNotification() {
 													</Box>
 												)}
 											</Box>
+											<label for='audioSrc' style={{ color: "rgb(108 108 108)" }}>
+												*Required audio shoud be less than 10MB
+											</label>
 										</Box>
 									</Grid>
 									<Grid item xs={12}>

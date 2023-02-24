@@ -55,6 +55,9 @@ function CreateFeed() {
 		mediaSource: null,
 	});
 
+	const lat = localStorage?.getItem("lat");
+	const lng = localStorage?.getItem("lng");
+
 	const { setModalData, setModalOpen } = React.useContext(MainContext);
 	const [pagination, setPagination] = React.useState({
 		page: 0,
@@ -71,8 +74,8 @@ function CreateFeed() {
 	const [listData, setListData] = React.useState([]);
 	const [finalPayload, setFinalPayload] = React.useState({
 		geoLocation: {
-			x: 0,
-			y: 0,
+			x: lng ? lng : 0,
+			y: lat ? lat : 0,
 		},
 		mediaContent: [],
 		text: "",
@@ -128,24 +131,24 @@ function CreateFeed() {
 			console.log("====================================");
 			console.log("payload", data);
 			console.log("====================================");
-			// createSocialFeeds(data)
-			// 	.then((res) => {
-			// 		setModalOpen(true);
-			// 		setModalData("Feed Created Successfully", "success");
-			// 		navigate("/social-feeds");
-			// 		// setData({
-			// 		// 	title: "",
-			// 		// 	bannerImageUrl: "",
-			// 		// 	categoryId: "",
-			// 		// 	categoryName: "",
-			// 		// 	description: "",
-			// 		// 	shortDescription: "",
-			// 		// 	publishOnFeed: true,
-			// 		// 	slug: "",
-			// 		// });
-			// 		setImgShow("");
-			// 	})
-			// 	.catch((err) => console.error(err));
+			createSocialFeeds(data)
+				.then((res) => {
+					setModalOpen(true);
+					setModalData("Feed Created Successfully", "success");
+					navigate("/social-feeds");
+					// setData({
+					// 	title: "",
+					// 	bannerImageUrl: "",
+					// 	categoryId: "",
+					// 	categoryName: "",
+					// 	description: "",
+					// 	shortDescription: "",
+					// 	publishOnFeed: true,
+					// 	slug: "",
+					// });
+					setImgShow("");
+				})
+				.catch((err) => console.error(err));
 		},
 		[navigate]
 	);
@@ -155,28 +158,65 @@ function CreateFeed() {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
 				const image = event.target.files[index];
 
+				const imageSize = event.target.files[index]?.size * 0.000001;
 				const inputType = image.type.split("/")?.[0];
 				if (inputType === "image") {
-					new Compressor(image, {
-						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-						// convertTypes: ["image/png"],
-						success: (compressedResult) => {
-							// compressedResult has the compressed file.
-							// Use the compressed file to upload the images to your server.
-							// ImageApiCAll(compressedResult, compressedResult.type);
-							setImgShow((prev) => [
-								...prev,
-								{
-									type: inputType,
-									data: URL.createObjectURL(compressedResult),
-									id: uuidv4(),
-									src: compressedResult,
-									loader: false,
-									done: false,
-								},
-							]);
-						},
-					});
+					var reader = new FileReader();
+
+					//Read the contents of Image File.
+					reader.readAsDataURL(image);
+					reader.onload = function (e) {
+						//Initiate the JavaScript Image object.
+						var imageReader = new Image();
+
+						//Set the Base64 string return from FileReader as source.
+						imageReader.src = e.target.result;
+
+						//Validate the File Height and Width.
+						imageReader.onload = function () {
+							var height = this.height;
+							var width = this.width;
+							if (height > 1024 || width > 1024 || imageSize > 1) {
+								if (imageSize > 1) {
+									setModalOpen(true);
+									setModalData("Size of image is not greater than 1MB", "error");
+
+									document.getElementById("img").value = "";
+									return false;
+								} else {
+									setModalOpen(true);
+									setModalData("Height and Width must not exceed 1024px.", "error");
+
+									document.getElementById("img").value = "";
+									return false;
+								}
+								// window.alert("Height and Width must not exceed 1024px.");
+							} else {
+								new Compressor(image, {
+									quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+									// convertTypes: ["image/png"],
+									success: (compressedResult) => {
+										// compressedResult has the compressed file.
+										// Use the compressed file to upload the images to your server.
+										// ImageApiCAll(compressedResult, compressedResult.type);
+										setImgShow((prev) => [
+											...prev,
+											{
+												type: inputType,
+												data: URL.createObjectURL(compressedResult),
+												id: uuidv4(),
+												src: compressedResult,
+												loader: false,
+												done: false,
+											},
+										]);
+									},
+								});
+							}
+
+							return true;
+						};
+					};
 				} else {
 					// ImageApiCAll(image, image.type);
 					setImgShow((prev) => [
@@ -482,7 +522,7 @@ function CreateFeed() {
 								)}
 								<Grid item xs={12}>
 									<Box>
-										<Typography sx={{ marginLeft: "0.3px" }}>upload image</Typography>
+										<Typography sx={{ marginLeft: "0.3px" }}>Upload Image</Typography>
 										<Box
 											sx={{
 												display: "flex",
@@ -560,7 +600,7 @@ function CreateFeed() {
 																		onClick={() => {
 																			imgShow?.map((item, index) => {
 																				if (imgShow?.length - 1 === index) {
-																					document.getElementById("businessImage").value = "";
+																					document.getElementById("img").value = "";
 																				}
 																				return item;
 																			});
@@ -691,6 +731,9 @@ function CreateFeed() {
 												</Box>
 											)}
 										</Box>
+										<label for='img' style={{ color: "rgb(108 108 108)" }}>
+											*Required image dimension 1024 x 1024px and shoud be less than 1MB
+										</label>
 									</Box>
 								</Grid>
 								<Grid item xs={12}>

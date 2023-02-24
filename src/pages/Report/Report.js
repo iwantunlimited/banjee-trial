@@ -1,9 +1,10 @@
 import React from "react";
+import UserReports from "./UserReports";
 
 function Reports() {
 	return (
 		<>
-			<h2>Report Comming soon...</h2>
+			<UserReports />
 		</>
 	);
 }

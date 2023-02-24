@@ -116,6 +116,7 @@ export const urls = {
 
 	USERPROFILE: {
 		USER_CSV_DATA: services?.USER_PROFILE + "remote/user/csvdownload",
+		USER_MEMBERSHIP: services?.USER_PROFILE_MEMBERSHIP + "/user-membership",
 		CUSTOMER_LIST: services.USER_PROFILE + "profile/filter",
 		CUSTOMER_FIND_BY_ID: services.USER_PROFILE + "admin/findById/",
 		FIND_USER_BY_SYSTEMUSER_ID: services?.USER_PROFILE + "profile/findBySystemUserId/",

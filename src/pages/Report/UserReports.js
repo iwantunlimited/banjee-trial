@@ -11,18 +11,17 @@ import {
 } from "@mui/material";
 import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
-import {  useNavigate } from "react-router";
-import ChipComp from "./components/chipComp";
-import {  listCustomer } from "./User_Services/UserApiService";
+import { useNavigate } from "react-router";
+import { listCustomer, listUserMembership } from "./User_Services/UserApiService";
 import jwt_decode from "jwt-decode";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import "./users.css";
 import { MainContext } from "../../context/Context";
 import { Download } from "@mui/icons-material";
 import { PaginationContext } from "../../context/PaginationContext";
-function UserComp() {
+import ChipComponents from "./components/ChipComponents";
+function UserReports() {
 	const navigate = useNavigate();
 	const { userPagination, setUserPagination } = useContext(PaginationContext);
 	const token = localStorage.getItem("token");
@@ -174,6 +173,41 @@ function UserComp() {
 		[keyword, customerFilter]
 	);
 
+	const UserMembershipApiCall = React.useCallback(
+		(data) => {
+			listUserMembership({ exists: false })
+				.then((res) => {
+					console.log("====================================");
+					console.log(res);
+					console.log("====================================");
+					const customerRows = res.map((item) => {
+						return (data = {
+							...item,
+							// ...data.userObject,
+							userId: item?.id,
+							displayDate: item.createdOn ? moment(item.createdOn).format("DD-MM-YYYY") : null,
+							View: "View",
+						});
+					});
+					setUserData((prev) => ({
+						...prev,
+						data: res,
+						totalElement: res.totalElements,
+						customerRows: customerRows,
+					}));
+					// setCustomerFilter((prev) => ({
+					// 	...prev,
+					// 	page: res.pageable.pageNumber,
+					// 	pageSize: res.pageable.pageSize,
+					// }));
+				})
+				.catch((err) => {
+					console.warn(err);
+				});
+		},
+		[keyword, customerFilter]
+	);
+
 	const UserCsvDataApi = React.useCallback((data) => {
 		fetch("https://gateway.banjee.org/services/userprofile-service/api/remote/user/csvdownload", {
 			method: "post",
@@ -208,8 +242,9 @@ function UserComp() {
 	}, []);
 
 	React.useEffect(() => {
-		UserApiCall();
-	}, [UserApiCall]);
+		// UserApiCall();
+		UserMembershipApiCall();
+	}, [UserMembershipApiCall]);
 
 	if (userData?.customerRows?.length === 0) {
 		return (
@@ -224,7 +259,7 @@ function UserComp() {
 				>
 					<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 						<Grid item xs={12}>
-							<ChipComp
+							<ChipComponents
 								refreshApi={handleCustomFilter}
 								keyword={keyword}
 								handleKey={handleKeyword}
@@ -252,7 +287,7 @@ function UserComp() {
 				>
 					<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 						<Grid item xs={12}>
-							<ChipComp
+							<ChipComponents
 								refreshApi={handleCustomFilter}
 								keyword={keyword}
 								handleKey={handleKeyword}
@@ -381,4 +416,4 @@ function UserComp() {
 	}
 }
 
-export default UserComp;
+export default UserReports;

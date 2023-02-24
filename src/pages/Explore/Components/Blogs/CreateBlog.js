@@ -48,23 +48,65 @@ function CreateBlog() {
 
 	const handleImageChange = (event) => {
 		// newImageFunc(event.target.files[0]);
-		const image = event.target.files[0];
-		new Compressor(image, {
-			quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-			convertTypes: ["image/png"],
-			success: (compressedResult) => {
-				// compressedResult has the compressed file.
-				// Use the compressed file to upload the images to your server.
 
-				setImgShow({
-					data: URL.createObjectURL(compressedResult),
-					src: compressedResult,
-					loader: false,
-					done: false,
-				});
-				// ImageApiCAll(compressedResult);
-			},
-		});
+		const imageSize = event.target.files[0]?.size * 0.000001;
+		const image = event.target.files[0];
+
+		var reader = new FileReader();
+
+		//Read the contents of Image File.
+		reader.readAsDataURL(image);
+		reader.onload = function (e) {
+			//Initiate the JavaScript Image object.
+			var imageReader = new Image();
+
+			//Set the Base64 string return from FileReader as source.
+			imageReader.src = e.target.result;
+
+			//Validate the File Height and Width.
+			imageReader.onload = function () {
+				var height = this.height;
+				var width = this.width;
+				if (height > 1024 || width > 1024 || imageSize > 1) {
+					if (imageSize > 1) {
+						setModalOpen(true);
+						setModalData("Size of image is not greater than 1MB", "error");
+
+						document.getElementById("img").value = "";
+						return false;
+					} else {
+						setModalOpen(true);
+						setModalData("Height and Width must not exceed 1024px.", "error");
+
+						document.getElementById("img").value = "";
+						return false;
+					}
+					// window.alert("Height and Width must not exceed 1024px.");
+				} else {
+					new Compressor(image, {
+						quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+						convertTypes: ["image/png"],
+						success: (compressedResult) => {
+							// compressedResult has the compressed file.
+							// Use the compressed file to upload the images to your server.
+
+							setImgShow({
+								data: URL.createObjectURL(compressedResult),
+								src: compressedResult,
+								loader: false,
+								done: false,
+							});
+							// ImageApiCAll(compressedResult);
+						},
+						error: (error) => {
+							window.alert(error);
+						},
+					});
+				}
+
+				return true;
+			};
+		};
 	};
 
 	const ImageApiCAll = React.useCallback((data) => {
@@ -356,6 +398,10 @@ function CreateBlog() {
 											)}
 										</Box>
 									</Box>
+
+									<label for='img' style={{ color: "rgb(108 108 108)" }}>
+										*Required image dimension 1024 x 1024px and shoud be less than 1MB
+									</label>
 								</Grid>
 								<Grid item xs={12}>
 									<Box>

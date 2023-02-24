@@ -15,6 +15,12 @@ code {
 .uv-map > div > div > div > div {
 	touch-action: pan-x pan-y !important;
 }
+/* .MuiDataGrid-columnHeadersInner {
+	background-color: #b9d5ff91 !important;
+}
+.css-um056b {
+	background-color: #b9d5ff91 !important;
+} */
 
 .markerCss {
 	background-color: #5664d2;

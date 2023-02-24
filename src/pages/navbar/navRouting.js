@@ -23,6 +23,7 @@ import GroupComp from "../Groups/Groups";
 import UserComp from "../Users/users";
 import DashboardTrial from "../Dashboard/DashboardChart";
 import Room from "../Rooms/Rooms";
+import Reports from "../Report/Report";
 
 const routing = [
 	{
@@ -151,6 +152,22 @@ const routing = [
 		name: "Groups",
 		icon: <PeopleAlt fontSize='medium' />,
 		component: <GroupComp />,
+	},
+	{
+		id: 18,
+		path: "/report",
+		name: "Report",
+		icon: <Report fontSize='medium' />,
+		component: <Reports />,
+		children: [
+			{
+				id: 19,
+				path: "/report",
+				name: "Users",
+				icon: <PeopleAlt fontSize='medium' />,
+				component: <Reports />,
+			},
+		],
 	},
 	// {
 	//     id:3,
