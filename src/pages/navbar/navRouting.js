@@ -8,6 +8,8 @@ import {
 	Report,
 	TravelExplore,
 	NotificationImportant,
+	Summarize,
+	VerifiedUser,
 } from "@mui/icons-material";
 import SocialFeed from "../Social_Feeds/Social_Feed";
 import UsersReport from "../Report/UsersReport";
@@ -24,6 +26,7 @@ import UserComp from "../Users/users";
 import DashboardTrial from "../Dashboard/DashboardChart";
 import Room from "../Rooms/Rooms";
 import Reports from "../Report/Report";
+import ActiveUsers from "../Report/ActiveUsers";
 
 const routing = [
 	{
@@ -157,7 +160,7 @@ const routing = [
 		id: 18,
 		path: "/report",
 		name: "Report",
-		icon: <Report fontSize='medium' />,
+		icon: <Summarize fontSize='medium' />,
 		component: <Reports />,
 		children: [
 			{
@@ -166,6 +169,13 @@ const routing = [
 				name: "Users",
 				icon: <PeopleAlt fontSize='medium' />,
 				component: <Reports />,
+			},
+			{
+				id: 20,
+				path: "/report/activeUsers",
+				name: "Active Users",
+				icon: <VerifiedUser fontSize='medium' />,
+				component: <ActiveUsers />,
 			},
 		],
 	},

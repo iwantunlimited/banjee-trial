@@ -43,6 +43,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import FeedDetail from "./pages/Social_Feeds/Components/DetailPage/FeedDetail";
 import GoogleMapCustom from "./CustomComponents/GoogleMap";
 import Reports from "./pages/Report/Report";
+import ActiveUsers from "./pages/Report/ActiveUsers";
 
 const Routes = () => {
 	return useRoutes([
@@ -54,10 +55,10 @@ const Routes = () => {
 					path: "/",
 					element: <DashboardTrial />,
 				},
-				{
-					path: "/map",
-					element: <GoogleMapCustom isMarkerShown={true} />,
-				},
+				// {
+				// 	path: "/map",
+				// 	element: <GoogleMapCustom isMarkerShown={true} />,
+				// },
 				{
 					path: "/category",
 					element: <MainCategoryComp />,
@@ -109,6 +110,10 @@ const Routes = () => {
 				{
 					path: "/report",
 					element: <Reports />,
+				},
+				{
+					path: "/report/activeUsers",
+					element: <ActiveUsers />,
 				},
 				// {
 				// 	path: "/report/users",

@@ -16,8 +16,6 @@ export const urls = {
 		"itpl-app-os": "web",
 	},
 
-	SVOD_FIND: services.SVOD + "subscriptionpackage/find",
-
 	LOGIN: services.AUTH,
 
 	DASHBOARD: {
@@ -36,7 +34,9 @@ export const urls = {
 		DELETE_CATEGORY: services.ASSETS_SERVICES + "category/delete/",
 		DELETE_SUB_CATEGORY: services.ASSETS_SERVICES + "sub-category/delete/",
 	},
-
+	SYSTEM_SERVICES: {
+		ACTIVE_USERS: services.SYSTEM_SERVICES + "user/active",
+	},
 	SOCIAL_CONNECTION: {
 		FILTER: services.SOCIAL_CONNECTIONS + "social-connection/group/filter",
 		FIND_BY_ID: services.SOCIAL_CONNECTIONS + "social-connection/group/findById/",
@@ -159,14 +159,6 @@ export const urls = {
 		FIND_BY_ID: services.LOCATION + "system/city/findById/", // pass id when calling this api
 	},
 
-	TRANSACTION_RELAY_CONFIG: {
-		ADD: services.USER_SERVICE + "system/relayconfig",
-		UPDATE: services.USER_SERVICE + "system/relayconfig",
-		DELETE: services.USER_SERVICE + "system/relayconfig",
-		FILTER: services.USER_SERVICE + "system/relayconfig",
-		FIND_BY_ID: services.USER_SERVICE + "system/relayconfig",
-	},
-
 	TEMPLATE: {
 		ADD: services.SNS_SERVICE + "sns/templates",
 		UPDATE: services.SNS_SERVICE + "sns/templates",
@@ -174,15 +166,6 @@ export const urls = {
 		FILTER: services.SNS_SERVICE + "sns/templates",
 		FIND_BY_ID: services.SNS_SERVICE + "sns/templates",
 	},
-
-	PAGE_CONTENT: {
-		PAGE_CONTENT: services.PRODUCT + "store-front/page",
-		FIND_BY_ID: services.PRODUCT + "store-front/page/findById/",
-		DELETE: services.PRODUCT + "store-front/page/delete/",
-	},
-
-	PAYMENTMODE_LIST: services.PAYMENTMODE + "findAll",
-	DELIVERYMODE_LIST: services.ORDER + "remote/deliveryMode/findByDomain/",
 
 	LOCALE: services.TEMPLOCATION + "commons/locale",
 	TIMEZONE: services.TEMPLOCATION + "commons/timezone",

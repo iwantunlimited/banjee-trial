@@ -12,7 +12,7 @@ import {
 import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router";
-import { listUserMembership } from "./User_Services/UserApiService";
+import { listActiveUsers, listUserMembership } from "./User_Services/UserApiService";
 import jwt_decode from "jwt-decode";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
@@ -21,14 +21,16 @@ import { MainContext } from "../../context/Context";
 import { Download } from "@mui/icons-material";
 import { PaginationContext } from "../../context/PaginationContext";
 import ChipComponents from "./components/ChipComponents";
-function UserReports() {
+
+function ActiverUsers() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
 	const context = React.useContext(MainContext);
 	const decodeToken = jwt_decode(token);
+	const date = new Date();
 	const [userData, setUserData] = React.useState({
 		data: [],
-		customerRows: null,
+		customerRows: [],
 		snackbar: {
 			message: "",
 			open: false,
@@ -37,10 +39,36 @@ function UserReports() {
 		totalElement: 0,
 	});
 
+	const [userRow, setUserRow] = React.useState([]);
+
 	const [customerFilter, setCustomerFilter] = React.useState({
 		page: 0,
 		pageSize: 10,
+		// domain: decodeToken.domain,
+		fromDate: moment().set({ hour: 0, minute: 0, second: 0 }).format(),
+		toDate: moment().set({ hour: 23, minute: 59, second: 59 }).format(),
 	});
+
+	const [keyword, setKeyword] = React.useState("");
+	function handleKeyword(event) {
+		setKeyword(event.target.value);
+	}
+
+	function handleRefresh() {
+		setCustomerFilter((prev) => ({
+			...prev,
+			page: 0,
+			pageSize: 10,
+		}));
+	}
+
+	function handleDate(data) {
+		setCustomerFilter((prev) => ({
+			...prev,
+			fromDate: moment(data?.startDate).set({ hour: 0, minute: 0, second: 0 }).format(),
+			toDate: moment(data?.endDate).format(),
+		}));
+	}
 
 	function sanckbarClose() {
 		setUserData((prev) => ({
@@ -51,31 +79,36 @@ function UserReports() {
 
 	const customerCols = [
 		{
+			id: 1,
 			field: "firstName",
 			headerClassName: "app-header",
 			headerName: "First Name",
 			flex: 0.4,
 		},
 		{
+			id: 2,
 			field: "lastName",
 			headerClassName: "app-header",
 			headerName: "Last Name",
 			flex: 0.4,
 		},
 		{
+			id: 3,
 			field: "mobile",
 			headerClassName: "app-header",
 			headerName: "Contact Number",
 			flex: 0.5,
 		},
 		{
+			id: 4,
 			field: "email",
 			headerClassName: "app-header",
 			headerName: "Email",
 			flex: 0.5,
 		},
 		{
-			field: "displayDate",
+			id: 5,
+			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
 			flex: 0.5,
@@ -88,64 +121,76 @@ function UserReports() {
 				}
 			},
 		},
-		{
-			field: "View",
-			headerClassName: "app-header",
-			headerName: "View",
-			flex: 0.2,
-			renderCell: (params) => (
-				<strong>
-					<IconButton
-						onClick={() => {
-							// navigate(`/user/${params?.row?.userObject?.id}`);
-							navigate("/user/" + params?.row?.systemUserId);
-							// this.props.history.push(
-							// 	this.props.location.pathname +
-							// 		"/view/" +
-							// 		params.row.userObject.id
-							// );
-						}}>
-						<VisibilityIcon />
-					</IconButton>
-				</strong>
-			),
-		},
+		// {
+		// 	id: 6,
+		// 	field: "id",
+		// 	headerClassName: "app-header",
+		// 	headerName: "View",
+		// 	flex: 0.2,
+		// 	renderCell: (params) => (
+		// 		<strong>
+		// 			<IconButton
+		// 				onClick={() => {
+		// 					// navigate(`/user/${params?.row?.userObject?.id}`);
+		// 					navigate("/user/" + params?.row?.systemUserId);
+		// 					// this.props.history.push(
+		// 					// 	this.props.location.pathname +
+		// 					// 		"/view/" +
+		// 					// 		params.row.userObject.id
+		// 					// );
+		// 				}}>
+		// 				<VisibilityIcon />
+		// 			</IconButton>
+		// 		</strong>
+		// 	),
+		// },
 	];
-	const rows = userData?.customerRows ? userData?.customerRows : [];
+	const rows = userRow ? userRow : [];
 
-	const UserMembershipApiCall = React.useCallback(
-		(data) => {
-			listUserMembership({
-				exists: false,
-				page: customerFilter?.page,
-				pageSize: customerFilter?.pageSize,
+	const ActiveUserApiCall = React.useCallback(
+		(newData) => {
+			listActiveUsers({
+				page: newData?.page ? newData?.page : customerFilter?.page,
+				pageSize: newData?.pageSize ? newData?.pageSize : customerFilter?.pageSize,
+				fromDate: customerFilter?.fromDate,
+				toDate: customerFilter?.toDate,
 			})
 				.then((res) => {
-					console.log("====================================");
-					console.log(res);
-					console.log("====================================");
-					const customerRows = res?.content.map((item) => {
-						return (data = {
+					const rowData = res?.content.map((item) => {
+						return {
 							...item,
-							// ...data.userObject,
-							userId: item?.id,
-							displayDate: item.createdOn ? moment(item.createdOn).format("DD-MM-YYYY") : null,
-							View: "View",
-						});
+							firstName: item?.user?.firstName,
+							lastName: item?.user?.lastName,
+							email: item?.user?.email,
+							mobile: item?.user?.mobile,
+							createdOn: item?.user?.createdOn,
+							id: item?.id,
+							view: "view",
+						};
 					});
+					setUserRow(rowData);
 					setUserData((prev) => ({
 						...prev,
 						data: res,
 						totalElement: res.totalElements,
-						customerRows: customerRows,
+						customerRows: rowData,
 					}));
 				})
 				.catch((err) => {
 					console.warn(err);
 				});
 		},
-		[customerFilter?.page, customerFilter?.pageSize]
+		[
+			customerFilter?.page,
+			customerFilter?.pageSize,
+			customerFilter?.fromDate,
+			customerFilter?.toDate,
+		]
 	);
+
+	// console.log("====================================");
+	// console.log("active users", userRow);
+	// console.log("====================================");
 
 	const UserCsvDataApi = React.useCallback((data) => {
 		fetch("https://gateway.banjee.org/services/userprofile-service/api/remote/user/csvdownload", {
@@ -181,10 +226,10 @@ function UserReports() {
 	}, []);
 
 	React.useEffect(() => {
-		UserMembershipApiCall();
-	}, [UserMembershipApiCall]);
+		ActiveUserApiCall();
+	}, [ActiveUserApiCall]);
 
-	if (userData?.customerRows?.length === 0) {
+	if (userRow?.length === 0) {
 		return (
 			<>
 				<Helmet>
@@ -197,7 +242,13 @@ function UserReports() {
 				>
 					<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 						<Grid item xs={12}>
-							<ChipComponents refreshApi={UserMembershipApiCall} searchByDate={false} />
+							<ChipComponents
+								refreshApi={handleRefresh}
+								searchByDate={true}
+								keyword={keyword}
+								handleKey={handleKeyword}
+								handleDate={handleDate}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -208,7 +259,7 @@ function UserReports() {
 				</Container>
 			</>
 		);
-	} else if (userData?.customerRows?.length > 0) {
+	} else if (userRow?.length > 0) {
 		return (
 			<>
 				<Helmet>
@@ -221,7 +272,13 @@ function UserReports() {
 				>
 					<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 						<Grid item xs={12}>
-							<ChipComponents refreshApi={UserMembershipApiCall} searchByDate={false} />
+							<ChipComponents
+								refreshApi={handleRefresh}
+								searchByDate={true}
+								keyword={keyword}
+								handleKey={handleKeyword}
+								handleDate={handleDate}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<Card className='main-card space-css'>
@@ -234,7 +291,7 @@ function UserReports() {
 												fontSize: "20px",
 												fontWeight: "500",
 											}}>
-											Users ({userData?.totalElement})
+											Active Users ({userData?.totalElement})
 										</div>
 										{/* <Button
 											onClick={() => {
@@ -330,4 +387,4 @@ function UserReports() {
 	}
 }
 
-export default UserReports;
+export default ActiverUsers;

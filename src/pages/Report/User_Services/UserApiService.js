@@ -21,6 +21,14 @@ let listUserMembership = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 // ----------------------------------------- CUSTOMER LIST SERVICE ---------------------------------------------------
+let listActiveUsers = (requestLoad) => {
+	let url = urls.SYSTEM_SERVICES.ACTIVE_USERS;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+// ----------------------------------------- CUSTOMER LIST SERVICE ---------------------------------------------------
 let getUserCsvData = (requestLoad) => {
 	let url = urls.USERPROFILE.USER_CSV_DATA;
 	let actionCode = "";
@@ -29,4 +37,4 @@ let getUserCsvData = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 
-export { listCustomer, listUserMembership, getUserCsvData };
+export { listCustomer, listUserMembership, getUserCsvData, listActiveUsers };

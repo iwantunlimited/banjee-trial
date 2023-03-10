@@ -8,20 +8,18 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import moment from "moment";
 import { PaginationContext } from "../../../context/PaginationContext";
 
-function ChipComponents({ refreshApi, keyword, handleKey, handleDate }) {
+function ChipComponents({ refreshApi, keyword, handleKey, handleDate, searchByDate }) {
 	const navigate = useNavigate();
 	const theme = useTheme();
-	const { setUserPagination } = React.useContext(PaginationContext);
-	const [startDate, setStartDate] = React.useState(null);
-	const [endDate, setEndDate] = React.useState(null);
+	const [startDate, setStartDate] = React.useState(new Date());
+	const [endDate, setEndDate] = React.useState(new Date().setHours(23));
 
 	return (
 		<Card className='main-card space-css'>
 			<div style={{ display: "flex", alignItems: "center" }}>
 				<IconButton
 					onClick={() => {
-						setUserPagination({ page: undefined, pageSize: undefined });
-						refreshApi({ startDate: null, endDate: null, page: 0, pageSize: 10 });
+						refreshApi();
 					}}
 					style={{
 						borderRadius: "50px",
@@ -32,7 +30,7 @@ function ChipComponents({ refreshApi, keyword, handleKey, handleDate }) {
 					}}>
 					<Refresh fontSize='small' />
 				</IconButton>
-				<TextField
+				{/* <TextField
 					size='small'
 					variant='outlined'
 					label='Search'
@@ -40,77 +38,67 @@ function ChipComponents({ refreshApi, keyword, handleKey, handleDate }) {
 					value={keyword}
 					onChange={(e) => handleKey(e)}
 					className='search-field'
-				/>
+				/> */}
 			</div>
-			<div>
-				<form
-					onSubmit={(event) => {
-						event.preventDefault();
-						handleDate({
-							startDate: startDate,
-							endDate: endDate,
-						});
-					}}>
-					<Stack direction={"row"} spacing={3}>
-						<LocalizationProvider dateAdapter={AdapterDateFns}>
-							<DatePicker
-								inputFormat='dd/MM/yyyy'
-								name='startDate'
-								label='Start Date'
-								value={startDate}
-								onChange={(newValue) => {
-									setStartDate(newValue);
-								}}
-								renderInput={(params) => (
-									<TextField
-										size='small'
-										helperText={params?.InputProps?.placeholder}
-										{...params}
-									/>
-								)}
-							/>
-						</LocalizationProvider>
-						<LocalizationProvider dateAdapter={AdapterDateFns}>
-							<DatePicker
-								minDate={startDate !== null && startDate}
-								inputFormat='dd/MM/yyyy'
-								name='endDate'
-								label='End Date'
-								value={endDate}
-								onChange={(newValue) => {
-									setEndDate(newValue);
-								}}
-								renderInput={(params) => <TextField size='small' {...params} />}
-							/>
-						</LocalizationProvider>
-						<Box sx={{ display: "flex", alignItems: "center" }}>
-							<IconButton
-								type='submit'
-								color='primary'
-								style={{
-									borderRadius: "50px !important",
-									background: theme.palette.primary.main,
-									padding: window.innerWidth < 501 ? "5px" : "10px",
-									color: theme.palette.primary.contrastText,
-								}}>
-								<Search fontSize='small' />
-							</IconButton>
-						</Box>
-						{/* <Tooltip title='Reported Users'>
-						<IconButton
-							onClick={() => navigate("/user/reporteduser")}
-							style={{
-								borderRadius: "50px",
-								background: theme.palette.primary.main,
-								padding: window.innerWidth < 501 ? "5px" : "10px",
-								color: theme.palette.primary.contrastText,
-							}}>
-							<Report />
-						</IconButton>
-					</Tooltip> */}
-					</Stack>
-				</form>
-			</div>
+			{searchByDate && (
+				<div>
+					<form
+						onSubmit={(event) => {
+							event.preventDefault();
+							handleDate({
+								startDate: startDate,
+								endDate: endDate,
+							});
+						}}>
+						<Stack direction={"row"} spacing={3}>
+							<LocalizationProvider dateAdapter={AdapterDateFns}>
+								<DatePicker
+									inputFormat='dd/MM/yyyy'
+									name='startDate'
+									label='Start Date'
+									value={startDate}
+									onChange={(newValue) => {
+										setStartDate(newValue);
+									}}
+									renderInput={(params) => (
+										<TextField
+											size='small'
+											helperText={params?.InputProps?.placeholder}
+											{...params}
+										/>
+									)}
+								/>
+							</LocalizationProvider>
+							<LocalizationProvider dateAdapter={AdapterDateFns}>
+								<DatePicker
+									minDate={startDate !== null && startDate}
+									inputFormat='dd/MM/yyyy'
+									name='endDate'
+									label='End Date'
+									value={endDate}
+									onChange={(newValue) => {
+										setEndDate(newValue);
+									}}
+									renderInput={(params) => <TextField size='small' {...params} />}
+								/>
+							</LocalizationProvider>
+							<Box sx={{ display: "flex", alignItems: "center" }}>
+								<IconButton
+									type='submit'
+									color='primary'
+									style={{
+										borderRadius: "50px !important",
+										background: theme.palette.primary.main,
+										padding: window.innerWidth < 501 ? "5px" : "10px",
+										color: theme.palette.primary.contrastText,
+									}}>
+									<Search fontSize='small' />
+								</IconButton>
+							</Box>
+						</Stack>
+					</form>
+				</div>
+			)}
 		</Card>
 	);
 }
