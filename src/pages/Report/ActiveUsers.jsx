@@ -291,7 +291,7 @@ function ActiverUsers() {
 												fontSize: "20px",
 												fontWeight: "500",
 											}}>
-											Active Users ({userData?.totalElement})
+											Daily Active Users ({userData?.totalElement})
 										</div>
 										{/* <Button
 											onClick={() => {
