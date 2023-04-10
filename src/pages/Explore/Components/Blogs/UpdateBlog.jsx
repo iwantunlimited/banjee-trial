@@ -191,6 +191,7 @@ function UpdateBlog() {
 								<Grid item container xs={12} spacing={2}>
 									<Grid item xs={12}>
 										<TextField
+											label='Title'
 											required
 											fullWidth
 											className='neighbourhood-form-textField'
@@ -222,34 +223,37 @@ function UpdateBlog() {
 										placeholder='Enter Slug'
 									/>
 								</Grid> */}
-									<Grid item xs={12}>
-										<FormControl fullWidth>
-											<InputLabel id='demo-simple-select-label'>Category Type</InputLabel>
-											<Select
-												required
-												labelId='demo-simple-select-label'
-												id='demo-simple-select'
-												name='type'
-												label='Category Type'
-												value={data?.categoryId}
-												onChange={(event, data) => {
-													setData((prev) => ({
-														...prev,
-														categoryId: event?.target?.value,
-														categoryName: data?.props?.children,
-													}));
-												}}>
-												{categoryList &&
-													categoryList?.map((item, index) => {
-														return (
-															<MenuItem key={index} value={item?.id}>
-																{item?.name}
-															</MenuItem>
-														);
-													})}
-											</Select>
-										</FormControl>
-									</Grid>
+									{categoryList?.length > 0 && (
+										<Grid item xs={12}>
+											<FormControl fullWidth>
+												<InputLabel id='demo-simple-select-label'>Category Type</InputLabel>
+												<Select
+													required
+													labelId='demo-simple-select-label'
+													id='demo-simple-select'
+													name='type'
+													label='Category Type'
+													value={data?.categoryId}
+													onChange={(event, data) => {
+														setData((prev) => ({
+															...prev,
+															categoryId: event?.target?.value,
+															categoryName: data?.props?.children,
+														}));
+													}}>
+													{categoryList &&
+														categoryList?.map((item, index) => {
+															return (
+																<MenuItem key={index} value={item?.id}>
+																	{item?.name}
+																</MenuItem>
+															);
+														})}
+												</Select>
+											</FormControl>
+										</Grid>
+									)}
+
 									<Grid item xs={12}>
 										<TextField
 											required

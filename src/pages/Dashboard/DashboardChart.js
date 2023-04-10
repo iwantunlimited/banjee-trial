@@ -203,7 +203,7 @@ const DashboardTrial = () => {
 								<Typography sx={{ fontWeight: "600" }}>Select Date</Typography>
 							</Box>
 							<Divider sx={{ mb: 1 }} />
-							<Box sx={{ display: "flex", justifyContent: "center" }}>
+							<Box sx={{ display: "flex", justifyContent: "center", marginY: 2 }}>
 								<LocalizationProvider
 									dateAdapter={AdapterDateFns}
 									localeText={{ start: "From Date", end: "To Date" }}>
@@ -215,9 +215,9 @@ const DashboardTrial = () => {
 										renderInput={(startProps, endProps) => (
 											<React.Fragment>
 												<Box sx={{ display: "flex", flexDirection: "column" }}>
-													<TextField {...startProps} />
+													<TextField size='small' {...startProps} />
 													<Box sx={{ textAlign: "center" }}> to </Box>
-													<TextField sx={{ my: 1 }} {...endProps} />
+													<TextField size='small' sx={{ my: 1 }} {...endProps} />
 												</Box>
 											</React.Fragment>
 										)}

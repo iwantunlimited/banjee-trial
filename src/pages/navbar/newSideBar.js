@@ -20,7 +20,7 @@ function SidebarList({ handleId, handleClick }) {
 
 	const path2 = pathname?.split("/")?.[2];
 
-	// console.log("path----3", "/" + path1 + "/" + path2 + "/" + path3);
+	console.log("path----3", "/" + path1 + "/" + path2);
 	const [open, setOpen] = React.useState(false);
 	const [id, setId] = React.useState("");
 	return (
@@ -33,6 +33,12 @@ function SidebarList({ handleId, handleClick }) {
 			component='nav'
 			aria-labelledby='nested-list-subheader'>
 			{routing?.map((item, index) => {
+				const routingPath = item?.path.split("/")?.[1];
+				{
+					/* console.log("====================================");
+				console.log("routingPath", routingPath, path1 === routingPath);
+				console.log("===================================="); */
+				}
 				if (item?.children?.length > 0) {
 					return (
 						<>
@@ -46,24 +52,12 @@ function SidebarList({ handleId, handleClick }) {
 								}}
 								sx={{
 									color:
-										`/${path1}` === item.path
+										`/${path1}` === routingPath
 											? theme.palette.common.white
 											: theme.palette.common.white,
 									// padding: "5px 10px",
 									background:
-										path1 === item.path ||
-										pathname === item.path ||
-										pathname === item.path + `/blogs/createblog` ||
-										pathname === item.path + `/detail/${params?.id}` ||
-										pathname === item.path + `/${params?.id}` ||
-										pathname === item.path + `/template` ||
-										pathname === item.path + `/template/${params?.id}` ||
-										pathname === item.path + `/template/create-template` ||
-										pathname === item.path + `/create-notification` ||
-										pathname === item.path + `/update/${params?.id}` ||
-										pathname === item.path + `/view/${params?.id}` ||
-										pathname === item.path + `/blogs/detail/${params?.id}` ||
-										pathname === item.path + `/blogs`
+										path1 === routingPath
 											? theme.palette.secondary.main
 											: theme.palette.primary.main,
 									borderRadius: "10px",
@@ -71,19 +65,7 @@ function SidebarList({ handleId, handleClick }) {
 									marginX: "5px",
 									":hover": {
 										background:
-											pathname === item.path ||
-											pathname === item.path + `/detail/${params?.id}` ||
-											pathname === item.path + `/update/${params?.id}` ||
-											pathname === item.path + `/view/${params?.id}` ||
-											pathname === item.path + `/${params?.id}` ||
-											pathname === item.path + `template` ||
-											pathname === item.path + `/template/${params?.id}` ||
-											pathname === item.path + `/template/create-template` ||
-											pathname === item.path + `/create-template` ||
-											pathname === item.path + `/create-notification` ||
-											pathname === item.path + `/blogs/detail/${params?.id}` ||
-											pathname === item.path + `/blogs` ||
-											pathname === item.path + `/blogs/createblog`
+											path1 === routingPath
 												? theme.palette.secondary.main
 												: theme.palette.primary.main,
 										opacity: "0.8",
@@ -95,7 +77,7 @@ function SidebarList({ handleId, handleClick }) {
 										justifyContent: "center",
 										alignItems: "center",
 										color:
-											`/${path1}` === item.path
+											path1 === routingPath
 												? theme.palette.primary.contrastText
 												: theme.palette.primary.contrastText,
 										"& > svg": {
@@ -122,6 +104,18 @@ function SidebarList({ handleId, handleClick }) {
 							<Collapse in={open && item?.id === id}>
 								<List className='urvik' sx={{ paddingTop: "0px", paddingBottom: "0px" }}>
 									{item?.children?.map((text, index) => {
+										const childPath1 = text?.path.split("/")?.[1];
+										const childPath2 = text?.path.split("/")?.[2];
+
+										const childPathUrlForDetail = text?.path + "/detail/" + params?.id;
+										const childPathUrlForView = text?.path + "/" + params?.id;
+										const childPathUrlForUpdate = text?.path + "/detail/update/" + params?.id;
+										{
+											/* console.log("====================================");
+										console.log("childPathUrlForDetail", childPathUrlForDetail);
+										console.log("pathname", pathname);
+										console.log("===================================="); */
+										}
 										return (
 											<ListItemButton
 												key={index}
@@ -130,18 +124,23 @@ function SidebarList({ handleId, handleClick }) {
 													handleClick();
 												}}
 												sx={{
+													// color:
+													// 	`/${path2}` === text.path
+													// 		? theme.palette.primary.contrastText
+													// 		: theme.palette.primary.contrastText,
 													color:
-														`/${path2}` === text.path
+														(path1 === routingPath && path2 === childPath2) ||
+														pathname === childPathUrlForDetail ||
+														pathname === childPathUrlForUpdate ||
+														pathname === childPathUrlForView
 															? theme.palette.primary.contrastText
 															: theme.palette.primary.contrastText,
 													// padding: "5px 10px",
 													background:
-														pathname === text.path ||
-														pathname === text.path + `/detail/${params?.id}` ||
-														pathname === text.path + `/createblog` ||
-														pathname === text.path + `/${params?.id}` ||
-														pathname === text.path + `/create-template` ||
-														pathname === text.path + `/create-notification`
+														(path1 === routingPath && path2 === childPath2) ||
+														pathname === childPathUrlForDetail ||
+														pathname === childPathUrlForUpdate ||
+														pathname === childPathUrlForView
 															? theme.palette.secondary.main
 															: theme.palette.primary.main,
 													borderRadius: "10px",
@@ -150,9 +149,10 @@ function SidebarList({ handleId, handleClick }) {
 													ml: 3,
 													":hover": {
 														background:
-															pathname === text.path ||
-															pathname === text.path + `/detail/${params?.id}` ||
-															pathname === text.path + `/createblog`
+															(path1 === routingPath && path2 === childPath2) ||
+															pathname === childPathUrlForDetail ||
+															pathname === childPathUrlForUpdate ||
+															pathname === childPathUrlForView
 																? theme.palette.secondary.main
 																: theme.palette.primary.main,
 														opacity: "0.8",
@@ -164,7 +164,10 @@ function SidebarList({ handleId, handleClick }) {
 														justifyContent: "center",
 														alignItems: "center",
 														color:
-															`/${path1}` === item.path
+															(path1 === routingPath && path2 === childPath2) ||
+															pathname === childPathUrlForDetail ||
+															pathname === childPathUrlForUpdate ||
+															pathname === childPathUrlForView
 																? theme.palette.primary.contrastText
 																: theme.palette.primary.contrastText,
 														"& > svg": {
@@ -205,33 +208,17 @@ function SidebarList({ handleId, handleClick }) {
 							}}
 							sx={{
 								color:
-									`/${path1}` === item.path
+									path1 === routingPath
 										? theme.palette.primary.contrastText
 										: theme.palette.primary.contrastText,
 								// padding: "5px 10px",
 								background:
-									pathname === item.path ||
-									pathname === item.path + `/reported-feeds` ||
-									pathname === item.path + `/reported-feeds/${params?.id}` ||
-									pathname === item.path + `/${params?.id}` ||
-									pathname === item.path + `/detail/${params?.id}` ||
-									pathname === item.path + `/update/${params?.id}` ||
-									pathname === item.path + `/view/${params?.id}` ||
-									pathname === item.path + `/create`
-										? theme.palette.secondary.main
-										: theme.palette.primary.main,
+									path1 === routingPath ? theme.palette.secondary.main : theme.palette.primary.main,
 								borderRadius: "10px",
 								margin: "5px",
 								":hover": {
 									background:
-										pathname === item.path ||
-										pathname === item.path + `/reported-feeds` ||
-										pathname === item.path + `/reported-feeds/${params?.id}` ||
-										pathname === item.path + `/${params?.id}` ||
-										pathname === item.path + `/detail/${params?.id}` ||
-										pathname === item.path + `/update/${params?.id}` ||
-										pathname === item.path + `/view/${params?.id}` ||
-										pathname === item.path + `/create`
+										path1 === routingPath
 											? theme.palette.secondary.main
 											: theme.palette.primary.main,
 									opacity: "0.8",
@@ -243,7 +230,7 @@ function SidebarList({ handleId, handleClick }) {
 									justifyContent: "center",
 									alignItems: "center",
 									color:
-										`/${path1}` === item.path
+										path1 === routingPath
 											? theme.palette.primary.contrastText
 											: theme.palette.primary.contrastText,
 									"& > svg": {

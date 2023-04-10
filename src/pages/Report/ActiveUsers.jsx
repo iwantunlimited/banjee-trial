@@ -39,7 +39,7 @@ function ActiverUsers() {
 		totalElement: 0,
 	});
 
-	const [userRow, setUserRow] = React.useState([]);
+	const [userRow, setUserRow] = React.useState();
 
 	const [customerFilter, setCustomerFilter] = React.useState({
 		page: 0,
@@ -55,11 +55,12 @@ function ActiverUsers() {
 	}
 
 	function handleRefresh() {
-		setCustomerFilter((prev) => ({
-			...prev,
-			page: 0,
-			pageSize: 10,
-		}));
+		ActiveUserApiCall({ page: 0, pageSize: 10 });
+		// setCustomerFilter((prev) => ({
+		// 	...prev,
+		// 	page: 0,
+		// 	pageSize: 10,
+		// }));
 	}
 
 	function handleDate(data) {
@@ -149,12 +150,24 @@ function ActiverUsers() {
 
 	const ActiveUserApiCall = React.useCallback(
 		(newData) => {
-			listActiveUsers({
-				page: newData?.page ? newData?.page : customerFilter?.page,
-				pageSize: newData?.pageSize ? newData?.pageSize : customerFilter?.pageSize,
-				fromDate: customerFilter?.fromDate,
-				toDate: customerFilter?.toDate,
-			})
+			console.log("====================================");
+			console.log(newData);
+			console.log("====================================");
+			const payload =
+				newData !== undefined
+					? {
+							page: newData?.page,
+							pageSize: newData?.pageSize,
+							fromDate: customerFilter?.fromDate,
+							toDate: customerFilter?.toDate,
+					  }
+					: {
+							page: customerFilter?.page,
+							pageSize: customerFilter?.pageSize,
+							fromDate: customerFilter?.fromDate,
+							toDate: customerFilter?.toDate,
+					  };
+			listActiveUsers(payload)
 				.then((res) => {
 					const rowData = res?.content.map((item) => {
 						return {
@@ -174,6 +187,11 @@ function ActiverUsers() {
 						data: res,
 						totalElement: res.totalElements,
 						customerRows: rowData,
+					}));
+					setCustomerFilter((prev) => ({
+						...prev,
+						page: res?.pageable?.pageNumber,
+						pageSize: res?.pageable?.pageSize,
 					}));
 				})
 				.catch((err) => {

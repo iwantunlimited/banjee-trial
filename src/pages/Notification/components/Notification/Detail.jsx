@@ -1,6 +1,15 @@
 import React from "react";
 import { ArrowBack } from "@mui/icons-material";
-import { Box, Card, CircularProgress, Divider, Grid, IconButton, Typography } from "@mui/material";
+import {
+	Box,
+	Card,
+	CircularProgress,
+	Container,
+	Divider,
+	Grid,
+	IconButton,
+	Typography,
+} from "@mui/material";
 import { useParams, useNavigate } from "react-router";
 import { AlertById } from "../../ApiServices/apiServices";
 import SwiperComp from "../../../../CustomComponents/SwiperComp";
@@ -14,7 +23,6 @@ function NotificationDetail() {
 	const [videoState, setVideoState] = React.useState([]);
 	const [audioState, setAudioState] = React.useState([]);
 	const [mediaState, setMediaState] = React.useState([]);
-
 
 	const DetailApiCall = React.useCallback(() => {
 		AlertById(params?.id)
@@ -71,7 +79,7 @@ function NotificationDetail() {
 
 	if (data) {
 		return (
-			<Box>
+			<Container maxWidth='xl'>
 				<Grid item container spacing={2}>
 					<Grid item xs={12}>
 						<IconButton onClick={() => navigate(-1)}>
@@ -140,7 +148,7 @@ function NotificationDetail() {
 						</Card>
 					</Grid>
 				</Grid>
-			</Box>
+			</Container>
 		);
 	} else {
 		return (

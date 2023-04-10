@@ -27,6 +27,7 @@ import DashboardTrial from "../Dashboard/DashboardChart";
 import Room from "../Rooms/Rooms";
 import Reports from "../Report/Report";
 import ActiveUsers from "../Report/ActiveUsers";
+import Automation from "../Notification/components/Automation/Automation";
 
 const routing = [
 	{
@@ -146,6 +147,13 @@ const routing = [
 				name: "Notification",
 				icon: <Notifications fontSize='medium' />,
 				component: <Notification />,
+			},
+			{
+				id: 21,
+				path: "/notification/automation",
+				name: "Automation",
+				icon: <Notifications fontSize='medium' />,
+				component: <Automation />,
 			},
 		],
 	},

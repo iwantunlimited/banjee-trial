@@ -33,7 +33,7 @@ function ReportedUser1(props) {
 
 	const classes = useStyles();
 
-	const [reportList, setReportList] = React.useState([]);
+	const [reportList, setReportList] = React.useState("");
 
 	const [pagination, setPagination] = React.useState({
 		page: 0,
@@ -190,6 +190,14 @@ function ReportedUser1(props) {
 					</Card>
 				</Container>
 			</div>
+		);
+	} else if (reportList?.length === 0) {
+		return (
+			<box
+				style={{ width: "100%", height: "100vh" }}
+				className='d-flex justify-content-center align-items-center'>
+				<p>no data found !</p>
+			</box>
 		);
 	} else {
 		return (

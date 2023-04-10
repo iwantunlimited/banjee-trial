@@ -26,6 +26,7 @@ import CommunityList from "./CommunityList";
 import AlertList from "./AlertList";
 import BlogList from "./BlogList";
 import { MainContext } from "../../../context/Context";
+import moment from "moment";
 
 function CustomerView(props) {
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
@@ -152,7 +153,7 @@ function CustomerView(props) {
 											padding: "0 10px 0 10px",
 										}}>
 										<Avatar
-											alt={state?.name?.length > 0 ? state?.name?.slice(0, 1) : "A"}
+											alt={state?.firstName ? state?.firstName : "A"}
 											src={
 												"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
 												state?.avtarUrl
@@ -205,6 +206,11 @@ function CustomerView(props) {
 											<Typography sx={{ marginTop: "5px", color: "grey" }} variant='h6'>
 												{state?.mcc + " " + state?.mobile}
 											</Typography>
+											{state?.lastSeen && (
+												<Typography>
+													{"lastSeen: " + moment(state?.lastSeen).format("lll")}
+												</Typography>
+											)}
 											<Box style={{ margin: "10px 0px 10px 0px" }}>
 												{state?.inactive ? (
 													<Button size='small' variant='outlined'>

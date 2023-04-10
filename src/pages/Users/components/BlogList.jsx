@@ -118,6 +118,9 @@ function BlogList(props) {
 				<Grid container spacing={1}>
 					{state?.length > 0 ? (
 						state?.map((item, index) => {
+							console.log("====================================");
+							console.log("blogId", item);
+							console.log("====================================");
 							return (
 								<Grid item xs={12} sm={6} md={4} lg={3} key={index}>
 									<Card sx={{ borderRadius: "20px", cursor: "pointer" }}>
@@ -164,7 +167,7 @@ function BlogList(props) {
 												</Typography>
 											</Box> */}
 											<Box
-												onClick={() => navigate("/explore/blogs/detail/" + item?.blogId)}
+												onClick={() => navigate("/explore/blogs/detail/" + item?.id)}
 												sx={{
 													width: "100%",
 													maxHeight: "150px",
@@ -181,7 +184,7 @@ function BlogList(props) {
 												/>
 											</Box>
 											<Box
-												onClick={() => navigate("/explore/blogs/detail/" + item?.blogId)}
+												onClick={() => navigate("/explore/blogs/detail/" + item?.id)}
 												style={{
 													marginTop: "10px",
 													padding: "0 5px",

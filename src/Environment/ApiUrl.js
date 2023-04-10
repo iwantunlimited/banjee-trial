@@ -43,7 +43,9 @@ export const urls = {
 		FIND_REPORTED_CUSTOMER_BY_ID: services.SOCIAL_CONNECTIONS + "secured/report/findById/",
 		FILTER_REPORTED_CUSTOMER: services.SOCIAL_CONNECTIONS + "secured/report/filter",
 	},
-
+	NOTIFICATIONS: {
+		NOTIFICATION_CONFIG: services?.NOTIFICATIONS + "notif/config/",
+	},
 	SOCIAL_FEEDS: {
 		CREATE_FEED: services.SOCIAL_FEEDS + "/feeds",
 		FILTER: services.SOCIAL_FEEDS + "api/feeds/admin/filter",

@@ -12,17 +12,21 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate, useParams } from "react-router";
-import { findByIdBlog } from "../../ApiServices/apiServices";
+import { findNotificationById } from "../../ApiServices/apiServices";
 
-function AnnouncementDetail() {
+function ViewAutoNotification() {
 	const params = useParams();
 	const navigate = useNavigate();
 
 	const [data, setData] = React.useState("");
+	const [responseNull, setResponseNull] = React.useState(false);
 
 	const DetailApiCall = React.useCallback(() => {
-		findByIdBlog(params?.id)
+		findNotificationById(params?.id)
 			.then((res) => {
+				if (res === null) {
+					setResponseNull(true);
+				}
 				setData(res);
 			})
 			.catch((err) => console.error(err));
@@ -34,7 +38,7 @@ function AnnouncementDetail() {
 
 	if (data) {
 		return (
-			<Container maxWidth='xl'>
+			<Container maxWidth='lg'>
 				<Grid item container spacing={2}>
 					<Grid item xs={12}>
 						<IconButton onClick={() => navigate(-1)}>
@@ -45,9 +49,9 @@ function AnnouncementDetail() {
 						<Card sx={{ padding: "10px" }}>
 							<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 								<Typography sx={{ fontSize: "22px", fontWeight: 600, color: "gray" }}>
-									Template Information
+									Auto Notification Information
 								</Typography>
-								<Button onClick={() => navigate("/notification/template/update/" + params?.id)}>
+								<Button onClick={() => navigate("/notification/automation/update/" + data?.id)}>
 									update
 								</Button>
 							</Box>
@@ -56,21 +60,36 @@ function AnnouncementDetail() {
 							</Box>
 							<Box>
 								<Typography sx={{ fontSize: "22px", fontWeight: 600 }}>{data?.title}</Typography>
-
-								{data?.shortDescription && (
-									<Typography>
-										<span>
-											<b>Short Description: </b>
-										</span>
-										{data?.shortDescription}
-									</Typography>
-								)}
 								{data?.description && (
 									<Typography>
 										<span>
 											<b>Description: </b>
 										</span>
-										<div dangerouslySetInnerHTML={{ __html: data?.description }} />
+										{data?.description}
+									</Typography>
+								)}
+								{data?.clickAction && (
+									<Typography>
+										<span>
+											<b>Click Action: </b>
+										</span>
+										{data?.clickAction}
+									</Typography>
+								)}
+								{data?.inactivityType && (
+									<Typography>
+										<span>
+											<b>Inactivity Type: </b>
+										</span>
+										{data?.inactivityType}
+									</Typography>
+								)}
+								{data?.durationType && (
+									<Typography>
+										<span>
+											<b>Duration Type: </b>
+										</span>
+										{data?.durationType}
 									</Typography>
 								)}
 							</Box>
@@ -89,10 +108,10 @@ function AnnouncementDetail() {
 					justifyContent: "center",
 					alignItems: "center",
 				}}>
-				<CircularProgress />
+				{responseNull ? <Typography>No Data Available !</Typography> : <CircularProgress />}
 			</Box>
 		);
 	}
 }
 
-export default AnnouncementDetail;
+export default ViewAutoNotification;

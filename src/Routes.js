@@ -44,6 +44,10 @@ import FeedDetail from "./pages/Social_Feeds/Components/DetailPage/FeedDetail";
 import GoogleMapCustom from "./CustomComponents/GoogleMap";
 import Reports from "./pages/Report/Report";
 import ActiveUsers from "./pages/Report/ActiveUsers";
+import Automation from "./pages/Notification/components/Automation/Automation";
+import CreateAutoNotification from "./pages/Notification/components/Automation/CreateAutoNotification";
+import ViewAutoNotification from "./pages/Notification/components/Automation/ViewAutoNotification";
+import UpdateAutoNotification from "./pages/Notification/components/Automation/UpdateAutoNotification";
 
 const Routes = () => {
 	return useRoutes([
@@ -202,6 +206,22 @@ const Routes = () => {
 				{
 					path: "/notification/template/update/:id",
 					element: <UpdateAnnouncement />,
+				},
+				{
+					path: "/notification/automation",
+					element: <Automation />,
+				},
+				{
+					path: "/notification/automation/create",
+					element: <CreateAutoNotification />,
+				},
+				{
+					path: "/notification/automation/update/:id",
+					element: <UpdateAutoNotification />,
+				},
+				{
+					path: "/notification/automation/:id",
+					element: <ViewAutoNotification />,
 				},
 				{
 					path: "/groups",

@@ -39,3 +39,39 @@ export let listNotification = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+export let createNotificationConfig = (requestLoad) => {
+	let url = urls.NOTIFICATIONS?.NOTIFICATION_CONFIG;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export let updateNotificationConfig = (requestLoad) => {
+	let url = urls.NOTIFICATIONS?.NOTIFICATION_CONFIG;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "PUT";
+	return executePost(url, actionCode, payload, method);
+};
+
+export let listNotificationConfig = (requestLoad) => {
+	let url = urls.NOTIFICATIONS?.NOTIFICATION_CONFIG + "filter";
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export const findNotificationById = (requestLoad) => {
+	let url = urls.NOTIFICATIONS?.NOTIFICATION_CONFIG + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
+export const deleteNotificationById = (requestLoad) => {
+	let url = urls.NOTIFICATIONS?.NOTIFICATION_CONFIG + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "DELETE";
+	return executeGet(url, actionCode, payload, method);
+};

@@ -101,7 +101,18 @@ function ViewAlert() {
 				}
 				setData(res);
 			})
-			.catch((err) => console.error(err));
+			.catch((err) => {
+				// console.log("====================================");
+				// console.log("error", err?.split(":"));
+				// console.log("====================================");
+				const errMessage = err?.split(":");
+				if (errMessage[0] === "-501") {
+					context?.setModalOpen(true);
+					context?.setModalData(errMessage[1], "error");
+					navigate(-1);
+				}
+				console.error(err);
+			});
 	}, []);
 
 	const reportedAlertByUserApiCall = React.useCallback(() => {

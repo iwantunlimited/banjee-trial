@@ -11,9 +11,9 @@ import {
 } from "@mui/material";
 import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
-import {  useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import ChipComp from "./components/chipComp";
-import {  listCustomer } from "./User_Services/UserApiService";
+import { listCustomer } from "./User_Services/UserApiService";
 import jwt_decode from "jwt-decode";
 import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
@@ -82,19 +82,19 @@ function UserComp() {
 			field: "firstName",
 			headerClassName: "app-header",
 			headerName: "First Name",
-			flex: 0.4,
+			flex: 0.3,
 		},
 		{
 			field: "lastName",
 			headerClassName: "app-header",
 			headerName: "Last Name",
-			flex: 0.4,
+			flex: 0.3,
 		},
 		{
 			field: "mobile",
 			headerClassName: "app-header",
 			headerName: "Contact Number",
-			flex: 0.5,
+			flex: 0.3,
 		},
 		{
 			field: "email",
@@ -106,10 +106,25 @@ function UserComp() {
 			field: "displayDate",
 			headerClassName: "app-header",
 			headerName: "Created On",
-			flex: 0.5,
+			flex: 0.3,
 			renderCell: (params) => {
 				if (params.row && params.row.createdOn) {
 					const date = moment(params.row.createdOn).format("DD/MM/YYYY");
+					return date;
+				} else {
+					return "-";
+				}
+			},
+		},
+		{
+			field: "lastSeen",
+			headerClassName: "app-header",
+			headerName: "last seen",
+			flex: 0.5,
+			renderCell: (params) => {
+				if (params.row && params.row.lastSeen) {
+					// const date = moment(params.row.lastSeen).calendar();
+					const date = moment(params.row.lastSeen).format("llll");
 					return date;
 				} else {
 					return "-";
