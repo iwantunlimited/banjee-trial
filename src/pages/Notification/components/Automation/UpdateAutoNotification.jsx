@@ -56,7 +56,7 @@ function UpdateAutoNotification() {
 		{ title: "DAYS_5", subTitle: "Notify users who are not active since last 5 days" },
 		{ title: "DAYS_7", subTitle: "Notify users who are not active since last 7 days" },
 		{ title: "NEIGHBOURHOOD", subTitle: "Notify users who haven't join any Neighbourhood yet" },
-		{ title: "All", subTitle: "Notify all users" },
+		{ title: "ALL", subTitle: "Notify all users" },
 	];
 
 	function handleSubmit(event) {
