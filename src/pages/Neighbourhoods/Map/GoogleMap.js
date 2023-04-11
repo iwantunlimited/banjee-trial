@@ -149,9 +149,9 @@ class MyGoogleMap extends Component {
 				// console.log(status);
 				if (status === "OK") {
 					if (results[0]) {
-						console.log("====================================");
-						console.log("result call", results);
-						console.log("====================================");
+						// console.log("====================================");
+						// console.log("result call", results);
+						// console.log("====================================");
 						this.zoom = 12;
 						this.setState({ address: results[0].formatted_address });
 						this.props.handleGLocation(
@@ -191,9 +191,9 @@ class MyGoogleMap extends Component {
 	}
 
 	render() {
-		console.log("====================================");
-		console.log("map state", this.state);
-		console.log("====================================");
+		// console.log("====================================");
+		// console.log("map state", this.state);
+		// console.log("====================================");
 		const { places, mapApiLoaded, mapInstance, mapApi } = this.state;
 		// mapApi?.places.Autocomplete.fe((a, b) => {
 		// 	console.log("====================================");

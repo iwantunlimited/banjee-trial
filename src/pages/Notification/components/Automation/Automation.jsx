@@ -181,9 +181,6 @@ function Automation() {
 	const DeleteNotificationApiCall = React.useCallback((nId) => {
 		deleteNotificationById(nId)
 			.then((Res) => {
-				console.log("====================================");
-				console.log("Res", Res);
-				console.log("====================================");
 				setModalOpen(true);
 				setModalData("Notification Deleted Successfully", "success");
 				AutomationListApiCall();

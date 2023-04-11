@@ -31,9 +31,9 @@ function AlertList(props) {
 			pageSize: 10,
 		})
 			.then((res) => {
-				console.log("====================================");
-				console.log("alert response", res);
-				console.log("====================================");
+				// console.log("====================================");
+				// console.log("alert response", res);
+				// console.log("====================================");
 				setState(res?.content);
 				// setPagination({
 				// 	page: res?.pageable?.pageNumber,

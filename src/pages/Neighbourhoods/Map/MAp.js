@@ -24,9 +24,9 @@ export const MyMapComponent = compose(
 		lng: 150.66,
 	});
 	const { finalLocation, handleFinalLocation } = props;
-	console.log("====================================");
-	console.log("data", data, props);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("data", data, props);
+	// console.log("====================================");
 
 	// useEffect(() => {
 	// 	if (finalLocation) {

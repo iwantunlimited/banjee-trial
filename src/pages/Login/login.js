@@ -41,16 +41,16 @@ function Login() {
 		const { name, value } = event.target;
 		setState((prevState) => ({ ...prevState, [name]: value }));
 	};
-	console.log("====================================");
-	console.log("state", state);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("state", state);
+	// console.log("====================================");
 
 	const handleTokenExpired = (exp) => {
 		let expiredTimer;
 		window.clearTimeout(expiredTimer);
 		const currentTime = Date.now();
 		const timeLeft = exp * 1000 - currentTime;
-		console.log(timeLeft);
+		// console.log(timeLeft);
 		expiredTimer = window.setTimeout(() => {
 			localStorage.removeItem("token");
 			window.location.reload();
@@ -87,9 +87,9 @@ function Login() {
 
 					const access_token =
 						response && response.data?.access_token ? response.data?.access_token : null;
-					console.log("====================================");
-					console.log("access_token", access_token);
-					console.log("====================================");
+					// console.log("====================================");
+					// console.log("access_token", access_token);
+					// console.log("====================================");
 					if (access_token !== null) {
 						localStorage.setItem("token", access_token);
 						setState({

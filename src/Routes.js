@@ -48,6 +48,7 @@ import Automation from "./pages/Notification/components/Automation/Automation";
 import CreateAutoNotification from "./pages/Notification/components/Automation/CreateAutoNotification";
 import ViewAutoNotification from "./pages/Notification/components/Automation/ViewAutoNotification";
 import UpdateAutoNotification from "./pages/Notification/components/Automation/UpdateAutoNotification";
+import NotifyUsers from "./pages/Notification/components/Automation/NotifyUsers";
 
 const Routes = () => {
 	return useRoutes([
@@ -222,6 +223,10 @@ const Routes = () => {
 				{
 					path: "/notification/automation/:id",
 					element: <ViewAutoNotification />,
+				},
+				{
+					path: "/notification/automation/notifyUsers",
+					element: <NotifyUsers />,
 				},
 				{
 					path: "/groups",

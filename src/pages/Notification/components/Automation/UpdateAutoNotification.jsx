@@ -17,7 +17,6 @@ import {
 import "../../../Explore/business.css";
 import { ArrowBack } from "@mui/icons-material";
 import { useNavigate, useLocation, useParams } from "react-router";
-import axios from "axios";
 import { MainContext } from "../../../../context/Context";
 import SnackbarContext from "../../../../CustomComponents/SnackbarContext";
 import { updateNotificationConfig, findNotificationById } from "../../ApiServices/apiServices";
@@ -57,18 +56,19 @@ function UpdateAutoNotification() {
 		{ title: "DAYS_5", subTitle: "Notify users who are not active since last 5 days" },
 		{ title: "DAYS_7", subTitle: "Notify users who are not active since last 7 days" },
 		{ title: "NEIGHBOURHOOD", subTitle: "Notify users who haven't join any Neighbourhood yet" },
+		{ title: "All", subTitle: "Notify all users" },
 	];
 
 	function handleSubmit(event) {
 		event?.preventDefault();
-		console.log("submit data", notificationData);
+		// console.log("submit data", notificationData);
 		UpdateNoticationApiCall(notificationData);
 	}
 
 	const UpdateNoticationApiCall = React.useCallback((payload) => {
 		updateNotificationConfig(payload)
 			.then((res) => {
-				console.log("res", res);
+				// console.log("res", res);
 				setModalOpen(true);
 				setModalData("Notification Updated Successfully", "success");
 				setNotificationData({
@@ -83,11 +83,9 @@ function UpdateAutoNotification() {
 			.catch((err) => console.error(err));
 	}, []);
 
-	console.log("useLocation", useLocation);
-
 	const findByIdApiCall = React.useCallback(() => {
 		findNotificationById(params?.id).then((res) => {
-			console.log("res", res);
+			// console.log("res", res);
 			setNotificationData({
 				id: res?.id,
 				title: res?.title,
@@ -277,7 +275,6 @@ function UpdateAutoNotification() {
 							</form>
 						</Card>
 						<SnackbarContext />
-						<img></img>
 					</Grid>
 				</Grid>
 			</Container>

@@ -55,6 +55,7 @@ function CreateAutoNotification() {
 		{ title: "DAYS_5", subTitle: "Notify users who are not active since last 5 days" },
 		{ title: "DAYS_7", subTitle: "Notify users who are not active since last 7 days" },
 		{ title: "NEIGHBOURHOOD", subTitle: "Notify users who haven't join any Neighbourhood yet" },
+		{ title: "All", subTitle: "Notify all users" },
 	];
 
 	function handleSubmit(event) {
@@ -66,7 +67,7 @@ function CreateAutoNotification() {
 	const CreateNoticationApiCall = React.useCallback((payload) => {
 		createNotificationConfig(payload)
 			.then((res) => {
-				console.log("res", res);
+				// console.log("res", res);
 				setModalOpen(true);
 				setModalData("Notification Created Successfully", "success");
 				setNotificationData({

@@ -121,9 +121,6 @@ function UserReports() {
 				pageSize: customerFilter?.pageSize,
 			})
 				.then((res) => {
-					console.log("====================================");
-					console.log(res);
-					console.log("====================================");
 					const customerRows = res?.content.map((item) => {
 						return (data = {
 							...item,

@@ -20,7 +20,7 @@ function SidebarList({ handleId, handleClick }) {
 
 	const path2 = pathname?.split("/")?.[2];
 
-	console.log("path----3", "/" + path1 + "/" + path2);
+	// console.log("path----3", "/" + path1 + "/" + path2);
 	const [open, setOpen] = React.useState(false);
 	const [id, setId] = React.useState("");
 	return (

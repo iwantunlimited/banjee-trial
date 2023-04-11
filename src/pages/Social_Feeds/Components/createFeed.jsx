@@ -128,9 +128,6 @@ function CreateFeed() {
 
 	const CreateFeedApiCall = React.useCallback(
 		(data) => {
-			console.log("====================================");
-			console.log("payload", data);
-			console.log("====================================");
 			createSocialFeeds(data)
 				.then((res) => {
 					setModalOpen(true);

@@ -61,6 +61,21 @@ export let listNotificationConfig = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+export let sentNotificationList = (requestLoad) => {
+	let url = urls.NOTIFICATIONS?.AUTO_NOTIFICATION + "sent";
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export let notifiedUsersList = (requestLoad) => {
+	let responseData = true;
+	let url = urls.NOTIFICATIONS?.MESSAGE_BROKER + "/messageId";
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method, responseData);
+};
 export const findNotificationById = (requestLoad) => {
 	let url = urls.NOTIFICATIONS?.NOTIFICATION_CONFIG + requestLoad;
 	let actionCode = "";

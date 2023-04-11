@@ -45,6 +45,8 @@ export const urls = {
 	},
 	NOTIFICATIONS: {
 		NOTIFICATION_CONFIG: services?.NOTIFICATIONS + "notif/config/",
+		AUTO_NOTIFICATION: services?.NOTIFICATIONS + "notif/",
+		MESSAGE_BROKER: services?.MESSAGE_BROKER + "message/delivery/filter",
 	},
 	SOCIAL_FEEDS: {
 		CREATE_FEED: services.SOCIAL_FEEDS + "/feeds",

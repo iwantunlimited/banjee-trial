@@ -120,6 +120,14 @@ function GroupDetailPage(props) {
 		},
 		{
 			id: "5",
+			field: "role",
+			headerClassName: "app-header",
+			headerName: "Role",
+			// align: "center",
+			flex: 0.3,
+		},
+		{
+			id: "6",
 			field: "createdOn",
 			headerClassName: "app-header",
 			headerName: "Created On",
@@ -127,7 +135,7 @@ function GroupDetailPage(props) {
 			flex: 0.4,
 			renderCell: (params) => {
 				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
+					const date = moment(params.row.createdOn).format("ll");
 					return date;
 				} else {
 					return "-";
@@ -135,13 +143,13 @@ function GroupDetailPage(props) {
 			},
 		},
 		{
-			id: "6",
+			id: "7",
 			field: "id",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "View",
 			// align: 'center',
-			flex: 0.3,
+			flex: 0.2,
 			renderCell: (params) => {
 				return (
 					<strong>

@@ -239,9 +239,6 @@ function CreateNeighbour(props) {
 		// console.log(base64);
 	};
 
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
 
 	// React.useEffect(() => {
 	// 	CountryApi();

@@ -4,6 +4,7 @@ const host = "https://gateway.banjee.org";
 
 export const services = {
 	HOST: host,
+	MESSAGE_BROKER: host + "/services/message-broker/api/",
 	SYSTEM_SERVICES: host + "/services/system-service/api/",
 	ASSETS_SERVICES: host + "/services/assets-service/api/",
 	SOCIAL_CONNECTIONS: host + "/services/social-connections/api/",

@@ -10,6 +10,7 @@ import {
 	NotificationImportant,
 	Summarize,
 	VerifiedUser,
+	EditNotifications,
 } from "@mui/icons-material";
 import SocialFeed from "../Social_Feeds/Social_Feed";
 import UsersReport from "../Report/UsersReport";
@@ -152,7 +153,7 @@ const routing = [
 				id: 21,
 				path: "/notification/automation",
 				name: "Automation",
-				icon: <Notifications fontSize='medium' />,
+				icon: <EditNotifications fontSize='medium' />,
 				component: <Automation />,
 			},
 		],

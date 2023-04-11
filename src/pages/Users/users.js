@@ -50,6 +50,11 @@ function UserComp() {
 	const [keyword, setKeyword] = React.useState("");
 	function handleKeyword(event) {
 		setKeyword(event.target.value);
+		setCustomerFilter((prev) => ({
+			...prev,
+			page: 0,
+			pageSize: 10,
+		}));
 	}
 
 	function handleCustomFilter(data) {

@@ -150,9 +150,9 @@ function ActiverUsers() {
 
 	const ActiveUserApiCall = React.useCallback(
 		(newData) => {
-			console.log("====================================");
-			console.log(newData);
-			console.log("====================================");
+			// console.log("====================================");
+			// console.log(newData);
+			// console.log("====================================");
 			const payload =
 				newData !== undefined
 					? {

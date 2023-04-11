@@ -55,9 +55,9 @@ const GoogleMapCustom = compose(
 		geocoder.geocode({ location: { lat: currentLat, lng: currentLng } }, (results, status) => {
 			if (status === "OK") {
 				if (results[0]) {
-					console.log("====================================");
-					console.log("result call", [results[0]]);
-					console.log("====================================");
+					// console.log("====================================");
+					// console.log("result call", [results[0]]);
+					// console.log("====================================");
 					const nextMarkers = [results[0]].map((place) => {
 						const data = {
 							position: place.geometry.location,
@@ -142,7 +142,7 @@ const GoogleMapCustom = compose(
 		const places = refs.searchBox.getPlaces();
 		const bounds = new window.google.maps.LatLngBounds();
 
-		console.log("place", places);
+		// console.log("place", places);
 		places.forEach((place) => {
 			if (place.geometry.viewport) {
 				bounds.union(place.geometry.viewport);
@@ -157,7 +157,7 @@ const GoogleMapCustom = compose(
 			return data;
 		});
 		const nextCenter = _.get(nextMarkers, "0.position", state.center);
-		console.log("nextCenter", nextCenter);
+		// console.log("nextCenter", nextCenter);
 
 		generateAddress(nextCenter?.lat(), nextCenter?.lng());
 		// refs.map.fitBounds(bounds);

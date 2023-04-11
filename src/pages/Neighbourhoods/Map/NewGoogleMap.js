@@ -108,9 +108,9 @@ function NewGoogleMap(props) {
 	};
 
 	const addPlace = (place) => {
-		console.log("====================================");
-		console.log("place", place, place.geometry.location.lat());
-		console.log("====================================");
+		// console.log("====================================");
+		// console.log("place", place, place.geometry.location.lat());
+		// console.log("====================================");
 		setState((prev) => ({
 			...prev,
 			places: [place],
@@ -131,12 +131,12 @@ function NewGoogleMap(props) {
 				{ location: { lat: glat ? glat : state.lat, lng: glng ? glng : state.lng } },
 				(results, status) => {
 					// console.log(results);
-					console.log(status);
+					// console.log(status);
 					if (status === "OK") {
 						if (results[0]) {
-							console.log("====================================");
-							console.log("result call", results);
-							console.log("====================================");
+							// console.log("====================================");
+							// console.log("result call", results);
+							// console.log("====================================");
 
 							const filteredCity = results?.filter((item, index) => {
 								if (index === 0) {
