@@ -117,7 +117,8 @@ function BlogReaction({ blogData }) {
 													sx={{
 														display: "flex",
 														justifyContent:
-															blogData?.authorId === ele?.user?.id ? "flex-end" : "flex-start",
+															ele?.user?.username === "root" ? "flex-end" : "flex-start",
+														// blogData?.authorId === ele?.user?.id ? "flex-end" : "flex-start",
 													}}>
 													<Box
 														key={index}
@@ -128,7 +129,8 @@ function BlogReaction({ blogData }) {
 															borderRadius: "10px",
 															padding: "5px",
 															paddingX: "10px",
-															textAlign: blogData?.authorId === ele?.user?.id ? "right" : "left",
+															textAlign: ele?.user?.username === "root" ? "right" : "left",
+															// textAlign: blogData?.authorId === ele?.user?.id ? "right" : "left",
 														}}>
 														{ele?.user?.firstName && ele?.user?.lastName ? (
 															<Typography sx={{ fontSize: "12px" }} noWrap>
@@ -169,7 +171,7 @@ function BlogReaction({ blogData }) {
 							)}
 						</Grid>
 					</Box>
-					<Box>
+					{/* <Box>
 						{emojiData?.map((item, index) => {
 							return (
 								<Tooltip title={item?.name}>
@@ -198,7 +200,7 @@ function BlogReaction({ blogData }) {
 								</Tooltip>
 							);
 						})}
-					</Box>
+					</Box> */}
 				</Grid>
 			</Grid>
 		);

@@ -32,7 +32,10 @@ function a11yProps(index) {
 	};
 }
 
-export default function ReactionCommentTab({ blogData }) {
+export default function ReactionCommentTab({ blogData, postType }) {
+	console.log("====================================");
+	console.log("blogData reaction", blogData);
+	console.log("====================================");
 	const [value, setValue] = React.useState(0);
 
 	const handleChange = (event, newValue) => {
@@ -48,10 +51,10 @@ export default function ReactionCommentTab({ blogData }) {
 				</Tabs>
 			</Box>
 			<TabPanel value={value} index={0}>
-				<BlogReaction blogData={blogData} />
+				<BlogReaction blogData={blogData} postType={postType} />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				<BlogComments blogData={blogData} />
+				<BlogComments blogData={blogData} postType={postType} />
 			</TabPanel>
 		</Box>
 	);

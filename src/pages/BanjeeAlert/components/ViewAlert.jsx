@@ -26,6 +26,7 @@ import { MainContext } from "../../../context/Context";
 import SwiperComp from "../../../CustomComponents/SwiperComp";
 import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
 import { DataGrid } from "@mui/x-data-grid";
+import ReactionCommentTab from "../../Explore/Components/Blogs/ReactionTab";
 
 function ViewAlert() {
 	const params = useParams();
@@ -346,6 +347,11 @@ function ViewAlert() {
 									</Grid>
 								)}
 							</Grid>
+						</Card>
+					</Grid>
+					<Grid item xs={12}>
+						<Card sx={{ padding: "10px" }}>
+							<ReactionCommentTab blogData={data} postType={"ALERT"} />
 						</Card>
 					</Grid>
 					<Grid item xs={12}>

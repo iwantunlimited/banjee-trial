@@ -150,7 +150,7 @@ function BlogDetail() {
 							</Box>
 						</Grid>
 						<Grid item xs={12}>
-							<ReactionCommentTab blogData={data} />
+							<ReactionCommentTab blogData={data} postType={"BLOG"} />
 						</Grid>
 						{/* <ModalComp width={400} handleModal={handleModal} data={modal}>
 						{modal?.type === "reaction" ? (

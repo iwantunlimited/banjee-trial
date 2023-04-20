@@ -3,7 +3,7 @@ import React from "react";
 import { useParams } from "react-router";
 import { createComments, getComments } from "../../services/ApiServices";
 
-function BlogComments({ blogData }) {
+function BlogComments({ blogData, postType }) {
 	const params = useParams();
 	const theme = useTheme();
 	const [comment, setComment] = React.useState({
@@ -60,7 +60,8 @@ function BlogComments({ blogData }) {
 										marginY: "5px",
 										display: "flex",
 										justifyContent:
-											blogData?.authorId === item?.author?.id ? "flex-end" : "flex-start",
+											// blogData?.authorId === item?.author?.id ? "flex-end" : "flex-start",
+											item?.author?.username === "root" ? "flex-end" : "flex-start",
 									}}>
 									<Box
 										key={index}
@@ -71,7 +72,8 @@ function BlogComments({ blogData }) {
 											borderRadius: "10px",
 											padding: "5px",
 											paddingX: "10px",
-											textAlign: blogData?.authorId === item?.author?.id ? "right" : "left",
+											textAlign: item?.author?.username === "root" ? "right" : "left",
+											// textAlign: blogData?.authorId === item?.author?.id ? "right" : "left",
 										}}>
 										<Typography sx={{ fontSize: "10px" }}>
 											{item?.author?.firstName && item?.author?.lastName
@@ -97,11 +99,14 @@ function BlogComments({ blogData }) {
 					)}
 				</Box>
 			</Grid>
-			<Grid item xs={12}>
+			{/* <Grid item xs={12}>
 				<form
 					onSubmit={(event) => {
 						event.preventDefault();
-						CreateCommentApi(comment);
+						CreateCommentApi({
+							...comment,
+							postType: postType,
+						});
 					}}>
 					<Box
 						sx={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100%" }}>
@@ -132,7 +137,7 @@ function BlogComments({ blogData }) {
 						</Box>
 					</Box>
 				</form>
-			</Grid>
+			</Grid> */}
 		</Grid>
 	);
 }
