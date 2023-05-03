@@ -82,8 +82,8 @@ function ViewAutoNotification() {
 			// align: "center",
 			flex: 0.4,
 			renderCell: (params) => {
-				if (params.row && params.row.configCreatedOn) {
-					const date = moment(params.row.configCreatedOn).format("lll");
+				if (params.row && params.row?.createdOn) {
+					const date = moment(params.row?.createdOn).format("lll");
 					return date;
 				} else {
 					return "-";

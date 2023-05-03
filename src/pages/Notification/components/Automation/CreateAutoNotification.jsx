@@ -55,13 +55,22 @@ function CreateAutoNotification() {
 		{ title: "DAYS_5", subTitle: "Notify users who are not active since last 5 days" },
 		{ title: "DAYS_7", subTitle: "Notify users who are not active since last 7 days" },
 		{ title: "NEIGHBOURHOOD", subTitle: "Notify users who haven't join any Neighbourhood yet" },
-		{ title: "ALL", subTitle: "Notify all users" },
-		{ title: "CREATE_ALERT_2", subTitle: "Notify Users who haven't create alert since last 2 days" },
-		{ title: "CREATE_ALERT_5", subTitle: "Notify Users who haven't create alert since last 5 days" },
-		{ title: "CREATE_ALERT_7", subTitle: "Notify Users who haven't create alert since last 7 days" },
+		{
+			title: "CREATE_ALERT_2",
+			subTitle: "Notify Users who haven't create alert since last 2 days",
+		},
+		{
+			title: "CREATE_ALERT_5",
+			subTitle: "Notify Users who haven't create alert since last 5 days",
+		},
+		{
+			title: "CREATE_ALERT_7",
+			subTitle: "Notify Users who haven't create alert since last 7 days",
+		},
 		{ title: "CREATE_FEED_2", subTitle: "Notify Users who haven't create post since last 2 days" },
 		{ title: "CREATE_FEED_5", subTitle: "Notify Users who haven't create post since last 5 days" },
 		{ title: "CREATE_FEED_7", subTitle: "Notify Users who haven't create post since last 7 days" },
+		{ title: "ALL", subTitle: "Notify all users" },
 	];
 
 	function handleSubmit(event) {
