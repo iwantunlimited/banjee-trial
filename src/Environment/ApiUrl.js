@@ -34,9 +34,6 @@ export const urls = {
 		DELETE_CATEGORY: services.ASSETS_SERVICES + "category/delete/",
 		DELETE_SUB_CATEGORY: services.ASSETS_SERVICES + "sub-category/delete/",
 	},
-	SYSTEM_SERVICES: {
-		ACTIVE_USERS: services.SYSTEM_SERVICES + "user/active",
-	},
 	SOCIAL_CONNECTION: {
 		FILTER: services.SOCIAL_CONNECTIONS + "social-connection/group/filter",
 		FIND_BY_ID: services.SOCIAL_CONNECTIONS + "social-connection/group/findById/",
@@ -44,6 +41,7 @@ export const urls = {
 		FILTER_REPORTED_CUSTOMER: services.SOCIAL_CONNECTIONS + "secured/report/filter",
 	},
 	NOTIFICATIONS: {
+		ACTIVE_USERS: services.NOTIFICATIONS + "user/active",
 		NOTIFICATION_CONFIG: services?.NOTIFICATIONS + "notif/config/",
 		AUTO_NOTIFICATION: services?.NOTIFICATIONS + "notif/",
 		MESSAGE_BROKER: services?.MESSAGE_BROKER + "message/delivery/filter",

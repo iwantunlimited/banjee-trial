@@ -122,29 +122,28 @@ function ActiverUsers() {
 				}
 			},
 		},
-		// {
-		// 	id: 6,
-		// 	field: "id",
-		// 	headerClassName: "app-header",
-		// 	headerName: "View",
-		// 	flex: 0.2,
-		// 	renderCell: (params) => (
-		// 		<strong>
-		// 			<IconButton
-		// 				onClick={() => {
-		// 					// navigate(`/user/${params?.row?.userObject?.id}`);
-		// 					navigate("/user/" + params?.row?.systemUserId);
-		// 					// this.props.history.push(
-		// 					// 	this.props.location.pathname +
-		// 					// 		"/view/" +
-		// 					// 		params.row.userObject.id
-		// 					// );
-		// 				}}>
-		// 				<VisibilityIcon />
-		// 			</IconButton>
-		// 		</strong>
-		// 	),
-		// },
+		{
+			field: "View",
+			headerClassName: "app-header",
+			headerName: "View",
+			flex: 0.2,
+			renderCell: (params) => (
+				<strong>
+					<IconButton
+						onClick={() => {
+							// navigate(`/user/${params?.row?.userObject?.id}`);
+							navigate("/user/" + params?.row?.user?.id);
+							// this.props.history.push(
+							// 	this.props.location.pathname +
+							// 		"/view/" +
+							// 		params.row.userObject.id
+							// );
+						}}>
+						<VisibilityIcon />
+					</IconButton>
+				</strong>
+			),
+		},
 	];
 	const rows = userRow ? userRow : [];
 
