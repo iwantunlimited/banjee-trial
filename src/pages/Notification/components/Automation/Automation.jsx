@@ -8,6 +8,7 @@ import {
 	Grid,
 	IconButton,
 	Stack,
+	Switch,
 	Tooltip,
 	Typography,
 } from "@mui/material";
@@ -16,7 +17,11 @@ import { useNavigate } from "react-router";
 import { Visibility } from "@mui/icons-material";
 import "../../../Explore/Components/component.css";
 import { DataGrid } from "@mui/x-data-grid";
-import { deleteNotificationById, listNotificationConfig } from "../../ApiServices/apiServices";
+import {
+	activeToggleHandler,
+	deleteNotificationById,
+	listNotificationConfig,
+} from "../../ApiServices/apiServices";
 import { MainContext } from "../../../../context/Context";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 import moment from "moment";
@@ -49,6 +54,25 @@ function Automation() {
 			open: data,
 		}));
 	};
+
+	const ActiveAPiCall = React.useCallback((data) => {
+		activeToggleHandler(data)
+			.then((res) => {
+				const to = res?.pause ? "inactive" : "active";
+				const from = res?.pause ? "active" : "inactive";
+				// console.log("====================================");
+				// console.log(res);
+				// console.log("====================================");
+				AutomationListApiCall();
+				setModalOpen(true);
+				setModalData(`${"status changed from " + from + " to " + to}`, "success");
+			})
+			.catch((err) => {
+				setModalOpen(true);
+				setModalData("something went wrong !", "error");
+				console.error(err);
+			});
+	}, []);
 
 	let columns = [
 		{
@@ -90,6 +114,31 @@ function Automation() {
 			headerName: "Filter Activity",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			flex: 0.4,
+		},
+		{
+			id: "8",
+			field: "pause",
+			headerClassName: "app-header",
+			headerName: "Active",
+			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
+			flex: 0.2,
+			renderCell: (params) => {
+				if (params?.row?.durationType === "QUICK_SEND") {
+					return <span></span>;
+				} else {
+					return (
+						<Switch
+							checked={params?.row?.pause === false}
+							onChange={(event) => {
+								ActiveAPiCall({
+									id: params?.row?.id,
+									pause: !event.target?.checked,
+								});
+							}}
+						/>
+					);
+				}
+			},
 		},
 		// {
 		// 	id: "3",

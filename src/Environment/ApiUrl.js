@@ -41,6 +41,7 @@ export const urls = {
 		FILTER_REPORTED_CUSTOMER: services.SOCIAL_CONNECTIONS + "secured/report/filter",
 	},
 	NOTIFICATIONS: {
+		ACTIVE_STATUS: services.NOTIFICATIONS + "notif/config/status",
 		ACTIVE_USERS: services.NOTIFICATIONS + "user/active",
 		NOTIFICATION_CONFIG: services?.NOTIFICATIONS + "notif/config/",
 		AUTO_NOTIFICATION: services?.NOTIFICATIONS + "notif/",

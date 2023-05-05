@@ -9,6 +9,13 @@ export const createAlert = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+export const activeToggleHandler = (requestLoad) => {
+	let url = urls.NOTIFICATIONS.ACTIVE_STATUS;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "PUT";
+	return executePost(url, actionCode, payload, method);
+};
 export const deleteAlert = (requestLoad) => {
 	let url = urls.GEO_CLOUD.GEO_ALERT + requestLoad;
 	let actionCode = "";
