@@ -66,8 +66,8 @@ function ActiverUsers() {
 	function handleDate(data) {
 		setCustomerFilter((prev) => ({
 			...prev,
-			fromDate: moment(data?.startDate).set({ hour: 0, minute: 0, second: 0 }).format(),
-			toDate: moment(data?.endDate).format(),
+			fromDate: data?.startDate,
+			toDate: data?.endDate,
 		}));
 	}
 

@@ -17,6 +17,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers-pro";
 import { AdapterDateFns } from "@mui/x-date-pickers-pro/AdapterDateFns";
 import { MobileDateRangePicker } from "@mui/x-date-pickers-pro/MobileDateRangePicker";
 import { MainContext } from "../../context/Context";
+import moment from "moment";
 
 const DashboardTrial = () => {
 	const context = React.useContext(MainContext);
@@ -210,7 +211,14 @@ const DashboardTrial = () => {
 									<MobileDateRangePicker
 										value={state}
 										onChange={(newValue) => {
-											setState(newValue);
+											console.log("date picker value", newValue);
+											const startDate = moment(newValue[0])
+												.set({ hour: 0, minute: 0, second: 0 })
+												.format();
+											const endDate = moment(newValue[1])
+												.set({ hour: 23, minute: 59, second: 58 })
+												.format();
+											setState([startDate, endDate]);
 										}}
 										renderInput={(startProps, endProps) => (
 											<React.Fragment>
@@ -239,8 +247,8 @@ const DashboardTrial = () => {
 									onClick={() => {
 										setFilterDate({
 											createdOn: {
-												$gte: new Date(state[0]),
-												$lte: new Date(state[1]),
+												$gte: state[0],
+												$lte: state[1],
 											},
 										});
 										setModalOpen(true);

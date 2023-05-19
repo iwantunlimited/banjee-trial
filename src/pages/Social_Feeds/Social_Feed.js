@@ -146,7 +146,7 @@ export default function SocialFeed(props) {
 									label='Start Date'
 									value={startDate}
 									onChange={(newValue) => {
-										setStartDate(newValue);
+										setStartDate(moment(newValue).set({ hour: 0, minute: 0, second: 0 }).format());
 									}}
 									renderInput={(params) => (
 										<TextField
@@ -167,7 +167,10 @@ export default function SocialFeed(props) {
 									label='End Date'
 									value={endDate}
 									onChange={(newValue) => {
-										setEndDate(newValue);
+										// const nowDate = moment(newValue).format("l") === moment().format("l");
+										// console.log("now date", nowDate);
+										// console.log("now date ---", moment().format());
+										setEndDate(moment(newValue).set({ hour: 23, minute: 59, second: 58 }).format());
 									}}
 									renderInput={(params) => <TextField size='small' {...params} />}
 								/>

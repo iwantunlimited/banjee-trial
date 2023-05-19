@@ -296,10 +296,14 @@ function UserComp() {
 											onClick={() => {
 												UserCsvDataApi({
 													fromDate: customerFilter?.fromDate
-														? moment(customerFilter?.fromDate).format()
+														? moment(customerFilter?.fromDate)
+																.set({ hour: 0, minute: 0, second: 0 })
+																.format()
 														: undefined,
 													toDate: customerFilter?.toDate
-														? moment(customerFilter?.toDate).format()
+														? moment(customerFilter?.toDate)
+																.set({ hour: 23, minute: 59, second: 58 })
+																.format()
 														: undefined,
 												});
 											}}

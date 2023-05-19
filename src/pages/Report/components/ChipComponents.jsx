@@ -58,7 +58,7 @@ function ChipComponents({ refreshApi, keyword, handleKey, handleDate, searchByDa
 									label='Start Date'
 									value={startDate}
 									onChange={(newValue) => {
-										setStartDate(newValue);
+										setStartDate(moment(newValue).set({ hour: 0, minute: 0, second: 0 }).format());
 									}}
 									renderInput={(params) => (
 										<TextField
@@ -77,7 +77,9 @@ function ChipComponents({ refreshApi, keyword, handleKey, handleDate, searchByDa
 									label='End Date'
 									value={endDate}
 									onChange={(newValue) => {
-										setEndDate(newValue);
+										const nowDate = moment(newValue).format("l") === moment().format("l");
+										// console.log("now date", nowDate);
+										setEndDate(moment(newValue).set({ hour: 23, minute: 59, second: 59 }).format());
 									}}
 									renderInput={(params) => <TextField size='small' {...params} />}
 								/>
