@@ -54,6 +54,9 @@ function CreateAutoNotification() {
 		{ title: "DAYS_2", subTitle: "Notify users who are not active since last 2 days" },
 		{ title: "DAYS_5", subTitle: "Notify users who are not active since last 5 days" },
 		{ title: "DAYS_7", subTitle: "Notify users who are not active since last 7 days" },
+		{ title: "DAYS_14", subTitle: "Notify users who are not active since last 14 days" },
+		{ title: "DAYS_21", subTitle: "Notify users who are not active since last 21 days" },
+		{ title: "DAYS_30", subTitle: "Notify users who are not active since last 30 days" },
 		{ title: "NEIGHBOURHOOD", subTitle: "Notify users who haven't join any Neighbourhood yet" },
 		{
 			title: "CREATE_ALERT_2",
