@@ -27,6 +27,7 @@ import AlertList from "./AlertList";
 import BlogList from "./BlogList";
 import { MainContext } from "../../../context/Context";
 import moment from "moment";
+import TimeSpentList from "./TimeSpentList";
 
 function CustomerView(props) {
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
@@ -275,7 +276,8 @@ function CustomerView(props) {
 										<Tab label='Neighbourhood' {...a11yProps(0)} />
 										<Tab label='Community' {...a11yProps(1)} />
 										<Tab label='Alerts' {...a11yProps(2)} />
-										<Tab label='BLogs' {...a11yProps(3)} />
+										<Tab label='Blogs' {...a11yProps(3)} />
+										<Tab label='Time Spent' {...a11yProps(4)} />
 										{/* <Tab label='Blocked' {...a11yProps(4)} /> */}
 									</Tabs>
 									{/* </AppBar> */}
@@ -307,6 +309,12 @@ function CustomerView(props) {
 										<TabPanel value={value} index={3} dir={theme.direction}>
 											<Grid iitem xs={12} sx={{ padding: "10px" }}>
 												<BlogList data={id} />
+											</Grid>
+										</TabPanel>
+										{/* ------------------------- time spent list ---------------------------- */}
+										<TabPanel value={value} index={4} dir={theme.direction}>
+											<Grid iitem xs={12} sx={{ padding: "10px" }}>
+												<TimeSpentList data={id} />
 											</Grid>
 										</TabPanel>
 										{/* ------------------------- blocked list ---------------------------- */}
