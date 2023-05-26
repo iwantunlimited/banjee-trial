@@ -22,7 +22,7 @@ let listUserMembership = (requestLoad) => {
 };
 // ----------------------------------------- CUSTOMER LIST SERVICE ---------------------------------------------------
 let listActiveUsers = (requestLoad) => {
-	let url = urls.NOTIFICATIONS.ACTIVE_USERS;
+	let url = urls.NOTIFICATIONS.LIVE_USER;
 	let actionCode = "";
 	let payload = requestLoad;
 	let method = "POST";

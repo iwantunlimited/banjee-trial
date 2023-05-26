@@ -66,8 +66,10 @@ function ActiverUsers() {
 	function handleDate(data) {
 		setCustomerFilter((prev) => ({
 			...prev,
-			fromDate: data?.startDate,
-			toDate: data?.endDate,
+			// fromDate: data?.startDate,
+			fromDate: moment(data?.startDate).set({ hour: 0, minute: 0, second: 0 }).format(),
+			// toDate: data?.startDate,
+			toDate: moment(data?.startDate).set({ hour: 23, minute: 59, second: 59 }).format(),
 		}));
 	}
 
@@ -98,7 +100,7 @@ function ActiverUsers() {
 			field: "mobile",
 			headerClassName: "app-header",
 			headerName: "Contact Number",
-			flex: 0.5,
+			flex: 0.4,
 		},
 		{
 			id: 4,
@@ -109,17 +111,25 @@ function ActiverUsers() {
 		},
 		{
 			id: 5,
-			field: "createdOn",
+			field: "timeSpent",
 			headerClassName: "app-header",
-			headerName: "Created On",
+			headerName: "Time Spent",
 			flex: 0.5,
 			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("DD/MM/YYYY");
-					return date;
-				} else {
-					return "-";
-				}
+				// console.log("====================================");
+				// console.log("params row hour", params?.row?.timeSpent);
+				// console.log("====================================");
+				const hour = params?.row?.timeSpent?.hour;
+				const minutes = params?.row?.timeSpent?.minutes;
+				const seconds = params?.row?.timeSpent?.seconds;
+				const time = `${hour + " hour, " + minutes + " minutes, " + seconds + " seconds"}`;
+				return time;
+				// if (params.row && params.row.createdOn) {
+				// 	const date = moment(params.row.createdOn).format("DD/MM/YYYY");
+				// 	return date;
+				// } else {
+				// 	return "-";
+				// }
 			},
 		},
 		{
@@ -168,15 +178,17 @@ function ActiverUsers() {
 					  };
 			listActiveUsers(payload)
 				.then((res) => {
+					console.log("listActive user", res);
 					const rowData = res?.content.map((item) => {
 						return {
 							...item,
-							firstName: item?.user?.firstName,
-							lastName: item?.user?.lastName,
-							email: item?.user?.email,
-							mobile: item?.user?.mobile,
-							createdOn: item?.user?.createdOn,
-							id: item?.id,
+							firstName: item?.userObject?.firstName,
+							lastName: item?.userObject?.lastName,
+							email: item?.userObject?.email,
+							mobile: item?.userObject?.mobile,
+							createdOn: item?.userObject?.createdOn,
+							userId: item?.userId,
+							timeSpent: item?.onlineActivityList?.[0]?.totalDuration,
 							view: "view",
 						};
 					});

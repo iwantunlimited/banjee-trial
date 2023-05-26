@@ -22,6 +22,7 @@ import "./users.css";
 import { MainContext } from "../../context/Context";
 import { Download } from "@mui/icons-material";
 import { PaginationContext } from "../../context/PaginationContext";
+
 function UserComp() {
 	const navigate = useNavigate();
 	const { userPagination, setUserPagination } = useContext(PaginationContext);
@@ -75,6 +76,7 @@ function UserComp() {
 		}));
 	}
 
+	//snackbar close function
 	function sanckbarClose() {
 		setUserData((prev) => ({
 			...prev,
@@ -160,6 +162,7 @@ function UserComp() {
 			),
 		},
 	];
+
 	const rows = userData?.customerRows ? userData?.customerRows : [];
 
 	const UserApiCall = React.useCallback(

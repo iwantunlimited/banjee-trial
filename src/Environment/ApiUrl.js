@@ -43,6 +43,7 @@ export const urls = {
 	NOTIFICATIONS: {
 		ACTIVE_STATUS: services.NOTIFICATIONS + "notif/config/status",
 		ACTIVE_USERS: services.NOTIFICATIONS + "user/active",
+		LIVE_USER: services.NOTIFICATIONS + "online-tracker/filter",
 		NOTIFICATION_CONFIG: services?.NOTIFICATIONS + "notif/config/",
 		AUTO_NOTIFICATION: services?.NOTIFICATIONS + "notif/",
 		MESSAGE_BROKER: services?.MESSAGE_BROKER + "message/delivery/filter",
@@ -59,6 +60,7 @@ export const urls = {
 
 	GEO_CLOUD: {
 		CREATE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud",
+		REMOVE_USER_FROM_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/quit",
 		// FILTER_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/filter",
 		FILTER_NEIGHBOURHOOD: services.GEO_CLOUD + "api/admin-filter",
 		Assign_Admin_To_Cloud: services.GEO_CLOUD + "api/assignAdmin",

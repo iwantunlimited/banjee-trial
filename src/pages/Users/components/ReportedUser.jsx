@@ -106,6 +106,7 @@ function ReportedUser1(props) {
 		},
 	];
 
+	//reported user list api 
 	const listApiCall = React.useCallback((page, pageSize) => {
 		ReportedUserList({ page: page, pageSize: pageSize })
 			.then((response) => {

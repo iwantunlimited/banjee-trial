@@ -55,10 +55,10 @@ function ChipComponents({ refreshApi, keyword, handleKey, handleDate, searchByDa
 								<DatePicker
 									inputFormat='dd/MM/yyyy'
 									name='startDate'
-									label='Start Date'
+									label='Select Date'
 									value={startDate}
 									onChange={(newValue) => {
-										setStartDate(moment(newValue).set({ hour: 0, minute: 0, second: 0 }).format());
+										setStartDate(newValue);
 									}}
 									renderInput={(params) => (
 										<TextField
@@ -69,7 +69,7 @@ function ChipComponents({ refreshApi, keyword, handleKey, handleDate, searchByDa
 									)}
 								/>
 							</LocalizationProvider>
-							<LocalizationProvider dateAdapter={AdapterDateFns}>
+							{/* <LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
 									minDate={startDate !== null && startDate}
 									inputFormat='dd/MM/yyyy'
@@ -83,7 +83,7 @@ function ChipComponents({ refreshApi, keyword, handleKey, handleDate, searchByDa
 									}}
 									renderInput={(params) => <TextField size='small' {...params} />}
 								/>
-							</LocalizationProvider>
+							</LocalizationProvider> */}
 							<Box sx={{ display: "flex", alignItems: "center" }}>
 								<IconButton
 									type='submit'

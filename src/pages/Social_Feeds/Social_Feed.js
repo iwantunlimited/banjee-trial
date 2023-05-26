@@ -380,6 +380,8 @@ export default function SocialFeed(props) {
 												{cNumber + "/" + ele?.mediaContent?.length}
 											</Box>
 										)} */}
+
+												{/* swiper for media */}
 												<Swiper
 													onClick={() => {
 														setFeedPagination({
@@ -693,6 +695,7 @@ export default function SocialFeed(props) {
 						})}
 						<Grid item xs={12}>
 							{/* <Card> */}
+							{/* pagination for all feeds */}
 							<Box
 								className='root'
 								sx={{
@@ -737,6 +740,7 @@ export default function SocialFeed(props) {
 					</Box>
 				)}
 
+				{/* image model for fullscreen show */}
 				{fullScreenState.imageModal && (
 					<FullScreenImageModal
 						state={fullScreenState}

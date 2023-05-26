@@ -1,17 +1,29 @@
-import { Refresh, Visibility } from "@mui/icons-material";
-import { Container, Grid, IconButton, Card, CircularProgress, Box, Tooltip } from "@mui/material";
+import { Delete, Refresh, Visibility } from "@mui/icons-material";
+import {
+	Container,
+	Grid,
+	IconButton,
+	Card,
+	CircularProgress,
+	Box,
+	Tooltip,
+	Typography,
+	Stack,
+	Button,
+} from "@mui/material";
 import moment from "moment";
 import React from "react";
 import { Helmet } from "react-helmet";
-import { communityList } from "./services/apiServices";
+import { communityList, deleteCommunity } from "./services/apiServices";
 import { DataGrid } from "@mui/x-data-grid";
 import { useNavigate } from "react-router";
 import { MainContext } from "../../context/Context";
 import { PaginationContext } from "../../context/PaginationContext";
+import ModalComp from "../../CustomComponents/ModalComp";
 
 function GroupsComp(props) {
 	const navigate = useNavigate();
-	const { themeData } = React.useContext(MainContext);
+	const { themeData, setModalData, setModalOpen } = React.useContext(MainContext);
 	const { groupPagination, setGroupPagination } = React.useContext(PaginationContext);
 	const [listData, setListData] = React.useState("");
 	const [totalElement, setTotalElement] = React.useState(0);
@@ -19,6 +31,17 @@ function GroupsComp(props) {
 		page: groupPagination?.page ? groupPagination?.page : 0,
 		pageSize: groupPagination?.pageSize ? groupPagination?.pageSize : 10,
 	});
+	const [modal, setModal] = React.useState({
+		open: false,
+		id: "",
+	});
+
+	const handleModalClose = () => {
+		setModal({
+			open: false,
+			id: "",
+		});
+	};
 
 	const handlePagination = (data) => {
 		setPagination((prev) => ({
@@ -44,6 +67,28 @@ function GroupsComp(props) {
 			})
 			.catch((err) => console.error(err));
 	}, [pagination]);
+
+	const DeleteCommunityApiCall = React.useCallback((payload) => {
+		deleteCommunity(payload)
+			.then((res) => {
+				setModalOpen(true);
+				setModalData("Community Deleted", "success");
+				CommunityListApiCall();
+				setModal((prev) => ({
+					...prev,
+					open: false,
+					id: "",
+				}));
+			})
+			.catch((err) => {
+				console.error(err);
+				setModalOpen(true);
+				setModalData({
+					message: "Something went wrong, try again later !",
+					severity: "error",
+				});
+			});
+	}, []);
 
 	React.useEffect(() => {
 		CommunityListApiCall();
@@ -110,12 +155,24 @@ function GroupsComp(props) {
 			field: "id",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "View",
+			headerName: "Action",
 			// align: 'center',
 			flex: 0.3,
 			renderCell: (params) => {
 				return (
 					<strong>
+						<IconButton
+							onClick={() => {
+								// setGroupPagination({ page: pagination?.page, pageSize: pagination?.pageSize });
+								// navigate("/groups/" + params.row.routingId);
+								// DeleteCommunityApiCall(params.row.routingId);
+								setModal({
+									open: true,
+									id: params.row.routingId,
+								});
+							}}>
+							<Delete />
+						</IconButton>
 						<IconButton
 							onClick={() => {
 								setGroupPagination({ page: pagination?.page, pageSize: pagination?.pageSize });
@@ -210,6 +267,37 @@ function GroupsComp(props) {
 					</Card>
 				</Grid>
 			</Grid>
+			<ModalComp data={modal} handleModal={handleModalClose}>
+				<Box
+					sx={{
+						display: "flex",
+						justifyContent: "center",
+						flexDirection: "column",
+						alignItems: "center",
+					}}>
+					<Typography sx={{ fontSize: { xs: "16px", sm: "16px", md: "18px" } }}>
+						<b>Are you sure to Delete Community ?</b>
+					</Typography>
+					<Stack spacing={2} direction={"row"} sx={{ marginTop: { xs: 1, md: 2 } }}>
+						<Button
+							onClick={() => {
+								setModal({
+									open: false,
+									id: "",
+								});
+							}}>
+							Cancel
+						</Button>
+						<Button
+							variant='contained'
+							onClick={() => {
+								DeleteCommunityApiCall(modal?.id);
+							}}>
+							Confirm
+						</Button>
+					</Stack>
+				</Box>
+			</ModalComp>
 		</Container>
 	);
 }

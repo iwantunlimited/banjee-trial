@@ -18,10 +18,11 @@ import {
 	deleteNeighbourhood,
 	filterMembers,
 	findNeighbourhood,
+	removeUserFromNeighbourhood,
 } from "../../services/apiServices";
 import { useLocation, useNavigate, useParams } from "react-router";
 import moment from "moment";
-import { ArrowBack, Cancel, Close, Done, MoreHoriz, Visibility } from "@mui/icons-material";
+import { ArrowBack, Cancel, Close, Delete, Done, MoreHoriz, Visibility } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
@@ -41,6 +42,7 @@ function DetailPage() {
 		open: false,
 		data: "",
 	});
+
 	const [memberPagination, setMemberPagination] = React.useState({
 		page: 0,
 		pageSize: 10,
@@ -157,12 +159,19 @@ function DetailPage() {
 			field: "id",
 			headerClassName: "app-header-rejected",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "View",
+			headerName: "Action",
 			// align: 'center',
 			flex: 0.3,
 			renderCell: (params) => {
 				return (
 					<strong>
+						<IconButton
+							onClick={() => {
+								setModal({ open: true, data: params?.row, modalId: 5 });
+								// navigate("/neighbourhood/" + params?.row?.routingId);
+							}}>
+							<Delete />
+						</IconButton>
 						<IconButton
 							onClick={() => {
 								setModal({ open: true, data: params?.row, modalId: 2 });
@@ -226,6 +235,7 @@ function DetailPage() {
 			.catch((err) => console.error(err));
 	}, [params?.id]);
 
+	//for filtering members by cloud id
 	const filterMemberApiCall = React.useCallback(() => {
 		filterMembers({
 			cloudId: params?.id,
@@ -258,6 +268,31 @@ function DetailPage() {
 			.catch((err) => console.error(err));
 	}, [memberPagination, params?.id]);
 
+	const removeUserFromNeighbourhoodApiCall = React.useCallback((data) => {
+		removeUserFromNeighbourhood({
+			cloudId: params?.id,
+			userId: data?.profile?.id,
+		})
+			.then((res) => {
+				// console.log(res);
+				setModal((prev) => ({
+					...prev,
+					open: false,
+					modalId: 1,
+					data: "",
+				}));
+				setModalOpen(true);
+				setModalData("user removed from neighbourhood", "success");
+				filterMemberApiCall();
+			})
+			.catch((err) => {
+				console.error(err);
+				setModalOpen(true);
+				setModalData("something went wrong , try again !", "error");
+			});
+	}, []);
+
+	//api for assigning admin to the cloud
 	const AssignAdminApiCall = (payload) => {
 		assignAdminToCloud(payload)
 			.then((res) => {
@@ -273,6 +308,8 @@ function DetailPage() {
 			})
 			.catch((err) => console.error(err));
 	};
+
+	//api for assigning member to the cloud
 	const AssignMemberApiCall = (payload) => {
 		assignMemberToCloud(payload)
 			.then((res) => {
@@ -292,6 +329,7 @@ function DetailPage() {
 	function modalFunction(modalId) {
 		switch (modalId) {
 			case 1:
+				// for delete neighbourhood
 				return (
 					<ModalComp handleModal={handleModal} data={modal}>
 						<Box>
@@ -315,6 +353,7 @@ function DetailPage() {
 					</ModalComp>
 				);
 			case 2:
+				// for user details
 				return (
 					<ModalComp handleModal={handleModal} data={modal}>
 						<IconButton
@@ -383,6 +422,7 @@ function DetailPage() {
 					</ModalComp>
 				);
 			case 3:
+				// for assign admin role
 				return (
 					<ModalComp handleModal={handleModal} data={modal}>
 						<Box>
@@ -409,6 +449,7 @@ function DetailPage() {
 					</ModalComp>
 				);
 			case 4:
+				// for assign member role
 				return (
 					<ModalComp handleModal={handleModal} data={modal}>
 						<Box>
@@ -427,6 +468,30 @@ function DetailPage() {
 											cloudId: params?.id,
 											userId: modal?.data,
 										});
+									}}>
+									Confirm
+								</Button>
+							</Box>
+						</Box>
+					</ModalComp>
+				);
+			case 5:
+				// for delete neighbourhood
+				return (
+					<ModalComp handleModal={handleModal} data={modal}>
+						<Box>
+							<Typography>
+								<b>Are you sure to remove user from neighbourhood ?</b>
+							</Typography>
+							<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
+								<Button variant='outlined' onClick={() => handleModal(false)}>
+									Cancel
+								</Button>
+								<Button
+									variant='contained'
+									sx={{ marginLeft: "20px" }}
+									onClick={() => {
+										removeUserFromNeighbourhoodApiCall(modal?.data);
 									}}>
 									Confirm
 								</Button>

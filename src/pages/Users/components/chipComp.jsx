@@ -101,6 +101,8 @@ function ChipComp({ refreshApi, keyword, handleKey, handleDate }) {
 								<Search fontSize='small' />
 							</IconButton>
 						</Box>
+
+						{/* for get reported user list */}
 						{/* <Tooltip title='Reported Users'>
 						<IconButton
 							onClick={() => navigate("/user/reporteduser")}

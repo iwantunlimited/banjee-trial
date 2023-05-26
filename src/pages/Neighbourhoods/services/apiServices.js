@@ -77,6 +77,13 @@ export const rejectRequest = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+export const removeUserFromNeighbourhood = (requestLoad) => {
+	let url = urls.GEO_CLOUD.REMOVE_USER_FROM_NEIGHBOURHOOD;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
 
 export const deleteNeighbourhood = (requestLoad) => {
 	let url = urls.GEO_CLOUD.DELETE_NEIGHBOURHOOD + requestLoad;

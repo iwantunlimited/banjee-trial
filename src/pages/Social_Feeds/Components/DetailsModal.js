@@ -200,6 +200,7 @@ export default function CommentsModal(props) {
 								/>
 							</Box>
 							<Box sx={{ maxWidth: "400px" }}>
+								{/* swiper for showing media contents */}
 								<Swiper
 									pagination={
 										data?.mediaContent?.length > 1

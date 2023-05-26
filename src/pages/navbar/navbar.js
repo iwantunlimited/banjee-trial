@@ -67,7 +67,6 @@ function Navbar(props) {
 			<Box sx={{ overflow: "auto" }}>
 				<List sx={{ paddingTop: "3px !important" }}>
 					<SidebarList handleId={handleIdFun} handleClick={handleDrawerToggle} />
-					{/* <Sidebar handleId={handleIdFun} handleClick={handleDrawerToggle} /> */}
 				</List>
 			</Box>
 		</Drawer>
@@ -75,7 +74,6 @@ function Navbar(props) {
 
 	const mobile = (
 		<Drawer
-			//   container={container}
 			anchor='top'
 			variant='temporary'
 			open={mobileOpen}

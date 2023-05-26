@@ -110,6 +110,7 @@ function Category(props) {
 		DeleteSubCategoryApiCall(event);
 	}
 
+	//for delete category
 	const DeleteCategoryApiCall = (id) => {
 		deleteCategory(id)
 			.then(() => {
@@ -124,6 +125,7 @@ function Category(props) {
 			});
 	};
 
+	//for delete sub-category
 	const DeleteSubCategoryApiCall = (id) => {
 		deleteSubCategory(id)
 			.then(() => {
@@ -137,6 +139,7 @@ function Category(props) {
 			});
 	};
 
+	//for creating Category
 	const CreateCategoryApiCall = () => {
 		CreateCategory({
 			name: modalData.name,
@@ -156,6 +159,7 @@ function Category(props) {
 			});
 	};
 
+	//for creating Sub-Category
 	const CreateSubCategoryApiCall = () => {
 		CreateSubCategory({
 			name: modalData.name,
@@ -173,6 +177,7 @@ function Category(props) {
 			});
 	};
 
+	//category listing api
 	const CategoryListApiCall = React.useCallback(() => {
 		CategoryList({ type: props?.categoryName })
 			.then((response) => {
@@ -181,8 +186,7 @@ function Category(props) {
 			.catch((err) => console.error(err));
 	}, [props?.categoryName]);
 
-	// Image api call for image upload to get image id
-
+	// Image api call for image upload in cloudinary to get image id
 	const ImageApiCAll = React.useCallback((data) => {
 		const mime = "image";
 		const formData = new FormData();

@@ -1,4 +1,4 @@
-import { Cancel, Visibility, ArrowBack } from "@mui/icons-material";
+import { Cancel, Visibility, ArrowBack, Delete } from "@mui/icons-material";
 import {
 	Avatar,
 	Box,
@@ -10,6 +10,7 @@ import {
 	Card,
 	Button,
 	IconButton,
+	Stack,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
@@ -19,7 +20,7 @@ import { useNavigate, useParams } from "react-router";
 import { MainContext } from "../../../context/Context";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { filterMembers } from "../../Neighbourhoods/services/apiServices";
-import { findCommunityById } from "../services/apiServices";
+import { deleteCommunity, findCommunityById } from "../services/apiServices";
 
 function GroupDetailPage(props) {
 	const params = useParams();
@@ -28,6 +29,8 @@ function GroupDetailPage(props) {
 	const { themeData } = React.useContext(MainContext);
 
 	const [state, setState] = React.useState();
+
+	const [modalId, setModalId] = React.useState("view");
 
 	const [modalData, setModalData] = React.useState({
 		open: false,
@@ -196,6 +199,18 @@ function GroupDetailPage(props) {
 			.catch((err) => console.error(err));
 	}, [pagination]);
 
+	const DeleteCommunityApiCall = React.useCallback((payload) => {
+		deleteCommunity(payload)
+			.then((res) => {
+				setModalId("view");
+				navigate(-1);
+				console.log("====================================");
+				console.log(res);
+				console.log("====================================");
+			})
+			.catch((err) => console.error(err));
+	}, []);
+
 	React.useEffect(() => {
 		ApiCall();
 	}, [ApiCall]);
@@ -214,6 +229,17 @@ function GroupDetailPage(props) {
 				<Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
 					<IconButton onClick={() => navigate(-1)}>
 						<ArrowBack style={{ color: theme.palette.primary.main }} />
+					</IconButton>
+					<IconButton
+						onClick={() => {
+							setModalId("delete");
+							setModalData((prev) => ({
+								...prev,
+								open: true,
+								id: params?.id,
+							}));
+						}}>
+						<Delete />
 					</IconButton>
 					{/* <Button
 						variant='contained'
@@ -313,33 +339,35 @@ function GroupDetailPage(props) {
 					</Grid>
 				</Card>
 				<ModalComp handleModal={handleModal} data={modalData}>
-					<IconButton
-						onClick={() => handleModal(false)}
-						style={{ position: "absolute", top: "0px", right: "0px" }}>
-						<Cancel sx={{ color: "brown" }} />
-					</IconButton>
-					<Card
-						elevation={1}
-						style={{
-							boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
-							padding: "40px 10px 40px 10px",
-							// background: "white ",
-							minHeight: "420px",
-						}}>
-						<Box
-							style={{
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-								flexDirection: "column",
-								padding: "0 10px 0 10px",
-							}}>
-							<Avatar
-								src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modalData?.data?.mavtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
-								alt={modalData?.data?.profile?.avtarUrl}
-								sx={{ width: "150px", height: "150px" }}
-							/>
-							{/* <Avatar
+					{modalId === "view" ? (
+						<React.Fragment>
+							<IconButton
+								onClick={() => handleModal(false)}
+								style={{ position: "absolute", top: "0px", right: "0px" }}>
+								<Cancel sx={{ color: "brown" }} />
+							</IconButton>
+							<Card
+								elevation={1}
+								style={{
+									boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
+									padding: "40px 10px 40px 10px",
+									// background: "white ",
+									minHeight: "420px",
+								}}>
+								<Box
+									style={{
+										display: "flex",
+										justifyContent: "center",
+										alignItems: "center",
+										flexDirection: "column",
+										padding: "0 10px 0 10px",
+									}}>
+									<Avatar
+										src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modalData?.data?.mavtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+										alt={modalData?.data?.profile?.avtarUrl}
+										sx={{ width: "150px", height: "150px" }}
+									/>
+									{/* <Avatar
 								alt={
 									modalData?.data?.mfirstName?.length > 0
 										? modalData?.data?.mfirstName?.slice(0, 1)
@@ -352,48 +380,84 @@ function GroupDetailPage(props) {
 								src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${modalData?.data?.mavatarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 								sx={{ width: "150px", height: "150px" }}
 							/> */}
-							<div
-								style={{
-									display: "flex",
-									alignItems: "center",
-									marginTop: "10px",
-									fontSize: "10px",
-									fontWeight: "400",
-								}}>
-								{modalData?.data?.profile?.firstName && (
-									<Typography variant='h6' style={{ marginRight: "5px" }}>
-										{modalData?.data?.profile?.firstName + " " + modalData?.data?.profile?.lastName}
-									</Typography>
-								)}
-							</div>
-							<Typography
-								style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
-								variant='h6'>
-								{window.innerWidth > 1282
-									? modalData?.data?.profile?.email
-									: modalData?.data?.profile?.email && modalData?.data?.profile?.email.slice(0, 20)}
-							</Typography>
-							{window.innerWidth < 1282 &&
-								modalData &&
-								modalData?.data?.profile?.email?.length > 10 && (
+									<div
+										style={{
+											display: "flex",
+											alignItems: "center",
+											marginTop: "10px",
+											fontSize: "10px",
+											fontWeight: "400",
+										}}>
+										{modalData?.data?.profile?.firstName && (
+											<Typography variant='h6' style={{ marginRight: "5px" }}>
+												{modalData?.data?.profile?.firstName +
+													" " +
+													modalData?.data?.profile?.lastName}
+											</Typography>
+										)}
+									</div>
 									<Typography
 										style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
 										variant='h6'>
-										{modalData?.data?.profile?.email?.slice(
-											20,
-											modalData?.data?.profile?.email?.length + 1
-										)}
+										{window.innerWidth > 1282
+											? modalData?.data?.profile?.email
+											: modalData?.data?.profile?.email &&
+											  modalData?.data?.profile?.email.slice(0, 20)}
 									</Typography>
-								)}
-							<Typography
-								style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
-								variant='h6'>
-								{modalData?.data?.profile?.mcc
-									? +modalData?.data?.profile?.mcc + " " + modalData?.data?.profile?.mobile
-									: modalData?.data?.profile?.mobile}
+									{window.innerWidth < 1282 &&
+										modalData &&
+										modalData?.data?.profile?.email?.length > 10 && (
+											<Typography
+												style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
+												variant='h6'>
+												{modalData?.data?.profile?.email?.slice(
+													20,
+													modalData?.data?.profile?.email?.length + 1
+												)}
+											</Typography>
+										)}
+									<Typography
+										style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
+										variant='h6'>
+										{modalData?.data?.profile?.mcc
+											? +modalData?.data?.profile?.mcc + " " + modalData?.data?.profile?.mobile
+											: modalData?.data?.profile?.mobile}
+									</Typography>
+								</Box>
+							</Card>
+						</React.Fragment>
+					) : (
+						<Box
+							sx={{
+								display: "flex",
+								justifyContent: "center",
+								flexDirection: "column",
+								alignItems: "center",
+							}}>
+							<Typography sx={{ fontSize: { xs: "16px", sm: "16px", md: "18px" } }}>
+								<b>Are you sure to Delete Community ?</b>
 							</Typography>
+							<Stack spacing={2} direction={"row"} sx={{ marginTop: { xs: 1, md: 2 } }}>
+								<Button
+									onClick={() => {
+										setModalData((prev) => ({
+											...prev,
+											open: false,
+											id: "",
+										}));
+									}}>
+									Cancel
+								</Button>
+								<Button
+									variant='contained'
+									onClick={() => {
+										DeleteCommunityApiCall(modalData?.id);
+									}}>
+									Confirm
+								</Button>
+							</Stack>
 						</Box>
-					</Card>
+					)}
 				</ModalComp>
 			</Container>
 		);

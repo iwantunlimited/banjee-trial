@@ -55,6 +55,7 @@ const useStyles = makeStyles({
 	},
 });
 
+//function for viewing reported feed
 function ViewRFeed() {
 	const navigate = useNavigate();
 	const { themeData } = React.useContext(MainContext);
