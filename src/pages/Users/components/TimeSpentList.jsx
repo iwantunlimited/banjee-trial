@@ -45,7 +45,7 @@ function TimeSpentList(props) {
 					};
 				});
 
-				setState(rowData);
+				setState(rowData ? rowData : []);
 				// setPagination({
 				// 	page: res?.pageable?.pageNumber,
 				// 	pageSize: res?.pageable?.pageSize,
@@ -56,6 +56,10 @@ function TimeSpentList(props) {
 				console.warn(err);
 			});
 	}, []);
+
+	console.log("====================================");
+	console.log("state", state);
+	console.log("====================================");
 
 	let rows = state ? state : [];
 
