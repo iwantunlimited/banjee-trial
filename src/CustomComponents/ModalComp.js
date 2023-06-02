@@ -23,11 +23,14 @@ function ModalComp(props) {
 					bgcolor: theme.palette.background.paper,
 					// background: "white",
 					// border: "2px solid #000",
+					borderRadius: "10px",
 					boxShadow: 24,
 					p: 4,
 					m: 2,
 				}}>
-				<Box sx={{ position: "relative" }}>{props?.children}</Box>
+				<Box sx={{ position: "relative", minWidth: { xs: "240px", sm: "340px" } }}>
+					{props?.children}
+				</Box>
 			</Box>
 		</Modal>
 	);

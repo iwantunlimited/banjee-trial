@@ -250,8 +250,12 @@ function NeighbourList(props) {
 					</div>
 					<ModalComp data={modal} handleModal={handleModal}>
 						<Box>
-							<Typography>
-								<b>Are you sure to delete the neighbourhood ?</b>
+							<Typography
+								sx={{
+									fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+									fontWeight: 400,
+								}}>
+								Are you sure to delete the neighbourhood ?
 							</Typography>
 							<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
 								<Button variant='outlined' onClick={() => handleModal(false)}>

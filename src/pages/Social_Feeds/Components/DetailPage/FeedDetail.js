@@ -178,6 +178,7 @@ function FeedDetail(props) {
 					open: false,
 				}));
 				feedCommentApiCall();
+				setModalType("feed");
 			})
 			.catch((err) => {
 				console.error(err);
@@ -226,13 +227,14 @@ function FeedDetail(props) {
 							}}>
 							<Typography
 								id='modal-modal-title'
-								style={{
-									fontSize: window.innerWidth < 500 ? "14px" : "24px",
+								sx={{
+									fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+									fontWeight: 400,
 								}}>
-								<b>Are you sure to delete this feed ?</b>
+								Are you sure to delete this feed ?
 							</Typography>
 							<Box sx={{ my: 2 }}>
-								<Typography style={{ fontSize: window.innerWidth < 500 ? "12px" : "14px" }}>
+								<Typography sx={{ fontSize: { xs: "12px", sm: "14px" } }}>
 									Give Remark to feed
 								</Typography>
 								<TextField
@@ -250,13 +252,14 @@ function FeedDetail(props) {
 									variant='outlined'
 								/>
 							</Box>
-							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+							<Box sx={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
 								<Button variant='outlined' onClick={() => handleCloseModal()}>
 									Cancel
 								</Button>
 								<Button
 									variant='contained'
 									type='submit'
+									sx={{ marginLeft: { xs: "10px", md: "20px" } }}
 									// onClick={() => {
 									// 	deleteFeedApiCall();
 									// 	filterSocialFeedsApiCall();
@@ -278,18 +281,22 @@ function FeedDetail(props) {
 							}}>
 							<Typography
 								id='modal-modal-title'
-								style={{
-									fontSize: window.innerWidth < 500 ? "14px" : "24px",
+								sx={{
+									fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+									fontWeight: 400,
 								}}>
-								<b>Are you sure to delete this Comment ?</b>
+								Are you sure to delete this Comment ?
 							</Typography>
-							<Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+							<Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
 								<Button variant='outlined' onClick={() => handleCloseModal()}>
 									Cancel
 								</Button>
 								<Button
 									variant='contained'
 									type='submit'
+									sx={{
+										marginLeft: { xs: "10px", md: "20px" },
+									}}
 									// onClick={() => {
 									// 	deleteFeedApiCall();
 									// 	filterSocialFeedsApiCall();
@@ -311,10 +318,11 @@ function FeedDetail(props) {
 							}}>
 							<Typography
 								id='modal-modal-title'
-								style={{
-									fontSize: window.innerWidth < 500 ? "14px" : "24px",
+								sx={{
+									fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+									fontWeight: 400,
 								}}>
-								<b>Are you sure to delete this feed ?</b>
+								Are you sure to delete this feed ?
 							</Typography>
 							<Box sx={{ my: 2 }}>
 								<Typography style={{ fontSize: window.innerWidth < 500 ? "12px" : "14px" }}>
@@ -335,13 +343,14 @@ function FeedDetail(props) {
 									variant='outlined'
 								/>
 							</Box>
-							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+							<Box sx={{ display: "flex", justifyContent: "center", mt: { xs: 1, md: 2 } }}>
 								<Button variant='outlined' onClick={() => handleCloseModal()}>
 									Cancel
 								</Button>
 								<Button
 									variant='contained'
 									type='submit'
+									sx={{ marginLeft: { xs: "10px", md: "20px" } }}
 									// onClick={() => {
 									// 	deleteFeedApiCall();
 									// 	filterSocialFeedsApiCall();
@@ -391,7 +400,9 @@ function FeedDetail(props) {
 											// setModalOpen(true);
 											// setModalData("Admin User", "warning");
 										} else {
-											navigate("/user/" + data?.authorId);
+											if (localStorage?.getItem("userType") !== "merchant") {
+												navigate("/user/" + data?.authorId);
+											}
 										}
 									}}
 									style={{

@@ -86,6 +86,7 @@ function CreateFeed() {
 	});
 
 	const [imgShow, setImgShow] = React.useState([]);
+	const userType = localStorage?.getItem("merchant");
 
 	const renderType = (type, src) => {
 		switch (type) {
@@ -132,7 +133,6 @@ function CreateFeed() {
 				.then((res) => {
 					setModalOpen(true);
 					setModalData("Feed Created Successfully", "success");
-					navigate("/social-feeds");
 					// setData({
 					// 	title: "",
 					// 	bannerImageUrl: "",
@@ -144,6 +144,11 @@ function CreateFeed() {
 					// 	slug: "",
 					// });
 					setImgShow("");
+					if (localStorage?.getItem("userType") === "merchant") {
+						navigate("/");
+					} else {
+						navigate("/social-feeds");
+					}
 				})
 				.catch((err) => console.error(err));
 		},

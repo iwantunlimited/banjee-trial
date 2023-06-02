@@ -17,12 +17,14 @@ function SidebarList({ handleId, handleClick }) {
 	const userType = localStorage?.getItem("userType");
 
 	const { pathname } = useLocation();
+	const path0 = pathname?.split("/")?.[0];
 	const path1 = pathname?.split("/")?.[1];
 
 	const path2 = pathname?.split("/")?.[2];
 	const routing = NavRouting();
 
-	// console.log("path----3", "/" + path1 + "/" + path2);
+	console.log("path----3", "/" + path0 + " " + path1, path2);
+	console.log("path----corect", path1, path1 === "social-feeds");
 	const [open, setOpen] = React.useState(false);
 	const [id, setId] = React.useState("");
 	return (
@@ -37,6 +39,9 @@ function SidebarList({ handleId, handleClick }) {
 			{userType &&
 				routing?.map((item, index) => {
 					const routingPath = item?.path.split("/")?.[1];
+					console.log("====================================");
+					console.log("routingPath", routingPath);
+					console.log("====================================");
 					{
 						/* console.log("====================================");
 				console.log("routingPath", routingPath, path1 === routingPath);
@@ -215,6 +220,10 @@ function SidebarList({ handleId, handleClick }) {
 											? theme.palette.primary.contrastText
 											: theme.palette.primary.contrastText,
 									// padding: "5px 10px",
+									// background:
+									// 	path1 === routingPath
+									// 		? theme.palette.secondary.main
+									// 		: theme.palette.primary.main,
 									background:
 										path1 === routingPath
 											? theme.palette.secondary.main
@@ -222,6 +231,10 @@ function SidebarList({ handleId, handleClick }) {
 									borderRadius: "10px",
 									margin: "5px",
 									":hover": {
+										// background:
+										// 	path1 === routingPath
+										// 		? theme.palette.secondary.main
+										// 		: theme.palette.primary.main,
 										background:
 											path1 === routingPath
 												? theme.palette.secondary.main

@@ -157,18 +157,20 @@ function BlogComments({ blogData, postType }) {
 											}}>
 											<Typography
 												id='modal-modal-title'
-												style={{
-													fontSize: window.innerWidth < 500 ? "14px" : "24px",
+												sx={{
+													fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+													fontWeight: 400,
 												}}>
-												<b>Are you sure to delete this Comment ?</b>
+												Are you sure to delete this Comment ?
 											</Typography>
-											<Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+											<Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
 												<Button variant='outlined' onClick={() => handleModal()}>
 													Cancel
 												</Button>
 												<Button
 													variant='contained'
 													type='submit'
+													sx={{ marginLeft: { xs: "10px", sm: "20px" } }}
 													// onClick={() => {
 													// 	deleteFeedApiCall();
 													// 	filterSocialFeedsApiCall();

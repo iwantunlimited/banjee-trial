@@ -675,8 +675,18 @@ function Category(props) {
 																				data={deleteCategoryModal}
 																				handleModal={handleModal}>
 																				<Box>
-																					<Typography sx={{ fontSize: "20px" }}>
-																						<b>Are you sure to delete the category ?</b>
+																					<Typography
+																						sx={{
+																							fontSize: {
+																								xs: "14px",
+																								sm: "16px",
+																								md: "16px",
+																								lg: "18px",
+																								xl: "20px",
+																							},
+																							fontWeight: 400,
+																						}}>
+																						Are you sure to delete the category ?
 																					</Typography>
 																					<Box
 																						sx={{

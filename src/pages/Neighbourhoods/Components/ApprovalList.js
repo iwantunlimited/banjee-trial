@@ -228,8 +228,12 @@ export function ApprovalList({
 					<CircularProgress />
 				</div>
 			)}
-			<ModalComp handleModal={handleModal} data={modal} width={500}>
-				<Typography sx={{ fontSize: { xs: "16px", sm: "20px", fontWeight: 500 } }}>
+			<ModalComp handleModal={handleModal} data={modal}>
+				<Typography
+					sx={{
+						fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+						fontWeight: 400,
+					}}>
 					Are You Sure To Reject The Neighbourhood ?
 				</Typography>
 				<Box sx={{ marginY: "10px" }}>

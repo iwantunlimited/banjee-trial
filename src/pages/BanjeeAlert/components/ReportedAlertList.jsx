@@ -233,8 +233,12 @@ function ReportedAlertList() {
 						</Box>
 						<ModalComp data={modalData} handleModal={handleModal}>
 							<Box>
-								<Typography>
-									<b>Are you sure to delete the alert ?</b>
+								<Typography
+									sx={{
+										fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+										fontWeight: 400,
+									}}>
+									Are you sure to delete the alert ?
 								</Typography>
 								<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
 									<Button variant='outlined' onClick={() => handleModal(false)}>

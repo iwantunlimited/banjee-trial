@@ -216,6 +216,10 @@ export default function SocialFeed(props) {
 									onClick={() => {
 										setFeedPagination({ page: undefined, pageSize: undefined });
 										setPagination({ page: 0, pageSize: 10 });
+										setDateFilter({
+											startDate: null,
+											endDate: null,
+										});
 									}}
 									style={{
 										borderRadius: "50px",
@@ -227,7 +231,7 @@ export default function SocialFeed(props) {
 								</IconButton>
 							</Tooltip>
 						</Box>
-						<Box sx={{ marginLeft: "10px" }}>
+						{/* <Box sx={{ marginLeft: "10px" }}>
 							<Tooltip title='Reported Feeds'>
 								<IconButton
 									onClick={() => navigate("reported-feeds")}
@@ -240,7 +244,7 @@ export default function SocialFeed(props) {
 									<Report />
 								</IconButton>
 							</Tooltip>
-						</Box>
+						</Box> */}
 					</Box>
 				</Card>
 				{/* <Typography variant="h3">Social Feeds</Typography> */}

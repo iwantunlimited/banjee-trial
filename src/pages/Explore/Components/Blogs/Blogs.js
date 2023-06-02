@@ -194,10 +194,17 @@ function ExploreBlogs() {
 												<ModalComp data={modal} handleModal={handleModal}>
 													<Typography
 														id='modal-modal-title'
-														style={{
-															fontSize: window.innerWidth < 500 ? "14px" : "24px",
+														sx={{
+															fontSize: {
+																xs: "14px",
+																sm: "16px",
+																md: "16px",
+																lg: "18px",
+																xl: "20px",
+															},
+															fontWeight: 400,
 														}}>
-														<b>Are you sure to delete this Blog ?</b>
+														Are you sure to delete this Blog ?
 													</Typography>
 													<Box
 														sx={{

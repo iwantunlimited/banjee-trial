@@ -33,9 +33,9 @@ function a11yProps(index) {
 }
 
 export default function ReactionCommentTab({ blogData, postType }) {
-	console.log("====================================");
-	console.log("blogData reaction", blogData);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("blogData reaction", blogData);
+	// console.log("====================================");
 	const [value, setValue] = React.useState(0);
 
 	const handleChange = (event, newValue) => {

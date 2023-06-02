@@ -275,8 +275,12 @@ function GroupsComp(props) {
 						flexDirection: "column",
 						alignItems: "center",
 					}}>
-					<Typography sx={{ fontSize: { xs: "16px", sm: "16px", md: "18px" } }}>
-						<b>Are you sure to Delete Community ?</b>
+					<Typography
+						sx={{
+							fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+							fontWeight: 400,
+						}}>
+						Are you sure to Delete Community ?
 					</Typography>
 					<Stack spacing={2} direction={"row"} sx={{ marginTop: { xs: 1, md: 2 } }}>
 						<Button

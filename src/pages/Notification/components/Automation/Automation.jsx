@@ -346,8 +346,12 @@ function Automation() {
 							alignItems: "center",
 							flexDirection: "column",
 						}}>
-						<Typography sx={{ fontSize: "20px" }}>
-							<b>Are you sure to delete notification?</b>
+						<Typography
+							sx={{
+								fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+								fontWeight: 400,
+							}}>
+							Are you sure to delete notification?
 						</Typography>
 						<Box sx={{ marginTop: "20px" }}>
 							<Button

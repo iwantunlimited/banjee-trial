@@ -1,4 +1,13 @@
-import { Card, Container, Grid, TextField, Button } from "@mui/material";
+import {
+	Card,
+	Container,
+	Grid,
+	TextField,
+	Button,
+	IconButton,
+	InputAdornment,
+	Box,
+} from "@mui/material";
 import Helmet from "react-helmet";
 import React from "react";
 import "./login.css";
@@ -10,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { MainContext } from "../../context/Context";
 import SnackbarContext from "../../CustomComponents/SnackbarContext";
 import jwt_decode from "jwt-decode";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function Login() {
 	const context = React.useContext(MainContext);
@@ -27,6 +37,14 @@ function Login() {
 	});
 
 	const { username, password } = state;
+
+	const [showPassword, setShowPassword] = React.useState(false);
+
+	const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+	const handleMouseDownPassword = (event) => {
+		event.preventDefault();
+	};
 
 	const setSecurity = (time) => {
 		const setting = new Setting();
@@ -177,40 +195,59 @@ function Login() {
 										<img src={Logo} alt='logo' />
 										<h2 style={{ marginTop: "10px" }}>Sign In</h2>
 									</Grid>
-									<Grid item xs={12}>
-										<form onSubmit={handleSubmit}>
-											<div style={{ display: "flex", justifyContent: "center" }}>
-												<TextField
-													type='text'
-													className='text-input'
-													variant='filled'
-													label='Username'
-													placeholder='Enter UserName'
-													name='username'
-													value={username}
-													onChange={handleChange}
-													required
-												/>
-											</div>
-											<div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
-												<TextField
-													type='password'
-													className='text-input'
-													variant='filled'
-													label='Password'
-													placeholder='Enter Password'
-													name='password'
-													value={password}
-													onChange={handleChange}
-													required
-												/>
-											</div>
-											<div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-												<Button type='submit' variant='contained' className='login-btn'>
-													Login
-												</Button>
-											</div>
-										</form>
+									<Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+										<Box sx={{ maxWidth: "300px" }}>
+											<form onSubmit={handleSubmit}>
+												<div style={{ display: "flex", justifyContent: "center" }}>
+													<TextField
+														fullWidth
+														type='text'
+														className='text-input'
+														variant='filled'
+														label='Username'
+														placeholder='Enter UserName'
+														name='username'
+														value={username}
+														onChange={handleChange}
+														required
+													/>
+												</div>
+												<div
+													style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
+													<TextField
+														fullWidth
+														type={showPassword ? "text" : "password"}
+														className='text-input'
+														variant='filled'
+														label='Password'
+														placeholder='Enter Password'
+														name='password'
+														value={password}
+														onChange={handleChange}
+														required
+														InputProps={{
+															endAdornment: (
+																<InputAdornment position='end'>
+																	<IconButton
+																		aria-label='toggle password visibility'
+																		onClick={handleClickShowPassword}
+																		onMouseDown={handleMouseDownPassword}
+																		edge='end'>
+																		{showPassword ? <VisibilityOff /> : <Visibility />}
+																	</IconButton>
+																</InputAdornment>
+															),
+														}}
+													/>
+												</div>
+												<div
+													style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+													<Button type='submit' variant='contained' className='login-btn'>
+														Login
+													</Button>
+												</div>
+											</form>
+										</Box>
 									</Grid>
 								</Grid>
 							</Grid>

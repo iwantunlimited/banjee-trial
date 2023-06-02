@@ -57,6 +57,7 @@ function DeleteFeedModal({
 					minWidth: "320px",
 					background: "white !important",
 					// boxShadow: 24,
+					borderRadius: "10px",
 					padding: "40px",
 				}}
 				className='delete1-modal'>
@@ -68,10 +69,8 @@ function DeleteFeedModal({
 					}}>
 					<Typography
 						id='modal-modal-title'
-						style={{
-							fontSize: window.innerWidth < 500 ? "14px" : "24px",
-						}}>
-						<b>Are you sure to delete this feed ?</b>
+						sx={{ fontSize: { xs: "14px", sm: "16px", lg: "18px", xl: "20px" }, fontWeight: 400 }}>
+						Are you sure to delete this feed ?
 					</Typography>
 					<Box sx={{ my: 2 }}>
 						<Typography style={{ fontSize: window.innerWidth < 500 ? "12px" : "14px" }}>

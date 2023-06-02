@@ -174,8 +174,12 @@ function BlogDetail() {
 							alignItems: "center",
 							flexDirection: "column",
 						}}>
-						<Typography sx={{ fontSize: "20px" }}>
-							<b>Are you sure to delete blog?</b>
+						<Typography
+							sx={{
+								fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+								fontWeight: 400,
+							}}>
+							Are you sure to delete blog?
 						</Typography>
 						<Box sx={{ marginTop: "20px" }}>
 							<Button

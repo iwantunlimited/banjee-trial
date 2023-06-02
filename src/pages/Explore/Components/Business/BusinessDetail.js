@@ -291,8 +291,14 @@ function BusinessDetail() {
 					</Grid>
 				</Card>
 				<ModalComp data={modal} handleModal={handleModal}>
-					<Typography>Are you sure to delete this business ?</Typography>
-					<Box sx={{ display: "flex", justifyContent: "space-between", marginTop: "30px" }}>
+					<Typography
+						sx={{
+							fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
+							fontWeight: 400,
+						}}>
+						Are you sure to delete this business ?
+					</Typography>
+					<Box sx={{ display: "flex", justifyContent: "center", marginTop: "30px" }}>
 						<Button variant='outlined' onClick={() => handleModal(false)}>
 							cancel
 						</Button>
