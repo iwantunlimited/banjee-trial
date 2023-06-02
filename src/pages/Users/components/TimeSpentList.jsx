@@ -14,7 +14,7 @@ function TimeSpentList(props) {
 	const navigate = useNavigate();
 	const [pagination, setPagination] = React.useState({
 		page: 0,
-		pageSize: 5,
+		pageSize: 10,
 	});
 
 	const [totalEle, setTotalEle] = React.useState(0);

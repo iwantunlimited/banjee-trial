@@ -6,6 +6,14 @@ import { useNavigate } from "react-router";
 
 function NotFound(props) {
 	const navigate = useNavigate();
+
+	React.useEffect(() => {
+		if (localStorage?.getItem("userType") === null) {
+			localStorage?.clear();
+			navigate("/login");
+		}
+	}, []);
+
 	return (
 		<Box
 			sx={{

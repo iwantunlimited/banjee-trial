@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 import Routes from "./Routes";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme, darkTheme } from "./Theme/theme";

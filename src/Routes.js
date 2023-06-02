@@ -1,7 +1,7 @@
 import React from "react";
 // import Account from "./pages/Account/Account";
 import Navbar from "./pages/navbar/navbar";
-import { useRoutes } from "react-router-dom";
+import { useNavigate, useRoutes } from "react-router-dom";
 import Login from "./pages/Login/login";
 import CustomerView from "./pages/Users/components/userView";
 // import Example from "./pages/Users/components/example";
@@ -51,9 +51,12 @@ import ViewAutoNotification from "./pages/Notification/components/Automation/Vie
 import UpdateAutoNotification from "./pages/Notification/components/Automation/UpdateAutoNotification";
 import NotifyUsers from "./pages/Notification/components/Automation/NotifyUsers";
 import { MainContext } from "./context/Context";
+import Loader from "./pages/Loader/Loader";
 
 const Routes = () => {
-	const userType = localStorage?.getItem("userType");
+	const navigate = useNavigate();
+
+	const [userType, setUserType] = React.useState(false);
 
 	const merchantRouting = [
 		{
@@ -276,11 +279,23 @@ const Routes = () => {
 		//     element: <Account />
 		// }
 	];
+
+	React.useEffect(() => {
+		if (localStorage?.getItem("userType") === null) {
+			localStorage?.clear();
+			navigate("/login");
+		}
+	}, []);
+
+	React.useEffect(() => {
+		setUserType(localStorage?.getItem("userType"));
+	}, []);
+
 	return useRoutes([
 		{
 			path: "/",
 			element: <Navbar />,
-			children: userType ? (userType === "merchant" ? merchantRouting : adminRouting) : [],
+			children: userType ? userType === "merchant" ? merchantRouting : adminRouting : <Loader />,
 		},
 		{
 			path: "login",

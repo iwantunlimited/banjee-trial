@@ -48,6 +48,7 @@ function Navbar(props) {
 	const isDarkModeEnabled = useMediaQuery("(prefers-color-scheme: dark)");
 
 	const [id, setId] = React.useState("");
+	const [userType, setUserType] = React.useState(false);
 
 	const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -116,7 +117,15 @@ function Navbar(props) {
 		}
 	}, [navigate]);
 
-	if (localStorage?.getItem("userType")) {
+	React.useEffect(() => {
+		setUserType(localStorage?.getItem("userType"));
+	}, []);
+
+	// console.log("====================================");
+	// console.log("userType navbar", userType);
+	// console.log("====================================");
+
+	if (userType) {
 		return (
 			<div>
 				<Helmet>
@@ -231,6 +240,11 @@ function Navbar(props) {
 			</div>
 		);
 	} else {
+		setTimeout(() => {
+			if (userType === null) {
+				window?.location?.reload();
+			}
+		}, 10000);
 		return <Loader />;
 	}
 }
