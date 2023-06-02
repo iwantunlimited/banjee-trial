@@ -23,8 +23,8 @@ function SidebarList({ handleId, handleClick }) {
 	const path2 = pathname?.split("/")?.[2];
 	const routing = NavRouting();
 
-	console.log("path----3", "/" + path0 + " " + path1, path2);
-	console.log("path----corect", path1, path1 === "social-feeds");
+	// console.log("path----3", "/" + path0 + " " + path1, path2);
+	// console.log("path----corect", path1, path1 === "social-feeds");
 	const [open, setOpen] = React.useState(false);
 	const [id, setId] = React.useState("");
 	return (
@@ -39,9 +39,11 @@ function SidebarList({ handleId, handleClick }) {
 			{userType &&
 				routing?.map((item, index) => {
 					const routingPath = item?.path.split("/")?.[1];
-					console.log("====================================");
+					{
+						/* console.log("====================================");
 					console.log("routingPath", routingPath);
-					console.log("====================================");
+					console.log("===================================="); */
+					}
 					{
 						/* console.log("====================================");
 				console.log("routingPath", routingPath, path1 === routingPath);

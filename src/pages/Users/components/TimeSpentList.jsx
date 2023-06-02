@@ -35,7 +35,7 @@ function TimeSpentList(props) {
 		listActiveUsers(payload)
 			.then((res) => {
 				const rowData = res?.content?.[0]?.onlineActivityList?.map((item, index) => {
-					console.log("listActive user", item);
+					// console.log("listActive user", item);
 					return {
 						...item,
 						id: index,
@@ -57,9 +57,9 @@ function TimeSpentList(props) {
 			});
 	}, []);
 
-	console.log("====================================");
-	console.log("state", state);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("state", state);
+	// console.log("====================================");
 
 	let rows = state ? state : [];
 

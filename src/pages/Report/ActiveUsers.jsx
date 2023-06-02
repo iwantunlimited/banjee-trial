@@ -138,9 +138,9 @@ function ActiverUsers() {
 			headerName: "View",
 			flex: 0.2,
 			renderCell: (params) => {
-				console.log("====================================");
-				console.log("params", params?.row);
-				console.log("====================================");
+				// console.log("====================================");
+				// console.log("params", params?.row);
+				// console.log("====================================");
 				return (
 					<strong>
 						<IconButton

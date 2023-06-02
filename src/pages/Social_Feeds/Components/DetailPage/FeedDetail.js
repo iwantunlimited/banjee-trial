@@ -375,9 +375,6 @@ function FeedDetail(props) {
 		feedReactionApiCall();
 	}, [ApiCall, feedReactionApiCall, feedCommentApiCall]);
 
-	console.log("====================================");
-	console.log("deleteModal", deleteModal);
-	console.log("====================================");
 
 	if (data) {
 		return (
@@ -586,9 +583,6 @@ function FeedDetail(props) {
 										{result?.length > 0 ? (
 											result?.map((ele, index) => {
 												const userLength = ele?.createdByUser?.username.length;
-												console.log("====================================");
-												console.log("comments user", ele);
-												console.log("====================================");
 												const commentId = ele?.id;
 												return (
 													<React.Fragment key={index}>
