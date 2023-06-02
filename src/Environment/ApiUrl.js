@@ -53,6 +53,7 @@ export const urls = {
 		FILTER: services.SOCIAL_FEEDS + "api/feeds/admin/filter",
 		GET_FEED_DETAILS: services.SOCIAL_FEEDS + "feeds/findById/",
 		GET_COMMENTS: services.SOCIAL_FEEDS + "comments/byFeed/",
+		DELETE_COMMENTS: services.SOCIAL_FEEDS + "comments/delete/",
 		GET_REACTIONS: services.SOCIAL_FEEDS + "reaction/",
 		DELETEFEED: services.SOCIAL_FEEDS + "api/feeds/admin/remove",
 		REPORTED_FEED_DETAIL: services.SOCIAL_FEEDS + "api/feeds/admin/reports/",
@@ -91,6 +92,7 @@ export const urls = {
 		CREATE_BLOG: services.LOCAL_DISCOVERY + "blogs",
 		CREATE_COMMENTS: services.LOCAL_DISCOVERY_V2 + "blog/comments",
 		GET_COMMENTS: services.LOCAL_DISCOVERY_V2 + "blog/comments/byPost/",
+		DELETE_COMMENTS: services.LOCAL_DISCOVERY_V2 + "blog/comments/delete/",
 		CREATE_REACTIONS: services.LOCAL_DISCOVERY_V2 + "user-reactions",
 	},
 

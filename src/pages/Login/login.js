@@ -46,17 +46,28 @@ function Login() {
 	// console.log("====================================");
 
 	const handleTokenExpired = (exp) => {
-		let expiredTimer;
-		window.clearTimeout(expiredTimer);
-		const currentTime = Date.now();
-		const timeLeft = exp * 1000 - currentTime;
-		// console.log(timeLeft);
-		expiredTimer = window.setTimeout(() => {
-			localStorage.removeItem("token");
-			window.location.reload();
-			// You can do what ever you want here, like show a notification
-		}, timeLeft);
+		// let expiredTimer;
+		// window.clearTimeout(expiredTimer);
+		// const currentTime = Date.now();
+		// const timeLeft = exp * 1000 - currentTime;
+		// // console.log(timeLeft);
+		// expiredTimer = window.setTimeout(() => {
+		// 	localStorage.removeItem("token");
+		// 	window.location.reload();
+		// 	// You can do what ever you want here, like show a notification
+		// }, timeLeft);
 	};
+
+	React.useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (token) {
+			const { exp, authorities } = jwt_decode(token);
+			if (exp * 1000 < new Date().getTime()) {
+				localStorage.removeItem("token");
+				window.location.reload();
+			}
+		}
+	});
 
 	const handleSubmit = (event) => {
 		const { formType } = state;
@@ -87,9 +98,7 @@ function Login() {
 
 					const access_token =
 						response && response.data?.access_token ? response.data?.access_token : null;
-					// console.log("====================================");
-					// console.log("access_token", access_token);
-					// console.log("====================================");
+					const decoded = jwt_decode(access_token);
 					if (access_token !== null) {
 						localStorage.setItem("token", access_token);
 						setState({
@@ -98,8 +107,12 @@ function Login() {
 							currentItem: localStorage.setItem("currentItem", "Dashboard"),
 						});
 						navigate("/");
-						const { exp } = jwt_decode.decode(access_token);
-						handleTokenExpired(exp);
+						const { exp, authorities } = jwt_decode(access_token);
+						if (authorities?.[0] === "ROLE_MERCHANT_ADMIN") {
+							localStorage?.setItem("userType", "merchant");
+						} else {
+							localStorage?.setItem("userType", "admin");
+						}
 					}
 
 					//   const {firstName}  = response && response.data ? response.data : null ;

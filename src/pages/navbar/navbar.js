@@ -2,12 +2,20 @@ import React from "react";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
-import { Drawer, Hidden, Toolbar, List, Typography, IconButton, Stack } from "@mui/material";
+import {
+	Drawer,
+	Hidden,
+	Toolbar,
+	List,
+	Typography,
+	IconButton,
+	Stack,
+	CircularProgress,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import Logo from "../../assets/LogoWhite.svg";
 import { styled } from "@mui/material/styles";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
-import routing from "./navRouting";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -17,6 +25,8 @@ import SnackbarContext from "../../CustomComponents/SnackbarContext";
 import { MainContext } from "../../context/Context";
 import { DarkMode, Light, LightMode } from "@mui/icons-material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import NavRouting from "./navRouting";
+import Loader from "../Loader/Loader";
 
 const LightTooltip = styled(({ className, ...props }) => (
 	<Tooltip {...props} classes={{ popper: className }} />
@@ -30,6 +40,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 }));
 
 function Navbar(props) {
+	const routing = NavRouting();
 	let navigate = useNavigate();
 	const theme = useTheme();
 	const { setModalOpen, setModalData, setThemeData, themeData } = React.useContext(MainContext);
@@ -105,119 +116,123 @@ function Navbar(props) {
 		}
 	}, [navigate]);
 
-	return (
-		<div>
-			<Helmet>
-				<title>Banjee Admin</title>
-			</Helmet>
-			<Box sx={{ display: "flex" }}>
-				<CssBaseline />
-				<AppBar
-					position='fixed'
-					sx={{
-						zIndex: (theme) => theme.zIndex.drawer + 1,
-						background: theme.palette.primary.main,
-						// color: theme.palette.common.white,
-					}}>
-					<Toolbar>
-						<Hidden mdUp>
-							<IconButton
-								color='inherit'
-								aria-label='open drawer'
-								edge='start'
-								onClick={handleDrawerToggle}
-								sx={{ marginRight: "20px", display: { lg: "none" } }}>
-								<MenuIcon />
-							</IconButton>
-						</Hidden>
-						<div
-							style={{
-								display: "flex",
-								width: "100%",
-								justifyContent: "space-between",
-							}}>
+	if (localStorage?.getItem("userType")) {
+		return (
+			<div>
+				<Helmet>
+					<title>Banjee Admin</title>
+				</Helmet>
+				<Box sx={{ display: "flex" }}>
+					<CssBaseline />
+					<AppBar
+						position='fixed'
+						sx={{
+							zIndex: (theme) => theme.zIndex.drawer + 1,
+							background: theme.palette.primary.main,
+							// color: theme.palette.common.white,
+						}}>
+						<Toolbar>
+							<Hidden mdUp>
+								<IconButton
+									color='inherit'
+									aria-label='open drawer'
+									edge='start'
+									onClick={handleDrawerToggle}
+									sx={{ marginRight: "20px", display: { lg: "none" } }}>
+									<MenuIcon />
+								</IconButton>
+							</Hidden>
 							<div
-								onClick={() => navigate("/")}
 								style={{
 									display: "flex",
-									alignItems: "center",
-									cursor: "pointer",
+									width: "100%",
+									justifyContent: "space-between",
 								}}>
-								<img
-									src={Logo}
-									style={{ width: window.innerWidth < 520 ? "80px" : "110px" }}
-									alt='BanjeeLogo'
-								/>
-								<Hidden mdDown>
-									{routing.map((ele) => {
-										if (ele.id === id) {
-											return (
-												<Typography
-													sx={{
-														fontSize: "25px",
-														marginLeft: "4em",
-														fontFamily: "inherit",
-													}}
-													noWrap
-													component='div'>
-													{ele.name}
-												</Typography>
-											);
-										} else {
-											return null;
-										}
-									})}
-								</Hidden>
+								<div
+									onClick={() => navigate("/")}
+									style={{
+										display: "flex",
+										alignItems: "center",
+										cursor: "pointer",
+									}}>
+									<img
+										src={Logo}
+										style={{ width: window.innerWidth < 520 ? "80px" : "110px" }}
+										alt='BanjeeLogo'
+									/>
+									<Hidden mdDown>
+										{routing.map((ele) => {
+											if (ele.id === id) {
+												return (
+													<Typography
+														sx={{
+															fontSize: "25px",
+															marginLeft: "4em",
+															fontFamily: "inherit",
+														}}
+														noWrap
+														component='div'>
+														{ele.name}
+													</Typography>
+												);
+											} else {
+												return null;
+											}
+										})}
+									</Hidden>
+								</div>
+								<div style={{ display: "flex", justifyContent: "flex-end" }}>
+									<Stack direction='row' spacing={2} sx={{ display: "flex", alignItems: "center" }}>
+										{/* {isDarkModeEnabled === false && ( */}
+										<LightTooltip title='theme'>
+											<IconButton
+												onClick={() => {
+													// console.log("themeData", themeData);
+													setThemeData(!themeData);
+												}}>
+												{themeData ? <LightMode /> : <DarkMode />}
+											</IconButton>
+										</LightTooltip>
+										{/* )} */}
+										<LightTooltip title='Logout'>
+											<IconButton
+												onClick={() => {
+													setModalOpen(true);
+													setModalData("Logout Successfully", "success");
+													localStorage.clear();
+													navigate("/login");
+												}}>
+												{/* <Link to='/login'> */}
+												<LogoutIcon style={{ color: theme.palette.primary.contrastText }} />
+												{/* </Link> */}
+											</IconButton>
+										</LightTooltip>
+									</Stack>
+								</div>
 							</div>
-							<div style={{ display: "flex", justifyContent: "flex-end" }}>
-								<Stack direction='row' spacing={2} sx={{ display: "flex", alignItems: "center" }}>
-									{/* {isDarkModeEnabled === false && ( */}
-									<LightTooltip title='theme'>
-										<IconButton
-											onClick={() => {
-												// console.log("themeData", themeData);
-												setThemeData(!themeData);
-											}}>
-											{themeData ? <LightMode /> : <DarkMode />}
-										</IconButton>
-									</LightTooltip>
-									{/* )} */}
-									<LightTooltip title='Logout'>
-										<IconButton
-											onClick={() => {
-												setModalOpen(true);
-												setModalData("Logout Successfully", "success");
-												localStorage.clear();
-												navigate("/login");
-											}}>
-											{/* <Link to='/login'> */}
-											<LogoutIcon style={{ color: theme.palette.primary.contrastText }} />
-											{/* </Link> */}
-										</IconButton>
-									</LightTooltip>
-								</Stack>
-							</div>
-						</div>
-					</Toolbar>
-				</AppBar>
-				<Hidden mdDown>{desktop}</Hidden>
-				<Hidden mdUp>{mobile}</Hidden>
-				<Box
-					component='main'
-					style={{
-						width: "100%",
-						height: "100%",
-						minHeight: "100vh",
-						// background: theme.palette.grey.A700,
-						padding: "20px",
-					}}>
-					<Toolbar />
-					<Outlet />
+						</Toolbar>
+					</AppBar>
+					<Hidden mdDown>{desktop}</Hidden>
+					<Hidden mdUp>{mobile}</Hidden>
+					<Box
+						component='main'
+						style={{
+							width: "100%",
+							height: "100%",
+							minHeight: "100vh",
+							// background: theme.palette.grey.A700,
+							padding: "20px",
+						}}>
+						<Toolbar />
+						<Outlet />
+					</Box>
 				</Box>
-			</Box>
-			<SnackbarContext />
-		</div>
-	);
+				<SnackbarContext />
+			</div>
+		);
+	} else {
+		return <Loader />;
+	}
 }
 
 export default Navbar;

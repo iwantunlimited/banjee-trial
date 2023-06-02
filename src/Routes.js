@@ -1,3 +1,4 @@
+import React from "react";
 // import Account from "./pages/Account/Account";
 import Navbar from "./pages/navbar/navbar";
 import { useRoutes } from "react-router-dom";
@@ -49,198 +50,237 @@ import CreateAutoNotification from "./pages/Notification/components/Automation/C
 import ViewAutoNotification from "./pages/Notification/components/Automation/ViewAutoNotification";
 import UpdateAutoNotification from "./pages/Notification/components/Automation/UpdateAutoNotification";
 import NotifyUsers from "./pages/Notification/components/Automation/NotifyUsers";
+import { MainContext } from "./context/Context";
 
 const Routes = () => {
+	const userType = localStorage?.getItem("userType");
+
+	const merchantRouting = [
+		{
+			path: "/",
+			element: <SocialFeed />,
+		},
+		{
+			path: "social-feeds/:id",
+			element: <FeedDetail />,
+		},
+		{
+			path: "social-feeds/create",
+			element: <CreateFeed />,
+		},
+		{
+			path: "/social-feeds/reported-feeds",
+			element: <ReportedFeed />,
+		},
+		{
+			path: "/social-feeds/reported-feeds/:id",
+			element: <ViewRFeed />,
+		},
+		{
+			path: "/banjee-alert",
+			element: <BanjeeAlert />,
+		},
+		{
+			path: "/banjee-alert/create",
+			element: <CreateAlert />,
+		},
+		{
+			path: "/banjee-alert/:id",
+			element: <ViewAlert />,
+		},
+	];
+
+	const adminRouting = [
+		{
+			path: "/",
+			element: <DashboardTrial />,
+		},
+		// {
+		// 	path: "/map",
+		// 	element: <GoogleMapCustom isMarkerShown={true} />,
+		// },
+		{
+			path: "/category",
+			element: <MainCategoryComp />,
+		},
+		{
+			path: "/user",
+			element: <UserComp />,
+		},
+		{
+			path: "/rooms",
+			element: <Room />,
+		},
+		{
+			path: "/user/:id",
+			element: <CustomerView />,
+		},
+		{
+			path: "/user/reporteduser",
+			element: <ReportedUser1 />,
+		},
+		{
+			path: "/user/reportedUserView/:id",
+			element: <ViewReportedUsers />,
+		},
+		{
+			path: "/rooms/view/:id",
+			element: <ViewRooms />,
+		},
+		{
+			path: "social-feeds",
+			element: <SocialFeed />,
+		},
+		{
+			path: "social-feeds/:id",
+			element: <FeedDetail />,
+		},
+		{
+			path: "social-feeds/create",
+			element: <CreateFeed />,
+		},
+		{
+			path: "/social-feeds/reported-feeds",
+			element: <ReportedFeed />,
+		},
+		{
+			path: "/social-feeds/reported-feeds/:id",
+			element: <ViewRFeed />,
+		},
+		{
+			path: "/report",
+			element: <Reports />,
+		},
+		{
+			path: "/report/activeUsers",
+			element: <ActiveUsers />,
+		},
+		// {
+		// 	path: "/report/users",
+		// 	element: <UsersReport />,
+		// },
+		// {
+		// 	path: "/report/rooms",
+		// 	element: <RoomsReport />,
+		// },
+		{
+			path: "/neighbourhood",
+			element: <Neighbourhood />,
+		},
+		{
+			path: "/neighbourhood/update/:id",
+			element: <EditNeighbourhood />,
+		},
+		{
+			path: "/neighbourhood/:id",
+			element: <DetailPage />,
+		},
+		{
+			path: "/explore",
+			element: <Explore />,
+		},
+		{
+			path: "/explore/blogs",
+			element: <ExploreBlogs />,
+		},
+		{
+			path: "/explore/blogs/createblog",
+			element: <CreateBlog />,
+		},
+		{
+			path: "/explore/blogs/update/:id",
+			element: <UpdateBlog />,
+		},
+		{
+			path: "/explore/blogs/detail/:id",
+			element: <BlogDetail />,
+		},
+		{
+			path: "/explore/detail/:id",
+			element: <BusinessDetail />,
+		},
+		{
+			path: "/explore/detail/update/:id",
+			element: <EditBusiness />,
+		},
+		{
+			path: "/banjee-alert",
+			element: <BanjeeAlert />,
+		},
+		{
+			path: "/banjee-alert/create",
+			element: <CreateAlert />,
+		},
+		{
+			path: "/banjee-alert/:id",
+			element: <ViewAlert />,
+		},
+		{
+			path: "notification",
+			element: <Notification />,
+		},
+		{
+			path: "notification/create-notification",
+			element: <CreatePushNotification />,
+		},
+		{
+			path: "notification/:id",
+			element: <NotificationDetail />,
+		},
+		{
+			path: "notification/template",
+			element: <Announcement />,
+		},
+		{
+			path: "notification/template/:id",
+			element: <AnnouncementDetail />,
+		},
+		{
+			path: "notification/template/create-template",
+			element: <CreateAnnouncement />,
+		},
+		{
+			path: "/notification/template/update/:id",
+			element: <UpdateAnnouncement />,
+		},
+		{
+			path: "/notification/automation",
+			element: <Automation />,
+		},
+		{
+			path: "/notification/automation/create",
+			element: <CreateAutoNotification />,
+		},
+		{
+			path: "/notification/automation/update/:id",
+			element: <UpdateAutoNotification />,
+		},
+		{
+			path: "/notification/automation/:id",
+			element: <ViewAutoNotification />,
+		},
+		{
+			path: "/notification/automation/notifyUsers",
+			element: <NotifyUsers />,
+		},
+		{
+			path: "/groups",
+			element: <GroupsComp />,
+		},
+		{
+			path: "/groups/:id",
+			element: <GroupDetailPage />,
+		},
+		// {
+		//     path: '/account',
+		//     element: <Account />
+		// }
+	];
 	return useRoutes([
 		{
 			path: "/",
 			element: <Navbar />,
-			children: [
-				{
-					path: "/",
-					element: <DashboardTrial />,
-				},
-				// {
-				// 	path: "/map",
-				// 	element: <GoogleMapCustom isMarkerShown={true} />,
-				// },
-				{
-					path: "/category",
-					element: <MainCategoryComp />,
-				},
-				{
-					path: "/user",
-					element: <UserComp />,
-				},
-				{
-					path: "/rooms",
-					element: <Room />,
-				},
-				{
-					path: "/user/:id",
-					element: <CustomerView />,
-				},
-				{
-					path: "/user/reporteduser",
-					element: <ReportedUser1 />,
-				},
-				{
-					path: "/user/reportedUserView/:id",
-					element: <ViewReportedUsers />,
-				},
-				{
-					path: "/rooms/view/:id",
-					element: <ViewRooms />,
-				},
-				{
-					path: "social-feeds",
-					element: <SocialFeed />,
-				},
-				{
-					path: "social-feeds/:id",
-					element: <FeedDetail />,
-				},
-				{
-					path: "social-feeds/create",
-					element: <CreateFeed />,
-				},
-				{
-					path: "/social-feeds/reported-feeds",
-					element: <ReportedFeed />,
-				},
-				{
-					path: "/social-feeds/reported-feeds/:id",
-					element: <ViewRFeed />,
-				},
-				{
-					path: "/report",
-					element: <Reports />,
-				},
-				{
-					path: "/report/activeUsers",
-					element: <ActiveUsers />,
-				},
-				// {
-				// 	path: "/report/users",
-				// 	element: <UsersReport />,
-				// },
-				// {
-				// 	path: "/report/rooms",
-				// 	element: <RoomsReport />,
-				// },
-				{
-					path: "/neighbourhood",
-					element: <Neighbourhood />,
-				},
-				{
-					path: "/neighbourhood/update/:id",
-					element: <EditNeighbourhood />,
-				},
-				{
-					path: "/neighbourhood/:id",
-					element: <DetailPage />,
-				},
-				{
-					path: "/explore",
-					element: <Explore />,
-				},
-				{
-					path: "/explore/blogs",
-					element: <ExploreBlogs />,
-				},
-				{
-					path: "/explore/blogs/createblog",
-					element: <CreateBlog />,
-				},
-				{
-					path: "/explore/blogs/update/:id",
-					element: <UpdateBlog />,
-				},
-				{
-					path: "/explore/blogs/detail/:id",
-					element: <BlogDetail />,
-				},
-				{
-					path: "/explore/detail/:id",
-					element: <BusinessDetail />,
-				},
-				{
-					path: "/explore/detail/update/:id",
-					element: <EditBusiness />,
-				},
-				{
-					path: "/banjee-alert",
-					element: <BanjeeAlert />,
-				},
-				{
-					path: "/banjee-alert/create",
-					element: <CreateAlert />,
-				},
-				{
-					path: "/banjee-alert/:id",
-					element: <ViewAlert />,
-				},
-				{
-					path: "notification",
-					element: <Notification />,
-				},
-				{
-					path: "notification/create-notification",
-					element: <CreatePushNotification />,
-				},
-				{
-					path: "notification/:id",
-					element: <NotificationDetail />,
-				},
-				{
-					path: "notification/template",
-					element: <Announcement />,
-				},
-				{
-					path: "notification/template/:id",
-					element: <AnnouncementDetail />,
-				},
-				{
-					path: "notification/template/create-template",
-					element: <CreateAnnouncement />,
-				},
-				{
-					path: "/notification/template/update/:id",
-					element: <UpdateAnnouncement />,
-				},
-				{
-					path: "/notification/automation",
-					element: <Automation />,
-				},
-				{
-					path: "/notification/automation/create",
-					element: <CreateAutoNotification />,
-				},
-				{
-					path: "/notification/automation/update/:id",
-					element: <UpdateAutoNotification />,
-				},
-				{
-					path: "/notification/automation/:id",
-					element: <ViewAutoNotification />,
-				},
-				{
-					path: "/notification/automation/notifyUsers",
-					element: <NotifyUsers />,
-				},
-				{
-					path: "/groups",
-					element: <GroupsComp />,
-				},
-				{
-					path: "/groups/:id",
-					element: <GroupDetailPage />,
-				},
-				// {
-				//     path: '/account',
-				//     element: <Account />
-				// }
-			],
+			children: userType ? (userType === "merchant" ? merchantRouting : adminRouting) : [],
 		},
 		{
 			path: "login",

@@ -17,7 +17,11 @@ import {
 } from "@mui/material";
 import React from "react";
 import SwiperComp from "../../../../CustomComponents/SwiperComp";
-import { deleteSocialFeed, getSocialFeedDetails } from "../../services/ApiServices";
+import {
+	deleteSocialFeed,
+	deleteSocialFeedsComments,
+	getSocialFeedDetails,
+} from "../../services/ApiServices";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { getSocialFeedsComments, getSocialFeedsReactions } from "../../services/ApiServices";
@@ -76,8 +80,10 @@ function FeedDetail(props) {
 		open: false,
 		feedId: params?.id,
 		remark: "",
+		commentId: "",
 	});
 
+	const [modalType, setModalType] = React.useState("feed");
 	const [result, setResult] = React.useState([]);
 	const [reaction, setReaction] = React.useState([]);
 	const [value, setValue] = React.useState(0);
@@ -88,9 +94,12 @@ function FeedDetail(props) {
 
 	const handleCloseModal = () => {
 		setDeleteModal((prev) => ({
+			...prev,
 			open: false,
 			remark: "",
+			commentId: "",
 		}));
+		setModalType("feed");
 	};
 
 	const getEmoji = (type) => {
@@ -159,6 +168,22 @@ function FeedDetail(props) {
 			});
 	}, []);
 
+	const deleteFeedCommentsApiCall = React.useCallback((payload) => {
+		deleteSocialFeedsComments(payload)
+			.then((res) => {
+				setModalOpen(true);
+				setModalData("Comment Deleted", "success");
+				setDeleteModal((prev) => ({
+					...prev,
+					open: false,
+				}));
+				feedCommentApiCall();
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}, []);
+
 	const textFun = (text) => {
 		if (text?.length > 550) {
 			if (textState) {
@@ -189,6 +214,148 @@ function FeedDetail(props) {
 		}
 	};
 
+	const modalHandler = () => {
+		switch (modalType) {
+			case "feed":
+				return (
+					<ModalComp data={deleteModal} handleModal={handleCloseModal}>
+						<form
+							onSubmit={(event) => {
+								event?.preventDefault();
+								deleteFeedApiCall();
+							}}>
+							<Typography
+								id='modal-modal-title'
+								style={{
+									fontSize: window.innerWidth < 500 ? "14px" : "24px",
+								}}>
+								<b>Are you sure to delete this feed ?</b>
+							</Typography>
+							<Box sx={{ my: 2 }}>
+								<Typography style={{ fontSize: window.innerWidth < 500 ? "12px" : "14px" }}>
+									Give Remark to feed
+								</Typography>
+								<TextField
+									fullWidth
+									label='remark'
+									name='remark'
+									value={deleteModal?.remark}
+									onChange={(event) => {
+										setDeleteModal((prev) => ({
+											...prev,
+											remark: event?.target?.value,
+										}));
+									}}
+									required
+									variant='outlined'
+								/>
+							</Box>
+							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+								<Button variant='outlined' onClick={() => handleCloseModal()}>
+									Cancel
+								</Button>
+								<Button
+									variant='contained'
+									type='submit'
+									// onClick={() => {
+									// 	deleteFeedApiCall();
+									// 	filterSocialFeedsApiCall();
+									// }}
+								>
+									Submit
+								</Button>
+							</Box>
+						</form>
+					</ModalComp>
+				);
+			case "comment":
+				return (
+					<ModalComp data={deleteModal} handleModal={handleCloseModal}>
+						<form
+							onSubmit={(event) => {
+								event?.preventDefault();
+								deleteFeedCommentsApiCall(deleteModal?.commentId);
+							}}>
+							<Typography
+								id='modal-modal-title'
+								style={{
+									fontSize: window.innerWidth < 500 ? "14px" : "24px",
+								}}>
+								<b>Are you sure to delete this Comment ?</b>
+							</Typography>
+							<Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+								<Button variant='outlined' onClick={() => handleCloseModal()}>
+									Cancel
+								</Button>
+								<Button
+									variant='contained'
+									type='submit'
+									// onClick={() => {
+									// 	deleteFeedApiCall();
+									// 	filterSocialFeedsApiCall();
+									// }}
+								>
+									Submit
+								</Button>
+							</Box>
+						</form>
+					</ModalComp>
+				);
+			default:
+				return (
+					<ModalComp data={deleteModal} handleModal={handleCloseModal}>
+						<form
+							onSubmit={(event) => {
+								event?.preventDefault();
+								deleteFeedApiCall();
+							}}>
+							<Typography
+								id='modal-modal-title'
+								style={{
+									fontSize: window.innerWidth < 500 ? "14px" : "24px",
+								}}>
+								<b>Are you sure to delete this feed ?</b>
+							</Typography>
+							<Box sx={{ my: 2 }}>
+								<Typography style={{ fontSize: window.innerWidth < 500 ? "12px" : "14px" }}>
+									Give Remark to feed
+								</Typography>
+								<TextField
+									fullWidth
+									label='remark'
+									name='remark'
+									value={deleteModal?.remark}
+									onChange={(event) => {
+										setDeleteModal((prev) => ({
+											...prev,
+											remark: event?.target?.value,
+										}));
+									}}
+									required
+									variant='outlined'
+								/>
+							</Box>
+							<Box sx={{ display: "flex", justifyContent: "space-between" }}>
+								<Button variant='outlined' onClick={() => handleCloseModal()}>
+									Cancel
+								</Button>
+								<Button
+									variant='contained'
+									type='submit'
+									// onClick={() => {
+									// 	deleteFeedApiCall();
+									// 	filterSocialFeedsApiCall();
+									// }}
+								>
+									Submit
+								</Button>
+							</Box>
+						</form>
+					</ModalComp>
+				);
+		}
+	};
+
 	// console.log("====================================");
 	// console.log("data", data);
 	// console.log("====================================");
@@ -198,6 +365,10 @@ function FeedDetail(props) {
 		feedCommentApiCall();
 		feedReactionApiCall();
 	}, [ApiCall, feedReactionApiCall, feedCommentApiCall]);
+
+	console.log("====================================");
+	console.log("deleteModal", deleteModal);
+	console.log("====================================");
 
 	if (data) {
 		return (
@@ -404,7 +575,10 @@ function FeedDetail(props) {
 										{result?.length > 0 ? (
 											result?.map((ele, index) => {
 												const userLength = ele?.createdByUser?.username.length;
-
+												console.log("====================================");
+												console.log("comments user", ele);
+												console.log("====================================");
+												const commentId = ele?.id;
 												return (
 													<React.Fragment key={index}>
 														<Grid item xs={12}>
@@ -426,19 +600,41 @@ function FeedDetail(props) {
 																		// textAlign:
 																		// 	blogData?.authorId === item?.author?.id ? "right" : "left",
 																	}}>
-																	<Typography noWrap sx={{ fontSize: "10px" }}>
-																		{ele?.createdByUser?.firstName ? (
-																			<span>{`${
-																				ele?.createdByUser?.firstName +
-																				" " +
-																				(ele?.createdByUser?.lastName
-																					? ele?.createdByUser?.lastName
-																					: "")
-																			}`}</span>
-																		) : (
-																			<span>{`${ele?.createdByUser?.userName || "userName"}`}</span>
-																		)}
-																	</Typography>
+																	<Box
+																		sx={{
+																			display: "flex",
+																			justifyContent: "space-between",
+																			alignItems: "center",
+																		}}>
+																		<Typography noWrap sx={{ fontSize: "10px" }}>
+																			{ele?.createdByUser?.firstName ? (
+																				<span>{`${
+																					ele?.createdByUser?.firstName +
+																					" " +
+																					(ele?.createdByUser?.lastName
+																						? ele?.createdByUser?.lastName
+																						: "")
+																				}`}</span>
+																			) : (
+																				<span>{`${
+																					ele?.createdByUser?.userName || "userName"
+																				}`}</span>
+																			)}
+																		</Typography>
+																		<IconButton
+																			sx={{ padding: "2.5px" }}
+																			onClick={() => {
+																				setModalType("comment");
+																				setDeleteModal((prev) => ({
+																					...prev,
+																					open: true,
+																					commentId: commentId,
+																				}));
+																			}}>
+																			<Delete sx={{ fontSize: "12px" }} />
+																		</IconButton>
+																	</Box>
+
 																	<Typography>{ele?.text}</Typography>
 																</Box>
 															</Box>
@@ -460,55 +656,7 @@ function FeedDetail(props) {
 						</Card>
 					</Grid>
 				</Grid>
-				<ModalComp data={deleteModal} handleModal={handleCloseModal}>
-					<form
-						onSubmit={(event) => {
-							event?.preventDefault();
-							deleteFeedApiCall();
-						}}>
-						<Typography
-							id='modal-modal-title'
-							style={{
-								fontSize: window.innerWidth < 500 ? "14px" : "24px",
-							}}>
-							<b>Are you sure to delete this feed ?</b>
-						</Typography>
-						<Box sx={{ my: 2 }}>
-							<Typography style={{ fontSize: window.innerWidth < 500 ? "12px" : "14px" }}>
-								Give Remark to feed
-							</Typography>
-							<TextField
-								fullWidth
-								label='remark'
-								name='remark'
-								value={deleteModal?.remark}
-								onChange={(event) => {
-									setDeleteModal((prev) => ({
-										...prev,
-										remark: event?.target?.value,
-									}));
-								}}
-								required
-								variant='outlined'
-							/>
-						</Box>
-						<Box sx={{ display: "flex", justifyContent: "space-between" }}>
-							<Button variant='outlined' onClick={() => handleCloseModal()}>
-								Cancel
-							</Button>
-							<Button
-								variant='contained'
-								type='submit'
-								// onClick={() => {
-								// 	deleteFeedApiCall();
-								// 	filterSocialFeedsApiCall();
-								// }}
-							>
-								Submit
-							</Button>
-						</Box>
-					</form>
-				</ModalComp>
+				{modalHandler()}
 			</Container>
 		);
 	} else {

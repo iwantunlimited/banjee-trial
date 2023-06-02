@@ -1,17 +1,42 @@
-import { Box, Button, TextField, Typography, Grid, Divider, useTheme } from "@mui/material";
+import {
+	Box,
+	Button,
+	TextField,
+	Typography,
+	Grid,
+	Divider,
+	useTheme,
+	IconButton,
+} from "@mui/material";
 import React from "react";
 import { useParams } from "react-router";
-import { createComments, getComments } from "../../services/ApiServices";
+import { createComments, deleteBlogComments, getComments } from "../../services/ApiServices";
+import ModalComp from "../../../../CustomComponents/ModalComp";
+import { Delete } from "@mui/icons-material";
+import { MainContext } from "../../../../context/Context";
 
 function BlogComments({ blogData, postType }) {
 	const params = useParams();
 	const theme = useTheme();
+	const { setModalOpen, setModalData } = React.useContext(MainContext);
 	const [comment, setComment] = React.useState({
 		postId: params?.id,
 		text: "",
 	});
 
+	const [modal, setModal] = React.useState({
+		open: false,
+		commentId: "",
+	});
+
 	const [commentData, setCommentData] = React.useState([]);
+
+	const handleModal = () => {
+		setModal((prev) => ({
+			open: false,
+			commentId: "",
+		}));
+	};
 
 	const GetCommentsApiCall = React.useCallback(() => {
 		if (params?.id) {
@@ -37,6 +62,20 @@ function BlogComments({ blogData, postType }) {
 			.catch((err) => console.error(err));
 	}, []);
 
+	const deleteCommentApiCall = React.useCallback((payload) => {
+		deleteBlogComments(payload)
+			.then((res) => {
+				handleModal();
+				setModalOpen(true);
+				setModalData("Comment Deleted", "success");
+			})
+			.catch((err) => {
+				console.error(err);
+				setModalOpen(true);
+				setModalData("Something went wrong", "error");
+			});
+	}, []);
+
 	React.useEffect(() => {
 		GetCommentsApiCall();
 	}, [GetCommentsApiCall]);
@@ -54,6 +93,7 @@ function BlogComments({ blogData, postType }) {
 					}}>
 					{commentData?.length > 0 ? (
 						commentData?.map((item, index) => {
+							const commentId = item?.id;
 							return (
 								<Box
 									sx={{
@@ -75,11 +115,31 @@ function BlogComments({ blogData, postType }) {
 											textAlign: item?.author?.username === "root" ? "right" : "left",
 											// textAlign: blogData?.authorId === item?.author?.id ? "right" : "left",
 										}}>
-										<Typography sx={{ fontSize: "10px" }}>
-											{item?.author?.firstName && item?.author?.lastName
-												? item?.author?.firstName + " " + item?.author?.lastName
-												: item?.author?.username}
-										</Typography>
+										<Box
+											sx={{
+												display: "flex",
+												justifyContent: "space-between",
+												alignItems: "center",
+											}}>
+											<Typography sx={{ fontSize: "10px" }}>
+												{item?.author?.firstName && item?.author?.lastName
+													? item?.author?.firstName + " " + item?.author?.lastName
+													: item?.author?.username}
+											</Typography>
+											{postType === "ALERT" && (
+												<IconButton
+													sx={{ padding: "2.5px", marginLeft: "5px" }}
+													onClick={() => {
+														setModal((prev) => ({
+															...prev,
+															open: true,
+															commentId: commentId,
+														}));
+													}}>
+													<Delete sx={{ fontSize: "12px" }} />
+												</IconButton>
+											)}
+										</Box>
 										<Typography
 											sx={{
 												fontSize: "14px",
@@ -89,6 +149,36 @@ function BlogComments({ blogData, postType }) {
 											{item?.text}
 										</Typography>
 									</Box>
+									<ModalComp data={modal} handleModal={handleModal}>
+										<form
+											onSubmit={(event) => {
+												event?.preventDefault();
+												deleteCommentApiCall(modal?.commentId);
+											}}>
+											<Typography
+												id='modal-modal-title'
+												style={{
+													fontSize: window.innerWidth < 500 ? "14px" : "24px",
+												}}>
+												<b>Are you sure to delete this Comment ?</b>
+											</Typography>
+											<Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+												<Button variant='outlined' onClick={() => handleModal()}>
+													Cancel
+												</Button>
+												<Button
+													variant='contained'
+													type='submit'
+													// onClick={() => {
+													// 	deleteFeedApiCall();
+													// 	filterSocialFeedsApiCall();
+													// }}
+												>
+													Submit
+												</Button>
+											</Box>
+										</form>
+									</ModalComp>
 								</Box>
 							);
 						})

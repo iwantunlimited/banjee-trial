@@ -137,6 +137,13 @@ export const getComments = (requestLoad) => {
 	let method = "GET";
 	return executeGet(url, actionCode, payload, method);
 };
+export const deleteBlogComments = (requestLoad) => {
+	let url = urls.LOCAL_DISCOVERY.DELETE_COMMENTS + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "DELETE";
+	return executeGet(url, actionCode, payload, method);
+};
 
 export const getReactions = (requestLoad) => {
 	let url = urls.LOCAL_DISCOVERY.CREATE_REACTIONS + `/${requestLoad}`;

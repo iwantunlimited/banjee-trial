@@ -41,6 +41,13 @@ export const getSocialFeedsComments = (requestLoad) => {
 	let method = "GET";
 	return executeGet(url, actionCode, payload, method);
 };
+export const deleteSocialFeedsComments = (requestLoad) => {
+	let url = urls.SOCIAL_FEEDS.DELETE_COMMENTS + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "DELETE";
+	return executeGet(url, actionCode, payload, method);
+};
 export const getSocialFeedsReactions = (requestLoad) => {
 	let url = urls.SOCIAL_FEEDS.GET_REACTIONS + requestLoad;
 	let actionCode = "";
