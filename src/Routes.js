@@ -287,6 +287,17 @@ const Routes = () => {
 		}
 	}, []);
 
+	const routingHandler = () => {
+		switch (userType) {
+			case "merchant":
+				return merchantRouting;
+			case "admin":
+				return adminRouting;
+			default:
+				return adminRouting;
+		}
+	};
+
 	React.useEffect(() => {
 		setUserType(localStorage?.getItem("userType"));
 	}, []);
@@ -295,7 +306,7 @@ const Routes = () => {
 		{
 			path: "/",
 			element: <Navbar />,
-			children: userType ? userType === "merchant" ? merchantRouting : adminRouting : <Loader />,
+			children: userType ? routingHandler() : <Loader />,
 		},
 		{
 			path: "login",
