@@ -123,13 +123,12 @@ function ActiverUsers() {
 				const minutes = params?.row?.timeSpent?.minutes;
 				const seconds = params?.row?.timeSpent?.seconds;
 				const time = `${hour + " hour, " + minutes + " minutes, " + seconds + " seconds"}`;
-				return time;
-				// if (params.row && params.row.createdOn) {
-				// 	const date = moment(params.row.createdOn).format("DD/MM/YYYY");
-				// 	return date;
-				// } else {
-				// 	return "-";
-				// }
+				// return time;
+				if (params?.row && params?.row?.timeSpent) {
+					return time;
+				} else {
+					return "-";
+				}
 			},
 		},
 		{
@@ -184,7 +183,7 @@ function ActiverUsers() {
 			listActiveUsers(payload)
 				.then((res) => {
 					console.log("listActive user", res);
-					const rowData = res?.content.map((item) => {
+					const rowData = res?.content?.map((item) => {
 						return {
 							...item,
 							firstName: item?.userObject?.firstName,
@@ -193,7 +192,7 @@ function ActiverUsers() {
 							mobile: item?.userObject?.mobile,
 							createdOn: item?.userObject?.createdOn,
 							userId: item?.userId,
-							timeSpent: item?.onlineActivityList?.[0]?.totalDuration,
+							timeSpent: item?.onlineActivityList?.totalDuration,
 							view: "view",
 						};
 					});

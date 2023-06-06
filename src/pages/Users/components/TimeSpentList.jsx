@@ -34,32 +34,34 @@ function TimeSpentList(props) {
 		};
 		listActiveUsers(payload)
 			.then((res) => {
-				const rowData = res?.content?.[0]?.onlineActivityList?.map((item, index) => {
-					// console.log("listActive user", item);
-					return {
-						...item,
-						id: index,
-						date: item?.date,
-						timeSpent: item?.totalDuration,
-						view: "view",
-					};
-				});
+				const rowData =
+					res?.content?.length > 0 &&
+					res?.content?.map((item, index) => {
+						// console.log("listActive user", item);
+						return {
+							...item,
+							id: index,
+							date: item?.date,
+							timeSpent: item?.onlineActivity?.totalDuration,
+							view: "view",
+						};
+					});
 
 				setState(rowData ? rowData : []);
 				// setPagination({
 				// 	page: res?.pageable?.pageNumber,
 				// 	pageSize: res?.pageable?.pageSize,
 				// });
-				setTotalEle(res?.content?.[0]?.onlineActivityList?.length);
+				setTotalEle(res?.totalElements);
 			})
 			.catch((err) => {
 				console.warn(err);
 			});
 	}, []);
 
-	// console.log("====================================");
-	// console.log("state", state);
-	// console.log("====================================");
+	console.log("====================================");
+	console.log("state", state);
+	console.log("====================================");
 
 	let rows = state ? state : [];
 
@@ -76,7 +78,7 @@ function TimeSpentList(props) {
 					const dateFormate = moment(params.row.date).format("LL");
 					return dateFormate;
 				} else {
-					return 0;
+					return "-";
 				}
 			},
 		},
@@ -92,7 +94,11 @@ function TimeSpentList(props) {
 				const minutes = params?.row?.timeSpent?.minutes;
 				const seconds = params?.row?.timeSpent?.seconds;
 				const time = `${hour + " hour, " + minutes + " minutes, " + seconds + " seconds"}`;
-				return time;
+				if (params?.row?.timeSpent) {
+					return time;
+				} else {
+					return "-";
+				}
 			},
 		},
 		// {
