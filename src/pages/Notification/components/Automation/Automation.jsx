@@ -105,7 +105,7 @@ function Automation() {
 			headerClassName: "app-header",
 			headerName: "Duration Type",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			flex: 0.4,
+			flex: 0.3,
 		},
 		{
 			id: "5",
@@ -186,7 +186,7 @@ function Automation() {
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
 			headerName: "Actions",
 			// align: 'center',
-			flex: 0.2,
+			flex: 0.3,
 			renderCell: (params) => {
 				return (
 					<Stack direction={"row"} spacing={1}>

@@ -27,6 +27,10 @@ function SidebarList({ handleId, handleClick }) {
 	// console.log("path----corect", path1, path1 === "social-feeds");
 	const [open, setOpen] = React.useState(false);
 	const [id, setId] = React.useState("");
+
+	console.log("====================================");
+	console.log("pathname", pathname);
+	console.log("====================================");
 	return (
 		<List
 			sx={{
@@ -226,8 +230,14 @@ function SidebarList({ handleId, handleClick }) {
 									// 	path1 === routingPath
 									// 		? theme.palette.secondary.main
 									// 		: theme.palette.primary.main,
+
 									background:
-										path1 === routingPath
+										userType === "mechant"
+											? path1 === routingPath ||
+											  (index === 0 && pathname === `${"/social-feeds/" + params?.id}`)
+												? theme.palette.secondary.main
+												: theme.palette.primary.main
+											: path1 === routingPath
 											? theme.palette.secondary.main
 											: theme.palette.primary.main,
 									borderRadius: "10px",

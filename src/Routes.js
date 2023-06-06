@@ -300,7 +300,7 @@ const Routes = () => {
 
 	React.useEffect(() => {
 		setUserType(localStorage?.getItem("userType"));
-	}, []);
+	}, [localStorage?.getItem("userType")]);
 
 	return useRoutes([
 		{

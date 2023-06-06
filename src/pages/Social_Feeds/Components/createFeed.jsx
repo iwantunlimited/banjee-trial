@@ -86,7 +86,7 @@ function CreateFeed() {
 	});
 
 	const [imgShow, setImgShow] = React.useState([]);
-	const userType = localStorage?.getItem("merchant");
+	const [userType, setUserType] = React.useState("admin");
 
 	const renderType = (type, src) => {
 		switch (type) {
@@ -144,7 +144,7 @@ function CreateFeed() {
 					// 	slug: "",
 					// });
 					setImgShow("");
-					if (localStorage?.getItem("userType") === "merchant") {
+					if (userType === "merchant") {
 						navigate("/");
 					} else {
 						navigate("/social-feeds");
@@ -357,12 +357,19 @@ function CreateFeed() {
 		listNeighbourApiCAll();
 	}, [listNeighbourApiCAll]);
 
+	React.useEffect(() => {
+		setUserType(localStorage?.getItem("merchant"));
+	}, [localStorage?.getItem("merchant")]);
+
 	// const descriptionText = <div dangerouslySetInnerHTML={{ __html: state }} />;
 
 	return (
 		<Container maxWidth='xl'>
 			<Box>
-				<IconButton onClick={() => navigate("/social-feeds")}>
+				<IconButton
+					onClick={() => {
+						navigate(-1);
+					}}>
 					<ArrowBack color='primary' />
 				</IconButton>
 			</Box>
