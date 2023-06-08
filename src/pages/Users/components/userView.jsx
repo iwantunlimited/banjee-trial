@@ -177,7 +177,9 @@ function CustomerView(props) {
 												}}>
 												{state?.firstName && state?.lastName && (
 													<Typography variant='h6' style={{ marginRight: "5px" }}>
-														{state?.firstName + " " + state?.lastName}
+														{(state?.firstName ? state?.firstName : "") +
+															" " +
+															(state?.lastName ? state?.lastName : "")}
 													</Typography>
 												)}
 												{state?.gender && (
@@ -192,7 +194,7 @@ function CustomerView(props) {
 													</div>
 												)}
 											</Box>
-											{state.email && (
+											{state?.email && (
 												<Typography
 													sx={{
 														marginTop: "5px",
@@ -204,9 +206,11 @@ function CustomerView(props) {
 													{state?.email}
 												</Typography>
 											)}
-											<Typography sx={{ marginTop: "5px", color: "grey" }} variant='h6'>
-												{state?.mcc + " " + state?.mobile}
-											</Typography>
+											{state?.mobile && (
+												<Typography sx={{ marginTop: "5px", color: "grey" }} variant='h6'>
+													{state?.mcc + " " + state?.mobile}
+												</Typography>
+											)}
 											{state?.lastSeen && (
 												<Typography>
 													{"lastSeen: " + moment(state?.lastSeen).format("lll")}

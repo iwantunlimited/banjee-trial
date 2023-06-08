@@ -4,11 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import moment from "moment";
 import { Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-import {
-	filterNeighbourhood,
-	findCommunityByUserId,
-	findNeighbourhoodByUserId,
-} from "../../Neighbourhoods/services/apiServices";
+import { findCommunityByUserId } from "../../Groups/services/apiServices";
 
 function CommunityList(props) {
 	const navigate = useNavigate();
@@ -21,12 +17,19 @@ function CommunityList(props) {
 
 	const [state, setState] = React.useState("");
 
-	//find neighbourhood by user id
+	console.log("====================================");
+	console.log("props", props);
+	console.log("====================================");
+
+	//find community by user id
 
 	const findCommunityApiCall = React.useCallback(() => {
-		findCommunityByUserId(props?.data)
+		findCommunityByUserId({
+			...pagination,
+			userId: props?.data,
+		})
 			.then((res) => {
-				setState(res);
+				setState(res?.content);
 				// setPagination({
 				// 	page: res?.pageable?.pageNumber,
 				// 	pageSize: res?.pageable?.pageSize,

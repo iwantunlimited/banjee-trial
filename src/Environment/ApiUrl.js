@@ -77,7 +77,7 @@ export const urls = {
 		GEO_ALERT: services.GEO_CLOUD + "api/geo-alert/",
 		FILTER_REPORTED_ALERT: services.GEO_CLOUD + "api/geo-alert/report/filter",
 		COMMUNITY: services.GEO_CLOUD + "community",
-		COMMUNITY_BY_USER_ID: services.GEO_CLOUD + "community/byUserId/",
+		COMMUNITY_BY_USER_ID: services.GEO_CLOUD + "community/byUserId",
 	},
 
 	LOCAL_DISCOVERY: {

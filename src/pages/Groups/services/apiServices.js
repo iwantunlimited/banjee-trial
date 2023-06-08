@@ -10,6 +10,14 @@ export const findCommunityById = (requestLoad) => {
 	return executeGet(url, actionCode, payload, method);
 };
 
+export const findCommunityByUserId = (requestLoad) => {
+	let url = urls.GEO_CLOUD.COMMUNITY_BY_USER_ID;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
 export const deleteCommunity = (requestLoad) => {
 	let url = urls.GEO_CLOUD.COMMUNITY + "/delete/" + requestLoad;
 	let actionCode = "";

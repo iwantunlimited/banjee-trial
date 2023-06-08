@@ -19,12 +19,19 @@ export const theme = createTheme({
 		},
 		primary: {
 			main: "#1976d2",
+			// main: "#F88512", //as per new banjee app theme
 			// main: "#ef5350",
 			light: "#42a5f5",
 			dark: "#1565c0",
 			contrastText: "#fff",
 		},
-		secondary: { main: "rgb(42,149,15)", light: "#4caf50", dark: "#1b5e20", contrastText: "#fff" },
+		secondary: {
+			main: "rgb(42,149,15)",
+			// main: "#2B2A31", //as per new banjee app theme
+			light: "#4caf50",
+			dark: "#1b5e20",
+			contrastText: "#fff",
+		},
 		error: {
 			main: "#d32f2f",
 			light: "#ef5350",
@@ -254,7 +261,11 @@ export const darkTheme = createTheme({
 			light: "#e3f2fd",
 			dark: "#42a5f5",
 		},
-		secondary: { main: "#ce93d9", light: "#f3e5f5", dark: "#ab47bc" },
+		secondary: {
+			main: "#ce93d9",
+			light: "#f3e5f5",
+			dark: "#ab47bc",
+		},
 	},
 	shadows: [
 		"none",

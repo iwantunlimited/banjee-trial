@@ -192,7 +192,7 @@ function ActiverUsers() {
 							mobile: item?.userObject?.mobile,
 							createdOn: item?.userObject?.createdOn,
 							userId: item?.userId,
-							timeSpent: item?.onlineActivityList?.totalDuration,
+							timeSpent: item?.onlineActivity?.totalDuration,
 							view: "view",
 						};
 					});

@@ -6,7 +6,6 @@ import { Visibility } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import {
 	filterNeighbourhood,
-	findCommunityByUserId,
 	findNeighbourhoodByUserId,
 } from "../../Neighbourhoods/services/apiServices";
 import { findAlertByUserId } from "../../BanjeeAlert/api-services/apiServices";
