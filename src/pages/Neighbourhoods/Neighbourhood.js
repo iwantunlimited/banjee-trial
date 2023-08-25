@@ -117,7 +117,9 @@ function Neighbourhood() {
 		pendingApproval({
 			page: pendingPagination?.page,
 			pageSize: pendingPagination?.pageSize,
-			processed: false,
+			// processed: false,
+			// approved: false,
+			onList: true,
 		})
 			.then((res) => {
 				const resp = res.content.map((ele) => {
