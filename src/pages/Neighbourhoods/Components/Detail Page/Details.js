@@ -104,9 +104,8 @@ function DetailPage() {
 			headerName: "Full Name",
 			flex: 0.3,
 			renderCell: (params) => {
-				const fullName = params?.row?.mfirstName + " " + params?.row?.mlastName;
-				if (params?.row?.mfirstName || params?.row?.mlastName) {
-					return fullName;
+				if (params?.row?.mfirstName) {
+					return params?.row?.mfirstName;
 				} else {
 					return "-";
 				}
@@ -120,13 +119,15 @@ function DetailPage() {
 			// align: "center",
 			flex: 0.3,
 			renderCell: (params) => {
-				if (params?.row?.mmcc) {
+				if (params?.row?.mmcc && params?.row?.mmobile) {
 					const number = params?.row?.mmcc && params?.row?.mmcc + " " + params?.row?.mmobile;
 
 					return number;
-				} else {
+				} else if (params?.row?.mmobile) {
 					const number = params?.row?.mmobile;
 					return number;
+				} else {
+					return "-";
 				}
 			},
 		},
@@ -382,9 +383,7 @@ function DetailPage() {
 									padding: "0 10px 0 10px",
 								}}>
 								<Avatar
-									alt={
-										modal?.data?.mfirstName?.length > 0 ? modal?.data?.mfirstName?.slice(0, 1) : "A"
-									}
+									alt={modal?.data?.mfirstName?.length > 0 ? modal?.data?.mfirstName?.slice(0, 1) : "A"}
 									// src={
 									// 	"https://gateway.banjee.org//services/media-service/iwantcdn/resources/" +
 									// 	modal?.data?.mavatarUrl
@@ -402,7 +401,7 @@ function DetailPage() {
 									}}>
 									{modal?.data?.firstName && (
 										<Typography variant='h6' style={{ marginRight: "5px" }}>
-											{modal?.data?.mfirstName + " " + modal?.data?.mlastName}
+											{modal?.data?.mfirstName}
 										</Typography>
 									)}
 								</div>
@@ -588,9 +587,7 @@ function DetailPage() {
 								</Box>
 								<Box sx={{ marginLeft: "40px" }}>
 									{state?.name && (
-										<Typography sx={{ fontSize: { xs: "22px", md: "26px" } }}>
-											{state?.name}
-										</Typography>
+										<Typography sx={{ fontSize: { xs: "22px", md: "26px" } }}>{state?.name}</Typography>
 									)}
 									{state?.createdOn && (
 										<Typography sx={{ fontSize: "12px" }}>
@@ -598,9 +595,7 @@ function DetailPage() {
 										</Typography>
 									)}
 									{state?.countryName && <Typography>{state?.countryName}</Typography>}
-									{state?.totalMembers && (
-										<Typography>{"Total Members: " + state?.totalMembers}</Typography>
-									)}
+									{state?.totalMembers && <Typography>{"Total Members: " + state?.totalMembers}</Typography>}
 									<Typography>{state?.description}</Typography>
 								</Box>
 							</Box>

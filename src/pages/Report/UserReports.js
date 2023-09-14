@@ -53,13 +53,7 @@ function UserReports() {
 		{
 			field: "firstName",
 			headerClassName: "app-header",
-			headerName: "First Name",
-			flex: 0.4,
-		},
-		{
-			field: "lastName",
-			headerClassName: "app-header",
-			headerName: "Last Name",
+			headerName: "Name",
 			flex: 0.4,
 		},
 		{
@@ -226,8 +220,7 @@ function UserReports() {
 						<Grid item xs={12}>
 							<Card className='main-card space-css'>
 								<div style={{ width: "100%" }}>
-									<Box
-										sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+									<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 										<div
 											style={{
 												color: context?.themeData ? "default" : "#6b778c",
@@ -293,11 +286,7 @@ function UserReports() {
 										onClose={sanckbarClose}
 										action={
 											<React.Fragment>
-												<IconButton
-													size='small'
-													aria-label='close'
-													color='inherit'
-													onClick={sanckbarClose}>
+												<IconButton size='small' aria-label='close' color='inherit' onClick={sanckbarClose}>
 													close
 													{/* <CloseIcon fontSize='small' /> */}
 												</IconButton>

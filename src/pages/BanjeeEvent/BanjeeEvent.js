@@ -1,14 +1,14 @@
 import { Box, Card, Grid, Tabs, Tab, IconButton, Typography, Tooltip } from "@mui/material";
 import React from "react";
-import { listAlert } from "./api-services/apiServices";
-import AlertListTable from "./components/AlertListTable";
 import { useCallback } from "react";
 import PropTypes from "prop-types";
-import ReportedAlertList from "./components/ReportedAlertList";
 import { Add, Refresh } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router";
 import { MainContext } from "../../context/Context";
 import { PaginationContext } from "../../context/PaginationContext";
+import { listEvent } from "./api-services/apiServices";
+import EventList from "./components/EventList";
+import ReportedEventList from "./components/ReportedEventList";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -38,19 +38,19 @@ function a11yProps(index) {
 	};
 }
 
-function BanjeeAlert() {
+function BanjeeEvent() {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { themeData } = React.useContext(MainContext);
-	const { alertPagination, setAlertPagination } = React.useContext(PaginationContext);
+	const { eventPagination, setEventPagination } = React.useContext(PaginationContext);
 	const [value, setValue] = React.useState(location?.state?.reportedDetail ? 1 : 0);
 
 	const [data, setData] = React.useState("");
 
 	const [totalElements, setTotalElements] = React.useState(0);
 	const [pagination, setPagination] = React.useState({
-		page: alertPagination?.page ? alertPagination?.page : 0,
-		pageSize: alertPagination?.pageSize ? alertPagination?.pageSize : 10,
+		page: eventPagination?.page ? eventPagination?.page : 0,
+		pageSize: eventPagination?.pageSize ? eventPagination?.pageSize : 10,
 	});
 
 	const handlePagination = (data) => {
@@ -65,20 +65,21 @@ function BanjeeAlert() {
 		setValue(newValue);
 	};
 
-	const handleAlertListApiCall = () => {
-		ListAlertApiCall();
+	const handleEventListApiCall = () => {
+		ListEventApiCall();
 	};
 
-	const ListAlertApiCall = useCallback(() => {
+	const ListEventApiCall = useCallback(() => {
 		// if (currentLocation?.lat && currentLocation?.lon) {
-		listAlert({
+		listEvent({
 			// latitude: currentLocation?.lat,
 			// longitude: currentLocation?.lon,
+			type: "EVENT",
 			page: pagination?.page,
 			pageSize: pagination?.pageSize,
-			eventCode: ["PANIC_EMERGENCY", "NEW_ALERT"],
 		})
 			.then((res) => {
+				console.log("res", res);
 				const resp = res?.content?.map((item) => {
 					return {
 						routingId: item?.id,
@@ -109,8 +110,8 @@ function BanjeeAlert() {
 	// }, []);
 
 	React.useEffect(() => {
-		ListAlertApiCall();
-	}, [ListAlertApiCall]);
+		ListEventApiCall();
+	}, [ListEventApiCall]);
 
 	return (
 		<Box>
@@ -124,19 +125,19 @@ function BanjeeAlert() {
 									color: themeData ? "default" : "#6b778c",
 									fontSize: "22px",
 								}}>
-								Alerts({totalElements ? totalElements : 0})
+								Events({totalElements ? totalElements : 0})
 							</Typography>
 						</Box>
 						<Box>
-							<Tooltip title='Create Alert' arrow sx={{ bacground: "white", color: "black" }}>
-								<IconButton onClick={() => navigate("/banjee-alert/create")}>
+							{/* <Tooltip title='Create Event' arrow sx={{ bacground: "white", color: "black" }}>
+								<IconButton onClick={() => navigate("/banjee-event/create")}>
 									<Add color='primary' />
 								</IconButton>
-							</Tooltip>
-							<Tooltip title='Refresh Alerts' arrow sx={{ bacground: "white", color: "black" }}>
+							</Tooltip> */}
+							<Tooltip title='Refresh Events' arrow sx={{ bacground: "white", color: "black" }}>
 								<IconButton
 									onClick={() => {
-										setAlertPagination({ page: undefined, pageSize: undefined });
+										setEventPagination({ page: undefined, pageSize: undefined });
 										setPagination({ page: 0, pageSize: 10 });
 									}}>
 									<Refresh color='primary' />
@@ -145,31 +146,6 @@ function BanjeeAlert() {
 						</Box>
 					</Card>
 				</Grid>
-				{/* <Grid item xs={12}>
-					<Card sx={{ padding: "20px", borderRadius: "0px" }}>
-						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
-							Banjee Alert
-						</div>
-						<Box sx={{ marginY: "10px" }}>
-							<Divider />
-						</Box>
-						<AlertLocation currentLocation={currentLocation} zoom={10} data={data} type={"array"} />
-					</Card>
-				</Grid> */}
-				{/* <Grid item xs={12}>
-					<Card sx={{ padding: "10px", borderRadius: "0px" }}>
-						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>Alert List</div>
-						<Box sx={{ marginY: "10px" }}>
-							<Divider />
-						</Box>
-						<AlertListTable
-							listApiCall={ListAlertApiCall}
-							pagination={state}
-							handlePagination={handlePagination}
-							data={data}
-						/>
-					</Card>
-				</Grid> */}
 				<Grid item xs={12}>
 					<Card sx={{ padding: "10px", borderRadius: "0px" }}>
 						<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -179,14 +155,14 @@ function BanjeeAlert() {
 								value={value}
 								onChange={handleChange}
 								aria-label='basic tabs example'>
-								<Tab label='Alert List' {...a11yProps(0)} />
+								<Tab label='Event List' {...a11yProps(0)} />
 								<Tab label='Reported List' {...a11yProps(1)} />
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
-							<AlertListTable
-								handleAlertListApiCall={handleAlertListApiCall}
-								listApiCall={ListAlertApiCall}
+							<EventList
+								handleEventListApiCall={handleEventListApiCall}
+								listApiCall={ListEventApiCall}
 								pagination={pagination}
 								handlePagination={handlePagination}
 								data={data}
@@ -194,7 +170,7 @@ function BanjeeAlert() {
 							/>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<ReportedAlertList />
+							<ReportedEventList />
 						</TabPanel>
 					</Card>
 				</Grid>
@@ -203,4 +179,4 @@ function BanjeeAlert() {
 	);
 }
 
-export default BanjeeAlert;
+export default BanjeeEvent;

@@ -133,6 +133,7 @@ function CreateNeighbour(props) {
 	}
 
 	const createApiCall = React.useCallback((payload) => {
+		console.log("payload", payload);
 		createNeighbourhood(payload)
 			.then((res) => {
 				setModalOpen(true);
@@ -238,7 +239,6 @@ function CreateNeighbour(props) {
 		const base64 = await blobToBase64(data);
 		// console.log(base64);
 	};
-
 
 	// React.useEffect(() => {
 	// 	CountryApi();

@@ -234,9 +234,7 @@ function FeedDetail(props) {
 								Are you sure to delete this feed ?
 							</Typography>
 							<Box sx={{ my: 2 }}>
-								<Typography sx={{ fontSize: { xs: "12px", sm: "14px" } }}>
-									Give Remark to feed
-								</Typography>
+								<Typography sx={{ fontSize: { xs: "12px", sm: "14px" } }}>Give Remark to feed</Typography>
 								<TextField
 									fullWidth
 									label='remark'
@@ -375,7 +373,6 @@ function FeedDetail(props) {
 		feedReactionApiCall();
 	}, [ApiCall, feedReactionApiCall, feedCommentApiCall]);
 
-
 	if (data) {
 		return (
 			<Container maxWidth='md' sx={{ marginTop: "10px" }}>
@@ -428,11 +425,7 @@ function FeedDetail(props) {
 											fontSize: "18px",
 										}}>
 										{data?.author?.firstName ? (
-											<span>{`${
-												data?.author?.firstName +
-												" " +
-												(data?.author?.lastName ? data?.author?.lastName : "")
-											}`}</span>
+											<span>{`${data?.author?.firstName}`}</span>
 										) : (
 											<span>{`${data?.author?.userName || "userName"}`}</span>
 										)}
@@ -442,9 +435,7 @@ function FeedDetail(props) {
 												{"Scheduled at " + moment(data?.dateTime).format("dddd")}
 											</span>
 										) : (
-											<span style={{ fontSize: "14px" }}>
-												{moment(data?.createdOn).format("lll")}
-											</span>
+											<span style={{ fontSize: "14px" }}>{moment(data?.createdOn).format("lll")}</span>
 										)}
 									</Typography>
 								</Box>
@@ -480,8 +471,7 @@ function FeedDetail(props) {
 									</Typography>
 								)} */}
 							</Box>
-							<Box
-								sx={{ borderBottom: 1, borderColor: "divider", width: "100%", marginTop: "10px" }}>
+							<Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%", marginTop: "10px" }}>
 								<Tabs
 									value={value}
 									onChange={handleChange}
@@ -511,8 +501,7 @@ function FeedDetail(props) {
 															<Box
 																sx={{
 																	display: "flex",
-																	justifyContent:
-																		data?.authorId === ele?.userId ? "flex-end" : "flex-start",
+																	justifyContent: data?.authorId === ele?.userId ? "flex-end" : "flex-start",
 																}}>
 																<Box
 																	sx={{
@@ -527,11 +516,7 @@ function FeedDetail(props) {
 																	}}>
 																	<Typography noWrap sx={{ fontSize: "10px" }}>
 																		{ele?.user?.firstName ? (
-																			<span>{`${
-																				ele?.user?.firstName +
-																				" " +
-																				(ele?.user?.lastName ? ele?.user?.lastName : "")
-																			}`}</span>
+																			<span>{`${ele?.user?.firstName}`}</span>
 																		) : (
 																			<span>{`${ele?.user?.userName || "userName"}`}</span>
 																		)}
@@ -539,8 +524,7 @@ function FeedDetail(props) {
 																	<Box
 																		sx={{
 																			display: "flex",
-																			justifyContent:
-																				data?.authorId === ele?.userId ? "flex-start" : "flex-end",
+																			justifyContent: data?.authorId === ele?.userId ? "flex-start" : "flex-end",
 
 																			marginLeft: data?.authorId === ele?.userId ? "0px" : "20px",
 																			marginRight: data?.authorId === ele?.userId ? "20px" : "0px",
@@ -591,8 +575,7 @@ function FeedDetail(props) {
 															<Box
 																sx={{
 																	display: "flex",
-																	justifyContent:
-																		data?.authorId === ele?.createdBy ? "flex-end" : "flex-start",
+																	justifyContent: data?.authorId === ele?.createdBy ? "flex-end" : "flex-start",
 																}}>
 																<Box
 																	sx={{
@@ -613,17 +596,9 @@ function FeedDetail(props) {
 																		}}>
 																		<Typography noWrap sx={{ fontSize: "10px" }}>
 																			{ele?.createdByUser?.firstName ? (
-																				<span>{`${
-																					ele?.createdByUser?.firstName +
-																					" " +
-																					(ele?.createdByUser?.lastName
-																						? ele?.createdByUser?.lastName
-																						: "")
-																				}`}</span>
+																				<span>{`${ele?.createdByUser?.firstName}`}</span>
 																			) : (
-																				<span>{`${
-																					ele?.createdByUser?.userName || "userName"
-																				}`}</span>
+																				<span>{`${ele?.createdByUser?.userName || "userName"}`}</span>
 																			)}
 																		</Typography>
 																		<IconButton

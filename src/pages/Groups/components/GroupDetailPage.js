@@ -21,6 +21,7 @@ import { MainContext } from "../../../context/Context";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { filterMembers } from "../../Neighbourhoods/services/apiServices";
 import { deleteCommunity, findCommunityById } from "../services/apiServices";
+import GroupFeed from "./GroupFeed";
 
 function GroupDetailPage(props) {
 	const params = useParams();
@@ -87,9 +88,8 @@ function GroupDetailPage(props) {
 			headerName: "Full Name",
 			flex: 0.3,
 			renderCell: (params) => {
-				const fullName = params?.row?.mfirstName + " " + params?.row?.mlastName;
-				if (params?.row?.mfirstName && params?.row?.mlastName) {
-					return fullName;
+				if (params?.row?.mfirstName) {
+					return params?.row?.mfirstName;
 				} else {
 					return "-";
 				}
@@ -103,13 +103,14 @@ function GroupDetailPage(props) {
 			// align: "center",
 			flex: 0.3,
 			renderCell: (params) => {
-				if (params?.row?.mmcc) {
+				if (params?.row?.mmcc && params?.row?.mmobile) {
 					const number = params?.row?.mmcc && params?.row?.mmcc + " " + params?.row?.mmobile;
-
 					return number;
-				} else {
+				} else if (params?.row?.mmobile) {
 					const number = params?.row?.mmobile;
 					return number;
+				} else {
+					return "-";
 				}
 			},
 		},
@@ -266,9 +267,7 @@ function GroupDetailPage(props) {
 								</Box>
 								<Box sx={{ marginLeft: "40px" }}>
 									{state?.name && (
-										<Typography sx={{ fontSize: { xs: "22px", md: "26px" } }}>
-											{state?.name}
-										</Typography>
+										<Typography sx={{ fontSize: { xs: "22px", md: "26px" } }}>{state?.name}</Typography>
 									)}
 									{state?.createdOn && (
 										<Typography sx={{ fontSize: "12px" }}>
@@ -276,12 +275,8 @@ function GroupDetailPage(props) {
 										</Typography>
 									)}
 									{state?.cloudType && <Typography>{"Cloud Type: " + state?.cloudType}</Typography>}
-									{state?.categoryName && (
-										<Typography>{"Category Name: " + state?.categoryName}</Typography>
-									)}
-									{state?.totalMembers && (
-										<Typography>{"Total Members: " + state?.totalMembers}</Typography>
-									)}
+									{state?.categoryName && <Typography>{"Category Name: " + state?.categoryName}</Typography>}
+									{state?.totalMembers && <Typography>{"Total Members: " + state?.totalMembers}</Typography>}
 									<Typography>{state?.description}</Typography>
 								</Box>
 							</Box>
@@ -335,6 +330,17 @@ function GroupDetailPage(props) {
 									</div>
 								</Box>
 							</Card>
+						</Grid>
+						<Grid item xs={12}>
+							<Box>
+								<Box sx={{ paddingY: "10px" }}>
+									<Typography sx={{ fontSize: "20px", color: "gray", fontWeight: "600" }}>
+										Group Feed
+									</Typography>
+									<Divider />
+								</Box>
+								<GroupFeed groupId={params?.id} groupName={state?.name} />
+							</Box>
 						</Grid>
 					</Grid>
 				</Card>
@@ -390,9 +396,7 @@ function GroupDetailPage(props) {
 										}}>
 										{modalData?.data?.profile?.firstName && (
 											<Typography variant='h6' style={{ marginRight: "5px" }}>
-												{modalData?.data?.profile?.firstName +
-													" " +
-													modalData?.data?.profile?.lastName}
+												{modalData?.data?.profile?.firstName}
 											</Typography>
 										)}
 									</div>
@@ -401,21 +405,15 @@ function GroupDetailPage(props) {
 										variant='h6'>
 										{window.innerWidth > 1282
 											? modalData?.data?.profile?.email
-											: modalData?.data?.profile?.email &&
-											  modalData?.data?.profile?.email.slice(0, 20)}
+											: modalData?.data?.profile?.email && modalData?.data?.profile?.email.slice(0, 20)}
 									</Typography>
-									{window.innerWidth < 1282 &&
-										modalData &&
-										modalData?.data?.profile?.email?.length > 10 && (
-											<Typography
-												style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
-												variant='h6'>
-												{modalData?.data?.profile?.email?.slice(
-													20,
-													modalData?.data?.profile?.email?.length + 1
-												)}
-											</Typography>
-										)}
+									{window.innerWidth < 1282 && modalData && modalData?.data?.profile?.email?.length > 10 && (
+										<Typography
+											style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
+											variant='h6'>
+											{modalData?.data?.profile?.email?.slice(20, modalData?.data?.profile?.email?.length + 1)}
+										</Typography>
+									)}
 									<Typography
 										style={{ marginTop: "5px", color: themeData ? "default" : "grey" }}
 										variant='h6'>

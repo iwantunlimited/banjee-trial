@@ -102,7 +102,7 @@ function Neighbourhood() {
 					});
 					setListData(resp);
 					// setState((prev) => ({
-					// 	...prev,
+					// 	...prev,0
 					// 	page: res?.pageable?.pageNumber,
 					// 	pageSize: res?.pageable?.pageSize,
 					// }));

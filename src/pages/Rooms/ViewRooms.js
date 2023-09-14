@@ -88,14 +88,7 @@ function ViewRooms() {
 			id: "2",
 			field: "firstName",
 			headerClassName: "app-header",
-			headerName: "First Name",
-			flex: 0.3,
-		},
-		{
-			id: "3",
-			field: "lastName",
-			headerClassName: "app-header",
-			headerName: "Last Name",
+			headerName: "Name",
 			flex: 0.3,
 		},
 		{
@@ -214,31 +207,19 @@ function ViewRooms() {
 									</Avatar>
 								</Grid>
 								<Grid item container xs={12} className='d-flex justify-content-center mt-3 px-2'>
-									<Grid
-										item
-										xs={12}
-										className='d-flex'
-										sx={{ display: "flex", alignItems: "center" }}>
+									<Grid item xs={12} className='d-flex' sx={{ display: "flex", alignItems: "center" }}>
 										<Typography style={{ fontSize: "14px" }}>Username:</Typography>
 										<Typography sx={{ fontSize: "16px", marginLeft: "10px" }}>
 											{data.creator.userName}
 										</Typography>
 									</Grid>
-									<Grid
-										item
-										xs={12}
-										className='d-flex mt-1'
-										sx={{ display: "flex", alignItems: "center" }}>
+									<Grid item xs={12} className='d-flex mt-1' sx={{ display: "flex", alignItems: "center" }}>
 										<Typography style={{ fontSize: "14px" }}>Mobile No:</Typography>
 										<Typography sx={{ fontSize: "16px", marginLeft: "10px" }}>
 											{data.creator.mobile}
 										</Typography>
 									</Grid>
-									<Grid
-										item
-										xs={12}
-										className='d-flex mt-1'
-										sx={{ display: "flex", alignItems: "center" }}>
+									<Grid item xs={12} className='d-flex mt-1' sx={{ display: "flex", alignItems: "center" }}>
 										<Typography style={{ fontSize: "14px" }}>Email Id :</Typography>
 										<Typography sx={{ fontSize: "16px", marginLeft: "10px" }}>
 											{data.creator.email}

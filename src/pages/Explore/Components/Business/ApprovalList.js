@@ -48,10 +48,7 @@ export function BusinessApprovalList({
 			// align: "center",
 			flex: 0.4,
 			renderCell: (params) => {
-				const firstName = params?.row?.mfirstName;
-				const lastName = params?.row?.mlastName;
-				const name = firstName + " " + lastName;
-				return name;
+				return params?.row?.mfirstName;
 			},
 		},
 		{

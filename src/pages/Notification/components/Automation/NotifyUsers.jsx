@@ -134,7 +134,7 @@ function NotifyUsers(props) {
 				const resp = res?.data?.content?.map((item) => {
 					return {
 						...item,
-						rName: item?.recipient?.firstName + " " + item?.recipient?.lastName,
+						rName: item?.recipient?.firstName,
 						rMobile: item?.recipient?.mcc + " " + item?.recipient?.mobile,
 						rEmail: item?.recipient?.email,
 						rAvatarUrl: item?.recipient?.avtarImageUrl,

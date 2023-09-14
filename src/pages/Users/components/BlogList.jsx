@@ -145,7 +145,7 @@ function BlogList(props) {
 														display: "flex",
 														flexDirection: "column",
 													}}>
-													{item?.userObject?.firstName && item?.userObject?.lastName ? (
+													{item?.userObject?.firstName ? (
 														<Typography
 															// noWrap={true}
 															sx={{
@@ -154,7 +154,7 @@ function BlogList(props) {
 																WebkitBoxOrient: "vertical",
 																WebkitLineClamp: 1,
 															}}>
-															{item?.userObject?.firstName + " " + item?.userObject?.lastName}
+															{item?.userObject?.firstName}
 														</Typography>
 													) : (
 														<Typography>{`${

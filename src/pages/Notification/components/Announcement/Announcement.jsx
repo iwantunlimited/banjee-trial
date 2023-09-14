@@ -74,11 +74,7 @@ function Announcement() {
 		// 	flex: 0.3,
 		// 	renderCell: (params) => {
 		// 		if (params?.row && params?.row?.mfirstName) {
-		// 			const name =
-		// 				params?.row?.mfirstName &&
-		// 				params?.row?.mfirstName + " " + params?.row?.mlastName &&
-		// 				params?.row?.mfirstName;
-		// 			return name;
+		// 			return params?.row?.mfirstName ;
 		// 		} else {
 		// 			return null;
 		// 		}

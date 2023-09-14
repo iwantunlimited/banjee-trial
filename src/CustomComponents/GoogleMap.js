@@ -102,10 +102,7 @@ const GoogleMapCustom = compose(
 							ele?.types[1] === "political"
 						) {
 							return ele?.long_name;
-						} else if (
-							ele?.types[0] === "administrative_area_level_3" &&
-							ele?.types[1] === "political"
-						) {
+						} else if (ele?.types[0] === "administrative_area_level_3" && ele?.types[1] === "political") {
 							return ele?.long_name;
 						}
 					});
@@ -170,7 +167,8 @@ const GoogleMapCustom = compose(
 			generateAddress(props?.prevLocation?.lat, props?.prevLocation?.lng);
 		} else {
 			document.getElementById("map-container-margin").style.marginTop = "50px";
-			generateAddress(locationData?.lat, locationData?.lng);
+			// generateAddress(locationData?.lat, locationData?.lng);
+			generateAddress(Number(localLat), Number(localLng));
 		}
 	}, [generateAddress]);
 
@@ -179,7 +177,7 @@ const GoogleMapCustom = compose(
 	}, [setCurrentLocation]);
 
 	// console.log("====================================");
-	// console.log("prevLocation", props?.prevLocation);
+	// console.log("prevLocation", localLat, localLng);
 	// console.log("====================================");
 	// console.log("====================================");
 	// console.log("locationData", locationData);
@@ -277,6 +275,7 @@ const GoogleMapCustom = compose(
 			// document.getElementById("map-container-margin").style.marginTop = "50px";
 			// localLat && localLng && generateAddress(localLat, localLat);
 			if (state?.lat && state?.lng) {
+				console.log("state", state?.lat);
 				return (
 					<Box sx={{ position: "relative" }}>
 						<GoogleMap

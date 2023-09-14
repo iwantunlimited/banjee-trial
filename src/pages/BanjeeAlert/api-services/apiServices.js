@@ -4,7 +4,7 @@ import { executeGet } from "../../../Services/iwant-rest-generic";
 import { executePost } from "../../../Services/iwant-rest-http-post";
 
 export let listAlert = (requestLoad) => {
-	let url = urls.GEO_CLOUD.GEO_ALERT + "	filter";
+	let url = urls.GEO_CLOUD.GEO_ALERT + "admin/filter";
 	let actionCode = "";
 	let payload = requestLoad;
 	let method = "POST";

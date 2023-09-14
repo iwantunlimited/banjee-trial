@@ -19,116 +19,38 @@ import {
 	FormLabel,
 	FormControlLabel,
 	Radio,
+	Stack,
 } from "@mui/material";
 // import "../../../Explore/business.css";
 import { ArrowBack, Cancel, Done } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-import { createAlert } from "../api-services/apiServices";
+import { createEvent } from "../api-services/apiServices";
 import axios from "axios";
 import { MainContext } from "../../../context/Context";
 import SnackbarContext from "../../../CustomComponents/SnackbarContext";
-import "../alert.css";
+import "../../BanjeeAlert/alert.css";
 import Compressor from "compressorjs";
-import MyGoogleMap from "../../Neighbourhoods/Map/GoogleMap";
 import { v4 as uuidv4 } from "uuid";
-import SuspiciousVehicle from "../../../assets/alerticonset/SuspiciusVehicle.png";
-import SuspiciousPerson from "../../../assets/alerticonset/SuspiciusPerson.png";
-import HouseBreakIn from "../../../assets/alerticonset/HouseBreak-In.png";
-import CarVandalism from "../../../assets/alerticonset/CarVandalism.png";
-import TheftRobbery from "../../../assets/alerticonset/Theft-Robbery.png";
-import ViolenceAssault from "../../../assets/alerticonset/Violence-Assault.png";
-import HitRun from "../../../assets/alerticonset/Hit&Run.png";
-import SuspiciousActivity from "../../../assets/alerticonset/SuspiciusActivity.png";
-import PoliceRoadblock from "../../../assets/alerticonset/PoliceRoadblock.png";
-import fire from "../../../assets/alerticonset/fire.png";
-import thunder from "../../../assets/alerticonset/thunder.png";
-import pawprint from "../../../assets/alerticonset/pawprint.png";
-import edit from "../../../assets/alerticonset/edit.png";
-import NewGoogleMap from "../../Neighbourhoods/Map/NewGoogleMap";
 import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import moment from "moment";
+import dayjs from "dayjs";
 
 const eventData = [
-	{
-		icon: "tow-truck",
-		img: SuspiciousVehicle,
-		name: "Suspicious Vehicle",
-		select: false,
-	},
-	{
-		icon: "person",
-		img: SuspiciousPerson,
-		name: "Suspicious Person",
-		select: false,
-	},
-	{
-		icon: "pets",
-		img: pawprint,
-		name: "Lost / Found Pet",
-		select: false,
-	},
-	{
-		icon: "robber",
-		img: HouseBreakIn,
-		name: "House Break-In",
-		select: false,
-	},
-	{
-		icon: "car",
-		img: CarVandalism,
-		name: "Car Vandalism",
-		select: false,
-	},
-	{
-		icon: "sound",
-		img: TheftRobbery,
-		name: "Theft/Robbery",
-		select: false,
-	},
-	{
-		icon: "car",
-		img: ViolenceAssault,
-		name: "Violence/Assault",
-		select: false,
-	},
-	{
-		icon: "car",
-		img: HitRun,
-		name: "Hit & Run",
-		select: false,
-	},
-	{
-		icon: "local-activity",
-		img: SuspiciousActivity,
-		name: "Suspicious Activity",
-		select: false,
-	},
-	{
-		icon: "road",
-		img: PoliceRoadblock,
-		name: "Police Roadblock",
-		select: false,
-	},
-	{
-		icon: "fire",
-		img: fire,
-		name: "Fire",
-		select: false,
-	},
-	{
-		icon: "lightning-bolt",
-		img: thunder,
-		name: "Power Cut",
-		select: false,
-	},
-	{
-		icon: "others",
-		img: edit,
-		name: "Others",
-		select: false,
-	},
+	"Celebration",
+	"Discussion",
+	"Meeting",
+	"Casual event",
+	"Fun activity",
+	"Get together",
+	"Funeral",
+	"Other",
 ];
 
-function CreateAlert() {
+function CreateEvent() {
 	const context = React.useContext(MainContext);
 
 	const { setModalOpen, setModalData, setNotificationPopup, themeData, locationData } = context;
@@ -139,11 +61,14 @@ function CreateAlert() {
 
 	const [data, setData] = React.useState({
 		anonymous: false,
-		eventCode: "NEW_ALERT",
-		type: "ALERT",
+		eventCode: "NEW_EVENT",
+		type: "EVENT",
+		date: moment(new Date()),
+		startTime: null,
+		endTime: null,
 		cityName: "",
 		eventName: null,
-		description: "",
+		// description: "",
 		imageUrl: [],
 		videoUrl: [],
 		metaInfo: {
@@ -158,18 +83,21 @@ function CreateAlert() {
 
 	const [imgShow, setImgShow] = React.useState([]);
 
-	const CreateAlertApiCall = React.useCallback((payloadData) => {
-		createAlert(payloadData)
+	const CreateEventApiCall = React.useCallback((payloadData) => {
+		createEvent(payloadData)
 			.then((res) => {
-				setNotificationPopup({ open: true, message: "Alert Created Successfully" });
-				navigate("/banjee-alert");
+				setNotificationPopup({ open: true, message: "Event Created Successfully" });
+				navigate("/banjee-event");
 				setData({
 					anonymous: false,
-					eventCode: "NEW_ALERT",
-					type: "ALERT",
+					eventCode: "NEW_EVENT",
+					type: "EVENT",
 					cityName: "",
+					date: moment(new Date()),
+					startTime: null,
+					endTime: null,
 					eventName: "",
-					description: "",
+					// description: "",
 					imageUrl: [],
 					videoUrl: [],
 					metaInfo: {
@@ -411,7 +339,7 @@ function CreateAlert() {
 			window.alert("Please upload the selected image first");
 		} else {
 			if (data?.cityName === "") {
-				CreateAlertApiCall({
+				CreateEventApiCall({
 					...data,
 					location: {
 						coordinates: [locationData?.lng, locationData?.lat],
@@ -421,7 +349,7 @@ function CreateAlert() {
 				});
 			} else {
 				if (data?.eventName === "Others") {
-					CreateAlertApiCall({
+					CreateEventApiCall({
 						...data,
 						title: eventTitle,
 						cityName: locationData?.address,
@@ -431,7 +359,7 @@ function CreateAlert() {
 						},
 					});
 				} else {
-					CreateAlertApiCall({
+					CreateEventApiCall({
 						...data,
 						cityName: locationData?.address,
 						location: {
@@ -447,10 +375,10 @@ function CreateAlert() {
 	// console.log("====================================");
 	// console.log("locationData", locationData);
 	// console.log("====================================");
-	// console.log("====================================");
-	// console.log("data", data);
-	// console.log("====================================");
-	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
+	console.log("====================================");
+	console.log("data", data);
+	console.log("====================================");
+	// const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
 
 	if (data) {
 		return (
@@ -465,7 +393,7 @@ function CreateAlert() {
 						<Card sx={{ padding: "20px" }}>
 							<Typography
 								sx={{ fontSize: "22px", color: themeData ? "default" : "#666", fontWeight: 500 }}>
-								Create Alert
+								Create Event
 							</Typography>
 						</Card>
 					</Grid>
@@ -474,15 +402,15 @@ function CreateAlert() {
 						<Card sx={{ padding: "20px" }}>
 							<form id='form-id' onSubmit={handleSubmit}>
 								<Grid item container xs={12} spacing={2}>
-									{/* <Grid item xs={12}>
+									<Grid item xs={12}>
 										<FormControl fullWidth>
 											<InputLabel id='demo-simple-select-label'>Select Event</InputLabel>
 											<Select
 												required
 												labelId='demo-simple-select-label'
 												id='demo-simple-select'
-												name='templateId'
-												label='Select Template'
+												name='eventName'
+												label='Select type of event'
 												value={data?.eventName}
 												onChange={(event, data) => {
 													setData((prev) => ({
@@ -493,165 +421,15 @@ function CreateAlert() {
 												{eventData &&
 													eventData?.map((item, index) => {
 														return (
-															<MenuItem key={index} value={item?.name}>
-																<IconButton sx={{ marginRight: "20px" }}>
-																	<img
-																		src={item?.img}
-																		alt={item?.icon}
-																		style={{ width: "25px", height: "25px", objectFit: "contain" }}
-																	/>
-																</IconButton>
-																{item?.name}
+															<MenuItem key={index} value={item}>
+																{item}
 															</MenuItem>
 														);
 													})}
 											</Select>
 										</FormControl>
-									</Grid> */}
-									<Grid item xs={12}>
-										<FormControl fullWidth required>
-											<FormLabel id='event-radios'>Select Event</FormLabel>
-											<RadioGroup
-												aria-labelledby='event-radios'
-												name='event-radios'
-												value={data?.eventName}
-												onChange={(event) => {
-													setData((prev) => ({
-														...prev,
-														eventName: event.target.value,
-													}));
-												}}>
-												<Grid item container xs={12} spacing={0.5}>
-													{eventData?.map((item, index) => {
-														return (
-															<Grid item xs={6} sm={4} md={4} lg={4} xl={2}>
-																<FormControlLabel
-																	sx={{ width: "100% !important" }}
-																	value={item?.name}
-																	control={
-																		<Radio
-																			required
-																			className='radio-button-icon'
-																			disableRipple
-																			color='default'
-																			checkedIcon={
-																				<Paper
-																					sx={{
-																						background: themeData ? "rgb(209 209 209 / 44%)" : "#e1e1e1",
-																						borderRadius: "10px",
-																						padding: "10px",
-																						display: "flex",
-																						justifyContent: "center",
-																						alignItems: "center",
-																						flexDirection: "column",
-																						textAlign: "center",
-																						width: "100%",
-																						height: "100%",
-																					}}>
-																					<Box
-																						sx={{
-																							width: {
-																								xs: "20px",
-																								sm: "20px",
-																								md: "25px",
-																								lg: "35px",
-																							},
-																							height: {
-																								xs: "20px",
-																								sm: "20px",
-																								md: "25px",
-																								lg: "35px",
-																							},
-																						}}>
-																						<img
-																							src={item?.img}
-																							alt={item?.icon}
-																							style={{
-																								width: "100%",
-																								height: "100%",
-																								objectFit: "contain",
-																							}}
-																						/>
-																					</Box>
-																					<Typography
-																						sx={{
-																							marginTop: "5px",
-																							fontSize: {
-																								xs: "10px",
-																								sm: "11px",
-																								md: "12px",
-																								lg: "14px",
-																							},
-																						}}>
-																						{item?.name}
-																					</Typography>
-																				</Paper>
-																			}
-																			icon={
-																				<Paper
-																					sx={{
-																						background: themeData ? "rgba(255, 255, 255, 0.08)" : "white",
-																						borderRadius: "10px",
-																						padding: "10px",
-																						display: "flex",
-																						justifyContent: "center",
-																						alignItems: "center",
-																						flexDirection: "column",
-																						textAlign: "center",
-																						width: "100%",
-																						height: "100%",
-																					}}>
-																					<Box
-																						sx={{
-																							width: {
-																								xs: "20px",
-																								sm: "20px",
-																								md: "25px",
-																								lg: "35px",
-																							},
-																							height: {
-																								xs: "20px",
-																								sm: "20px",
-																								md: "25px",
-																								lg: "35px",
-																							},
-																						}}>
-																						<img
-																							src={item?.img}
-																							alt={item?.icon}
-																							style={{
-																								width: "100%",
-																								height: "100%",
-																								objectFit: "contain",
-																							}}
-																						/>
-																					</Box>
-																					<Typography
-																						sx={{
-																							marginTop: "5px",
-																							fontSize: {
-																								xs: "10px",
-																								sm: "11px",
-																								md: "12px",
-																								lg: "14px",
-																							},
-																						}}>
-																						{item?.name}
-																					</Typography>
-																				</Paper>
-																			}
-																		/>
-																	}
-																	label=''
-																/>
-															</Grid>
-														);
-													})}
-												</Grid>
-											</RadioGroup>
-										</FormControl>
 									</Grid>
-									{data?.eventName === "Others" && (
+									{data?.eventName === "Other" && (
 										<Grid item xs={12}>
 											<TextField
 												required
@@ -875,6 +653,54 @@ function CreateAlert() {
 										</Box>
 									</Grid>
 									<Grid item xs={12}>
+										<Box>
+											<LocalizationProvider dateAdapter={AdapterDayjs}>
+												<DesktopDatePicker
+													renderInput={(props) => <TextField size='small' fullWidth {...props} />}
+													label='Select Date'
+													value={data?.date}
+													onChange={(newValue) =>
+														setData((prev) => ({
+															...prev,
+															date: newValue,
+														}))
+													}
+												/>
+											</LocalizationProvider>
+										</Box>
+									</Grid>
+									<Grid item xs={12}>
+										<FormLabel id='event-radios'>Select Time(optional)</FormLabel>
+										<Stack columnGap={4} flexDirection={"row"} alignItems={"center"}>
+											<LocalizationProvider dateAdapter={AdapterDayjs}>
+												<MobileTimePicker
+													renderInput={(props) => <TextField size='small' fullWidth {...props} />}
+													label='From'
+													value={data?.startTime}
+													onChange={(newValue) =>
+														setData((prev) => ({
+															...prev,
+															startTime: newValue,
+														}))
+													}
+												/>
+											</LocalizationProvider>
+											<LocalizationProvider dateAdapter={AdapterDayjs}>
+												<MobileTimePicker
+													renderInput={(props) => <TextField size='small' fullWidth {...props} />}
+													label='To'
+													value={data?.endTime}
+													onChange={(newValue) =>
+														setData((prev) => ({
+															...prev,
+															endTime: newValue,
+														}))
+													}
+												/>
+											</LocalizationProvider>
+										</Stack>
+									</Grid>
+									{/* <Grid item xs={12}>
 										<TextField
 											required
 											className='neighbourhood-form-textField'
@@ -893,7 +719,7 @@ function CreateAlert() {
 												}));
 											}}
 										/>
-									</Grid>
+									</Grid> */}
 									<Grid item xs={12}>
 										<Box sx={{ position: "relative", height: "400px" }}>
 											{/* <MyGoogleMap handleGLocation={handleGLocation} /> */}
@@ -934,4 +760,4 @@ function CreateAlert() {
 	}
 }
 
-export default CreateAlert;
+export default CreateEvent;

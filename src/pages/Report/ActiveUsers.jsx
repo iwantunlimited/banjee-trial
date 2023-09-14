@@ -85,14 +85,7 @@ function ActiverUsers() {
 			id: 1,
 			field: "firstName",
 			headerClassName: "app-header",
-			headerName: "First Name",
-			flex: 0.4,
-		},
-		{
-			id: 2,
-			field: "lastName",
-			headerClassName: "app-header",
-			headerName: "Last Name",
+			headerName: "Name",
 			flex: 0.4,
 		},
 		{
@@ -213,12 +206,7 @@ function ActiverUsers() {
 					console.warn(err);
 				});
 		},
-		[
-			customerFilter?.page,
-			customerFilter?.pageSize,
-			customerFilter?.fromDate,
-			customerFilter?.toDate,
-		]
+		[customerFilter?.page, customerFilter?.pageSize, customerFilter?.fromDate, customerFilter?.toDate]
 	);
 
 	// console.log("====================================");
@@ -316,8 +304,7 @@ function ActiverUsers() {
 						<Grid item xs={12}>
 							<Card className='main-card space-css'>
 								<div style={{ width: "100%" }}>
-									<Box
-										sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+									<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 										<div
 											style={{
 												color: context?.themeData ? "default" : "#6b778c",
@@ -383,11 +370,7 @@ function ActiverUsers() {
 										onClose={sanckbarClose}
 										action={
 											<React.Fragment>
-												<IconButton
-													size='small'
-													aria-label='close'
-													color='inherit'
-													onClick={sanckbarClose}>
+												<IconButton size='small' aria-label='close' color='inherit' onClick={sanckbarClose}>
 													close
 													{/* <CloseIcon fontSize='small' /> */}
 												</IconButton>

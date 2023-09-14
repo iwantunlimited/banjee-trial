@@ -52,6 +52,9 @@ import UpdateAutoNotification from "./pages/Notification/components/Automation/U
 import NotifyUsers from "./pages/Notification/components/Automation/NotifyUsers";
 import { MainContext } from "./context/Context";
 import Loader from "./pages/Loader/Loader";
+import BanjeeEvent from "./pages/BanjeeEvent/BanjeeEvent";
+import ViewEvent from "./pages/BanjeeEvent/components/ViewEvent";
+import CreateEvent from "./pages/BanjeeEvent/components/CreateEvent";
 
 const Routes = () => {
 	const navigate = useNavigate();
@@ -217,6 +220,18 @@ const Routes = () => {
 		{
 			path: "/banjee-alert/:id",
 			element: <ViewAlert />,
+		},
+		{
+			path: "/banjee-event",
+			element: <BanjeeEvent />,
+		},
+		{
+			path: "/banjee-event/:id",
+			element: <ViewEvent />,
+		},
+		{
+			path: "/banjee-event/create",
+			element: <CreateEvent />,
 		},
 		{
 			path: "notification",

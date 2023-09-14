@@ -12,6 +12,8 @@ const PaginationContext = React.createContext({
 	setBlogPagination: () => {},
 	alertPagination: {},
 	setAlertPagination: () => {},
+	eventPagination: {},
+	setEventPagination: () => {},
 	notificationPagination: {},
 	setNotificationPagination: () => {},
 	groupPagination: {},
@@ -36,6 +38,10 @@ function ContextHandler({ children }) {
 		pageSize: undefined,
 	});
 	const [alertPagination, setAlertPagination] = React.useState({
+		page: undefined,
+		pageSize: undefined,
+	});
+	const [eventPagination, setEventPagination] = React.useState({
 		page: undefined,
 		pageSize: undefined,
 	});
@@ -83,6 +89,13 @@ function ContextHandler({ children }) {
 			pageSize: data?.pageSize,
 		}));
 	}
+	function handleEventPagination(data) {
+		setAlertPagination((prev) => ({
+			...prev,
+			page: data?.page,
+			pageSize: data?.pageSize,
+		}));
+	}
 	function handleNotificationPagination(data) {
 		setNotificationPagination((prev) => ({
 			...prev,
@@ -111,6 +124,8 @@ function ContextHandler({ children }) {
 				setBlogPagination: handleBlogPagination,
 				alertPagination: alertPagination,
 				setAlertPagination: handleAlertPagination,
+				eventPagination: eventPagination,
+				setEventPagination: handleEventPagination,
 				notificationPagination: notificationPagination,
 				setNotificationPagination: handleNotificationPagination,
 				groupPagination: groupPagination,

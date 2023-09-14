@@ -122,9 +122,7 @@ function BlogComments({ blogData, postType }) {
 												alignItems: "center",
 											}}>
 											<Typography sx={{ fontSize: "10px" }}>
-												{item?.author?.firstName && item?.author?.lastName
-													? item?.author?.firstName + " " + item?.author?.lastName
-													: item?.author?.username}
+												{item?.author?.firstName ? item?.author?.firstName : item?.author?.username}
 											</Typography>
 											{postType === "ALERT" && (
 												<IconButton

@@ -175,11 +175,9 @@ function CustomerView(props) {
 													fontSize: "10px",
 													fontWeight: "400",
 												}}>
-												{state?.firstName && state?.lastName && (
+												{state?.firstName && (
 													<Typography variant='h6' style={{ marginRight: "5px" }}>
-														{(state?.firstName ? state?.firstName : "") +
-															" " +
-															(state?.lastName ? state?.lastName : "")}
+														{state?.firstName}
 													</Typography>
 												)}
 												{state?.gender && (
@@ -212,9 +210,7 @@ function CustomerView(props) {
 												</Typography>
 											)}
 											{state?.lastSeen && (
-												<Typography>
-													{"lastSeen: " + moment(state?.lastSeen).format("lll")}
-												</Typography>
+												<Typography>{"lastSeen: " + moment(state?.lastSeen).format("lll")}</Typography>
 											)}
 											<Box style={{ margin: "10px 0px 10px 0px" }}>
 												{state?.inactive ? (

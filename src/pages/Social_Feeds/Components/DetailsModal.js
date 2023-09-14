@@ -167,17 +167,11 @@ export default function CommentsModal(props) {
 											fontSize: "18px",
 										}}>
 										{data?.author?.firstName ? (
-											<span>{`${
-												data?.author?.firstName +
-												" " +
-												(data?.author?.lastName ? data?.author?.lastName : "")
-											}`}</span>
+											<span>{`${data?.author?.firstName}`}</span>
 										) : (
 											<span>{`${data?.author?.userName || "userName"}`}</span>
 										)}
-										<span style={{ fontSize: "14px" }}>
-											{moment(data?.createdOn).format("lll")}
-										</span>
+										<span style={{ fontSize: "14px" }}>{moment(data?.createdOn).format("lll")}</span>
 									</Typography>
 								</Box>
 								<Box>
@@ -383,9 +377,7 @@ export default function CommentsModal(props) {
 																	display: "flex",
 																	alignItems: "center",
 																}}>
-																{userLength > 15
-																	? ele?.user?.username.slice(0, 15) + " ..."
-																	: ele?.user?.username}
+																{userLength > 15 ? ele?.user?.username.slice(0, 15) + " ..." : ele?.user?.username}
 															</span>
 														</Grid>
 														<Grid item xs={6}>

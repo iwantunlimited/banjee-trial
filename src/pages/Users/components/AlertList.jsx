@@ -87,9 +87,7 @@ function AlertList(props) {
 			// align: "center",
 			flex: 0.3,
 			renderCell: (params) => {
-				const fullname =
-					params?.row?.createdByUser?.firstName + " " + params?.row?.createdByUser?.lastName;
-				return fullname;
+				return params?.row?.createdByUser?.firstName;
 			},
 		},
 		{

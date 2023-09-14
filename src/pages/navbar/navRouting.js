@@ -31,6 +31,7 @@ import Reports from "../Report/Report";
 import ActiveUsers from "../Report/ActiveUsers";
 import Automation from "../Notification/components/Automation/Automation";
 import { MainContext } from "../../context/Context";
+import BanjeeEvent from "../BanjeeEvent/BanjeeEvent";
 
 function NavRouting(props) {
 	const userType = localStorage.getItem("userType");
@@ -131,6 +132,13 @@ function NavRouting(props) {
 			name: "Banjee Alert",
 			icon: <NotificationImportant fontSize='medium' />,
 			component: <BanjeeAlert />,
+		},
+		{
+			id: 22,
+			path: "/banjee-event",
+			name: "Banjee Event",
+			icon: <NotificationImportant fontSize='medium' />,
+			component: <BanjeeEvent />,
 		},
 
 		{

@@ -54,8 +54,7 @@ function ReportedFeed(props) {
 			headerName: "Name",
 			flex: 0.3,
 			renderCell: (params) => {
-				const fullname = params?.row?.author?.firstName + " " + params?.row?.author?.lastName;
-				return fullname;
+				return params?.row?.author?.firstName;
 			},
 			// align: "center",
 			// renderCell: (params) => (

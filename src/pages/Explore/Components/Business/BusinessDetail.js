@@ -103,9 +103,7 @@ function BusinessDetail() {
 							onClick={() => navigate("/explore/detail/update/" + params?.id)}>
 							Edit
 						</Button>
-						<Button
-							variant='contained'
-							onClick={() => setModal((prev) => ({ ...prev, open: true }))}>
+						<Button variant='contained' onClick={() => setModal((prev) => ({ ...prev, open: true }))}>
 							delete
 						</Button>
 					</Box>
@@ -136,9 +134,7 @@ function BusinessDetail() {
 									{state?.cloudName && (
 										<Box sx={{ display: "flex", alignItems: "center" }}>
 											<Typography>Cloud : </Typography>
-											<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
-												{state?.cloudName}
-											</Typography>
+											<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>{state?.cloudName}</Typography>
 										</Box>
 									)}
 									{state?.categoryName && (
@@ -149,11 +145,11 @@ function BusinessDetail() {
 											</Typography>
 										</Box>
 									)}
-									{state?.userObject?.firstName && state?.userObject?.lastName && (
+									{state?.userObject?.firstName && (
 										<Box sx={{ display: "flex", alignItems: "center" }}>
 											<Typography>Created By : </Typography>
 											<Typography sx={{ fontSize: "18px", marginLeft: "10px" }}>
-												{state?.userObject?.firstName + " " + state?.userObject?.lastName}
+												{state?.userObject?.firstName}
 											</Typography>
 										</Box>
 									)}

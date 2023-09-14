@@ -12,8 +12,6 @@ import {
 	useTheme,
 } from "@mui/material";
 import { useParams, useNavigate, useLocation } from "react-router";
-import { deleteAlert, listMyAlert, reportedByUserAlertList } from "../api-services/apiServices";
-import AlertLocation from "./AlertMap";
 import { ArrowBack, RemoveRedEye, Visibility } from "@mui/icons-material";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { MainContext } from "../../../context/Context";
@@ -22,8 +20,13 @@ import SwiperComp from "../../../CustomComponents/SwiperComp";
 import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
 import { DataGrid } from "@mui/x-data-grid";
 import ReactionCommentTab from "../../Explore/Components/Blogs/ReactionTab";
+import {
+	deleteAlert,
+	listMyAlert,
+	reportedByUserAlertList,
+} from "../../BanjeeAlert/api-services/apiServices";
 
-function ViewAlert() {
+function ViewEvent() {
 	const params = useParams();
 	const location = useLocation();
 	const theme = useTheme();
@@ -62,19 +65,19 @@ function ViewAlert() {
 		}));
 	}
 
-	const deleteAlertApiCall = React.useCallback((id) => {
+	const deleteeventApiCall = React.useCallback((id) => {
 		deleteAlert(id)
 			.then((res) => {
 				context?.setModalOpen(true);
-				context?.setModalData("Alert Deleted Successfully", "success");
-				navigate("/banjee-alert", {
+				context?.setModalData("Event Deleted Successfully", "success");
+				navigate("/banjee-event", {
 					state: { reportedDetail: location?.state?.reported ? true : false },
 				});
 			})
 			.catch((err) => console.error(err));
 	}, []);
 
-	const alertApiCall = React.useCallback(() => {
+	const eventApiCall = React.useCallback(() => {
 		listMyAlert(params?.id)
 			.then((res) => {
 				if (res?.imageUrl?.length > 0) {
@@ -199,9 +202,9 @@ function ViewAlert() {
 
 	React.useEffect(() => {
 		getCurrentLocation();
-		params?.id && alertApiCall();
+		params?.id && eventApiCall();
 		params?.id && reportedAlertByUserApiCall();
-	}, [alertApiCall, reportedAlertByUserApiCall]);
+	}, [eventApiCall, reportedAlertByUserApiCall]);
 
 	if (currentLocation && data) {
 		return (
@@ -211,7 +214,7 @@ function ViewAlert() {
 						<Box sx={{ display: "flex", justifyContent: "space-between" }}>
 							<IconButton
 								onClick={() =>
-									navigate("/banjee-alert", {
+									navigate("/banjee-event", {
 										state: { reportedDetail: location?.state?.reported ? true : false },
 									})
 								}>
@@ -233,7 +236,7 @@ function ViewAlert() {
 							<Grid item container xs={12} spacing={1}>
 								<Grid item xs={12}>
 									<Typography sx={{ fontSize: "22px", fontWeight: 600, color: "gray" }}>
-										Alert Information
+										Event Information
 									</Typography>
 									<Box sx={{ marginY: "5px" }}>
 										<Divider />
@@ -242,6 +245,9 @@ function ViewAlert() {
 								<Grid item xs={12} md={finalData?.length > 0 ? 6 : 12}>
 									<Box sx={{ width: "100%" }}>
 										<Typography sx={{ fontSize: "22px", fontWeight: 600 }}>{data?.eventName}</Typography>
+										{data?.eventName === "Other" && (
+											<Typography sx={{ fontSize: "20px", fontWeight: 500 }}>{data?.title}</Typography>
+										)}
 										{data?.cloudName && <Typography>{data?.cloudName}</Typography>}
 
 										{data?.metaInfo?.address && (
@@ -349,7 +355,7 @@ function ViewAlert() {
 					<Grid item xs={12}>
 						<Card sx={{ padding: "10px" }}>
 							<Typography sx={{ fontSize: "22px", fontWeight: 600, color: "gray" }}>
-								Alert Location
+								Event Location
 							</Typography>
 							<Box sx={{ marginBottom: "10px" }}>
 								<Divider />
@@ -378,7 +384,7 @@ function ViewAlert() {
 								fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
 								fontWeight: 400,
 							}}>
-							Are you sure to delete the alert ?
+							Are you sure to delete the event ?
 						</Typography>
 						<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
 							<Button variant='outlined' onClick={() => handleModal(false)}>
@@ -388,7 +394,7 @@ function ViewAlert() {
 								variant='contained'
 								sx={{ marginLeft: "20px" }}
 								onClick={() => {
-									deleteAlertApiCall(modalData?.id);
+									deleteeventApiCall(modalData?.id);
 								}}>
 								Confirm
 							</Button>
@@ -413,4 +419,4 @@ function ViewAlert() {
 	}
 }
 
-export default ViewAlert;
+export default ViewEvent;

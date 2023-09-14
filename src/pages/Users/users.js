@@ -88,13 +88,7 @@ function UserComp() {
 		{
 			field: "firstName",
 			headerClassName: "app-header",
-			headerName: "First Name",
-			flex: 0.3,
-		},
-		{
-			field: "lastName",
-			headerClassName: "app-header",
-			headerName: "Last Name",
+			headerName: "Name",
 			flex: 0.3,
 		},
 		{
@@ -124,14 +118,14 @@ function UserComp() {
 			},
 		},
 		{
-			field: "lastSeen",
+			field: "lastOffline",
 			headerClassName: "app-header",
 			headerName: "last seen",
 			flex: 0.5,
 			renderCell: (params) => {
-				if (params.row && params.row.lastSeen) {
+				if (params?.row?.lastOffline) {
 					// const date = moment(params.row.lastSeen).calendar();
-					const date = moment(params.row.lastSeen).format("llll");
+					const date = moment(params?.row?.lastOffline).format("llll");
 					return date;
 				} else {
 					return "-";
@@ -247,11 +241,7 @@ function UserComp() {
 				>
 					<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 						<Grid item xs={12}>
-							<ChipComp
-								refreshApi={handleCustomFilter}
-								keyword={keyword}
-								handleKey={handleKeyword}
-							/>
+							<ChipComp refreshApi={handleCustomFilter} keyword={keyword} handleKey={handleKeyword} />
 						</Grid>
 						<Grid item xs={12}>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -285,8 +275,7 @@ function UserComp() {
 						<Grid item xs={12}>
 							<Card className='main-card space-css'>
 								<div style={{ width: "100%" }}>
-									<Box
-										sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+									<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 										<div
 											style={{
 												color: context?.themeData ? "default" : "#6b778c",
@@ -299,14 +288,10 @@ function UserComp() {
 											onClick={() => {
 												UserCsvDataApi({
 													fromDate: customerFilter?.fromDate
-														? moment(customerFilter?.fromDate)
-																.set({ hour: 0, minute: 0, second: 0 })
-																.format()
+														? moment(customerFilter?.fromDate).set({ hour: 0, minute: 0, second: 0 }).format()
 														: undefined,
 													toDate: customerFilter?.toDate
-														? moment(customerFilter?.toDate)
-																.set({ hour: 23, minute: 59, second: 58 })
-																.format()
+														? moment(customerFilter?.toDate).set({ hour: 23, minute: 59, second: 58 }).format()
 														: undefined,
 												});
 											}}
@@ -371,11 +356,7 @@ function UserComp() {
 										onClose={sanckbarClose}
 										action={
 											<React.Fragment>
-												<IconButton
-													size='small'
-													aria-label='close'
-													color='inherit'
-													onClick={sanckbarClose}>
+												<IconButton size='small' aria-label='close' color='inherit' onClick={sanckbarClose}>
 													close
 													{/* <CloseIcon fontSize='small' /> */}
 												</IconButton>

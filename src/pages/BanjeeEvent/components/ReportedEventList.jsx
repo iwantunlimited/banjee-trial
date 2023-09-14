@@ -6,9 +6,9 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { MainContext } from "../../../context/Context";
 import ModalComp from "../../../CustomComponents/ModalComp";
-import { deleteAlert, filterReportList } from "../api-services/apiServices";
+import { deleteAlert, filterReportList } from "../../BanjeeAlert/api-services/apiServices";
 
-function ReportedAlertList() {
+function ReportedEventList() {
 	const navigate = useNavigate();
 
 	const context = React.useContext(MainContext);
@@ -42,8 +42,8 @@ function ReportedAlertList() {
 		}));
 	}
 
-	const ReportedAlertListApiCall = React.useCallback((page, pageSize) => {
-		filterReportList({ page: page, pageSize: pageSize })
+	const ReportedEventListApiCall = React.useCallback((page, pageSize) => {
+		filterReportList({ page: page, pageSize: pageSize, eventCode: "NEW_ALERT" })
 			.then((res) => {
 				const resp = res?.content?.map((item) => {
 					return {
@@ -73,8 +73,8 @@ function ReportedAlertList() {
 		deleteAlert(id)
 			.then((res) => {
 				context?.setModalOpen(true);
-				context?.setModalData("Alert Deleted Successfully", "success");
-				navigate("/banjee-alert");
+				context?.setModalData("Event Deleted Successfully", "success");
+				navigate("/banjee-event");
 				setModalData((prev) => ({
 					open: false,
 					id: "",
@@ -84,8 +84,8 @@ function ReportedAlertList() {
 	}, []);
 
 	React.useEffect(() => {
-		ReportedAlertListApiCall(0, 10);
-	}, [ReportedAlertListApiCall]);
+		ReportedEventListApiCall(0, 10);
+	}, [ReportedEventListApiCall]);
 
 	let rows = data ? data : [];
 
@@ -100,7 +100,7 @@ function ReportedAlertList() {
 		// },
 		{
 			id: "2",
-			field: "eventName",
+			field: "title",
 			headerClassName: "app-header",
 			headerName: "Event Name",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
@@ -142,7 +142,8 @@ function ReportedAlertList() {
 			// align: "center",
 			flex: 0.25,
 			renderCell: (params) => {
-				return params?.row?.rFirstName;
+				const fullname = params?.row?.rFirstName ? params?.row?.rFirstName : "-";
+				return fullname;
 			},
 		},
 
@@ -159,7 +160,7 @@ function ReportedAlertList() {
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/banjee-alert/" + params.row.id, { state: { reported: true } });
+								navigate("/banjee-event/" + params.row.id, { state: { reported: true } });
 							}}>
 							<Visibility />
 						</IconButton>
@@ -211,7 +212,7 @@ function ReportedAlertList() {
 										page: pagination?.pagination?.page,
 										pageSize: event,
 									});
-									ReportedAlertListApiCall(pagination?.pagination?.page, event);
+									ReportedEventListApiCall(pagination?.pagination?.page, event);
 								}}
 								rowCount={pagination?.totalElement}
 								rows={rows}
@@ -224,7 +225,7 @@ function ReportedAlertList() {
 										page: event,
 										pageSize: pagination?.pagination?.page,
 									});
-									ReportedAlertListApiCall(event, pagination?.pagination?.pageSize);
+									ReportedEventListApiCall(event, pagination?.pagination?.pageSize);
 								}}
 								rowsPerPageOptions={[5, 10, 20]}
 								className='dataGridFooter'
@@ -237,7 +238,7 @@ function ReportedAlertList() {
 										fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
 										fontWeight: 400,
 									}}>
-									Are you sure to delete the alert ?
+									Are you sure to delete the event ?
 								</Typography>
 								<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
 									<Button variant='outlined' onClick={() => handleModal(false)}>
@@ -282,4 +283,4 @@ function ReportedAlertList() {
 	}
 }
 
-export default ReportedAlertList;
+export default ReportedEventList;

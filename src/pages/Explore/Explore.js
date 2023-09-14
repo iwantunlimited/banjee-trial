@@ -82,9 +82,7 @@ function Explore() {
 				const resp = res.content.map((ele) => {
 					return {
 						routingId: ele.id,
-						userFName: ele?.userObject?.firstName
-							? ele?.userObject?.firstName + " " + ele?.userObject?.lastName
-							: "-",
+						userFName: ele?.userObject?.firstName ? ele?.userObject?.firstName : "-",
 						...ele,
 						// ...ele?.userObject,
 						// ...ele?.name,

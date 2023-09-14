@@ -116,8 +116,7 @@ function BlogReaction({ blogData }) {
 												<Box
 													sx={{
 														display: "flex",
-														justifyContent:
-															ele?.user?.username === "root" ? "flex-end" : "flex-start",
+														justifyContent: ele?.user?.username === "root" ? "flex-end" : "flex-start",
 														// blogData?.authorId === ele?.user?.id ? "flex-end" : "flex-start",
 													}}>
 													<Box
@@ -132,9 +131,9 @@ function BlogReaction({ blogData }) {
 															textAlign: ele?.user?.username === "root" ? "right" : "left",
 															// textAlign: blogData?.authorId === ele?.user?.id ? "right" : "left",
 														}}>
-														{ele?.user?.firstName && ele?.user?.lastName ? (
+														{ele?.user?.firstName ? (
 															<Typography sx={{ fontSize: "12px" }} noWrap>
-																{ele?.user?.firstName + " " + ele?.user?.lastName}
+																{ele?.user?.firstName}
 															</Typography>
 														) : (
 															<Typography sx={{ fontSize: "12px" }} noWrap>

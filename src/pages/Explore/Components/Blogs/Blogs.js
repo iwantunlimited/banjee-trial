@@ -88,9 +88,7 @@ function ExploreBlogs() {
 					<Grid item xs={12}>
 						<Card sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
 							<Box>
-								<Typography sx={{ fontWeight: 500, fontSize: "22px" }}>
-									Blogs({totalEle})
-								</Typography>
+								<Typography sx={{ fontWeight: 500, fontSize: "22px" }}>Blogs({totalEle})</Typography>
 							</Box>
 							<Box>
 								<Tooltip title='Create Blog' arrow sx={{ bacground: "white", color: "black" }}>
@@ -152,7 +150,7 @@ function ExploreBlogs() {
 															display: "flex",
 															flexDirection: "column",
 														}}>
-														{item?.userObject?.firstName && item?.userObject?.lastName ? (
+														{item?.userObject?.firstName ? (
 															<Typography
 																// noWrap={true}
 																sx={{
@@ -161,16 +159,12 @@ function ExploreBlogs() {
 																	WebkitBoxOrient: "vertical",
 																	WebkitLineClamp: 1,
 																}}>
-																{item?.userObject?.firstName + " " + item?.userObject?.lastName}
+																{item?.userObject?.firstName}
 															</Typography>
 														) : (
-															<Typography>{`${
-																item?.muserName || item?.muserName || "userName"
-															}`}</Typography>
+															<Typography>{`${item?.muserName || item?.muserName || "userName"}`}</Typography>
 														)}
-														<span style={{ fontSize: "12px" }}>
-															{moment(item?.createdOn).format("lll")}
-														</span>
+														<span style={{ fontSize: "12px" }}>{moment(item?.createdOn).format("lll")}</span>
 													</Typography>
 												</Box>
 												<Box>
@@ -322,8 +316,7 @@ function ExploreBlogs() {
 														<RemoveRedEye />
 														<span style={{ marginLeft: "5px" }}>{item?.totalViews || 0}</span>
 													</Box>
-													<Box
-														style={{ display: "flex", alignItems: "center", marginLeft: "10px" }}>
+													<Box style={{ display: "flex", alignItems: "center", marginLeft: "10px" }}>
 														<FavoriteBorder />
 														<span style={{ marginLeft: "5px" }}>
 															{item?.totalReactions || item?.reactions?.length || 0}

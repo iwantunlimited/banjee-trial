@@ -77,9 +77,7 @@ function NotificationList() {
 		// 	renderCell: (params) => {
 		// 		if (params?.row && params?.row?.mfirstName) {
 		// 			const name =
-		// 				params?.row?.mfirstName &&
-		// 				params?.row?.mfirstName + " " + params?.row?.mlastName &&
-		// 				params?.row?.mfirstName;
+		// 				params?.row?.mfirstName
 		// 			return name;
 		// 		} else {
 		// 			return null;
@@ -209,18 +207,12 @@ function NotificationList() {
 								</Typography>
 							</Box>
 							<Box>
-								<Tooltip
-									title='Create Notification'
-									arrow
-									sx={{ bacground: "white", color: "black" }}>
+								<Tooltip title='Create Notification' arrow sx={{ bacground: "white", color: "black" }}>
 									<IconButton onClick={() => navigate("/notification/create-notification")}>
 										<Add color='primary' />
 									</IconButton>
 								</Tooltip>
-								<Tooltip
-									title='Refresh Notification'
-									arrow
-									sx={{ bacground: "white", color: "black" }}>
+								<Tooltip title='Refresh Notification' arrow sx={{ bacground: "white", color: "black" }}>
 									<IconButton
 										onClick={() => {
 											setNotificationPagination({ page: undefined, pageSize: undefined });

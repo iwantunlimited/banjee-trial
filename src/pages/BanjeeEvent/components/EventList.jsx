@@ -7,15 +7,15 @@ import { useNavigate } from "react-router";
 import { MainContext } from "../../../context/Context";
 import { PaginationContext } from "../../../context/PaginationContext";
 import ModalComp from "../../../CustomComponents/ModalComp";
-import { deleteAlert } from "../api-services/apiServices";
+import { deleteAlert } from "../../BanjeeAlert/api-services/apiServices";
 
-function AlertListTable({
+function EventList({
 	totalElement,
 	data,
 	handlePagination,
 	pagination,
 	listApiCall,
-	handleAlertListApiCall,
+	handleEventListApiCall,
 }) {
 	const navigate = useNavigate();
 
@@ -38,11 +38,11 @@ function AlertListTable({
 		deleteAlert(id)
 			.then((res) => {
 				if (res) {
-					handleAlertListApiCall();
+					handleEventListApiCall();
 				}
-				navigate("/banjee-alert");
+				navigate("/banjee-event");
 				context?.setModalOpen(true);
-				context?.setModalData("Alert Deleted Successfully", "success");
+				context?.setModalData("Event Deleted Successfully", "success");
 				setModalData((prev) => ({
 					open: false,
 					id: "",
@@ -56,7 +56,7 @@ function AlertListTable({
 	let columns = [
 		{
 			id: "1",
-			field: "eventName",
+			field: "title",
 			headerClassName: "app-header",
 			headerName: "Name",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
@@ -116,7 +116,7 @@ function AlertListTable({
 						<IconButton
 							onClick={() => {
 								setAlertPagination({ page: pagination?.page, pageSize: pagination?.pageSize });
-								navigate("/banjee-alert/" + params.row.id, { state: { reported: false } });
+								navigate("/banjee-event/" + params.row.id, { state: { reported: false } });
 							}}>
 							<Visibility />
 						</IconButton>
@@ -191,7 +191,7 @@ function AlertListTable({
 									fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
 									fontWeight: 400,
 								}}>
-								Are you sure to delete the alert ?
+								Are you sure to delete the Event ?
 							</Typography>
 							<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
 								<Button size='small' variant='outlined' onClick={() => handleModal(false)}>
@@ -225,4 +225,4 @@ function AlertListTable({
 	);
 }
 
-export default AlertListTable;
+export default EventList;
