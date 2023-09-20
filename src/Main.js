@@ -2,7 +2,6 @@ import React from "react";
 import Navbar from "./pages/navbar/navbar";
 import AuthContext from "./context/AuthContext";
 import { useNavigate } from 'react-router-dom';
-
 function Main(props){
 
     const context = React.useContext(AuthContext);

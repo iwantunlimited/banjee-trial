@@ -13,6 +13,7 @@ import {
 	VerifiedUser,
 	EditNotifications,
 } from "@mui/icons-material";
+import CampaignIcon from '@mui/icons-material/Campaign';
 import SocialFeed from "../Social_Feeds/Social_Feed";
 import UsersReport from "../Report/UsersReport";
 import Neighbourhood from "../Neighbourhoods/Neighbourhood";
@@ -32,6 +33,7 @@ import ActiveUsers from "../Report/ActiveUsers";
 import Automation from "../Notification/components/Automation/Automation";
 import { MainContext } from "../../context/Context";
 import BanjeeEvent from "../BanjeeEvent/BanjeeEvent";
+import LiveAlerts from "../LiveAlerts/LiveAlerts";
 
 function NavRouting(props) {
 	const userType = localStorage.getItem("userType");
@@ -200,6 +202,13 @@ function NavRouting(props) {
 					component: <ActiveUsers />,
 				},
 			],
+		},
+		{
+			id: 18,
+			path: "/livealerts",
+			name: "Live Alerts",
+			icon: <CampaignIcon fontSize='medium' />,
+			component: <LiveAlerts />,
 		},
 		// {
 		//     id:3,

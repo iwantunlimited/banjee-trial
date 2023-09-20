@@ -55,6 +55,7 @@ import Loader from "./pages/Loader/Loader";
 import BanjeeEvent from "./pages/BanjeeEvent/BanjeeEvent";
 import ViewEvent from "./pages/BanjeeEvent/components/ViewEvent";
 import CreateEvent from "./pages/BanjeeEvent/components/CreateEvent";
+import LiveAlerts from "./pages/LiveAlerts/LiveAlerts";
 
 const Routes = () => {
 	const navigate = useNavigate();
@@ -289,6 +290,11 @@ const Routes = () => {
 			path: "/groups/:id",
 			element: <GroupDetailPage />,
 		},
+		{
+			path: "/livealerts",
+			element: <LiveAlerts />,
+		},
+
 		// {
 		//     path: '/account',
 		//     element: <Account />
