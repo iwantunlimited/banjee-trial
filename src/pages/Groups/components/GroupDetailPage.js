@@ -335,7 +335,7 @@ function GroupDetailPage(props) {
 							<Box>
 								<Box sx={{ paddingY: "10px" }}>
 									<Typography sx={{ fontSize: "20px", color: "gray", fontWeight: "600" }}>
-										Group Feed
+										Group Activity
 									</Typography>
 									<Divider />
 								</Box>

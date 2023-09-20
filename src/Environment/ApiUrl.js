@@ -13,7 +13,7 @@ export const urls = {
 		"itpl-client-id": "SS7052021-001",
 		"itpl-app-os": "web",
 	},
-	MB_SOCKET: "https://imydp54x0j.execute-api.eu-central-1.amazonaws.com/geo-loc/loc-id/",
+	MB_SOCKET: "https://imydp54x0j.execute-api.eu-central-1.amazonaws.com/geo-loc/",
 	LOGIN: services.AUTH,
 
 	DASHBOARD: {

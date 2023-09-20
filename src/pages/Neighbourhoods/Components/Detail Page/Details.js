@@ -677,7 +677,7 @@ function DetailPage() {
 											data={{
 												lat: state?.geoLocation?.coordinates[1],
 												lng: state?.geoLocation?.coordinates[0],
-												zoom: 15,
+												zoom: 8,
 											}}
 										/>
 									</Box>

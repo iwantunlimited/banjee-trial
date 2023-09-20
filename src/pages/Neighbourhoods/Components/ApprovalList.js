@@ -177,6 +177,10 @@ export function ApprovalList({
 			.catch((err) => console.error(err));
 	}, []);
 
+	React.useEffect(() => {
+		pendingListApiCall();
+	}, [pendingListApiCall]);
+
 	return (
 		<Box>
 			{data ? (
