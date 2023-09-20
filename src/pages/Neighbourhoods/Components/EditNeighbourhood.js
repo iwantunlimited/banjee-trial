@@ -188,7 +188,7 @@ function EditNeighbourhood() {
 					// lon: res?.geoLocation?.coordinates ? res?.geoLocation?.coordinates[1] : "",
 					description: res?.description ? res?.description : "",
 					imageUrl: res?.imageUrl ? res?.imageUrl : "",
-					type: res?.cloudType ? res?.cloudType : "",
+					type: res?.cloudType ? res?.cloudType : "PUBLIC",
 					approvalType: "BY_ADMIN",
 				}));
 				setPrevLocation({
@@ -240,6 +240,7 @@ function EditNeighbourhood() {
 			// cloudType: payloadData?.cloudType,
 			// approvalType: "BY_ANY_MEMBER",
 			name: payloadData?.name,
+			geoLocation: {},
 			lat: mapData?.lat,
 			lon: mapData?.lng,
 			id: payloadData?.id,
@@ -301,7 +302,7 @@ function EditNeighbourhood() {
 					<Card sx={{ padding: "30px" }}>
 						<form onSubmit={handleSubmit}>
 							<Grid item container xs={12} spacing={2}>
-								<Grid item xs={6}>
+								<Grid item xs={12}>
 									<TextField
 										required
 										value={data.name}
@@ -313,7 +314,7 @@ function EditNeighbourhood() {
 										onChange={handleChange}
 									/>
 								</Grid>
-								<Grid item xs={6}>
+								{/* <Grid item xs={6}>
 									<FormControl fullWidth>
 										<InputLabel id='demo-simple-select-label'>Neighbourhood Type</InputLabel>
 										<Select
@@ -328,7 +329,7 @@ function EditNeighbourhood() {
 											<MenuItem value={"PUBLIC"}>Public</MenuItem>
 										</Select>
 									</FormControl>
-								</Grid>
+								</Grid> */}
 								{/* {data.countryId && (
 									<Grid item xs={4}>
 										<FormControl fullWidth>

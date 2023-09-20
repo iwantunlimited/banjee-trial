@@ -167,7 +167,8 @@ const CustomGoogleMap = compose(
 			axios
 				.get(urls.MB_SOCKET + event?.placeId)
 				.then((response) => {
-					const fullName = response.data.result?.name + ", " + response.data.result?.formatted_address;
+					const fullName =
+						response?.data?.data?.result?.name + ", " + response?.data?.data?.result?.formatted_address;
 					console.log("====================================");
 					console.log("response axios", response);
 					console.log("====================================");
@@ -218,6 +219,7 @@ const CustomGoogleMap = compose(
 	// Get Current Location Coordinates
 	const setCurrentLocation = React.useCallback(() => {
 		if (props?.prevLocation) {
+			console.log("props in current location", props?.data);
 			document.getElementById("map-container-margin").style.marginTop = "0px";
 			generateAddress(props?.data?.lat, props?.data?.lng);
 		} else {
@@ -225,7 +227,7 @@ const CustomGoogleMap = compose(
 			// generateAddress(locationData?.lat, locationData?.lng);
 			generateAddress(Number(localLat), Number(localLng));
 		}
-	}, [generateAddress]);
+	}, [generateAddress, props?.prevLocation, props?.data?.lat, props?.data?.lng]);
 
 	React.useEffect(() => {
 		setCurrentLocation();
@@ -278,6 +280,10 @@ const CustomGoogleMap = compose(
 		}
 	} else {
 		if (props?.prevLocation) {
+			console.log("====================================");
+			console.log("state", state);
+			console.log("props", props);
+			console.log("====================================");
 			// document.getElementById("map-container-margin").style.marginTop = "0px";
 			// generateAddress(props?.prevLocation?.lat, props?.prevLocation?.lng);
 			return (

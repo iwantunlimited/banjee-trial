@@ -35,7 +35,7 @@ function CreateNeighbour(props) {
 		lon: "",
 		description: "",
 		imageUrl: "",
-		type: "",
+		type: "PUBLIC",
 		approvalType: "BY_ADMIN",
 	});
 	const [mapData, setMapData] = React.useState({
@@ -163,7 +163,7 @@ function CreateNeighbour(props) {
 					lon: "",
 					description: "",
 					imageUrl: "",
-					type: "",
+					type: "PUBLIC",
 					approvalType: "BY_ADMIN",
 				}));
 				handleExpanded();
@@ -268,7 +268,7 @@ function CreateNeighbour(props) {
 				<Box sx={{ padding: "20px" }}>
 					<form onSubmit={handleSubmit}>
 						<Grid item container xs={12} spacing={2}>
-							<Grid item xs={12} sm={6}>
+							<Grid item xs={12} sm={12}>
 								<TextField
 									required
 									value={data.name}
@@ -280,7 +280,7 @@ function CreateNeighbour(props) {
 									onChange={handleChange}
 								/>
 							</Grid>
-							<Grid item xs={12} sm={6}>
+							{/* <Grid item xs={12} sm={6}>
 								<FormControl fullWidth>
 									<InputLabel id='demo-simple-select-label'>Neighbourhood Type</InputLabel>
 									<Select
@@ -295,7 +295,7 @@ function CreateNeighbour(props) {
 										<MenuItem value={"PUBLIC"}>Public</MenuItem>
 									</Select>
 								</FormControl>
-							</Grid>
+							</Grid> */}
 							{/* {data.countryId && (
 								<Grid item xs={12} sm={4}>
 									<FormControl fullWidth>
@@ -399,7 +399,7 @@ function CreateNeighbour(props) {
 										display: "flex",
 										alignItems: "center",
 										// justifyContent: "space-around",
-										width: "80%",
+										width: "100%",
 										height: "100%",
 										border: "0.5px solid lightgrey",
 										padding: "10px",
