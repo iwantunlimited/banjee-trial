@@ -33,6 +33,7 @@ import { useNavigate, useParams } from "react-router";
 import { MainContext } from "../../../context/Context";
 import NewGoogleMap from "../Map/NewGoogleMap";
 import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
+import CustomGoogleMap from "../../../CustomComponents/CustomGoogleMap";
 
 function EditNeighbourhood() {
 	const params = useParams();
@@ -68,6 +69,11 @@ function EditNeighbourhood() {
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imgShow, setImgShow] = React.useState("");
 	const [prevLocation, setPrevLocation] = React.useState(null);
+	const [mapData, setMapData] = React.useState({
+		lat: null,
+		lng: null,
+		address: null,
+	});
 
 	// const CityApi = React.useCallback((id) => {
 	// 	findCity({ cityId: id })
@@ -97,6 +103,14 @@ function EditNeighbourhood() {
 	// 		})
 	// 		.catch((err) => console.error(err));
 	// }, []);
+	const locationHandler = (data) => {
+		setMapData((prev) => ({
+			...prev,
+			lat: data?.lat,
+			lng: data?.lng,
+			address: data?.address,
+		}));
+	};
 
 	function handleImageChange(event) {
 		const image = event.target.files[0];
@@ -181,6 +195,11 @@ function EditNeighbourhood() {
 					lat: res?.geoLocation?.coordinates[1],
 					lng: res?.geoLocation?.coordinates[0],
 				});
+				setMapData((prev) => ({
+					...prev,
+					lat: res?.geoLocation?.coordinates[1],
+					lng: res?.geoLocation?.coordinates[0],
+				}));
 				setImgShow({
 					data: res?.imageUrl
 						? `https://res.cloudinary.com/banjee/image/upload/ar_1:1,c_pad,f_auto,q_auto:low/v1/${res?.imageUrl}.png`
@@ -221,8 +240,8 @@ function EditNeighbourhood() {
 			// cloudType: payloadData?.cloudType,
 			// approvalType: "BY_ANY_MEMBER",
 			name: payloadData?.name,
-			// lat: payloadData?.geoLocation.coordinates[1],
-			// lon: payloadData?.geoLocation.coordinates[0],
+			lat: mapData?.lat,
+			lon: mapData?.lng,
 			id: payloadData?.id,
 			imageUrl: payloadData?.imageUrl,
 		};
@@ -273,8 +292,7 @@ function EditNeighbourhood() {
 						<ArrowBack />
 					</IconButton>
 					<Card sx={{ padding: "30px" }}>
-						<Typography
-							sx={{ color: "#6b778c", fontSize: "20px", fontWeight: "500", textAlign: "left" }}>
+						<Typography sx={{ color: "#6b778c", fontSize: "20px", fontWeight: "500", textAlign: "left" }}>
 							Edit Neighbourhood
 						</Typography>
 					</Card>
@@ -530,8 +548,8 @@ function EditNeighbourhood() {
 										)}
 									</Box>
 								</Grid>
-								<Grid item xs={12}>
-									<Box sx={{ position: "relative", height: "400px" }}>
+								<Grid item xs={12} sx={{ marginTop: "40px" }}>
+									<Box style={{ position: "relative", height: "400px" }}>
 										{/* <NewGoogleMap
 											view={true}
 											data={{
@@ -544,7 +562,7 @@ function EditNeighbourhood() {
 												lng: data?.geoLocation?.coordinates[0],
 											}}
 										/> */}
-										{prevLocation?.lat && (
+										{/* {prevLocation?.lat && (
 											<GoogleMapCustom
 												view={true}
 												data={{
@@ -557,7 +575,15 @@ function EditNeighbourhood() {
 													lng: prevLocation?.lng,
 												}}
 											/>
-										)}
+										)} */}
+										{
+											<CustomGoogleMap
+												view={false}
+												data={{ lat: mapData?.lat, lng: mapData?.lng }}
+												prevLocation={true}
+												handleLocation={locationHandler}
+											/>
+										}
 									</Box>
 								</Grid>
 								<Grid item xs={12}>

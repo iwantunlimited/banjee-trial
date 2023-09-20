@@ -56,6 +56,9 @@ import BanjeeEvent from "./pages/BanjeeEvent/BanjeeEvent";
 import ViewEvent from "./pages/BanjeeEvent/components/ViewEvent";
 import CreateEvent from "./pages/BanjeeEvent/components/CreateEvent";
 import LiveAlerts from "./pages/LiveAlerts/LiveAlerts";
+import MapWithSearch from "./CustomComponents/TrialMap";
+import { Box } from "@mui/material";
+import MapContainer from "./CustomComponents/TrialMap";
 
 const Routes = () => {
 	const navigate = useNavigate();
@@ -102,10 +105,14 @@ const Routes = () => {
 			path: "/",
 			element: <DashboardTrial />,
 		},
-		// {
-		// 	path: "/map",
-		// 	element: <GoogleMapCustom isMarkerShown={true} />,
-		// },
+		{
+			path: "/map",
+			element: (
+				<Box sx={{ position: "relative", height: "400px" }}>
+					<MapContainer />
+				</Box>
+			),
+		},
 		{
 			path: "/category",
 			element: <MainCategoryComp />,

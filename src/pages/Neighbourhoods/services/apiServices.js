@@ -131,3 +131,11 @@ export const findCity = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+
+export const findPlaceByPlaceId = (requestLoad) => {
+	let url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${requestLoad}&key=AIzaSyCrhHuTkSLIcd5UhwimmpF50CrP9itelXk&v=3`;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};

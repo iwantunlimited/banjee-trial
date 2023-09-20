@@ -229,6 +229,8 @@ export default function SocialFeed(props) {
 											startDate: null,
 											endDate: null,
 										});
+										setStartDate(null);
+										setEndDate(null);
 									}}
 									style={{
 										borderRadius: "50px",
