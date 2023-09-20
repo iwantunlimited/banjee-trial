@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
 
-const WebSocketContext = createContext(null);
+export const WebSocketContext = createContext(null);
 
 export const WebSocketProvider = ({ children, socket }) => {
   return (
@@ -9,9 +9,3 @@ export const WebSocketProvider = ({ children, socket }) => {
     </WebSocketContext.Provider>
   );
 };
-
-export const useWebSocket = () => {
-  return useContext(WebSocketContext);
-};
-
-export {WebSocketContext};

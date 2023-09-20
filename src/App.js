@@ -10,7 +10,7 @@ import SnackbarContext from "./CustomComponents/SnackbarContext";
 import NotificationPopup from "./CustomComponents/NotificationPopup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { initWebSocket } from "./WebSocketConfig";
-import { WebSocketProvider } from "./context/WebSocketContext";
+import {WebSocketProvider} from "./context/WebSocketContext";
 
 function App() {
 	const { themeData, setThemeData, setLocationData } = React.useContext(MainContext);
@@ -40,7 +40,7 @@ function App() {
 	useEffect(()=>{
 		socket=initWebSocket();
 	},[socket]);
-	
+
 	return (
 		<WebSocketProvider socket={socket}>
 		<ThemeProvider theme={themeData ? darkTheme : theme}>
