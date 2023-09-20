@@ -59,6 +59,7 @@ import LiveAlerts from "./pages/LiveAlerts/LiveAlerts";
 import MapWithSearch from "./CustomComponents/TrialMap";
 import { Box } from "@mui/material";
 import MapContainer from "./CustomComponents/TrialMap";
+import LiveAlerts from "./pages/LiveAlerts/LiveAlerts";
 
 const Routes = () => {
 	const navigate = useNavigate();
