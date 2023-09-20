@@ -6,16 +6,14 @@ let token = "Basic aXRwbDppd2FudHVubGltaXRlZA==";
 export const urls = {
 	headers: {
 		"Content-Type": "application/json",
-		Authorization: localStorage.getItem("token")
-			? "Bearer " + localStorage.getItem("token")
-			: token,
+		Authorization: localStorage.getItem("token") ? "Bearer " + localStorage.getItem("token") : token,
 		"itpl-app-name": "Merchant-Registration-App",
 		"itpl-app-version": "1.0-101",
 		"itpl-app-type": "web",
 		"itpl-client-id": "SS7052021-001",
 		"itpl-app-os": "web",
 	},
-
+	MB_SOCKET: "https://imydp54x0j.execute-api.eu-central-1.amazonaws.com/geo-loc/loc-id/",
 	LOGIN: services.AUTH,
 
 	DASHBOARD: {

@@ -18,6 +18,7 @@ import { createNeighbourhood, findCity, findCountry, findState } from "../servic
 import { MainContext } from "../../../context/Context";
 import Compressor from "compressorjs";
 import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
+import CustomGoogleMap from "../../../CustomComponents/CustomGoogleMap";
 
 function CreateNeighbour(props) {
 	const { listApiCall, pendingListApiCall, handleExpanded } = props;
@@ -37,7 +38,11 @@ function CreateNeighbour(props) {
 		type: "",
 		approvalType: "BY_ADMIN",
 	});
-
+	const [mapData, setMapData] = React.useState({
+		lat: null,
+		lng: null,
+		address: null,
+	});
 	const [country, setCountry] = React.useState();
 	const [state, setState] = React.useState();
 	const [city, setCity] = React.useState();
@@ -53,6 +58,15 @@ function CreateNeighbour(props) {
 	// 		address: address,
 	// 	}));
 	// };
+
+	const locationHandler = (data) => {
+		setMapData((prev) => ({
+			...prev,
+			lat: data?.lat,
+			lng: data?.lng,
+			address: data?.address,
+		}));
+	};
 
 	// const CityApi = React.useCallback((id) => {
 	// 	findCity({ cityId: id })
@@ -223,7 +237,7 @@ function CreateNeighbour(props) {
 		if (imgShow && submitForm === false) {
 			window.alert("Please upload the selected image first");
 		} else {
-			createApiCall({ ...data, lat: locationData?.lat, lon: locationData?.lng });
+			createApiCall({ ...data, lat: mapData?.lat, lon: mapData?.lng });
 		}
 	}
 
@@ -239,6 +253,10 @@ function CreateNeighbour(props) {
 		const base64 = await blobToBase64(data);
 		// console.log(base64);
 	};
+
+	// console.log("====================================");
+	// console.log("map data", mapData);
+	// console.log("====================================");
 
 	// React.useEffect(() => {
 	// 	CountryApi();
@@ -497,7 +515,13 @@ function CreateNeighbour(props) {
 							</Grid>
 							<Grid item xs={12}>
 								<Box sx={{ position: "relative", height: "400px" }}>
-									<GoogleMapCustom />
+									{/* <GoogleMapCustom /> */}
+									<CustomGoogleMap
+										// view={false}
+										// data={{ lat: 23, lng: 24 }}
+										// prevLocation={true}
+										handleLocation={locationHandler}
+									/>
 								</Box>
 							</Grid>
 							<Grid item xs={12}>
