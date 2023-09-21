@@ -1,16 +1,22 @@
-let socket;
-const localToken = localStorage.getItem("token");
-export const initWebSocket = () => {
-  socket = new WebSocket(
+import React from "react";
+import { WebSocketContext } from "./context/WebSocketContext";
+
+export const SocketConfiguration = () => {
+  const {setSocketData} = React.useContext(WebSocketContext)
+  React.useEffect(() => {
+  const localToken = localStorage.getItem("token");
+  let socket = new WebSocket(
     "wss://utb0hat9rd.execute-api.eu-central-1.amazonaws.com/dev"
   );
-
-  socket.onopen = async() => {
+    
+  socket.onopen = () => {
+    
     socket.send(
     JSON.stringify({
       action: "auth",
       data: localToken,
     }))
+    setSocketData(socket)
     console.log("socket configured successfully" , socket);
   };
 
@@ -27,7 +33,8 @@ export const initWebSocket = () => {
       console.error("WebSocket connection died");
     }
   };
+  },[])
 
-  return socket;
+  return null;
 };
 

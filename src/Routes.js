@@ -56,10 +56,8 @@ import BanjeeEvent from "./pages/BanjeeEvent/BanjeeEvent";
 import ViewEvent from "./pages/BanjeeEvent/components/ViewEvent";
 import CreateEvent from "./pages/BanjeeEvent/components/CreateEvent";
 import LiveAlerts from "./pages/LiveAlerts/LiveAlerts";
-import MapWithSearch from "./CustomComponents/TrialMap";
 import { Box } from "@mui/material";
 import MapContainer from "./CustomComponents/TrialMap";
-import LiveAlerts from "./pages/LiveAlerts/LiveAlerts";
 
 const Routes = () => {
 	const navigate = useNavigate();

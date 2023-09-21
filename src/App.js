@@ -9,7 +9,7 @@ import { ContextProvider, MainContext } from "./context/Context";
 import SnackbarContext from "./CustomComponents/SnackbarContext";
 import NotificationPopup from "./CustomComponents/NotificationPopup";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { initWebSocket } from "./WebSocketConfig";
+import { SocketConfiguration, initWebSocket } from "./WebSocketConfig";
 import {WebSocketProvider} from "./context/WebSocketContext";
 
 function App() {
@@ -36,13 +36,11 @@ function App() {
 		return position;
 	});
 
-	let socket;
-	useEffect(()=>{
-		socket=initWebSocket();
-	},[socket]);
+
 
 	return (
-		<WebSocketProvider socket={socket}>
+		<WebSocketProvider>
+			<SocketConfiguration />
 		<ThemeProvider theme={themeData ? darkTheme : theme}>
 			<BrowserRouter>
 				<Routes />

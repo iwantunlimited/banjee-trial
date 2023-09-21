@@ -1,17 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { WebSocketContext } from "../../context/WebSocketContext";
+import LiveAlertMap from "./components/LiveAlertMap";
+import { Box } from "@mui/material";
 
 export default function LiveAlerts() {
-  let socket = React.useContext(WebSocketContext) 
-
-  useEffect(() => {
-    console.log("Live Alerts",WebSocketContext);
-    if (socket) {
-      socket.addEventListener("message", (event) => {
-        console.log("Received message:", event.data);
-      });
-    }
-    console.log(socket);
-  }, [socket]);
-  return <div>LiveAlerts</div>;
+	return (
+		<div>
+			LiveAlerts
+			<Box style={{ height: "100vh" }}>
+				<LiveAlertMap data={{ lat: 23, lng: 72 }} />
+			</Box>
+		</div>
+	);
 }
