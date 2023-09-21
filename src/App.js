@@ -35,14 +35,8 @@ function App() {
 		setLocationData({ lat: position.coords.latitude, lng: position.coords.longitude, address: "" });
 		return position;
 	});
-
-	let socket;
-	useEffect(()=>{
-		socket=initWebSocket();
-	},[socket]);
-
 	return (
-		<WebSocketProvider socket={socket}>
+		<WebSocketProvider>
 		<ThemeProvider theme={themeData ? darkTheme : theme}>
 			<BrowserRouter>
 				<Routes />
