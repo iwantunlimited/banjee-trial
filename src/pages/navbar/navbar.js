@@ -145,7 +145,7 @@ function Navbar(props) {
 			console.log("socket.readyState", socket?.readyState);
 			socket?.addEventListener("message", ({ data }) => {
 				const { action, data: mData } = JSON.parse(data);
-				if (mData?.type === "ALERT" || mData?.type === "PANIC_EMERGENCY") {
+				if (mData?.type === "ALERT" || mData?.type === "PANIC") {
 					setAlertData({ open: true, data: mData });
 				}
 				console.log("Socket Data------------->", JSON.parse(data));

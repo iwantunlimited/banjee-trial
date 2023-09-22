@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import LiveAlertMap from "./LiveAlertMap";
 import { Avatar, Grid } from "@mui/material";
-import FireIcon from "../../../assets/alertIcons/Fire.webp";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import moment from "moment";
@@ -17,7 +16,6 @@ const style = {
 	top: "50%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
-	width: 550,
 	height: 550,
 	bgcolor: "background.paper",
 	border: "2px solid #000",
@@ -26,10 +24,10 @@ const style = {
 	p: 4,
 };
 const dummyData = {
-	type: "PANIC_EMERGENCY",
+	type: "ALERT",
 	id: "650c0e33643f8e3f27c3a03f",
 	eventCode: "NEW_ALERT",
-	eventName: "Fire",
+	eventName: "Missingperson",
 	createdBy: "642a75b7d5d0641c6f3deb97",
 	createdByUser: {
 		lastName: "Sparrow",
@@ -115,7 +113,7 @@ export default function AlertModal({ open, data, handleClose }) {
 						>
 							<Typography variant="h4">{data?.eventName}</Typography>
 							<Avatar
-								src={FireIcon}
+								src={require(`../../../assets/alertIcons/${data?.eventName}.webp`)}
 								alt={data?.eventName}
 								sx={{ height: "30px", width: "30px" }}
 							/>
@@ -143,10 +141,6 @@ export default function AlertModal({ open, data, handleClose }) {
 								<Typography sx={{ fontSize: "22px" }}>
 									{data?.createdByUser?.firstName}
 								</Typography>
-								{/* <Typography sx={{ fontSize: "14px" }}>
-                                    <PeopleOutlineIcon fontSize="small" />
-                                    {`  ${data?.data.confirmIncidenceCount} people have confirmed`}
-                                </Typography> */}
 							</Grid>
 							<Grid
 								item
@@ -210,7 +204,7 @@ export default function AlertModal({ open, data, handleClose }) {
 				</Fade>
 			</Modal>
 		);
-	} else if (data?.type === "PANIC_EMERGENCY") {
+	} else if (data?.type === "PANIC") {
 		return (
 			<Modal
 				aria-labelledby="transition-modal-title"
@@ -231,87 +225,103 @@ export default function AlertModal({ open, data, handleClose }) {
 							sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
 						>
 							<Typography variant="h4">{data?.eventName}</Typography>
-							<Avatar
-								src={FireIcon}
-								alt={data?.eventName}
-								sx={{ height: "30px", width: "30px" }}
-							/>
 						</Box>
+
+						<Grid container>
+							<Grid
+								item
+								md={3}
+								sm={3}
+								xs={3}
+							>
+								<Avatar
+									src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${data?.createdBy}`}
+									alt={data?.eventName}
+									variant="circular"
+									sx={{ height: "100px", width: "100px" }}
+								/>
+							</Grid>
+							<Grid
+								item
+								md={9}
+								sm={9}
+								xs={9}
+								mt={1}
+							>
+								<Grid container>
+									<Grid
+										item
+										md={6}
+										xs={6}
+										sm={6}
+									>
+										<Typography sx={{ fontSize: "22px" }}>
+											{data?.createdByUser?.firstName}
+										</Typography>
+									</Grid>
+									<Grid
+										md={6}
+										sm={6}
+										xs={6}
+									>
+										<Button
+											color="secondary"
+											variant="outlined"
+											sx={{ float: "right" }}
+											onClick={() => {
+												navigate("/banjee-alert/" + data?.id);
+												handleClose();
+											}}
+										>
+											View Panic
+										</Button>
+									</Grid>
+								</Grid>
+								<Typography
+									id="transition-modal-title"
+									component="h6"
+								>
+									<span style={{ fontWeight: "bold" }}>Description: </span>
+									{data?.description?.length > 0
+										? data?.description
+										: "No Discription Added"}
+								</Typography>
+								<Typography
+									id="transition-modal-title"
+									component="h6"
+								>
+									<span style={{ fontWeight: "bold" }}>Created On: </span>
+									{moment(data?.createdOn).format("LLL")}
+								</Typography>
+							</Grid>
+						</Grid>
+
 						<Grid
 							container
 							sx={{ display: "flex", alignItems: "center" }}
 						>
 							<Grid
 								item
-								md={1}
-							>
-								<Avatar
-									src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${data?.createdBy}`}
-									alt={data?.eventName}
-									variant="circular"
-									sx={{ height: "50px", width: "50px" }}
-								/>
-							</Grid>
-							<Grid
-								item
 								sx={{ marginLeft: 2 }}
-								md={7}
+								md={12}
+								sm={12}
+								xs={12}
 							>
-								<Typography sx={{ fontSize: "22px" }}>
-									{data?.createdByUser?.firstName}
-								</Typography>
-							</Grid>
-							<Grid
-								item
-								md={3}
-							>
-								<Button
-									color="secondary"
-									variant="outlined"
-									onClick={() => {
-										navigate("/banjee-alert/" + data?.id);
-										handleClose();
-									}}
-								>
-									View Alert
-								</Button>
+								<Box sx={{ mt: 2 }}>
+									<Typography
+										id="transition-modal-description"
+										sx={{ mt: 1 }}
+									>
+										<LocationOnIcon
+											fontSize="small"
+											sx={{ ml: 0 }}
+										/>
+										{data?.metaInfo?.address}
+									</Typography>
+								</Box>
 							</Grid>
 						</Grid>
-						<Box sx={{ mt: 2 }}>
-							<Grid container>
-								<Grid
-									item
-									md={12}
-								>
-									<Typography
-										id="transition-modal-title"
-										component="h6"
-									>
-										<span style={{ fontWeight: "bold" }}>Description: </span>
-										{data?.description}
-									</Typography>
-								</Grid>
-								<Grid
-									item
-									md={12}
-									sx={{ mt: 1 }}
-								>
-									<span style={{ fontWeight: "bold" }}>Created On: </span>
-									{moment(data?.createdOn).format("LLL")}
-								</Grid>
-							</Grid>
-							<Typography
-								id="transition-modal-description"
-								sx={{ mt: 1 }}
-							>
-								<LocationOnIcon
-									fontSize="small"
-									sx={{ ml: 0 }}
-								/>
-								{data?.metaInfo?.address}
-							</Typography>
-						</Box>
-						<Box sx={{ height: "250px", mt: 1 }}>
+						<Box sx={{ height: "250px", mt: 1, mb: 1 }}>
 							<LiveAlertMap
 								data={{
 									lat: data?.location?.coordinates[1],
@@ -323,8 +333,5 @@ export default function AlertModal({ open, data, handleClose }) {
 				</Fade>
 			</Modal>
 		);
-	}
-	{
-		return <></>;
 	}
 }
