@@ -87,8 +87,8 @@ const dummyData = {
 };
 export default function AlertModal({ open, data, handleClose }) {
 	const navigate = useNavigate();
-	data = dummyData;
-	open = true;
+	// data = dummyData;
+	// open = true;
 	console.log("Data==============>", data, open);
 
 	if (data?.type === "ALERT") {
