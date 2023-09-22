@@ -11,6 +11,7 @@ import FireIcon from "../../../assets/alertIcons/Fire.webp";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import moment from "moment";
+import { useNavigate } from "react-router";
 const style = {
 	position: "absolute",
 	top: "50%",
@@ -92,108 +93,128 @@ const dummyData = {
 };
 
 export default function AlertModal({ open, data, handleClose }) {
-	data = dummyData;
-	return (
-		<Modal
-			aria-labelledby="transition-modal-title"
-			aria-describedby="transition-modal-description"
-			open={open}
-			onClose={handleClose}
-			closeAfterTransition
-			slots={{ backdrop: Backdrop }}
-			slotProps={{
-				backdrop: {
-					timeout: 500,
-				},
-			}}
-		>
-			<Fade in={open}>
-				<Box sx={style}>
-					<Box
-						sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
-					>
-						<Typography variant="h4">{data.data.eventName}</Typography>
-						<Avatar
-							src={FireIcon}
-							alt={data.data.eventName}
-							sx={{ height: "30px", width: "30px" }}
-						/>
-					</Box>
-					<Grid
-						container
-						sx={{ display: "flex", alignItems: "center" }}
-					>
-						<Grid
-							item
-							md={1}
+	const navigate = useNavigate();
+	// data = dummyData;
+	console.log("Data==============>", data, open);
+
+	if (open && data?.data?.type === "ALERT") {
+		return (
+			<Modal
+				aria-labelledby="transition-modal-title"
+				aria-describedby="transition-modal-description"
+				open={open}
+				onClose={handleClose}
+				closeAfterTransition
+				slots={{ backdrop: Backdrop }}
+				slotProps={{
+					backdrop: {
+						timeout: 500,
+					},
+				}}
+			>
+				<Fade in={open}>
+					<Box sx={style}>
+						<Box
+							sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
 						>
+							<Typography variant="h4">{data?.data?.eventName}</Typography>
 							<Avatar
-								src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${data.data.createdBy}`}
-								alt={data.data.eventName}
-								variant="circular"
-								sx={{ height: "50px", width: "50px" }}
+								src={FireIcon}
+								alt={data?.data?.eventName}
+								sx={{ height: "30px", width: "30px" }}
 							/>
-						</Grid>
+						</Box>
 						<Grid
-							item
-							sx={{ marginLeft: 2 }}
-							md={7}
+							container
+							sx={{ display: "flex", alignItems: "center" }}
 						>
-							<Typography>{data.data.createdByUser.firstName}</Typography>
-							<Typography sx={{ fontSize: "14px" }}>
-								<PeopleOutlineIcon fontSize="small" />
-								{`  ${data.data.confirmIncidenceCount} people have confirmed`}
-							</Typography>
-						</Grid>
-						<Grid
-							item
-							md={3}
-						>
-							<Button>View Alert</Button>
-						</Grid>
-					</Grid>
-					<Box sx={{ mt: 2 }}>
-						<Grid container>
 							<Grid
 								item
-								md={12}
+								md={1}
 							>
-								<Typography
-									id="transition-modal-title"
-									component="h6"
-								>
-									Description: {data.data.description}
-								</Typography>
+								<Avatar
+									src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${data?.data?.createdBy}`}
+									alt={data?.data?.eventName}
+									variant="circular"
+									sx={{ height: "50px", width: "50px" }}
+								/>
 							</Grid>
 							<Grid
 								item
-								md={12}
+								sx={{ marginLeft: 2 }}
+								md={7}
+							>
+								<Typography sx={{ fontSize: "22px" }}>
+									{data?.data.createdByUser.firstName}
+								</Typography>
+								{/* <Typography sx={{ fontSize: "14px" }}>
+                                    <PeopleOutlineIcon fontSize="small" />
+                                    {`  ${data?.data.confirmIncidenceCount} people have confirmed`}
+                                </Typography> */}
+							</Grid>
+							<Grid
+								item
+								md={3}
+							>
+								<Button
+									color="secondary"
+									variant="outlined"
+									onClick={() => {
+										navigate("/banjee-alert/" + data.data.id);
+										handleClose();
+									}}
+								>
+									View Alert
+								</Button>
+							</Grid>
+						</Grid>
+						<Box sx={{ mt: 2 }}>
+							<Grid container>
+								<Grid
+									item
+									md={12}
+								>
+									<Typography
+										id="transition-modal-title"
+										component="h6"
+									>
+										<span style={{ fontWeight: "bold" }}>Description: </span>
+										{data.data.description}
+									</Typography>
+								</Grid>
+								<Grid
+									item
+									md={12}
+									sx={{ mt: 1 }}
+								>
+									<span style={{ fontWeight: "bold" }}>Created On: </span>
+									{moment(data.data.createdOn).format("LLL")}
+								</Grid>
+							</Grid>
+							<Typography
+								id="transition-modal-description"
 								sx={{ mt: 1 }}
 							>
-								Created On: {moment(data.data.createdOn).format("LLL")}
-							</Grid>
-						</Grid>
-						<Typography
-							id="transition-modal-description"
-							sx={{ mt: 1 }}
-						>
-							<LocationOnIcon
-								fontSize="small"
-								sx={{ ml: 0 }}
+								<LocationOnIcon
+									fontSize="small"
+									sx={{ ml: 0 }}
+								/>
+								{data.data.metaInfo.address}
+							</Typography>
+						</Box>
+						<Box sx={{ height: "250px", mt: 1 }}>
+							<LiveAlertMap
+								data={{
+									lat: data.data?.location.coordinates[1],
+									lng: data.data?.location.coordinates[0],
+								}}
 							/>
-							{data.data.metaInfo.address}
-						</Typography>
+						</Box>
 					</Box>
-					<Box sx={{ height: "250px", mt: 1 }}>
-						<LiveAlertMap
-							data={{
-								lat: data.data?.location.coordinates[1],
-								lng: data.data?.location.coordinates[0],
-							}}
-						/>
-					</Box>
-				</Box>
-			</Fade>
-		</Modal>
-	);
+				</Fade>
+			</Modal>
+		);
+	} else {
+		return <></>;
+	}
 }

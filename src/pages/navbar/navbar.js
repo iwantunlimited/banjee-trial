@@ -54,7 +54,7 @@ function Navbar(props) {
 		data: {},
 	});
 	const handleClose = () => {
-		setAlertData({ open: false });
+		setAlertData({ open: false, data: {} });
 	};
 
 	const { setModalOpen, setModalData, setThemeData, themeData } =
@@ -145,7 +145,7 @@ function Navbar(props) {
 			console.log("socket.readyState", socket?.readyState);
 			socket?.addEventListener("message", ({ data }) => {
 				const { action, data: mData } = JSON.parse(data);
-				setAlertData({ data: mData, open: true });
+				setAlertData({ open: true, data: mData });
 				console.log("Socket Data------------->", JSON.parse(data));
 			});
 		}
@@ -280,14 +280,14 @@ function Navbar(props) {
 						}}
 					>
 						<Toolbar />
+						<AlertModal
+							open={alertData.open}
+							data={alertData.data}
+							handleClose={handleClose}
+						/>
 						<Outlet />
 					</Box>
 				</Box>
-				<AlertModal
-					open={alertData.open}
-					data={alertData.data}
-					handleClose={handleClose}
-				/>
 				<SnackbarContext />
 			</div>
 		);
