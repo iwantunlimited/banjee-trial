@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import LiveAlertMap from "./LiveAlertMap";
 import { Avatar, Grid } from "@mui/material";
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import moment from "moment";
 import { useNavigate } from "react-router";
