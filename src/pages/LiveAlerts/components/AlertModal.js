@@ -24,10 +24,10 @@ const style = {
 	p: 4,
 };
 const dummyData = {
-	type: "ALERT",
+	type: "PANIC",
 	id: "650c0e33643f8e3f27c3a03f",
 	eventCode: "NEW_ALERT",
-	eventName: "Missingperson",
+	eventName: "Other",
 	createdBy: "642a75b7d5d0641c6f3deb97",
 	createdByUser: {
 		lastName: "Sparrow",
@@ -88,7 +88,7 @@ const dummyData = {
 export default function AlertModal({ open, data, handleClose }) {
 	const navigate = useNavigate();
 	data = dummyData;
-	// open = true;
+	open = true;
 	console.log("Data==============>", data, open);
 
 	if (data?.type === "ALERT") {
@@ -113,9 +113,17 @@ export default function AlertModal({ open, data, handleClose }) {
 						>
 							<Typography variant="h4">{data?.eventName}</Typography>
 							<Avatar
-								src={require(`../../../assets/alertIcons/${data?.eventName}.webp`)}
+								src={require(`../../../assets/alertIcons/${data?.eventName.replace(
+									/[\s/]/g,
+									""
+								)}.webp`)}
 								alt={data?.eventName}
-								sx={{ height: "30px", width: "30px" }}
+								sx={{
+									height: "30px",
+									width: "30px",
+									marginLeft: "5px",
+									borderRadius: "0px",
+								}}
 							/>
 						</Box>
 						<Grid
@@ -333,5 +341,7 @@ export default function AlertModal({ open, data, handleClose }) {
 				</Fade>
 			</Modal>
 		);
+	} else {
+		return <></>;
 	}
 }
