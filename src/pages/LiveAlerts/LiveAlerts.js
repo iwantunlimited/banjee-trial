@@ -16,7 +16,6 @@ export default function LiveAlerts() {
 		})
 			.then((res) => {
 				const content = res.content.filter((alert) => {
-					console.log(alert);
 					return alert.createdBy != "61111e42bcc68b2a1fa3432c";
 				});
 				setAlertList(content);
@@ -57,7 +56,7 @@ export default function LiveAlerts() {
 						bottom: 0,
 						left: 0,
 						zIndex: 1,
-						backgroundColor: "rgba(0, 0, 0, 0.05)",
+						backgroundColor: "rgba(0, 0, 0, 0.10)",
 						width: "100%",
 					}}
 				>

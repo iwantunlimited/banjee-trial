@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -89,7 +89,6 @@ const dummyData = {
 const useAudio = (url) => {
 	const [audio] = useState(new Audio(url));
 	const [playing, setPlaying] = useState(false);
-
 	const toggle = () => setPlaying(!playing);
 
 	useEffect(() => {
@@ -112,17 +111,18 @@ const useAudio = (url) => {
 };
 
 export default function AlertModal({ open, data, handleClose }) {
+	// data = dummyData;
+	// open = true;
 	const navigate = useNavigate();
 	const emergencyUrl =
 		"https://banjee.s3.eu-central-1.amazonaws.com/root/sound/emergency.mp3";
+
 	const [playing, toggle] = useAudio(emergencyUrl);
-	// data = dummyData;
-	// open = true;
 	console.log("Data==============>", data, open);
 
 	React.useEffect(() => {
 		setTimeout(() => {
-			toggle();
+			if (open) toggle();
 		}, 200);
 	}, []);
 

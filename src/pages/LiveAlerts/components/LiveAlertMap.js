@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 const _ = require("lodash");
 const { compose, withProps, lifecycle } = require("recompose");
@@ -192,7 +192,6 @@ const LiveAlertMap = compose(
 	};
 
 	const setCurrentLocation = React.useCallback(() => {
-		console.log("props in current location", props?.data);
 		document.getElementById("map-container-margin").style.marginTop = "0px";
 		generateAddress(props?.data?.lat, props?.data?.lng);
 	}, [generateAddress, props?.data?.lat, props?.data?.lng]);
@@ -209,7 +208,7 @@ const LiveAlertMap = compose(
 					gestureHandling: "auto",
 				}}
 				ref={onMapMounted}
-				defaultZoom={12}
+				defaultZoom={15}
 				center={{ lat: state?.lat, lng: state?.lng }}
 				defaultCenter={{ lat: props?.data?.lat, lng: props?.data?.lng }}
 				// onBoundsChanged={onBoundsChanged}
@@ -238,7 +237,9 @@ const LiveAlertMap = compose(
 													fontSize="small"
 													sx={{ ml: 0 }}
 												/>
-												{props?.alertData?.metaInfo?.address}
+												{props?.alertData?.metaInfo?.address
+													? props?.alertData?.metaInfo?.address
+													: " No address added"}
 											</Typography>
 										</Box>
 									</Box>

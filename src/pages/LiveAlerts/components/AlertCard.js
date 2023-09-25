@@ -3,7 +3,6 @@ import React from "react";
 import moment from "moment";
 
 export default function AlertCard({ alert, handleData }) {
-	console.log(alert);
 	return (
 		<Paper
 			onClick={() => handleData(alert)}
@@ -11,6 +10,7 @@ export default function AlertCard({ alert, handleData }) {
 				height: "250px",
 				padding: "10px",
 				width: "250px",
+				minWidth: "250px",
 				ml: "60px",
 				cursor: "pointer",
 			}}
@@ -18,9 +18,9 @@ export default function AlertCard({ alert, handleData }) {
 			<Box>
 				<Typography
 					variant="h6"
-					sx={{ textAlign: "center", mb: 2 }}
+					sx={{ textAlign: "center" }}
 				>
-					{alert?.eventName}
+					<strong>{alert?.eventName}</strong>
 				</Typography>
 
 				<Grid container>
@@ -28,6 +28,7 @@ export default function AlertCard({ alert, handleData }) {
 						item
 						sm={3}
 						xs={3}
+						sx={{ my: 1 }}
 					>
 						<Avatar
 							src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${alert?.createdBy}`}
