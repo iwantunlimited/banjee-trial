@@ -18,7 +18,7 @@ export default function AlertCard({ alert, handleData }) {
 			<Box>
 				<Typography
 					variant="h6"
-					sx={{ textAlign: "center" }}
+					sx={{ textAlign: "center", mb: 2 }}
 				>
 					{alert?.eventName}
 				</Typography>

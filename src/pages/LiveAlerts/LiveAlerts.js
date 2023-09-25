@@ -15,8 +15,12 @@ export default function LiveAlerts() {
 			eventCode: ["PANIC_EMERGENCY", "NEW_ALERT"],
 		})
 			.then((res) => {
-				setAlertList(res.content);
-				setSelectedCard(res?.content?.[0]);
+				const content = res.content.filter((alert) => {
+					console.log(alert);
+					return alert.createdBy != "61111e42bcc68b2a1fa3432c";
+				});
+				setAlertList(content);
+				setSelectedCard(content?.[0]);
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -35,6 +39,7 @@ export default function LiveAlerts() {
 				<Box sx={{ height: "90vh", position: "relative" }}>
 					<LiveAlertMap
 						alertData={selectedCard}
+						openModal={true}
 						data={{
 							lat: selectedCard?.location?.coordinates?.[1]
 								? selectedCard?.location?.coordinates?.[1]

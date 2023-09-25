@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -10,6 +11,7 @@ import { Avatar, Grid } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import moment from "moment";
 import { useNavigate } from "react-router";
+
 const style = {
 	position: "absolute",
 	top: "50%",
@@ -23,7 +25,7 @@ const style = {
 	p: 4,
 };
 const dummyData = {
-	type: "PANIC",
+	type: "ALERT",
 	id: "650c0e33643f8e3f27c3a03f",
 	eventCode: "NEW_ALERT",
 	eventName: "Other",
@@ -84,11 +86,45 @@ const dummyData = {
 	totalUsersOnWay: 0,
 	stopTime: null,
 };
+const useAudio = (url) => {
+	const [audio] = useState(new Audio(url));
+	const [playing, setPlaying] = useState(false);
+
+	const toggle = () => setPlaying(!playing);
+
+	useEffect(() => {
+		audio.muted = false;
+		playing
+			? audio.play().catch((error) => {
+					console.log(error);
+			  })
+			: audio.pause();
+	}, [playing]);
+
+	useEffect(() => {
+		audio.addEventListener("ended", () => setPlaying(false));
+		return () => {
+			audio.removeEventListener("ended", () => setPlaying(false));
+		};
+	}, []);
+
+	return [playing, toggle];
+};
+
 export default function AlertModal({ open, data, handleClose }) {
 	const navigate = useNavigate();
+	const emergencyUrl =
+		"https://banjee.s3.eu-central-1.amazonaws.com/root/sound/emergency.mp3";
+	const [playing, toggle] = useAudio(emergencyUrl);
 	// data = dummyData;
 	// open = true;
 	console.log("Data==============>", data, open);
+
+	React.useEffect(() => {
+		setTimeout(() => {
+			toggle();
+		}, 200);
+	}, []);
 
 	if (data?.type === "ALERT") {
 		return (
@@ -201,6 +237,7 @@ export default function AlertModal({ open, data, handleClose }) {
 						</Box>
 						<Box sx={{ height: "250px", mt: 1 }}>
 							<LiveAlertMap
+								openModal={false}
 								data={{
 									lat: data?.location?.coordinates[1],
 									lng: data?.location?.coordinates[0],
@@ -330,6 +367,7 @@ export default function AlertModal({ open, data, handleClose }) {
 						</Grid>
 						<Box sx={{ height: "250px", mt: 1, mb: 1 }}>
 							<LiveAlertMap
+								openModal={false}
 								data={{
 									lat: data?.location?.coordinates[1],
 									lng: data?.location?.coordinates[0],

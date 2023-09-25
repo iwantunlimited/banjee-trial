@@ -31,7 +31,7 @@ const LiveAlertMap = compose(
 	const localLat = localStorage?.getItem("lat");
 	const localLng = localStorage?.getItem("lng");
 	const [searchValue, setSearchValue] = React.useState(null);
-	const [openModal, setOpenModal] = React.useState(true);
+	const [openModal, setOpenModal] = React.useState(false);
 
 	const [state, setState] = React.useState({
 		mapApiLoaded: false,
@@ -199,6 +199,7 @@ const LiveAlertMap = compose(
 
 	React.useEffect(() => {
 		setCurrentLocation();
+		setOpenModal(props?.openModal);
 	}, [setCurrentLocation]);
 
 	return (
@@ -226,7 +227,7 @@ const LiveAlertMap = compose(
 						>
 							{openModal && (
 								<InfoWindow onCloseClick={handleModal}>
-									<Box style={{ width: "200px", height: "100px" }}>
+									<Box style={{ width: "300px", height: "150px" }}>
 										<Typography>{props?.alertData?.eventName}</Typography>
 										<Box sx={{ mt: 2 }}>
 											<Typography
