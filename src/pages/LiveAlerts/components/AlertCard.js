@@ -7,12 +7,16 @@ export default function AlertCard({ alert, handleData }) {
 		<Paper
 			onClick={() => handleData(alert)}
 			sx={{
-				height: "250px",
+				height: "200px",
 				padding: "10px",
-				width: "250px",
-				minWidth: "250px",
-				ml: "60px",
+				width: "350px",
+				minWidth: "350px",
+				ml: "20px",
 				cursor: "pointer",
+				transition: "background-color 0.5s ease",
+				"&:hover": {
+					backgroundColor: "#f0f0f0",
+				},
 			}}
 		>
 			<Box>

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Avatar, Box, Typography, Grid } from "@mui/material";
 import React, { useEffect } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 const _ = require("lodash");
@@ -226,8 +226,38 @@ const LiveAlertMap = compose(
 						>
 							{openModal && (
 								<InfoWindow onCloseClick={handleModal}>
-									<Box style={{ width: "300px", height: "150px" }}>
-										<Typography>{props?.alertData?.eventName}</Typography>
+									<Box style={{ width: "350px", height: "170px" }}>
+										<Typography
+											variant="h6"
+											sx={{ textAlign: "center" }}
+										>
+											{props?.alertData?.eventName}
+										</Typography>
+										<Grid container>
+											<Grid
+												item
+												sm={3}
+												xs={3}
+												sx={{ my: 1 }}
+											>
+												<Avatar
+													src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${props?.alertData?.createdBy}`}
+													alt={props?.alertData?.eventName}
+													variant="circular"
+													sx={{ height: "40px", width: "40px" }}
+												/>
+											</Grid>
+											<Grid
+												item
+												sx={{ display: "flex", alignItems: "center" }}
+												xs={8}
+												sm={8}
+											>
+												<Typography sx={{ fontSize: "22px" }}>
+													{props?.alertData?.createdByUser?.firstName}
+												</Typography>
+											</Grid>
+										</Grid>
 										<Box sx={{ mt: 2 }}>
 											<Typography
 												id="transition-modal-description"

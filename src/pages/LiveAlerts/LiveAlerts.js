@@ -52,9 +52,9 @@ export default function LiveAlerts() {
 				<Box
 					sx={{
 						position: "absolute",
-						// right: "0px",
+						right: "0px",
 						bottom: 0,
-						left: 0,
+						// left: 0,
 						zIndex: 1,
 						backgroundColor: "rgba(0, 0, 0, 0.10)",
 						width: "100%",
@@ -63,11 +63,9 @@ export default function LiveAlerts() {
 					<Box
 						sx={{
 							display: "flex",
-							justifyContent: "space-evenly",
-							alignItems: "center",
+							flexDirection: "row",
 							paddingY: "20px",
 							width: "auto",
-							flexDirection: "row",
 							overflowX: "auto",
 							overflowY: "hidden",
 						}}
