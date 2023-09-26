@@ -3,7 +3,9 @@ import LiveAlertMap from "./components/LiveAlertMap";
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import { listAlert } from "../BanjeeAlert/api-services/apiServices";
 import AlertCard from "./components/AlertCard";
-
+import { Navigation, A11y, Virtual } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper-bundle.min.css";
 export default function LiveAlerts() {
 	const [alertList, setAlertList] = useState([]);
 	const [selectedCard, setSelectedCard] = useState();
@@ -70,15 +72,26 @@ export default function LiveAlerts() {
 							overflowY: "hidden",
 						}}
 					>
-						{alertList?.map((alert, index) => {
-							return (
-								<AlertCard
-									handleData={handleData}
-									key={index}
-									alert={alert}
-								/>
-							);
-						})}
+						<Swiper
+							spaceBetween={20}
+							slidesPerView={4}
+							modules={[Navigation, A11y]}
+							navigation
+						>
+							{alertList?.map((alert, index) => {
+								return (
+									<SwiperSlide
+										key={index}
+										virtualIndex={index}
+									>
+										<AlertCard
+											handleData={handleData}
+											alert={alert}
+										/>
+									</SwiperSlide>
+								);
+							})}
+						</Swiper>
 					</Box>
 				</Box>
 			</Box>

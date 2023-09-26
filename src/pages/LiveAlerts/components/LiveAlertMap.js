@@ -1,6 +1,8 @@
-import { Avatar, Box, Typography, Grid } from "@mui/material";
+import { Avatar, Box, Typography, Grid, Button } from "@mui/material";
 import React, { useEffect } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { useNavigate } from "react-router";
+import moment from "moment";
 const _ = require("lodash");
 const { compose, withProps, lifecycle } = require("recompose");
 const {
@@ -32,7 +34,7 @@ const LiveAlertMap = compose(
 	const localLng = localStorage?.getItem("lng");
 	const [searchValue, setSearchValue] = React.useState(null);
 	const [openModal, setOpenModal] = React.useState(false);
-
+	const navigate = useNavigate();
 	const [state, setState] = React.useState({
 		mapApiLoaded: false,
 		mapInstance: null,
@@ -99,28 +101,14 @@ const LiveAlertMap = compose(
 							const filteredCity = results?.filter((item, index) => {
 								if (index === 0) {
 									return item?.address_components?.filter((ele, inde) => {
-										if (
-											// ele?.types[0] === "administrative_area_level_1" &&
-											ele?.types[0] === "locality" &&
-											ele?.types[1] === "political"
-										) {
+										if (ele?.types[0] === "locality" && ele?.types[1] === "political") {
 											return ele?.long_name;
 										}
-										// else if (
-										// 	ele?.types[0] === "administrative_area_level_3" &&
-										// 	ele?.types[1] === "political"
-										// ) {
-										// 	return ele?.long_name;
-										// }
 									});
 								}
 							});
 							const newData = filteredCity[0].address_components?.filter((ele) => {
-								if (
-									// ele?.types[0] === "administrative_area_level_1"
-									ele?.types[0] === "locality" &&
-									ele?.types[1] === "political"
-								) {
+								if (ele?.types[0] === "locality" && ele?.types[1] === "political") {
 									return ele?.long_name;
 								} else if (
 									ele?.types[0] === "administrative_area_level_3" &&
@@ -136,17 +124,6 @@ const LiveAlertMap = compose(
 										? newData[0]?.long_name
 										: results[0].formatted_address,
 							}));
-
-							// this.zoom = 12;
-							// if (props?.view) {
-							// 	return;
-							// } else {
-							// 	props?.handleLocation({
-							// 		lat: currentLat ? currentLat : state.lat,
-							// 		lng: currentLng ? currentLng : state.lng,
-							// 		address: newData?.length > 0 ? newData[0]?.long_name : results[0].formatted_address,
-							// 	});
-							// }
 						} else {
 							window.alert("No results found");
 						}
@@ -211,73 +188,213 @@ const LiveAlertMap = compose(
 				defaultZoom={15}
 				center={{ lat: state?.lat, lng: state?.lng }}
 				defaultCenter={{ lat: props?.data?.lat, lng: props?.data?.lng }}
-				// onBoundsChanged={onBoundsChanged}
 				onClick={(event) => {
-					// console.log("click", event);
 					onClick(event);
 				}}
 			>
-				{state?.markers.map((marker, index) => (
-					<Box style={{ position: "relative" }}>
-						<Marker
-							key={index}
-							position={marker.position}
-							onClick={handleModal}
-						>
-							{openModal && (
-								<InfoWindow onCloseClick={handleModal}>
-									<Box style={{ width: "350px", height: "170px" }}>
-										<Typography
-											variant="h6"
-											sx={{ textAlign: "center" }}
-										>
-											{props?.alertData?.eventName}
-										</Typography>
-										<Grid container>
-											<Grid
-												item
-												sm={3}
-												xs={3}
-												sx={{ my: 1 }}
-											>
-												<Avatar
-													src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${props?.alertData?.createdBy}`}
-													alt={props?.alertData?.eventName}
-													variant="circular"
-													sx={{ height: "40px", width: "40px" }}
-												/>
-											</Grid>
-											<Grid
-												item
-												sx={{ display: "flex", alignItems: "center" }}
-												xs={8}
-												sm={8}
-											>
-												<Typography sx={{ fontSize: "22px" }}>
-													{props?.alertData?.createdByUser?.firstName}
-												</Typography>
-											</Grid>
-										</Grid>
-										<Box sx={{ mt: 2 }}>
+				{state?.markers.map((marker, index) =>
+					props?.alertData?.eventCode === "NEW_ALERT" ? (
+						<Box style={{ position: "relative" }}>
+							<Marker
+								key={index}
+								position={marker.position}
+								onClick={handleModal}
+							>
+								{openModal && (
+									<InfoWindow onCloseClick={handleModal}>
+										<Box style={{ width: "350px", height: "170px" }}>
 											<Typography
-												id="transition-modal-description"
-												sx={{ mt: 1 }}
+												variant="h6"
+												sx={{ textAlign: "center" }}
 											>
-												<LocationOnIcon
-													fontSize="small"
-													sx={{ ml: 0 }}
-												/>
-												{props?.alertData?.metaInfo?.address
-													? props?.alertData?.metaInfo?.address
-													: " No address added"}
+												{props?.alertData?.eventName.startsWith("Test") ||
+												props?.alertData?.eventName.startsWith("test")
+													? "Other"
+													: props?.alertData?.eventName}
 											</Typography>
+											<Grid container>
+												<Grid
+													item
+													sm={2}
+													xs={2}
+													md={2}
+													sx={{ my: 1 }}
+												>
+													<Avatar
+														src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${props?.alertData?.createdBy}`}
+														alt={props?.alertData?.eventName}
+														variant="circular"
+														sx={{ height: "40px", width: "40px" }}
+													/>
+												</Grid>
+												<Grid
+													item
+													sx={{ display: "flex", alignItems: "center" }}
+													xs={10}
+													sm={10}
+												>
+													<Grid container>
+														<Grid
+															item
+															xs={7}
+															sm={7}
+															md={7}
+														>
+															<Typography sx={{ fontSize: "22px", textAlign: "left" }}>
+																{props?.alertData?.createdByUser?.firstName}
+															</Typography>
+														</Grid>
+														<Grid
+															item
+															xs={5}
+															sm={5}
+															md={5}
+														>
+															<Button
+																color="secondary"
+																variant="outlined"
+																sx={{ float: "right" }}
+																onClick={() => {
+																	navigate("/banjee-alert/" + props?.alertData?.id);
+																}}
+															>
+																View Alert
+															</Button>
+														</Grid>
+													</Grid>
+												</Grid>
+												<Grid item></Grid>
+											</Grid>
+											<Box sx={{ mt: 2 }}>
+												<Typography
+													id="transition-modal-description"
+													sx={{ mt: 1 }}
+												>
+													<LocationOnIcon
+														fontSize="small"
+														sx={{ ml: 0 }}
+													/>
+													{props?.alertData?.metaInfo?.address
+														? props?.alertData?.metaInfo?.address
+														: " No address added"}
+												</Typography>
+											</Box>
 										</Box>
-									</Box>
-								</InfoWindow>
-							)}
-						</Marker>
-					</Box>
-				))}
+									</InfoWindow>
+								)}
+							</Marker>
+						</Box>
+					) : (
+						<Box style={{ position: "relative" }}>
+							<Marker
+								key={index}
+								position={marker.position}
+								onClick={handleModal}
+							>
+								{openModal && (
+									<InfoWindow onCloseClick={handleModal}>
+										<Box sx={{ height: "200px", width: "370px" }}>
+											<Box
+												sx={{
+													display: "flex",
+													alignItems: "center",
+													justifyContent: "center",
+												}}
+											>
+												<Typography variant="h6">
+													<strong>
+														{props?.alertData?.eventName.startsWith("Test") ||
+														props?.alertData?.eventName.startsWith("test")
+															? "Other"
+															: props?.alertData?.eventName}
+													</strong>
+												</Typography>
+											</Box>
+
+											<Grid container>
+												<Grid
+													item
+													md={3}
+													sm={3}
+													xs={3}
+												>
+													<Avatar
+														src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${props?.alertData?.createdBy}`}
+														alt={props?.alertData?.eventName}
+														variant="circular"
+														sx={{ height: "100px", width: "100px" }}
+													/>
+												</Grid>
+												<Grid
+													item
+													md={9}
+													sm={9}
+													xs={9}
+													mt={1}
+													sx={{ mt: 3 }}
+												>
+													<Grid container>
+														<Grid
+															item
+															md={6}
+															xs={6}
+															sm={6}
+														>
+															<Typography sx={{ fontSize: "22px", textAlign: "center" }}>
+																{props?.alertData?.createdByUser?.firstName}
+															</Typography>
+														</Grid>
+														<Grid
+															md={6}
+															sm={6}
+															xs={6}
+														>
+															<Button
+																color="secondary"
+																variant="outlined"
+																sx={{ float: "right" }}
+																onClick={() => {
+																	navigate("/banjee-alert/" + props?.alertData?.id);
+																}}
+															>
+																View Panic
+															</Button>
+														</Grid>
+													</Grid>
+												</Grid>
+											</Grid>
+											<Grid
+												container
+												sx={{ display: "flex", alignItems: "center" }}
+											>
+												<Grid
+													item
+													sx={{ marginLeft: 2 }}
+													md={12}
+													sm={12}
+													xs={12}
+												>
+													<Box sx={{ mt: 2 }}>
+														<Typography
+															id="transition-modal-description"
+															sx={{ mt: 1 }}
+														>
+															<LocationOnIcon
+																fontSize="small"
+																sx={{ ml: 0 }}
+															/>
+															{props?.alertData?.metaInfo?.address}
+														</Typography>
+													</Box>
+												</Grid>
+											</Grid>
+										</Box>
+									</InfoWindow>
+								)}
+							</Marker>
+						</Box>
+					)
+				)}
 			</GoogleMap>
 		</Box>
 	);

@@ -25,7 +25,7 @@ const style = {
 	p: 4,
 };
 const dummyData = {
-	type: "ALERT",
+	type: "PANIC",
 	id: "650c0e33643f8e3f27c3a03f",
 	eventCode: "NEW_ALERT",
 	eventName: "Other",
@@ -126,7 +126,7 @@ export default function AlertModal({ open, data, handleClose }) {
 		}, 200);
 	}, []);
 
-	if (data?.type === "ALERT") {
+	if (data?.eventCode === "NEW_ALERT") {
 		return (
 			<Modal
 				aria-labelledby="transition-modal-title"
@@ -248,7 +248,7 @@ export default function AlertModal({ open, data, handleClose }) {
 				</Fade>
 			</Modal>
 		);
-	} else if (data?.type === "PANIC") {
+	} else if (data?.eventCode === "PANIC_EMERGENCY") {
 		return (
 			<Modal
 				aria-labelledby="transition-modal-title"
