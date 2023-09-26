@@ -116,15 +116,23 @@ export default function AlertModal({ open, data, handleClose }) {
 	const navigate = useNavigate();
 	const emergencyUrl =
 		"https://banjee.s3.eu-central-1.amazonaws.com/root/sound/emergency.mp3";
+	const alertUrl =
+		"https://banjee.s3.eu-central-1.amazonaws.com/root/sound/alert.mp3";
 
-	const [playing, toggle] = useAudio(emergencyUrl);
+	const [emergencyAudio, playEmergencyAudio] = useAudio(emergencyUrl);
+	const [alertAudio, playAlertAudio] = useAudio(alertUrl);
 	console.log("Data==============>", data, open);
 
 	React.useEffect(() => {
 		setTimeout(() => {
-			if (open) toggle();
+			if (open && data?.eventCode === "NEW_ALERT") {
+				playAlertAudio();
+			}
+			if (open && data?.eventCode === "PANIC_EMERGENCY") {
+				playEmergencyAudio();
+			}
 		}, 200);
-	}, []);
+	}, [data]);
 
 	if (data?.eventCode === "NEW_ALERT") {
 		return (
