@@ -28,7 +28,7 @@ const dummyData = {
 	type: "PANIC",
 	id: "650c0e33643f8e3f27c3a03f",
 	eventCode: "NEW_ALERT",
-	eventName: "Other",
+	eventName: "Alert",
 	createdBy: "642a75b7d5d0641c6f3deb97",
 	createdByUser: {
 		lastName: "Sparrow",
@@ -134,6 +134,26 @@ export default function AlertModal({ open, data, handleClose }) {
 		}, 200);
 	}, [data]);
 
+	const eventNames = [
+		"Suspiciousactivity",
+		"Suspicious person",
+		"Missing person",
+		"Fire",
+		"Accident",
+		"Roadblock",
+		"Water",
+		"Electricity",
+		"Petmissing/found",
+		"Suspiciousvehicle",
+		"General",
+	];
+
+	const eventName = eventNames.includes(data?.eventName?.replace(/[\s/]/g, ""))
+		? data?.eventName.replace(/[\s/]/g, "")
+		: "Other";
+
+	const eventIcon = require(`../../../assets/alertIcons/${eventName}.webp`);
+
 	if (data?.eventCode === "NEW_ALERT") {
 		return (
 			<Modal
@@ -156,10 +176,11 @@ export default function AlertModal({ open, data, handleClose }) {
 						>
 							<Typography variant="h4">{data?.eventName}</Typography>
 							<Avatar
-								src={require(`../../../assets/alertIcons/${data?.eventName.replace(
-									/[\s/]/g,
-									""
-								)}.webp`)}
+								// src={require(`../../../assets/alertIcons/${data?.eventName.replace(
+								// 	/[\s/]/g,
+								// 	""
+								// )}.webp`)}
+								src={eventIcon}
 								alt={data?.eventName}
 								sx={{
 									height: "30px",
@@ -276,7 +297,9 @@ export default function AlertModal({ open, data, handleClose }) {
 						<Box
 							sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
 						>
-							<Typography variant="h4">{data?.eventName}</Typography>
+							<Typography variant="h4">
+								<strong>{data?.eventName}</strong>
+							</Typography>
 						</Box>
 
 						<Grid container>

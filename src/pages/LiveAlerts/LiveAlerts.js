@@ -35,6 +35,7 @@ export default function LiveAlerts() {
 	}, []);
 
 	if (alertList) {
+		console.log(alertList);
 		return (
 			<Box sx={{ position: "relative" }}>
 				<Box sx={{ height: "90vh", position: "relative" }}>
