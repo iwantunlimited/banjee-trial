@@ -7,7 +7,7 @@ import { Navigation, A11y, Virtual } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.min.css";
 export default function LiveAlerts() {
-	const [alertList, setAlertList] = useState([]);
+	const [alertList, setAlertList] = useState();
 	const [selectedCard, setSelectedCard] = useState();
 	const currentLat = localStorage?.getItem("lat");
 	const currentLng = localStorage?.getItem("lng");
@@ -99,9 +99,16 @@ export default function LiveAlerts() {
 		);
 	} else {
 		return (
-			<Box>
+			<div
+				style={{
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+					height: "80vh",
+				}}
+			>
 				<CircularProgress />
-			</Box>
+			</div>
 		);
 	}
 }
