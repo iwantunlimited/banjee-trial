@@ -11,8 +11,6 @@ export default function AlertCard({ alert, handleData }) {
 				sx={{
 					height: "200px",
 					padding: "10px",
-					width: "350px",
-					minWidth: "350px",
 					ml: "20px",
 					cursor: "pointer",
 					transition: "background-color 0.5s ease",
@@ -97,8 +95,6 @@ export default function AlertCard({ alert, handleData }) {
 				sx={{
 					height: "200px",
 					padding: "10px",
-					width: "350px",
-					minWidth: "350px",
 					ml: "20px",
 					cursor: "pointer",
 					transition: "background-color 0.5s ease",
