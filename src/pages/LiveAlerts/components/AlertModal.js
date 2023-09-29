@@ -98,16 +98,15 @@ const useAudio = (url) => {
 					console.log(error);
 			  })
 			: audio.pause();
-	}, [playing]);
+	}, [playing, audio]);
 
 	useEffect(() => {
 		audio.addEventListener("ended", () => setPlaying(false));
 		return () => {
 			audio.removeEventListener("ended", () => setPlaying(false));
 		};
-	}, []);
-
-	return [playing, toggle];
+	}, [audio]);
+	return [toggle];
 };
 
 export default function AlertModal({ open, data, handleClose }) {
@@ -132,7 +131,7 @@ export default function AlertModal({ open, data, handleClose }) {
 				playEmergencyAudio();
 			}
 		}, 200);
-	}, [data]);
+	}, []);
 
 	const eventNames = [
 		"Suspiciousactivity",
@@ -149,7 +148,7 @@ export default function AlertModal({ open, data, handleClose }) {
 	];
 
 	const eventName = eventNames.includes(data?.eventName?.replace(/[\s/]/g, ""))
-		? data?.eventName.replace(/[\s/]/g, "")
+		? data?.eventName?.replace(/[\s/]/g, "")
 		: "Other";
 
 	const eventIcon = require(`../../../assets/alertIcons/${eventName}.webp`);
@@ -200,7 +199,7 @@ export default function AlertModal({ open, data, handleClose }) {
 							>
 								<Avatar
 									src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${data?.createdBy}`}
-									alt={data?.eventName}
+									alt={data?.createdByUser?.firstName}
 									variant="circular"
 									sx={{ height: "50px", width: "50px" }}
 								/>

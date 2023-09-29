@@ -4,7 +4,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useNavigate } from "react-router";
 import moment from "moment";
 const _ = require("lodash");
-const { compose, withProps, lifecycle } = require("recompose");
+const { compose, withProps } = require("recompose");
 const {
 	withScriptjs,
 	withGoogleMap,
@@ -222,7 +222,7 @@ const LiveAlertMap = compose(
 												>
 													<Avatar
 														src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${props?.alertData?.createdBy}`}
-														alt={props?.alertData?.eventName}
+														alt={props?.alertData?.createdByUser?.firstName}
 														variant="circular"
 														sx={{ height: "40px", width: "40px" }}
 													/>
@@ -320,7 +320,7 @@ const LiveAlertMap = compose(
 												>
 													<Avatar
 														src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${props?.alertData?.createdBy}`}
-														alt={props?.alertData?.eventName}
+														alt={props?.alertData?.createdByUser?.firstName}
 														variant="circular"
 														sx={{ height: "100px", width: "100px" }}
 													/>

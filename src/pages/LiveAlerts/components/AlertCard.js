@@ -1,9 +1,9 @@
-import { Box, Paper, Typography, Grid, Button, Avatar } from "@mui/material";
+import { Box, Paper, Typography, Grid, Avatar } from "@mui/material";
 import React from "react";
 import moment from "moment";
-import { SwiperSlide } from "swiper/react";
 
 export default function AlertCard({ alert, handleData }) {
+	console.log(alert);
 	if (alert?.eventCode === "NEW_ALERT") {
 		return (
 			<Paper
@@ -40,7 +40,7 @@ export default function AlertCard({ alert, handleData }) {
 						>
 							<Avatar
 								src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${alert?.createdBy}`}
-								alt={alert?.eventName}
+								alt={alert?.createdByUser?.firstName}
 								variant="circular"
 								sx={{ height: "50px", width: "50px" }}
 							/>

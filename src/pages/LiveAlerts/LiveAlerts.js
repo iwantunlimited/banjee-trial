@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import LiveAlertMap from "./components/LiveAlertMap";
-import { Box, CircularProgress, Grid, Paper, Typography } from "@mui/material";
+import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 import { listAlert } from "../BanjeeAlert/api-services/apiServices";
 import AlertCard from "./components/AlertCard";
-import { Navigation, A11y, Virtual } from "swiper";
+import { Navigation, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.min.css";
 import moment from "moment";
@@ -22,8 +22,8 @@ export default function LiveAlerts() {
 					const today = moment(date).format("L");
 					console.log(today === moment(alert.createdOn).format("L"));
 					return (
-						today == moment(alert.createdOn).format("L") &&
-						alert.createdBy != "61111e42bcc68b2a1fa3432c"
+						today === moment(alert.createdOn).format("L") &&
+						alert.createdBy !== "61111e42bcc68b2a1fa3432c"
 					);
 				});
 				setAlertList(content);
@@ -83,6 +83,7 @@ export default function LiveAlerts() {
 							slidesPerView={4}
 							modules={[Navigation, A11y]}
 							navigation
+							style={{ width: "100%" }}
 						>
 							{alertList?.map((alert, index) => {
 								return (
@@ -102,7 +103,7 @@ export default function LiveAlerts() {
 				</Box>
 			</Box>
 		);
-	} else if (alertList) {
+	} else if (alertList?.length === 0) {
 		return (
 			<Box sx={{ position: "relative" }}>
 				<Box sx={{ height: "90vh", position: "relative" }}>
