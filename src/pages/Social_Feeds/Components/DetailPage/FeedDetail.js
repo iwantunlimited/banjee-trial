@@ -147,9 +147,23 @@ function FeedDetail(props) {
 	const ApiCall = React.useCallback(() => {
 		getSocialFeedDetails(params?.id)
 			.then((res) => {
+				// console.log("res", res);
 				setData(res);
+				// navigate(-1);
 			})
-			.catch((err) => console.error(err));
+			.catch((err) => {
+				console.error(err);
+				if (err === "-404:Requested Item [Feed[65292ec11b37be7c18a11af5]] Not Found") {
+					console.log("404");
+					setModalOpen(true);
+					setModalData("Requested Item [Feed[65292ec11b37be7c18a11af5]] Not Found ", "error");
+					setTimeout(() => {
+						navigate(-1);
+					}, 4000);
+				} else {
+					console.log("500");
+				}
+			});
 	}, []);
 
 	const deleteFeedApiCall = React.useCallback(() => {
@@ -544,7 +558,7 @@ function FeedDetail(props) {
 																			marginLeft: BanjeeAuthorId === ele?.userId ? "0px" : "20px",
 																			marginRight: BanjeeAuthorId === ele?.userId ? "20px" : "0px",
 																		}}>
-																		<Typography>{ele?.reactionType}</Typography>
+																		<Typography>{ele?.reactionType === "like" ? "👍" : ele?.reactionType}</Typography>
 																		{/* <img
 																			src={getEmoji(ele?.reactionType)}
 																			alt=''
