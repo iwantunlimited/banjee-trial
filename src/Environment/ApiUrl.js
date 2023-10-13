@@ -2,6 +2,7 @@ import { DATA_GRID_DEFAULT_SLOTS_COMPONENTS } from "@mui/x-data-grid";
 import { services } from "./Environment.dev";
 
 let token = "Basic aXRwbDppd2FudHVubGltaXRlZA==";
+export const BanjeeAuthorId = "BANJEEAUTHORID";
 
 export const urls = {
 	headers: {
@@ -47,6 +48,7 @@ export const urls = {
 		MESSAGE_BROKER: services?.MESSAGE_BROKER + "message/delivery/filter",
 	},
 	SOCIAL_FEEDS: {
+		COOMENT_ON_FEED: services.SOCIAL_FEEDS + "comments",
 		CREATE_FEED: services.SOCIAL_FEEDS + "/feeds",
 		FILTER: services.SOCIAL_FEEDS + "api/feeds/admin/filter",
 		GET_FEED_DETAILS: services.SOCIAL_FEEDS + "feeds/findById/",

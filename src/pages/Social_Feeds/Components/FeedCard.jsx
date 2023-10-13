@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid, IconButton, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Card, Grid, IconButton, Typography, useTheme } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router";
 import { PaginationContext } from "../../../context/PaginationContext";
@@ -20,12 +20,17 @@ function FeedCard(props) {
 		imageModal: false,
 	});
 
-	const { ele, handleFeedPagination, handleDeleteModal, index } = props;
+	const { ele, handleContextPagination, handleDeleteModal, index } = props;
 
 	if (props?.ele) {
 		return (
 			<React.Fragment>
-				<Box
+				<Card
+					// onClick={() => {
+					// 	handleContextPagination();
+					// 	navigate("/social-feeds/" + ele?.id);
+					// 	// setModal({ open: true, data: ele });
+					// }}
 					sx={{
 						// paddingX: "14px",
 						// paddingBottom: "7px",
@@ -54,7 +59,7 @@ function FeedCard(props) {
 							}}>
 							<Box
 								onClick={() => {
-									handleFeedPagination();
+									handleContextPagination();
 									navigate("/social-feeds/" + ele?.id);
 									// setModal({ open: true, data: ele });
 								}}
@@ -144,7 +149,7 @@ function FeedCard(props) {
 							{/* swiper for media */}
 							<Swiper
 								onClick={() => {
-									handleFeedPagination();
+									handleContextPagination();
 									navigate("/social-feeds/" + ele?.id);
 									// setModal({ open: true, data: ele });
 								}}
@@ -352,7 +357,7 @@ function FeedCard(props) {
 								flexDirection: "column",
 							}}
 							onClick={() => {
-								handleFeedPagination();
+								handleContextPagination();
 								navigate("/social-feeds/" + ele?.id);
 								// setModal({ open: true, data: ele })
 							}}>
@@ -429,7 +434,7 @@ function FeedCard(props) {
 							</Typography>
 						</Box>
 					)}
-				</Box>
+				</Card>
 				{fullScreenState.imageModal && (
 					<FullScreenImageModal
 						state={fullScreenState}

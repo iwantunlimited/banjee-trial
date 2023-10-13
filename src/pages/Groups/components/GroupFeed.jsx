@@ -24,7 +24,7 @@ export default function GroupFeed({ groupId, groupName }) {
 	// pagination state
 	const [pagination, setPagination] = React.useState({
 		page: feedPagination?.page ? feedPagination?.page : 0,
-		pageSize: feedPagination?.pageSize ? feedPagination?.pageSize : 10,
+		pageSize: feedPagination?.pageSize ? feedPagination?.pageSize : 12,
 	});
 	const [totalEle, setTotalEle] = React.useState();
 

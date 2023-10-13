@@ -14,10 +14,12 @@ import {
 	Button,
 	TextField,
 	useTheme,
+	Stack,
 } from "@mui/material";
 import React from "react";
 import SwiperComp from "../../../../CustomComponents/SwiperComp";
 import {
+	commentOnFeed,
 	deleteSocialFeed,
 	deleteSocialFeedsComments,
 	getSocialFeedDetails,
@@ -35,6 +37,7 @@ import LoveEmoji from "../../../../assets/emojis/Love.svg";
 import SadEmoji from "../../../../assets/emojis/Sad.svg";
 import WowEmoji from "../../../../assets/emojis/Wow.svg";
 import { MainContext } from "../../../../context/Context";
+import { BanjeeAuthorId } from "../../../../Environment/ApiUrl";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -82,7 +85,7 @@ function FeedDetail(props) {
 		remark: "",
 		commentId: "",
 	});
-
+	const [commentText, setCommentText] = React.useState("");
 	const [modalType, setModalType] = React.useState("feed");
 	const [result, setResult] = React.useState([]);
 	const [reaction, setReaction] = React.useState([]);
@@ -363,8 +366,20 @@ function FeedDetail(props) {
 		}
 	};
 
+	const commentApiCall = React.useCallback((id, comment) => {
+		commentOnFeed({ feedId: id, text: comment, image: null })
+			.then((res) => {
+				console.log("res", res);
+				setCommentText("");
+				feedCommentApiCall();
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}, []);
+
 	// console.log("====================================");
-	// console.log("data", data);
+	// console.log("data", process.env.BANJEEAUTHORID);
 	// console.log("====================================");
 
 	React.useEffect(() => {
@@ -501,7 +516,7 @@ function FeedDetail(props) {
 															<Box
 																sx={{
 																	display: "flex",
-																	justifyContent: data?.authorId === ele?.userId ? "flex-end" : "flex-start",
+																	justifyContent: BanjeeAuthorId === ele?.userId ? "flex-end" : "flex-start",
 																}}>
 																<Box
 																	sx={{
@@ -524,10 +539,10 @@ function FeedDetail(props) {
 																	<Box
 																		sx={{
 																			display: "flex",
-																			justifyContent: data?.authorId === ele?.userId ? "flex-start" : "flex-end",
+																			justifyContent: BanjeeAuthorId === ele?.userId ? "flex-start" : "flex-end",
 
-																			marginLeft: data?.authorId === ele?.userId ? "0px" : "20px",
-																			marginRight: data?.authorId === ele?.userId ? "20px" : "0px",
+																			marginLeft: BanjeeAuthorId === ele?.userId ? "0px" : "20px",
+																			marginRight: BanjeeAuthorId === ele?.userId ? "20px" : "0px",
 																		}}>
 																		<Typography>{ele?.reactionType}</Typography>
 																		{/* <img
@@ -556,81 +571,109 @@ function FeedDetail(props) {
 							</TabPanel>
 							<TabPanel value={value} index={1} style={{ width: "100%" }}>
 								<Box
-									style={{
+									sx={{
 										height: "310px",
 										width: "100%",
 										// minWidth: "440px",
 										overflowY: data?.reactions?.length > 5 && "scroll",
 										overflowX: "hidden",
+										display: "flex",
+										flexDirection: "column",
+										justifyContent: "space-between",
 									}}>
-									<Grid item container xs={12} spacing={1}>
-										{result?.length > 0 ? (
-											result?.map((ele, index) => {
-												const userLength = ele?.createdByUser?.username.length;
-												const commentId = ele?.id;
-												return (
-													<React.Fragment key={index}>
-														<Grid item xs={12}>
-															{/* <span>{ele?.createdByUser?.username}</span> */}
-															<Box
-																sx={{
-																	display: "flex",
-																	justifyContent: data?.authorId === ele?.createdBy ? "flex-end" : "flex-start",
-																}}>
+									<Box>
+										<Grid item container xs={12} spacing={1}>
+											{result?.length > 0 ? (
+												result?.map((ele, index) => {
+													const userLength = ele?.createdByUser?.username.length;
+													const commentId = ele?.id;
+													return (
+														<React.Fragment key={index}>
+															<Grid item xs={12}>
+																{/* <span>{ele?.createdByUser?.username}</span> */}
 																<Box
 																	sx={{
-																		background: theme?.palette?.grey?.A700,
-																		boxShadow: 0,
-																		maxWidth: "90%",
-																		borderRadius: "10px",
-																		padding: "5px",
-																		paddingX: "10px",
-																		// textAlign:
-																		// 	blogData?.authorId === item?.author?.id ? "right" : "left",
+																		display: "flex",
+																		justifyContent: BanjeeAuthorId === ele?.createdBy ? "flex-end" : "flex-start",
 																	}}>
 																	<Box
 																		sx={{
-																			display: "flex",
-																			justifyContent: "space-between",
-																			alignItems: "center",
+																			background: theme?.palette?.grey?.A700,
+																			boxShadow: 0,
+																			maxWidth: "90%",
+																			borderRadius: "10px",
+																			padding: "5px",
+																			paddingX: "10px",
+																			// textAlign:
+																			// 	blogData?.authorId === item?.author?.id ? "right" : "left",
 																		}}>
-																		<Typography noWrap sx={{ fontSize: "10px" }}>
-																			{ele?.createdByUser?.firstName ? (
-																				<span>{`${ele?.createdByUser?.firstName}`}</span>
-																			) : (
-																				<span>{`${ele?.createdByUser?.userName || "userName"}`}</span>
-																			)}
-																		</Typography>
-																		<IconButton
-																			sx={{ padding: "2.5px" }}
-																			onClick={() => {
-																				setModalType("comment");
-																				setDeleteModal((prev) => ({
-																					...prev,
-																					open: true,
-																					commentId: commentId,
-																				}));
+																		<Box
+																			sx={{
+																				display: "flex",
+																				justifyContent: "space-between",
+																				alignItems: "center",
 																			}}>
-																			<Delete sx={{ fontSize: "12px" }} />
-																		</IconButton>
-																	</Box>
+																			<Typography noWrap sx={{ fontSize: "10px" }}>
+																				{ele?.createdByUser?.firstName ? (
+																					<span>{`${ele?.createdByUser?.firstName}`}</span>
+																				) : (
+																					<span>{`${ele?.createdByUser?.userName || "userName"}`}</span>
+																				)}
+																			</Typography>
+																			<IconButton
+																				sx={{ padding: "2.5px" }}
+																				onClick={() => {
+																					setModalType("comment");
+																					setDeleteModal((prev) => ({
+																						...prev,
+																						open: true,
+																						commentId: commentId,
+																					}));
+																				}}>
+																				<Delete sx={{ fontSize: "12px" }} />
+																			</IconButton>
+																		</Box>
 
-																	<Typography>{ele?.text}</Typography>
+																		<Typography>{ele?.text}</Typography>
+																	</Box>
 																</Box>
-															</Box>
-														</Grid>
-														{/* <Grid item xs={8}>
+															</Grid>
+															{/* <Grid item xs={8}>
 													<span>{ele?.text}</span>
 												</Grid> */}
-													</React.Fragment>
-												);
-											})
-										) : (
-											<Grid item xs={12}>
-												<Typography>No Comments !</Typography>
-											</Grid>
-										)}
-									</Grid>
+														</React.Fragment>
+													);
+												})
+											) : (
+												<Grid item xs={12}>
+													<Typography>No Comments !</Typography>
+												</Grid>
+											)}
+										</Grid>
+									</Box>
+									<Stack
+										flexDirection='row'
+										alignItems='center'
+										justifyContent={"space-between"}
+										spacing={2}>
+										<TextField
+											name='commentText'
+											value={commentText}
+											onChange={(event) => setCommentText(event?.target?.value)}
+											hiddenLabel
+											size='small'
+											placeholder='Enter Comment'
+											variant='filled'
+											sx={{ padding: "2px 2px", width: "100%" }}
+										/>
+										<Button
+											sx={{ marginTop: "0px !important" }}
+											variant='contained'
+											disabled={commentText === ""}
+											onClick={() => commentApiCall(params?.id, commentText)}>
+											submit
+										</Button>
+									</Stack>
 								</Box>
 							</TabPanel>
 						</Card>

@@ -158,7 +158,7 @@ function NotificationList() {
 		listNotification({
 			page: pagination?.page,
 			pageSize: pagination?.pageSize,
-			eventCode: "ADMIN_NOTIFICATION",
+			eventCode: ["ADMIN_NOTIFICATION"],
 		})
 			.then((res) => {
 				const resp = res?.content?.map((item, index) => ({

@@ -29,101 +29,93 @@ import { MainContext } from "../../../context/Context";
 import SnackbarContext from "../../../CustomComponents/SnackbarContext";
 import "../alert.css";
 import Compressor from "compressorjs";
-import MyGoogleMap from "../../Neighbourhoods/Map/GoogleMap";
 import { v4 as uuidv4 } from "uuid";
-import SuspiciousVehicle from "../../../assets/alerticonset/SuspiciusVehicle.png";
-import SuspiciousPerson from "../../../assets/alerticonset/SuspiciusPerson.png";
-import HouseBreakIn from "../../../assets/alerticonset/HouseBreak-In.png";
-import CarVandalism from "../../../assets/alerticonset/CarVandalism.png";
-import TheftRobbery from "../../../assets/alerticonset/Theft-Robbery.png";
-import ViolenceAssault from "../../../assets/alerticonset/Violence-Assault.png";
-import HitRun from "../../../assets/alerticonset/Hit&Run.png";
-import SuspiciousActivity from "../../../assets/alerticonset/SuspiciusActivity.png";
-import PoliceRoadblock from "../../../assets/alerticonset/PoliceRoadblock.png";
-import fire from "../../../assets/alerticonset/fire.png";
-import thunder from "../../../assets/alerticonset/thunder.png";
-import pawprint from "../../../assets/alerticonset/pawprint.png";
-import edit from "../../../assets/alerticonset/edit.png";
-import NewGoogleMap from "../../Neighbourhoods/Map/NewGoogleMap";
+import SuspiciousActivity from "../../../assets/alerticonset/SuspiciousActivity.webp";
+import SuspiciousPerson from "../../../assets/alerticonset/Suspiciousperson.webp";
+import MissingPerson from "../../../assets/alerticonset/Missingperson.webp";
+import Fire from "../../../assets/alerticonset/Fire.webp";
+import Accident from "../../../assets/alerticonset/Accident.webp";
+import Roadblock from "../../../assets/alerticonset/Roadblock.webp";
+import Water from "../../../assets/alerticonset/Water.webp";
+import Electricity from "../../../assets/alerticonset/Electricity.webp";
+import Petmissing from "../../../assets/alerticonset/Petmissing.webp";
+import Suspiciousvehical from "../../../assets/alerticonset/Suspiciousvehical.webp";
+import General from "../../../assets/alerticonset/General.webp";
+import Other from "../../../assets/alerticonset/Other.webp";
+
 import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
 
 const eventData = [
 	{
-		icon: "tow-truck",
-		img: SuspiciousVehicle,
-		name: "Suspicious Vehicle",
+		icon: "local-activity",
+		img: SuspiciousActivity,
+		name: "Suspicious activity",
 		select: false,
 	},
 	{
 		icon: "person",
 		img: SuspiciousPerson,
-		name: "Suspicious Person",
+		name: "Suspicious person",
 		select: false,
 	},
 	{
-		icon: "pets",
-		img: pawprint,
-		name: "Lost / Found Pet",
-		select: false,
-	},
-	{
-		icon: "robber",
-		img: HouseBreakIn,
-		name: "House Break-In",
-		select: false,
-	},
-	{
-		icon: "car",
-		img: CarVandalism,
-		name: "Car Vandalism",
-		select: false,
-	},
-	{
-		icon: "sound",
-		img: TheftRobbery,
-		name: "Theft/Robbery",
-		select: false,
-	},
-	{
-		icon: "car",
-		img: ViolenceAssault,
-		name: "Violence/Assault",
-		select: false,
-	},
-	{
-		icon: "car",
-		img: HitRun,
-		name: "Hit & Run",
-		select: false,
-	},
-	{
-		icon: "local-activity",
-		img: SuspiciousActivity,
-		name: "Suspicious Activity",
-		select: false,
-	},
-	{
-		icon: "road",
-		img: PoliceRoadblock,
-		name: "Police Roadblock",
+		icon: "missing-person",
+		img: MissingPerson,
+		name: "Missing person",
 		select: false,
 	},
 	{
 		icon: "fire",
-		img: fire,
-		name: "Fire",
+		img: Fire,
+		name: "Fire alert",
 		select: false,
 	},
 	{
-		icon: "lightning-bolt",
-		img: thunder,
-		name: "Power Cut",
+		icon: "accident",
+		img: Accident,
+		name: "Accident",
 		select: false,
 	},
 	{
-		icon: "others",
-		img: edit,
-		name: "Others",
+		icon: "road-block",
+		img: Roadblock,
+		name: "Road block",
+		select: false,
+	},
+	{
+		icon: "water-alert",
+		img: Water,
+		name: "Water alert",
+		select: false,
+	},
+	{
+		icon: "electricity-alert",
+		img: Electricity,
+		name: "Electricity alert",
+		select: false,
+	},
+	{
+		icon: "pet-missing",
+		img: Petmissing,
+		name: "Pet missing/found alert",
+		select: false,
+	},
+	{
+		icon: "suspicious-vehical",
+		img: Suspiciousvehical,
+		name: "Suspicious vehical",
+		select: false,
+	},
+	{
+		icon: "general",
+		img: General,
+		name: "General",
+		select: false,
+	},
+	{
+		icon: "other",
+		img: Other,
+		name: "Other",
 		select: false,
 	},
 ];
@@ -156,6 +148,7 @@ function CreateAlert() {
 		},
 	});
 
+	console.log("DATA", data);
 	const [imgShow, setImgShow] = React.useState([]);
 
 	const CreateAlertApiCall = React.useCallback((payloadData) => {
@@ -420,7 +413,7 @@ function CreateAlert() {
 					cityName: locationData?.address,
 				});
 			} else {
-				if (data?.eventName === "Others") {
+				if (data?.eventName === "Other") {
 					CreateAlertApiCall({
 						...data,
 						title: eventTitle,
@@ -651,7 +644,7 @@ function CreateAlert() {
 											</RadioGroup>
 										</FormControl>
 									</Grid>
-									{data?.eventName === "Others" && (
+									{data?.eventName === "Other" && (
 										<Grid item xs={12}>
 											<TextField
 												required

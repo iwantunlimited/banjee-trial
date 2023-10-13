@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
 	Container,
 	Grid,
@@ -69,6 +69,8 @@ export default function SocialFeed(props) {
 
 	const [startDate, setStartDate] = React.useState(null);
 	const [endDate, setEndDate] = React.useState(null);
+	const [openStartDate, setOpenStartDate] = React.useState(false);
+	const [openEndDate, setOpenEndDate] = React.useState(false);
 	const [dateFilter, setDateFilter] = React.useState({
 		startDate: null,
 		endDate: null,
@@ -158,11 +160,22 @@ export default function SocialFeed(props) {
 									name='startDate'
 									label='Start Date'
 									value={startDate}
+									open={openStartDate}
+									onOpen={() => setOpenStartDate(true)}
+									onClose={() => setOpenEndDate(false)}
 									onChange={(newValue) => {
 										setStartDate(moment(newValue).set({ hour: 0, minute: 0, second: 0 }).format());
 									}}
 									renderInput={(params) => (
-										<TextField size='small' helperText={params?.InputProps?.placeholder} {...params} />
+										<TextField
+											onClick={() => {
+												setOpenEndDate(false);
+												setOpenStartDate(true);
+											}}
+											size='small'
+											helperText={params?.InputProps?.placeholder}
+											{...params}
+										/>
 									)}
 								/>
 							</LocalizationProvider>
@@ -175,13 +188,25 @@ export default function SocialFeed(props) {
 									name='endDate'
 									label='End Date'
 									value={endDate}
+									open={openEndDate}
+									onOpen={() => setOpenEndDate(true)}
+									onClose={() => setOpenEndDate(false)}
 									onChange={(newValue) => {
 										// const nowDate = moment(newValue).format("l") === moment().format("l");
 										// console.log("now date", nowDate);
 										// console.log("now date ---", moment().format());
 										setEndDate(moment(newValue).set({ hour: 23, minute: 59, second: 58 }).format());
 									}}
-									renderInput={(params) => <TextField size='small' {...params} />}
+									renderInput={(params) => (
+										<TextField
+											onClick={() => {
+												setOpenEndDate(true);
+												setOpenStartDate(false);
+											}}
+											size='small'
+											{...params}
+										/>
+									)}
 								/>
 							</LocalizationProvider>
 						</Box>

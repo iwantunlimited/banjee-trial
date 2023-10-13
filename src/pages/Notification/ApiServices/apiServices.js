@@ -40,7 +40,7 @@ export const findByIdBlog = (requestLoad) => {
 };
 
 export let listNotification = (requestLoad) => {
-	let url = urls.GEO_CLOUD.GEO_ALERT + "/filter";
+	let url = urls.GEO_CLOUD.GEO_ALERT + "filter";
 	let actionCode = "";
 	let payload = requestLoad;
 	let method = "POST";

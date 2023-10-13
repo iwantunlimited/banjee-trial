@@ -173,6 +173,7 @@ export function ApprovalList({
 				setModalData("Neighbourhood Rejected", "success");
 				handleTabChange(modal?.event, 1);
 				pendingListApiCall();
+				setReview("");
 			})
 			.catch((err) => console.error(err));
 	}, []);

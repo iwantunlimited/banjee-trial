@@ -28,6 +28,7 @@ import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
 import { MainContext } from "../../../../context/Context";
 import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
+import GroupFeed from "../../../Groups/components/GroupFeed";
 
 function DetailPage() {
 	const params = useParams();
@@ -683,6 +684,17 @@ function DetailPage() {
 									</Box>
 								)}
 							</Card>
+						</Grid>
+						<Grid item xs={12}>
+							<Box>
+								<Box sx={{ paddingY: "10px" }}>
+									<Typography sx={{ fontSize: "20px", color: "gray", fontWeight: "600" }}>
+										Neighbourhood Activity
+									</Typography>
+									<Divider />
+								</Box>
+								<GroupFeed groupId={params?.id} groupName={state?.name} />
+							</Box>
 						</Grid>
 					</Grid>
 				</Card>
