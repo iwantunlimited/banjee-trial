@@ -13,6 +13,7 @@ import {
 	VerifiedUser,
 	EditNotifications,
 } from "@mui/icons-material";
+import CampaignIcon from "@mui/icons-material/Campaign";
 import SocialFeed from "../Social_Feeds/Social_Feed";
 import UsersReport from "../Report/UsersReport";
 import Neighbourhood from "../Neighbourhoods/Neighbourhood";
@@ -32,6 +33,7 @@ import ActiveUsers from "../Report/ActiveUsers";
 import Automation from "../Notification/components/Automation/Automation";
 import { MainContext } from "../../context/Context";
 import BanjeeEvent from "../BanjeeEvent/BanjeeEvent";
+import LiveAlerts from "../LiveAlerts/LiveAlerts";
 
 function NavRouting(props) {
 	const userType = localStorage.getItem("userType");
@@ -41,21 +43,21 @@ function NavRouting(props) {
 			id: 1,
 			path: "/",
 			name: "Dashboard",
-			icon: <Dashboard fontSize='medium' />,
+			icon: <Dashboard fontSize="medium" />,
 			component: <DashboardTrial />,
 		},
 		{
 			id: 2,
 			path: "/category",
 			name: "Category",
-			icon: <CategoryIcon fontSize='medium' />,
+			icon: <CategoryIcon fontSize="medium" />,
 			component: <MainCategoryComp />,
 		},
 		{
 			id: 3,
 			path: "/user",
 			name: "Users",
-			icon: <PeopleAlt fontSize='medium' />,
+			icon: <PeopleAlt fontSize="medium" />,
 			component: <UserComp />,
 		},
 		// {
@@ -69,7 +71,7 @@ function NavRouting(props) {
 			id: 5,
 			path: "/social-feeds",
 			name: "Social Feeds",
-			icon: <ConnectWithoutContact fontSize='medium' />,
+			icon: <ConnectWithoutContact fontSize="medium" />,
 			component: <SocialFeed />,
 		},
 		// {
@@ -99,28 +101,28 @@ function NavRouting(props) {
 			id: 9,
 			path: "/neighbourhood",
 			name: "Neighbourhood",
-			icon: <ConnectWithoutContact fontSize='medium' />,
+			icon: <ConnectWithoutContact fontSize="medium" />,
 			component: <Neighbourhood />,
 		},
 		{
 			id: 10,
 			path: "/explore",
 			name: "Explore",
-			icon: <TravelExplore fontSize='medium' />,
+			icon: <TravelExplore fontSize="medium" />,
 			component: <Explore />,
 			children: [
 				{
 					id: 11,
 					path: "/explore",
 					name: "Business",
-					icon: <TravelExplore fontSize='medium' />,
+					icon: <TravelExplore fontSize="medium" />,
 					component: <Explore />,
 				},
 				{
 					id: 12,
 					path: "/explore/blogs",
 					name: "Blogs",
-					icon: <TravelExplore fontSize='medium' />,
+					icon: <TravelExplore fontSize="medium" />,
 					component: <ExploreBlogs />,
 				},
 			],
@@ -130,14 +132,14 @@ function NavRouting(props) {
 			id: 13,
 			path: "/banjee-alert",
 			name: "Banjee Alert",
-			icon: <NotificationImportant fontSize='medium' />,
+			icon: <NotificationImportant fontSize="medium" />,
 			component: <BanjeeAlert />,
 		},
 		{
 			id: 22,
 			path: "/banjee-event",
 			name: "Banjee Event",
-			icon: <NotificationImportant fontSize='medium' />,
+			icon: <NotificationImportant fontSize="medium" />,
 			component: <BanjeeEvent />,
 		},
 
@@ -145,28 +147,28 @@ function NavRouting(props) {
 			id: 14,
 			path: "/notification",
 			name: "Notification",
-			icon: <Notifications fontSize='medium' />,
+			icon: <Notifications fontSize="medium" />,
 			component: <Notification />,
 			children: [
 				{
 					id: 15,
 					path: "/notification/template",
 					name: "Template",
-					icon: <Notifications fontSize='medium' />,
+					icon: <Notifications fontSize="medium" />,
 					component: <Announcement />,
 				},
 				{
 					id: 16,
 					path: "/notification",
 					name: "Notification",
-					icon: <Notifications fontSize='medium' />,
+					icon: <Notifications fontSize="medium" />,
 					component: <Notification />,
 				},
 				{
 					id: 21,
 					path: "/notification/automation",
 					name: "Automation",
-					icon: <EditNotifications fontSize='medium' />,
+					icon: <EditNotifications fontSize="medium" />,
 					component: <Automation />,
 				},
 			],
@@ -175,31 +177,38 @@ function NavRouting(props) {
 			id: 17,
 			path: "/groups",
 			name: "Groups",
-			icon: <PeopleAlt fontSize='medium' />,
+			icon: <PeopleAlt fontSize="medium" />,
 			component: <GroupComp />,
 		},
 		{
 			id: 18,
 			path: "/report",
 			name: "Report",
-			icon: <Summarize fontSize='medium' />,
+			icon: <Summarize fontSize="medium" />,
 			component: <Reports />,
 			children: [
 				{
 					id: 19,
 					path: "/report",
 					name: "Users",
-					icon: <PeopleAlt fontSize='medium' />,
+					icon: <PeopleAlt fontSize="medium" />,
 					component: <Reports />,
 				},
 				{
 					id: 20,
 					path: "/report/activeUsers",
 					name: "Active Users",
-					icon: <VerifiedUser fontSize='medium' />,
+					icon: <VerifiedUser fontSize="medium" />,
 					component: <ActiveUsers />,
 				},
 			],
+		},
+		{
+			id: 23,
+			path: "/livealerts",
+			name: "Live Alerts",
+			icon: <CampaignIcon fontSize="medium" />,
+			component: <LiveAlerts />,
 		},
 		// {
 		//     id:3,
@@ -215,14 +224,14 @@ function NavRouting(props) {
 			id: 5,
 			path: "/",
 			name: "Social Feeds",
-			icon: <ConnectWithoutContact fontSize='medium' />,
+			icon: <ConnectWithoutContact fontSize="medium" />,
 			component: <SocialFeed />,
 		},
 		{
 			id: 13,
 			path: "/banjee-alert",
 			name: "Banjee Alert",
-			icon: <NotificationImportant fontSize='medium' />,
+			icon: <NotificationImportant fontSize="medium" />,
 			component: <BanjeeAlert />,
 		},
 

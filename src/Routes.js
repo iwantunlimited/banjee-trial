@@ -55,7 +55,7 @@ import Loader from "./pages/Loader/Loader";
 import BanjeeEvent from "./pages/BanjeeEvent/BanjeeEvent";
 import ViewEvent from "./pages/BanjeeEvent/components/ViewEvent";
 import CreateEvent from "./pages/BanjeeEvent/components/CreateEvent";
-import MapWithSearch from "./CustomComponents/TrialMap";
+import LiveAlerts from "./pages/LiveAlerts/LiveAlerts";
 import { Box } from "@mui/material";
 import MapContainer from "./CustomComponents/TrialMap";
 
@@ -296,6 +296,11 @@ const Routes = () => {
 			path: "/groups/:id",
 			element: <GroupDetailPage />,
 		},
+		{
+			path: "/livealerts",
+			element: <LiveAlerts />,
+		},
+
 		// {
 		//     path: '/account',
 		//     element: <Account />
