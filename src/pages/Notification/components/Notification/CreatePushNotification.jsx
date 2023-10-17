@@ -40,6 +40,7 @@ function CreatePushNotification() {
 		eventName: "",
 		// cloudIds: [],
 		description: "",
+		type: "ALERT",
 		audioSrc: "",
 		imageUrl: [],
 		videoUrl: [],
@@ -90,6 +91,7 @@ function CreatePushNotification() {
 					eventCode: "ADMIN_NOTIFICATION",
 					eventName: "",
 					// cloudIds: [],
+					type: "ALERT",
 					description: "",
 					audioSrc: "",
 					imageUrl: [],
@@ -604,9 +606,7 @@ function CreatePushNotification() {
 																				}
 																				return item;
 																			});
-																			setImgShow((prev) =>
-																				prev?.filter((data) => data?.id !== item?.id)
-																			);
+																			setImgShow((prev) => prev?.filter((data) => data?.id !== item?.id));
 																		}}
 																		sx={{
 																			position: "absolute",
@@ -617,11 +617,7 @@ function CreatePushNotification() {
 																		}}>
 																		<Cancel fontSize='small' style={{ color: "brown" }} />
 																	</IconButton>
-																	<img
-																		src={item?.data}
-																		alt={item.id}
-																		style={{ width: "100%", height: "100%" }}
-																	/>
+																	<img src={item?.data} alt={item.id} style={{ width: "100%", height: "100%" }} />
 																</Box>
 															);
 														} else {
@@ -680,9 +676,7 @@ function CreatePushNotification() {
 																				}
 																				return item;
 																			});
-																			setImgShow((prev) =>
-																				prev?.filter((data) => data?.id !== item?.id)
-																			);
+																			setImgShow((prev) => prev?.filter((data) => data?.id !== item?.id));
 																		}}
 																		sx={{
 																			position: "absolute",
@@ -822,9 +816,7 @@ function CreatePushNotification() {
 																				}
 																				return item;
 																			});
-																			setAudioShow((prev) =>
-																				prev?.filter((data) => data?.id !== item?.id)
-																			);
+																			setAudioShow((prev) => prev?.filter((data) => data?.id !== item?.id));
 																		}}
 																		sx={{
 																			position: "absolute",
