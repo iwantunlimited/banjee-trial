@@ -35,6 +35,7 @@ import dayjs from "dayjs";
 import moment from "moment";
 
 function CreateFeed() {
+	const userType = localStorage.getItem("userType");
 	const navigate = useNavigate();
 	const [cloudinaryData, setCloudinaryData] = React.useState({
 		type: "image",
@@ -86,7 +87,6 @@ function CreateFeed() {
 	});
 
 	const [imgShow, setImgShow] = React.useState([]);
-	const [userType, setUserType] = React.useState("admin");
 
 	const renderType = (type, src) => {
 		switch (type) {
@@ -357,10 +357,6 @@ function CreateFeed() {
 		listNeighbourApiCAll();
 	}, [listNeighbourApiCAll]);
 
-	React.useEffect(() => {
-		setUserType(localStorage?.getItem("merchant"));
-	}, [localStorage?.getItem("merchant")]);
-
 	// const descriptionText = <div dangerouslySetInnerHTML={{ __html: state }} />;
 
 	return (
@@ -613,9 +609,7 @@ function CreateFeed() {
 																				}
 																				return item;
 																			});
-																			setImgShow((prev) =>
-																				prev?.filter((data) => data?.id !== item?.id)
-																			);
+																			setImgShow((prev) => prev?.filter((data) => data?.id !== item?.id));
 																		}}
 																		sx={{
 																			position: "absolute",
@@ -626,11 +620,7 @@ function CreateFeed() {
 																		}}>
 																		<Cancel fontSize='small' style={{ color: "brown" }} />
 																	</IconButton>
-																	<img
-																		src={item?.data}
-																		alt={item?.id}
-																		style={{ width: "100%", height: "100%" }}
-																	/>
+																	<img src={item?.data} alt={item?.id} style={{ width: "100%", height: "100%" }} />
 																</Box>
 															</React.Fragment>
 														);
@@ -689,9 +679,7 @@ function CreateFeed() {
 																			}
 																			return item;
 																		});
-																		setImgShow((prev) =>
-																			prev?.filter((data) => data?.id !== item?.id)
-																		);
+																		setImgShow((prev) => prev?.filter((data) => data?.id !== item?.id));
 																	}}
 																	sx={{
 																		position: "absolute",
