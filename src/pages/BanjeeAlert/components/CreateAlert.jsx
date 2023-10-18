@@ -44,6 +44,7 @@ import General from "../../../assets/alerticonset/General.webp";
 import Other from "../../../assets/alerticonset/Other.webp";
 
 import GoogleMapCustom from "../../../CustomComponents/GoogleMap";
+import useLocation from "../../../hook/useLocation";
 
 const eventData = [
 	{
@@ -120,6 +121,9 @@ const eventData = [
 	},
 ];
 
+const localLat = localStorage.getItem("lat");
+const localLng = localStorage.getItem("lng");
+
 function CreateAlert() {
 	const context = React.useContext(MainContext);
 
@@ -128,6 +132,10 @@ function CreateAlert() {
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [eventTitle, setEventTitle] = React.useState("");
+
+	const location = useLocation();
+
+	// console.log("location", location);
 
 	const [data, setData] = React.useState({
 		anonymous: false,
@@ -139,16 +147,16 @@ function CreateAlert() {
 		imageUrl: [],
 		videoUrl: [],
 		metaInfo: {
-			address: "",
+			address: location?.address ? location?.address : "",
 		},
 		sendTo: "TO_NEARBY",
 		location: {
-			coordinates: [0, 0],
+			coordinates: [localLng ? localLng : 0, localLat ? localLat : 0],
 			type: "Point",
 		},
 	});
 
-	console.log("DATA", data);
+	// console.log("DATA", data);
 	const [imgShow, setImgShow] = React.useState([]);
 
 	const CreateAlertApiCall = React.useCallback((payloadData) => {
@@ -166,11 +174,11 @@ function CreateAlert() {
 					imageUrl: [],
 					videoUrl: [],
 					metaInfo: {
-						address: "",
+						address: location?.address ? location?.address : "",
 					},
 					sendTo: "TO_NEARBY",
 					location: {
-						coordinates: [0, 0],
+						coordinates: [localLng ? localLng : 0, localLat ? localLat : 0],
 						type: "Point",
 					},
 				});

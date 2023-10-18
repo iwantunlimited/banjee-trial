@@ -38,6 +38,7 @@ import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import moment from "moment";
 import dayjs from "dayjs";
+import useLocation from "../../../hook/useLocation";
 
 const eventData = [
 	"Celebration",
@@ -50,6 +51,9 @@ const eventData = [
 	"Other",
 ];
 
+const localLat = localStorage.getItem("lat");
+const localLng = localStorage.getItem("lng");
+
 function CreateEvent() {
 	const context = React.useContext(MainContext);
 
@@ -58,6 +62,7 @@ function CreateEvent() {
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [eventTitle, setEventTitle] = React.useState("");
+	const location = useLocation();
 
 	const [data, setData] = React.useState({
 		anonymous: false,
@@ -72,11 +77,11 @@ function CreateEvent() {
 		imageUrl: [],
 		videoUrl: [],
 		metaInfo: {
-			address: "",
+			address: location?.address ? location?.address : "",
 		},
 		sendTo: "TO_NEARBY",
 		location: {
-			coordinates: [0, 0],
+			coordinates: [localLng ? localLng : 0, localLat ? localLat : 0],
 			type: "Point",
 		},
 	});
@@ -101,11 +106,11 @@ function CreateEvent() {
 					imageUrl: [],
 					videoUrl: [],
 					metaInfo: {
-						address: "",
+						address: location?.address ? location?.address : "",
 					},
 					sendTo: "TO_NEARBY",
 					location: {
-						coordinates: [0, 0],
+						coordinates: [localLng ? localLng : 0, localLat ? localLat : 0],
 						type: "Point",
 					},
 				});

@@ -28,6 +28,9 @@ import SnackbarContext from "../../../../CustomComponents/SnackbarContext";
 import Compressor from "compressorjs";
 import { v4 as uuidv4 } from "uuid";
 
+const localLat = localStorage.getItem("lat");
+const localLng = localStorage.getItem("lng");
+
 function CreatePushNotification() {
 	const context = React.useContext(MainContext);
 
@@ -49,7 +52,7 @@ function CreatePushNotification() {
 		},
 		sendTo: "ELSE",
 		location: {
-			coordinates: [72.51113723963499, 23.069438702322635],
+			coordinates: [localLng ? localLng : 0, localLat ? localLat : 0],
 			type: "Point",
 		},
 	});
@@ -61,9 +64,6 @@ function CreatePushNotification() {
 	const [audioUploaded, setAudioUploaded] = React.useState(false);
 	const [neighbourList, setNeighbourList] = React.useState("");
 	const [blogList, setBLogList] = React.useState("");
-
-	const localLat = localStorage.getItem("lat");
-	const localLng = localStorage.getItem("lng");
 
 	const NeighbourListApi = React.useCallback(() => {
 		filterNeighbourhood({ page: 0, size: 1000, online: true })
@@ -101,7 +101,7 @@ function CreatePushNotification() {
 					},
 					sendTo: "ELSE",
 					location: {
-						coordinates: [localLng, localLat],
+						coordinates: [localLng ? localLng : 0, localLat ? localLat : 0],
 						type: "Point",
 					},
 				});
