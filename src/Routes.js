@@ -58,6 +58,7 @@ import CreateEvent from "./pages/BanjeeEvent/components/CreateEvent";
 import LiveAlerts from "./pages/LiveAlerts/LiveAlerts";
 import { Box } from "@mui/material";
 import MapContainer from "./CustomComponents/TrialMap";
+import Thoughts from "./pages/Thoughts/Thoughts";
 
 const Routes = () => {
 	const navigate = useNavigate();
@@ -299,6 +300,10 @@ const Routes = () => {
 		{
 			path: "/livealerts",
 			element: <LiveAlerts />,
+		},
+		{
+			path: "/thoughts",
+			element: <Thoughts />,
 		},
 
 		// {
