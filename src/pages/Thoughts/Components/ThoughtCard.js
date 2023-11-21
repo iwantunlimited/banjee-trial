@@ -8,9 +8,6 @@ import { Delete } from "@mui/icons-material";
 export default function ThoughtCard({ ele, setOpen, setDeleteThoughtId }) {
 	const theme = useTheme();
 	const { themeData } = React.useContext(MainContext);
-	console.log("====================================");
-	console.log(ele);
-	console.log("====================================");
 	return (
 		<>
 			<Card

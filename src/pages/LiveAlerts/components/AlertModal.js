@@ -24,68 +24,6 @@ const style = {
 	boxShadow: 24,
 	p: 4,
 };
-// const dummyData = {
-// 	type: "PANIC",
-// 	id: "650c0e33643f8e3f27c3a03f",
-// 	eventCode: "NEW_ALERT",
-// 	eventName: "Alert",
-// 	createdBy: "642a75b7d5d0641c6f3deb97",
-// 	createdByUser: {
-// 		lastName: "Sparrow",
-// 		userName: "jackekek",
-// 		mobile: "1122334455",
-// 		mcc: "+267",
-// 		type: "CUSTOMER",
-// 		authorities: ["ROLE_CUSTOMER"],
-// 		externalReferenceId: "642a75b63ff05177283a7d92",
-// 		firstName: "Jack",
-// 		domain: "208991",
-// 		id: "642a75b7d5d0641c6f3deb97",
-// 		userType: 0,
-// 		email: "jacksparrow@blackpearl.in",
-// 		domainSsid: "208991",
-// 		locale: "eng",
-// 		timeZoneId: "GMT",
-// 		profileImageUrl: null,
-// 		avtarImageUrl: "642a75fecc217c465e3c8a91",
-// 		realm: "banjee",
-// 	},
-// 	createdOn: "2023-09-21T09:34:43.403+00:00",
-// 	sendTo: "CLOUD",
-// 	location: {
-// 		type: "Point",
-// 		coordinates: [72.5015153, 23.0498009],
-// 	},
-// 	audioSrc: null,
-// 	imageUrl: [],
-// 	videoUrl: [],
-// 	description: "Test",
-// 	metaInfo: {
-// 		address:
-// 			"708, Time Square Arcade, Thaltej - Shilaj Rd, Thaltej, Ahmedabad, Gujarat 380059, India",
-// 	},
-// 	anonymous: true,
-// 	deleted: false,
-// 	reportCount: 0,
-// 	confirmIncidenceCount: 0,
-// 	cityId: null,
-// 	cityName: null,
-// 	confirmIncidence: false,
-// 	totalComments: null,
-// 	emergencyUserIds: null,
-// 	cloudId: "6419756145c92819895d361e",
-// 	distance: null,
-// 	date: "2023-09-21T09:34:40.050+00:00",
-// 	startTime: null,
-// 	endTime: null,
-// 	token: "Fire Fir Test Tes",
-// 	title: null,
-// 	stopEmergency: false,
-// 	confirmByUsers: [],
-// 	usersOnWay: [],
-// 	totalUsersOnWay: 0,
-// 	stopTime: null,
-// };
 const useAudio = (url) => {
 	const [audio] = useState(new Audio(url));
 	const [playing, setPlaying] = useState(false);
@@ -120,7 +58,6 @@ export default function AlertModal({ open, data, handleClose }) {
 
 	const [emergencyAudio, playEmergencyAudio] = useAudio(emergencyUrl);
 	const [alertAudio, playAlertAudio] = useAudio(alertUrl);
-	console.log("Data==============>", data, open);
 
 	React.useEffect(() => {
 		setTimeout(() => {

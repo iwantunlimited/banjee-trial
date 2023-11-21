@@ -20,7 +20,6 @@ export default function LiveAlerts() {
 				const date = new Date();
 				const content = res.content.filter((alert) => {
 					const today = moment(date).format("L");
-					console.log(today === moment(alert.createdOn).format("L"));
 					return (
 						today === moment(alert.createdOn).format("L") &&
 						alert.createdBy !== "61111e42bcc68b2a1fa3432c"
@@ -66,7 +65,8 @@ export default function LiveAlerts() {
 						zIndex: 1,
 						backgroundColor: "rgba(0, 0, 0, 0.10)",
 						width: "100%",
-					}}>
+					}}
+				>
 					<Box
 						sx={{
 							display: "flex",
@@ -75,17 +75,25 @@ export default function LiveAlerts() {
 							width: "auto",
 							overflowX: "auto",
 							overflowY: "hidden",
-						}}>
+						}}
+					>
 						<Swiper
 							spaceBetween={20}
 							slidesPerView={4}
 							modules={[Navigation, A11y]}
 							navigation
-							style={{ width: "100%" }}>
+							style={{ width: "100%" }}
+						>
 							{alertList?.map((alert, index) => {
 								return (
-									<SwiperSlide key={index} virtualIndex={index}>
-										<AlertCard handleData={handleData} alert={alert} />
+									<SwiperSlide
+										key={index}
+										virtualIndex={index}
+									>
+										<AlertCard
+											handleData={handleData}
+											alert={alert}
+										/>
 									</SwiperSlide>
 								);
 							})}
@@ -116,7 +124,8 @@ export default function LiveAlerts() {
 						width: "100%",
 						display: "flex",
 						justifyContent: "center",
-					}}>
+					}}
+				>
 					<Paper
 						sx={{
 							padding: "10px",
@@ -126,8 +135,12 @@ export default function LiveAlerts() {
 							"&:hover": {
 								backgroundColor: "#f0f0f0",
 							},
-						}}>
-						<Typography variant='h4' sx={{ textAlign: "center", fontWeight: "bold" }}>
+						}}
+					>
+						<Typography
+							variant="h4"
+							sx={{ textAlign: "center", fontWeight: "bold" }}
+						>
 							No live alert today
 						</Typography>
 					</Paper>
@@ -142,7 +155,8 @@ export default function LiveAlerts() {
 					justifyContent: "center",
 					alignItems: "center",
 					height: "80vh",
-				}}>
+				}}
+			>
 				<CircularProgress />
 			</div>
 		);
