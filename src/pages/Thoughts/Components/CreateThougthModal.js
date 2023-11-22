@@ -7,6 +7,7 @@ export default function CreateThougthModal({
 	openCreateModal,
 	setOpenCreateModal,
 	getThoughtsApiCall,
+	setIsLoading,
 }) {
 	const { setModalData, setModalOpen } = React.useContext(MainContext);
 	const createThoughtApiCall = () => {
@@ -16,16 +17,15 @@ export default function CreateThougthModal({
 			cloudname: "Global-Feeds",
 		})
 			.then((res) => {
+				getThoughtsApiCall();
 				setOpenCreateModal(false);
 				setModalOpen(true);
 				setModalData("Thought Created Successfully", "success");
-				getThoughtsApiCall();
 			})
 			.catch((err) => {
-				if (err === "-404:You've already shared a thought") {
-					setModalOpen(true);
-					setModalData("You've already shared a thought", "error");
-				}
+				console.log("====================================");
+				console.log(err);
+				console.log("====================================");
 			});
 	};
 

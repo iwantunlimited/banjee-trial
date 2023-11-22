@@ -17,10 +17,9 @@ export default function DeleteThoughtModal({
 			cloudname: "Global-Feeds",
 		})
 			.then(() => {
-				setOpen(false);
+				getThoughtsApiCall();
 				setModalOpen(true);
 				setModalData("Thought Deleted Successfully", "success");
-				getThoughtsApiCall();
 			})
 			.catch((err) => {
 				console.log("====================================");
@@ -68,6 +67,7 @@ export default function DeleteThoughtModal({
 					<Button
 						variant="contained"
 						onClick={() => {
+							setOpen(false);
 							deleteThoughtApiCall();
 						}}
 						sx={{ float: "right" }}

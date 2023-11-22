@@ -22,17 +22,37 @@ export default function Thoughts() {
 	const [openCreateModal, setOpenCreateModal] = React.useState(false);
 	const [deleteModal, setDeleteModal] = React.useState(false);
 	const [deleteThoughtId, setDeleteThoughtId] = React.useState("");
+	const [loading, setLoading] = useState(false);
 	const getThoughtsApiCall = React.useCallback(() => {
-		getThoughts({ cloudId: "62401d53e3a009309544d3e8" }).then((res) => {
-			setThoughts(res.content);
-		});
+		setLoading(true);
+		getThoughts({ cloudId: "62401d53e3a009309544d3e8" })
+			.then((res) => {
+				setThoughts(res.content);
+			})
+			.finally(() => {
+				setLoading(false);
+			});
 	}, []);
 
 	React.useEffect(() => {
 		getThoughtsApiCall();
 	}, [getThoughtsApiCall]);
 
-	if (thoughts) {
+	if (loading) {
+		return (
+			<Box
+				style={{
+					height: "100vh",
+					width: "100%",
+					display: "flex",
+					justifyContent: "center",
+					alignItems: " center",
+				}}
+			>
+				<CircularProgress />
+			</Box>
+		);
+	} else if (thoughts) {
 		return (
 			<>
 				<Card
@@ -54,10 +74,12 @@ export default function Thoughts() {
 								textAlign: "left",
 							}}
 						>
-							Thoughts({thoughts?.length})
+							Thoughts
+							{/* ({thoughts?.length}) */}
 						</Typography>
 					</Box>
-					<Box sx={{ display: "flex", alignItems: "center" }}>
+
+					{thoughts?.length === 0 && (
 						<Box sx={{ marginLeft: "10px" }}>
 							<Tooltip title="Create Thougth">
 								<IconButton
@@ -75,31 +97,7 @@ export default function Thoughts() {
 								</IconButton>
 							</Tooltip>
 						</Box>
-						{/* <Box sx={{ marginLeft: "10px" }}>
-					<Tooltip title="Refresh Feeds">
-						<IconButton
-							onClick={() => {
-								setFeedPagination({ page: undefined, pageSize: undefined });
-								setPagination({ page: 0, pageSize: 10 });
-								setDateFilter({
-									startDate: null,
-									endDate: null,
-								});
-								setStartDate(null);
-								setEndDate(null);
-							}}
-							style={{
-								borderRadius: "50px",
-								background: theme.palette.primary.main,
-								padding: window.innerWidth < 501 ? "5px" : "10px",
-								color: theme.palette.primary.contrastText,
-							}}
-						>
-							<Refresh />
-						</IconButton>
-					</Tooltip>
-				</Box> */}
-					</Box>
+					)}
 
 					<CreateThougthModal
 						openCreateModal={openCreateModal}
@@ -124,10 +122,10 @@ export default function Thoughts() {
 									<Grid
 										item
 										xs={12}
-										sm={6}
-										md={4}
-										lg={4}
-										xl={4}
+										sm={12}
+										md={12}
+										lg={12}
+										xl={12}
 										key={index}
 									>
 										<ThoughtCard
@@ -143,8 +141,6 @@ export default function Thoughts() {
 				) : (
 					<Box
 						style={{
-							height: "100vh",
-							width: "100%",
 							display: "flex",
 							justifyContent: "center",
 							alignItems: " center",
