@@ -58,6 +58,7 @@ import CreateEvent from "./pages/BanjeeEvent/components/CreateEvent";
 import MapWithSearch from "./CustomComponents/TrialMap";
 import { Box } from "@mui/material";
 import MapContainer from "./CustomComponents/TrialMap";
+import Thoughts from "./pages/Thoughts/Thoughts";
 
 const Routes = () => {
 	const navigate = useNavigate();
@@ -295,6 +296,10 @@ const Routes = () => {
 		{
 			path: "/groups/:id",
 			element: <GroupDetailPage />,
+		},
+		{
+			path: "/thoughts",
+			element: <Thoughts />,
 		},
 		// {
 		//     path: '/account',
