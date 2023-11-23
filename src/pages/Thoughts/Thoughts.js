@@ -118,23 +118,21 @@ export default function Thoughts() {
 					>
 						{thoughts?.map((ele, index) => {
 							return (
-								<>
-									<Grid
-										item
-										xs={12}
-										sm={12}
-										md={12}
-										lg={12}
-										xl={12}
-										key={index}
-									>
-										<ThoughtCard
-											ele={ele}
-											setOpen={setDeleteModal}
-											setDeleteThoughtId={setDeleteThoughtId}
-										/>
-									</Grid>
-								</>
+								<Grid
+									item
+									xs={12}
+									sm={12}
+									md={12}
+									lg={12}
+									xl={12}
+									key={index}
+								>
+									<ThoughtCard
+										ele={ele}
+										setOpen={setDeleteModal}
+										setDeleteThoughtId={setDeleteThoughtId}
+									/>
+								</Grid>
 							);
 						})}
 					</Grid>
