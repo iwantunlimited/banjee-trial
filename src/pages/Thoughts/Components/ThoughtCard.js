@@ -17,35 +17,30 @@ export default function ThoughtCard({ ele, setOpen, setDeleteThoughtId }) {
 					width: "100%",
 					// height: "100%",
 					// minHeight: "250px",
-					boxShadow:
-						"rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset",
+					boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset",
 					borderRadius: "8px",
 					background: themeData === false ? "#FFF" : "default",
 					cursor: "pointer",
 					"&:hover": {
 						background: themeData === false ? theme?.palette.grey.A700 : "#323232",
 					},
-				}}
-			>
+				}}>
 				<Box
 					sx={{
 						paddingX: "14px",
 						width: "100%",
-					}}
-				>
+					}}>
 					<Box
 						style={{
 							display: "flex",
 							justifyContent: "space-between",
 							alignItems: "center",
-						}}
-					>
+						}}>
 						<Box
 							style={{
 								display: "flex",
 								alignItems: "center",
-							}}
-						>
+							}}>
 							<Avatar
 								alt={ele?.user?.firstName}
 								src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${ele?.user?.avtarImageUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
@@ -61,8 +56,7 @@ export default function ThoughtCard({ ele, setOpen, setDeleteThoughtId }) {
 									padding: "10px 10px",
 									display: "flex",
 									flexDirection: "column",
-								}}
-							>
+								}}>
 								{ele?.user?.firstName ? (
 									<span
 										style={{
@@ -70,8 +64,7 @@ export default function ThoughtCard({ ele, setOpen, setDeleteThoughtId }) {
 											overflow: "hidden",
 											WebkitBoxOrient: "vertical",
 											WebkitLineClamp: 1,
-										}}
-									>{`${ele?.user?.firstName}`}</span>
+										}}>{`${ele?.user?.firstName}`}</span>
 								) : (
 									<span
 										style={{
@@ -79,8 +72,7 @@ export default function ThoughtCard({ ele, setOpen, setDeleteThoughtId }) {
 											overflow: "hidden",
 											WebkitBoxOrient: "vertical",
 											WebkitLineClamp: 1,
-										}}
-									>
+										}}>
 										{ele?.user?.username ? ele?.user?.username : "username"}
 									</span>
 								)}
@@ -90,9 +82,7 @@ export default function ThoughtCard({ ele, setOpen, setDeleteThoughtId }) {
 										{"Scheduled at " + moment(ele?.dateTime).format("dddd")}
 									</span>
 								) : (
-									<span style={{ fontSize: "12px" }}>
-										{moment(ele?.createdOn).format("lll")}
-									</span>
+									<span style={{ fontSize: "12px" }}>{moment(ele?.createdOn).format("lll")}</span>
 								)}
 							</Typography>
 						</Box>
@@ -101,8 +91,7 @@ export default function ThoughtCard({ ele, setOpen, setDeleteThoughtId }) {
 								setOpen(true);
 								setDeleteThoughtId(ele?.id);
 							}}
-							style={{ width: "40px", height: "40px" }}
-						>
+							style={{ width: "40px", height: "40px" }}>
 							<Delete />
 						</IconButton>
 					</Box>

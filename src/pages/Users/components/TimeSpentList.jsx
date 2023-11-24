@@ -31,6 +31,7 @@ function TimeSpentList(props) {
 			userId: props?.data,
 			page: pagination?.page,
 			pageSize: pagination?.pageSize,
+			// sortBy: "createdOn desc",
 		};
 		listActiveUsers(payload)
 			.then((res) => {
@@ -57,7 +58,7 @@ function TimeSpentList(props) {
 			.catch((err) => {
 				console.warn(err);
 			});
-	}, []);
+	}, [pagination]);
 
 	console.log("====================================");
 	console.log("state", state);

@@ -19,7 +19,7 @@ export const getThoughts = (requestLoad) => {
 };
 
 export const deleteThought = (requestLoad) => {
-	let url = urls.GEO_CLOUD.DELETE_THOUGHTS + `${requestLoad.id}`;
+	let url = urls.GEO_CLOUD.DELETE_THOUGHTS + requestLoad;
 	let actionCode = "";
 	let payload = requestLoad;
 	let method = "DELETE";

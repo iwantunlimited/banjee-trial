@@ -70,7 +70,8 @@ function FeedCard(props) {
 								}}>
 								<Avatar
 									alt={ele?.author?.userName}
-									src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${ele?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+									// src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${ele?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+									src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${ele?.author?.id}`}
 									style={{
 										height: "40px",
 										width: "40px",
