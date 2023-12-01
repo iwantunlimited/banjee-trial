@@ -18,6 +18,10 @@ const PaginationContext = React.createContext({
 	setNotificationPagination: () => {},
 	groupPagination: {},
 	setGroupPagination: () => {},
+	feedFilter: {},
+	setFeedFilter: () => {},
+	userFeedFilter: {},
+	setUserFeedFilter: () => {},
 });
 
 function ContextHandler({ children }) {
@@ -28,6 +32,12 @@ function ContextHandler({ children }) {
 	const [feedPagination, setFeedPagination] = React.useState({
 		page: undefined,
 		pageSize: undefined,
+	});
+	const [feedFilterData, setFeedFilterData] = React.useState({
+		page: 0,
+		pageSize: 10,
+		startDate: null,
+		endDate: null,
 	});
 	const [neighbourPagination, setNeighbourPagination] = React.useState({
 		page: undefined,
@@ -53,6 +63,10 @@ function ContextHandler({ children }) {
 		page: undefined,
 		pageSize: undefined,
 	});
+	const [userFeed, setUserFeed] = React.useState({
+		page: undefined,
+		pageSize: undefined,
+	});
 
 	function handlePagination(data) {
 		setPagination((prev) => ({
@@ -67,6 +81,16 @@ function ContextHandler({ children }) {
 			page: data?.page,
 			pageSize: data?.pageSize,
 		}));
+	}
+
+	function handleFeedFilter(data) {
+		setFeedFilterData({
+			page: data?.page === 0 ? 0 : data?.page ? data?.page : feedFilterData?.page,
+			pageSize: data?.pageSize ? data?.pageSize : feedFilterData?.pageSize,
+			startDate:
+				data?.startDate === null ? null : data?.startDate ? data?.startDate : feedFilterData?.startDate,
+			endDate: data?.endDate === null ? null : data?.endDate ? data?.endDate : feedFilterData?.endDate,
+		});
 	}
 	function handleNeighbourhoodPagination(data) {
 		setNeighbourPagination((prev) => ({
@@ -110,6 +134,13 @@ function ContextHandler({ children }) {
 			pageSize: data?.pageSize,
 		}));
 	}
+	function handleUserFeedFilter(data) {
+		setUserFeed((prev) => ({
+			...prev,
+			page: data?.page,
+			pageSize: data?.pageSize,
+		}));
+	}
 
 	return (
 		<PaginationContext.Provider
@@ -118,6 +149,8 @@ function ContextHandler({ children }) {
 				setUserPagination: handlePagination,
 				feedPagination: feedPagination,
 				setFeedPagination: handleFeedPagination,
+				feedFilter: feedFilterData,
+				setFeedFilter: handleFeedFilter,
 				neighbourhoodPagination: neighbourPagination,
 				setNeighbourhoodPagination: handleNeighbourhoodPagination,
 				blogPagination: blogPagination,
@@ -130,6 +163,8 @@ function ContextHandler({ children }) {
 				setNotificationPagination: handleNotificationPagination,
 				groupPagination: groupPagination,
 				setGroupPagination: handleGroupPagination,
+				userFeedFilter: userFeed,
+				setUserFeedFilter: handleUserFeedFilter,
 			}}>
 			{children}
 		</PaginationContext.Provider>

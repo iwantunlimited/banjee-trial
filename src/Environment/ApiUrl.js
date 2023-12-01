@@ -7,17 +7,14 @@ export const BanjeeAuthorId = "BANJEEAUTHORID";
 export const urls = {
 	headers: {
 		"Content-Type": "application/json",
-		Authorization: localStorage.getItem("token")
-			? "Bearer " + localStorage.getItem("token")
-			: token,
+		Authorization: localStorage.getItem("token") ? "Bearer " + localStorage.getItem("token") : token,
 		"itpl-app-name": "Merchant-Registration-App",
 		"itpl-app-version": "1.0-101",
 		"itpl-app-type": "web",
 		"itpl-client-id": "SS7052021-001",
 		"itpl-app-os": "web",
 	},
-	MB_SOCKET:
-		"https://imydp54x0j.execute-api.eu-central-1.amazonaws.com/geo-loc/",
+	MB_SOCKET: "https://imydp54x0j.execute-api.eu-central-1.amazonaws.com/geo-loc/",
 	LOGIN: services.AUTH,
 
 	DASHBOARD: {
@@ -39,10 +36,8 @@ export const urls = {
 	SOCIAL_CONNECTION: {
 		FILTER: services.SOCIAL_CONNECTIONS + "social-connection/group/filter",
 		FIND_BY_ID: services.SOCIAL_CONNECTIONS + "social-connection/group/findById/",
-		FIND_REPORTED_CUSTOMER_BY_ID:
-			services.SOCIAL_CONNECTIONS + "secured/report/findById/",
-		FILTER_REPORTED_CUSTOMER:
-			services.SOCIAL_CONNECTIONS + "secured/report/filter",
+		FIND_REPORTED_CUSTOMER_BY_ID: services.SOCIAL_CONNECTIONS + "secured/report/findById/",
+		FILTER_REPORTED_CUSTOMER: services.SOCIAL_CONNECTIONS + "secured/report/filter",
 	},
 	NOTIFICATIONS: {
 		ACTIVE_STATUS: services.NOTIFICATIONS + "notif/config/status",
@@ -55,6 +50,7 @@ export const urls = {
 	SOCIAL_FEEDS: {
 		COOMENT_ON_FEED: services.SOCIAL_FEEDS + "comments",
 		CREATE_FEED: services.SOCIAL_FEEDS + "/feeds",
+		FEEDS_BY_USER_ID: services.SOCIAL_FEEDS + "feeds/byAdmin",
 		FILTER: services.SOCIAL_FEEDS + "api/feeds/admin/filter",
 		GET_FEED_DETAILS: services.SOCIAL_FEEDS + "feeds/findById/",
 		GET_COMMENTS: services.SOCIAL_FEEDS + "comments/byFeed/",
@@ -78,8 +74,7 @@ export const urls = {
 		FIND_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/findById/",
 		FIND_NEIGHBOURHOOD_BY_USER_ID: services.GEO_CLOUD + "social-cloud/byUserId/",
 		FILTER_MEMBERS: services.GEO_CLOUD + "social-cloud/members/filter",
-		FIND_MEMBERS_BY_CLOUDID:
-			services.GEO_CLOUD + "social-cloud/members/byCloudId/",
+		FIND_MEMBERS_BY_CLOUDID: services.GEO_CLOUD + "social-cloud/members/byCloudId/",
 		GEO_ALERT: services.GEO_CLOUD + "api/geo-alert/",
 		FILTER_REPORTED_ALERT: services.GEO_CLOUD + "api/geo-alert/report/filter",
 		COMMUNITY: services.GEO_CLOUD + "community",
@@ -135,8 +130,7 @@ export const urls = {
 		USER_MEMBERSHIP: services?.USER_PROFILE_MEMBERSHIP + "/user-membership",
 		CUSTOMER_LIST: services.USER_PROFILE + "profile/filter",
 		CUSTOMER_FIND_BY_ID: services.USER_PROFILE + "admin/findById/",
-		FIND_USER_BY_SYSTEMUSER_ID:
-			services?.USER_PROFILE + "profile/findBySystemUserId/",
+		FIND_USER_BY_SYSTEMUSER_ID: services?.USER_PROFILE + "profile/findBySystemUserId/",
 		FIND_USER_BY_USER_ID: services?.USER_PROFILE + "profile/findById/",
 		FIND_USER_CONNECTION_BY_ID: services.USER_PROFILE + "admin/userConnection/",
 		FIND_USER_BLOCK_LIST: services.USER_PROFILE + "admin/userBlockList/",

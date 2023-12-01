@@ -199,13 +199,19 @@ function UserComp() {
 					data?.fromDate && data?.toDate
 						? { userType: 0, fromDate: data?.fromDate, toDate: data?.toDate }
 						: { userType: 0 },
+				actionCode: "ACTION_DOWNLOAD_CSV",
 			}),
 			headers: {
 				"Content-Type": "application/json;",
-				authorization: `Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJsYXN0TmFtZSI6IiIsImRvbWFpblNzaWQiOiIyMDg5OTEiLCJnZW5kZXIiOm51bGwsInVzZXJfbmFtZSI6IjYxMTExZTQyYmNjNjhiMmExZmEzNDMyYyIsImluY29nbml0byI6ZmFsc2UsIm1jYyI6bnVsbCwidHlwZSI6IlNZU19BRE1JTiIsImxvY2FsZSI6ImVuLVVTIiwiY2xpZW50X2lkIjoiaXRwbCIsImV4dGVybmFsUmVmZXJlbmNlSWQiOm51bGwsInNjb3BlIjpbIlJlYWQiLCJXcml0ZSJdLCJhdnRhckltYWdlVXJsIjoiNjNhMDFlYTVkZGVmYjM3ZjY5MjFiMmU4IiwiaWQiOiI2MTExMWU0MmJjYzY4YjJhMWZhMzQzMmMiLCJleHAiOjE2NzkyODc3MDAsImp0aSI6ImEyOTFjMGE2LWQ2YzMtNDUzNy05ZDg5LTg3MTMzZGFjNGVlMiIsImVtYWlsIjoicm9vdEBpdHBsLmlvIiwiR3JhbnRlZC1BdXRob3JpdGllcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9TWVNURU1fQURNSU4ifV0sInRpbWVab25lSWQiOiJBc2lhL0pha2FydGEiLCJtb2JpbGUiOiIxMjM0NTY3ODkwIiwiZXh0ZXJuYWxTeXN0ZW1Db2RlIjpudWxsLCJ1c2VyTmFtZSI6InJvb3QiLCJiaXJ0aERhdGUiOm51bGwsImF1dGhvcml0aWVzIjpbIlJPTEVfU1lTVEVNX0FETUlOIl0sImZpcnN0TmFtZSI6IkJhbmplZSIsImV4dGVybmFsVXNlcklkIjpudWxsLCJkb21haW4iOiIyMDg5OTEiLCJyZWFsbSI6ImJhbmplZSIsInVzZXJUeXBlIjotMSwidXNlcm5hbWUiOiJyb290In0.ABSYC8llKHnoskHltFynTlaKUwMhea-bnbnQDJ61lHf2NJljQpMlpmzQ0pt12FePbyPbS1KwKUwms8NDmMCByeKAQwbUbZU6u9EqTQIh8Ig4b8aGNavsMfjXuG2qbcFYFS3H-OLR5kCFAd0UxU8IZtcyZGK7C4oFWpCM2C-FMYR0zImqn2CaZV3RgKPzUpbSkTb0zCG14NAQ0tcQ_7bosorzjtppDhKYltRc2rg6uK-N-BHQytoiCY85Vxute9P8dGIt5zQfyEKdSzoLXjur91MmlIufPtbqSRF4KzgA4HF1z2TTU22qhF65qVoo8yDygsONEuqS8xq_GDYOUA`,
+				// authorization: `Bearer ${token}`,
 			},
 		})
-			.then((response) => response.blob())
+			.then((response) => {
+				console.log("====================================");
+				console.log("response", response);
+				console.log("====================================");
+				return response.blob();
+			})
 			.then((blob) => {
 				// Create blob link to download
 				const url = window.URL.createObjectURL(new Blob([blob]));

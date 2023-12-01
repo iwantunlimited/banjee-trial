@@ -2,9 +2,17 @@ import { Box, CircularProgress } from "@mui/material";
 import React from "react";
 import StandaloneSearchBox from "react-google-maps/lib/components/places/StandaloneSearchBox";
 import { MainContext } from "../context/Context";
+import { LocalActivity, PinDrop } from "@mui/icons-material";
 const _ = require("lodash");
 const { compose, withProps, lifecycle } = require("recompose");
-const { withScriptjs, withGoogleMap, GoogleMap, Marker } = require("react-google-maps");
+const {
+	withScriptjs,
+	withGoogleMap,
+	GoogleMap,
+	Marker,
+	Circle,
+	InfoWindow,
+} = require("react-google-maps");
 
 const GoogleMapCustom = compose(
 	withProps({
@@ -204,6 +212,52 @@ const GoogleMapCustom = compose(
 						{state.markers.map((marker, index) => (
 							<Marker key={index} position={marker.position} />
 						))}
+						{props?.nearBymarker && props?.nearBymarker?.length > 0
+							? props?.nearBymarker?.map((item, index) => (
+									<Marker
+										// icon={"http://maps.google.com/mapfiles/ms/icons/yellow.png"}
+										icon={"https://maps.gstatic.com/mapfiles/ms2/micons/blue-dot.png"}
+										key={index}
+										position={{
+											lat: item?.geoLocation?.coordinates?.[1],
+											lng: item?.geoLocation?.coordinates?.[0],
+										}}
+										// title={item?.name}
+										// label={item?.name}
+										// labelStyle={{
+										// 	background: "white",
+										// 	borderRadius: "10px",
+										// 	padding: "10px",
+										// }}
+									>
+										<InfoWindow>
+											<div>{item?.name}</div>
+										</InfoWindow>
+									</Marker>
+							  ))
+							: null}
+
+						{props?.circle ? (
+							<Circle
+								options={{
+									strokeColor: "rgba(242, 112, 89, 0.45)",
+									strokeOpacity: 0.8,
+									strokeWeight: 2,
+									fillColor: "rgba(248, 133, 18, 0.45)",
+									fillOpacity: 0.3,
+								}}
+								radius={3000}
+								defaultRadius={3000}
+								center={{
+									lat: props?.data?.lat ? props?.data?.lat : locationData?.lat,
+									lng: props?.data?.lng ? props?.data?.lng : locationData?.lng,
+								}}
+								defaultCenter={{
+									lat: props?.data?.lat ? props?.data?.lat : locationData?.lat,
+									lng: props?.data?.lng ? props?.data?.lng : locationData?.lng,
+								}}
+							/>
+						) : null}
 					</GoogleMap>
 				</Box>
 			);

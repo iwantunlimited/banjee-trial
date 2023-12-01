@@ -13,7 +13,7 @@ import {
 	CircularProgress,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import Logo from "../../assets/LogoWhite.svg";
+import Logo from "../../assets/newLogo.png";
 import { styled } from "@mui/material/styles";
 import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import LogoutIcon from "@mui/icons-material/Logout";

@@ -18,7 +18,8 @@ export const theme = createTheme({
 			white: "#fff",
 		},
 		primary: {
-			main: "#1976d2",
+			// main: "#1976d2",
+			main: "#F57B37",
 			// main: "#F88512", //as per new banjee app theme
 			// main: "#ef5350",
 			light: "#42a5f5",
@@ -26,7 +27,8 @@ export const theme = createTheme({
 			contrastText: "#fff",
 		},
 		secondary: {
-			main: "rgb(42,149,15)",
+			// main: "rgb(42,149,15)",
+			main: "#0D0D0D",
 			// main: "#2B2A31", //as per new banjee app theme
 			light: "#4caf50",
 			dark: "#1b5e20",
@@ -231,7 +233,6 @@ export const theme = createTheme({
 			leavingScreen: 195,
 		},
 	},
-
 	zIndex: {
 		mobileStepper: 1000,
 		appBar: 1100,
@@ -256,15 +257,20 @@ export const darkTheme = createTheme({
 	palette: {
 		mode: "dark",
 		primary: {
-			main: "#168dbb",
+			// main: "#168dbb",
+
+			main: "#F57B37",
 			// main: "#ef5350",
 			light: "#e3f2fd",
 			dark: "#42a5f5",
+			contrastText: "white",
 		},
 		secondary: {
-			main: "#ce93d9",
+			// main: "#ce93d9",
+			main: "#0D0D0D",
 			light: "#f3e5f5",
 			dark: "#ab47bc",
+			contrastText: "white",
 		},
 	},
 	shadows: [

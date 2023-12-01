@@ -11,12 +11,14 @@ import {
 	Button,
 	CircularProgress,
 	Stack,
+	Paper,
 } from "@mui/material";
 import {
 	assignAdminToCloud,
 	assignMemberToCloud,
 	deleteNeighbourhood,
 	filterMembers,
+	findNearByNH,
 	findNeighbourhood,
 	removeUserFromNeighbourhood,
 } from "../../services/apiServices";
@@ -37,6 +39,7 @@ function DetailPage() {
 	const theme = useTheme();
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
 	const [state, setState] = React.useState();
+	const [nearByNH, setNearByNH] = React.useState();
 
 	const [modal, setModal] = React.useState({
 		modalId: 1,
@@ -61,6 +64,10 @@ function DetailPage() {
 			data: "",
 		}));
 	}
+
+	// console.log("====================================");
+	// console.log("filtere data", nearByNH);
+	// console.log("====================================");
 
 	const deleteAlertApiCall = (id) => {
 		deleteNeighbourhood(id)
@@ -233,9 +240,30 @@ function DetailPage() {
 		findNeighbourhood(params?.id)
 			.then((res) => {
 				setState(res);
+				FindNearByNHApiCall(res?.geoLocation?.coordinates[1], res?.geoLocation?.coordinates[0]);
 			})
 			.catch((err) => console.error(err));
 	}, [params?.id]);
+
+	const FindNearByNHApiCall = React.useCallback((lat, lon) => {
+		findNearByNH({
+			online: true,
+			lat: lat,
+			lon: lon,
+			// text,
+			radius: 5,
+			page: 0,
+			pageSize: 10,
+		})
+			.then((res) => {
+				console.log("====================================");
+				console.log("nearby nh", res);
+				console.log("====================================");
+				const filteredData = res?.content?.filter((item, index) => item?.id !== params?.id);
+				setNearByNH(filteredData);
+			})
+			.catch((err) => console.error(err));
+	}, []);
 
 	//for filtering members by cloud id
 	const filterMemberApiCall = React.useCallback(() => {
@@ -601,6 +629,52 @@ function DetailPage() {
 								</Box>
 							</Box>
 						</Grid>
+						<Grid
+							item
+							xs={12}
+							// sx={{ display: "flex", justifyContent: "flex-end" }}
+						>
+							<Paper
+								sx={{ boxShadow: "none", marginBottom: { xs: 2, md: 4 } }}
+								onClick={() => {
+									console.log("asdasdads", state);
+									if (
+										state?.createdBy === "61111e42bcc68b2a1fa3432c" ||
+										state?.createdBy === "63f75ffa4c16dbbb155fc380"
+									) {
+										// setModalOpen(true);
+										// setModalData("Admin User", "warning");
+									} else {
+										if (localStorage?.getItem("userType") !== "merchant") {
+											navigate("/user/" + state?.createdByUser?.id);
+										}
+									}
+								}}>
+								<Typography sx={{ fontWeight: 600 }}>Created By:</Typography>
+								<Stack
+									columnGap={2}
+									sx={{
+										display: "flex",
+										alignItems: "center",
+										flexDirection: "row",
+									}}>
+									<Avatar
+										src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${state?.createdByUser?.systemUserId}`}
+										alt={state?.createdByUser?.firstName}
+										style={{
+											width: window.innerWidth < 500 ? "40px" : "60px",
+											height: window.innerWidth < 500 ? "40px" : "60px",
+										}}
+									/>
+									<Typography>
+										{state?.createdBy === "61111e42bcc68b2a1fa3432c" ||
+										state?.createdBy === "63f75ffa4c16dbbb155fc380"
+											? "Banjee Admin"
+											: state?.createdByUser?.firstName}
+									</Typography>
+								</Stack>
+							</Paper>
+						</Grid>
 						<Grid item xs={12} sm={12}>
 							<Card sx={{ padding: "20px", borderRadius: "0px" }}>
 								<Box sx={{ paddingBottom: "10px" }}>
@@ -678,8 +752,10 @@ function DetailPage() {
 											data={{
 												lat: state?.geoLocation?.coordinates[1],
 												lng: state?.geoLocation?.coordinates[0],
-												zoom: 8,
+												zoom: 12.4,
 											}}
+											circle={true}
+											nearBymarker={nearByNH}
 										/>
 									</Box>
 								)}

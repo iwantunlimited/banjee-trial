@@ -139,3 +139,11 @@ export const findPlaceByPlaceId = (requestLoad) => {
 	let method = "GET";
 	return executeGet(url, actionCode, payload, method);
 };
+
+export const findNearByNH = (requestLoad) => {
+	let url = urls.GEO_CLOUD.CREATE_NEIGHBOURHOOD + "/filter";
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};

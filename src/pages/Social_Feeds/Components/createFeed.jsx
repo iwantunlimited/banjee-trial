@@ -42,18 +42,18 @@ function CreateFeed() {
 		src: "",
 		caption: "",
 		sequenceNumber: 0,
-		tags: null,
+		tags: [],
 		mimeType: "image/jpg",
 		sizeInBytes: 0,
 		length: 0,
 		width: 0,
 		height: 0,
 		aspectRatio: null,
-		title: null,
+		title: "",
 		subTitle: null,
 		description: null,
 		base64Content: null,
-		mediaSource: null,
+		mediaSource: [],
 	});
 
 	const lat = localStorage?.getItem("lat");
@@ -279,15 +279,23 @@ function CreateFeed() {
 					setFinalPayload((prev) => ({
 						...prev,
 						mediaContent: [
-							...prev.mediaContent,
+							...prev?.mediaContent,
 							{
 								...cloudinaryData,
+								title: res?.data?.asset_id,
 								src: res?.data?.public_id,
 								type: imgData?.type,
 								mimeType: mimeTypeFun(),
 							},
 						],
 					}));
+					// setCloudinaryData((prev) => ({
+					// 	...prev,
+					// 	title: res?.data?.asset_id,
+					// 	src: res?.data?.public_id,
+					// 	type: imgData?.type,
+					// 	mimeType: mimeTypeFun(),
+					// }));
 					setImgShow((prev) => {
 						return prev.map((item) => {
 							if (item?.id === imgData?.id) {
@@ -323,6 +331,7 @@ function CreateFeed() {
 								src: res?.data?.public_id,
 								type: imgData?.type,
 								mimeType: mimeTypeFun(),
+								title: res?.data?.asset_id,
 							},
 						],
 					}));

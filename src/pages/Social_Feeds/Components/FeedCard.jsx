@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // import required modules
 import { Pagination } from "swiper";
-import { ChatBubbleOutline, Delete, FavoriteBorder, Fullscreen } from "@mui/icons-material";
+import { ChatBubbleOutline, Delete, FavoriteBorder, Fullscreen, Group } from "@mui/icons-material";
 import FullScreenImageModal from "./FullScreenImageModal";
 import moment from "moment";
 
@@ -20,14 +20,64 @@ function FeedCard(props) {
 		imageModal: false,
 	});
 
-	const { ele, handleContextPagination, handleDeleteModal, index } = props;
+	const { ele, handleDeleteModal, index } = props;
+
+	function CollaborateItem(data) {
+		if (data?.mediaContent) {
+			return (
+				<Box
+					sx={{
+						padding: { xs: "5px", md: "10px" },
+						borderRadius: "10px",
+						background: "rgba(0,0,0,0.5)",
+						position: "absolute",
+						bottom: 0,
+						left: 0,
+						margin: "10px",
+						width: "-webkit-fill-available",
+						display: "flex",
+						flexDirection: "row",
+						alignItems: "center",
+						color: "white",
+					}}>
+					<Avatar
+						alt={data?.user?.firstName}
+						// src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${ele?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+						src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${data?.user?.systemUserId}`}
+						sx={{
+							height: { xs: "20px", md: "30px" },
+							width: { xs: "20px", md: "30px" },
+							objectFit: "contain",
+							borderRadius: "50%",
+							marginRight: "20px",
+						}}
+					/>
+					<Typography lineHeight={2} noWrap sx={{ fontSize: { xs: "10px", sm: "12px", md: "14px" } }}>
+						{data?.text}
+					</Typography>
+				</Box>
+			);
+		} else {
+			return null;
+		}
+	}
 
 	if (props?.ele) {
+		const mainMedia =
+			ele?.collaboration && ele?.collaborateFeeds?.length > 0
+				? [
+						...ele?.mediaContent,
+						...ele?.collaborateFeeds?.map((item) => ({
+							...item,
+							...item?.mediaContent,
+						})),
+				  ]
+				: ele?.mediaContent;
+
 		return (
 			<React.Fragment>
 				<Card
 					// onClick={() => {
-					// 	handleContextPagination();
 					// 	navigate("/social-feeds/" + ele?.id);
 					// 	// setModal({ open: true, data: ele });
 					// }}
@@ -59,7 +109,6 @@ function FeedCard(props) {
 							}}>
 							<Box
 								onClick={() => {
-									handleContextPagination();
 									navigate("/social-feeds/" + ele?.id);
 									// setModal({ open: true, data: ele });
 								}}
@@ -150,12 +199,11 @@ function FeedCard(props) {
 							{/* swiper for media */}
 							<Swiper
 								onClick={() => {
-									handleContextPagination();
 									navigate("/social-feeds/" + ele?.id);
 									// setModal({ open: true, data: ele });
 								}}
 								pagination={
-									ele?.mediaContent?.length > 1
+									mainMedia?.length > 1
 										? {
 												type: "fraction",
 										  }
@@ -164,8 +212,8 @@ function FeedCard(props) {
 								modules={[Pagination]}
 								className='mySwiper'>
 								{ele?.mediaContent?.length > 0 ? (
-									ele?.mediaContent?.map((item, iIndex) => {
-										if (item?.type === "video") {
+									mainMedia?.map((item, iIndex) => {
+										if (item?.type === "video" || item?.mimeType?.startsWith("video")) {
 											return (
 												<SwiperSlide>
 													<Box
@@ -186,10 +234,11 @@ function FeedCard(props) {
 															/>
 															Your browser does not support HTML video.
 														</video>
+														{CollaborateItem(item)}
 													</Box>
 												</SwiperSlide>
 											);
-										} else if (item?.type === "audio" || item?.mimeType === "audio/mpeg") {
+										} else if (item?.type === "audio" || item?.mimeType?.startsWith("audio")) {
 											return (
 												<SwiperSlide>
 													<Box
@@ -224,10 +273,11 @@ function FeedCard(props) {
 															/>
 															Your browser does not support HTML video.
 														</audio>
+														{CollaborateItem(item)}
 													</Box>
 												</SwiperSlide>
 											);
-										} else if (item?.type === "image" || item?.mimeType === "image/png") {
+										} else if (item?.type === "image" || item?.mimeType?.startsWith("image")) {
 											return (
 												<Box key={iIndex}>
 													<SwiperSlide>
@@ -286,6 +336,8 @@ function FeedCard(props) {
 																	}}
 																/>
 															</IconButton>
+
+															{CollaborateItem(item)}
 														</Box>
 													</SwiperSlide>
 												</Box>
@@ -358,7 +410,6 @@ function FeedCard(props) {
 								flexDirection: "column",
 							}}
 							onClick={() => {
-								handleContextPagination();
 								navigate("/social-feeds/" + ele?.id);
 								// setModal({ open: true, data: ele })
 							}}>
@@ -382,6 +433,15 @@ function FeedCard(props) {
 									}}>
 									<ChatBubbleOutline />
 									<span style={{ marginLeft: "5px" }}>{ele?.totalComments || 0}</span>
+								</Box>
+								<Box
+									sx={{
+										display: "flex",
+										alignItems: "center",
+										marginLeft: "20px",
+									}}>
+									<Group />
+									<span style={{ marginLeft: "5px" }}>{ele?.collaborateFeeds?.length || 0}</span>
 								</Box>
 							</Box>
 						</Box>

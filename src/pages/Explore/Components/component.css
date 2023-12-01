@@ -12,10 +12,11 @@
 	position: absolute;
 	top: 1px !important;
 	right: 1px !important;
-	background-color: #1976d2;
+	/* background-color: #1976d2; */
+	background-color: #f57b37;
 	color: white;
 	border-radius: 5px;
-	font-size: 12px;
+	font-size: 10px;
 	padding: 2px 4px;
 	z-index: 2;
 }

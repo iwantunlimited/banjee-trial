@@ -49,7 +49,7 @@ import FeedCard from "./Components/FeedCard";
 export default function SocialFeed(props) {
 	const navigate = useNavigate();
 	const theme = useTheme();
-	const { feedPagination, setFeedPagination } = React.useContext(PaginationContext);
+	const { setFeedPagination, feedFilter, setFeedFilter } = React.useContext(PaginationContext);
 	const { themeData } = React.useContext(MainContext);
 	const [data, setData] = React.useState([]);
 	const [modal, setModal] = React.useState({ open: false });
@@ -62,19 +62,17 @@ export default function SocialFeed(props) {
 
 	// pagination state
 	const [pagination, setPagination] = React.useState({
-		page: feedPagination?.page ? feedPagination?.page : 0,
-		pageSize: feedPagination?.pageSize ? feedPagination?.pageSize : 10,
+		page: feedFilter?.page ? feedFilter?.page : 0,
+		pageSize: feedFilter?.pageSize ? feedFilter?.pageSize : 10,
 	});
 	const [totalEle, setTotalEle] = React.useState();
 
-	const [startDate, setStartDate] = React.useState(null);
-	const [endDate, setEndDate] = React.useState(null);
+	const [startDate, setStartDate] = React.useState(
+		feedFilter?.startDate ? feedFilter?.startDate : null
+	);
+	const [endDate, setEndDate] = React.useState(feedFilter?.endDate ? feedFilter?.endDate : null);
 	const [openStartDate, setOpenStartDate] = React.useState(false);
 	const [openEndDate, setOpenEndDate] = React.useState(false);
-	const [dateFilter, setDateFilter] = React.useState({
-		startDate: null,
-		endDate: null,
-	});
 
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
@@ -87,13 +85,17 @@ export default function SocialFeed(props) {
 				deleted: null,
 				domain: null,
 				fields: null,
-				finishDate: dateFilter?.endDate,
+				finishDate: feedFilter?.endDate
+					? moment(feedFilter?.endDate).set({ hour: 23, minute: 59, second: 58 }).format()
+					: null,
 				inactive: null,
 				keywords: null,
-				page: pagination?.page,
-				pageSize: pagination?.pageSize,
+				page: feedFilter?.page,
+				pageSize: feedFilter?.pageSize,
 				sortBy: null,
-				startDate: dateFilter?.startDate,
+				startDate: feedFilter?.startDate
+					? moment(feedFilter?.startDate).set({ hour: 0, minute: 0, second: 0 }).format()
+					: null,
 			})
 				.then((res) => {
 					setData(res);
@@ -104,20 +106,17 @@ export default function SocialFeed(props) {
 				});
 		},
 		// remove dependecies startDate and endDate
-		[pagination, dateFilter]
+		[feedFilter]
 	);
-
-	function handleContextPagination() {
-		setFeedPagination({
-			page: pagination?.page,
-			pageSize: pagination?.pageSize,
-		});
-	}
 
 	function handleDeleteModal(data) {
 		setDFeedData({ feedId: data?.feedId });
 		setOpenDModal(data?.open);
 	}
+
+	console.log("====================================");
+	console.log("feed filter", feedFilter);
+	console.log("====================================");
 
 	React.useEffect(() => {
 		filterSocialFeedsApiCall();
@@ -164,14 +163,14 @@ export default function SocialFeed(props) {
 									onOpen={() => setOpenStartDate(true)}
 									onClose={() => setOpenEndDate(false)}
 									onChange={(newValue) => {
-										setStartDate(moment(newValue).set({ hour: 0, minute: 0, second: 0 }).format());
+										setStartDate(newValue);
 									}}
 									renderInput={(params) => (
 										<TextField
-											onClick={() => {
-												setOpenEndDate(false);
-												setOpenStartDate(true);
-											}}
+											// onClick={() => {
+											// 	setOpenEndDate(false);
+											// 	setOpenStartDate(true);
+											// }}
 											size='small'
 											helperText={params?.InputProps?.placeholder}
 											{...params}
@@ -195,14 +194,14 @@ export default function SocialFeed(props) {
 										// const nowDate = moment(newValue).format("l") === moment().format("l");
 										// console.log("now date", nowDate);
 										// console.log("now date ---", moment().format());
-										setEndDate(moment(newValue).set({ hour: 23, minute: 59, second: 58 }).format());
+										setEndDate(newValue);
 									}}
 									renderInput={(params) => (
 										<TextField
-											onClick={() => {
-												setOpenEndDate(true);
-												setOpenStartDate(false);
-											}}
+											// onClick={() => {
+											// 	setOpenEndDate(true);
+											// 	setOpenStartDate(false);
+											// }}
 											size='small'
 											{...params}
 										/>
@@ -220,8 +219,9 @@ export default function SocialFeed(props) {
 										color: theme.palette.primary.contrastText,
 									}}
 									onClick={() => {
-										setPagination({ page: 0, pageSize: 10 });
-										setDateFilter({
+										setFeedFilter({
+											page: 0,
+											pageSize: 10,
 											startDate: startDate,
 											endDate: endDate,
 										});
@@ -248,9 +248,9 @@ export default function SocialFeed(props) {
 							<Tooltip title='Refresh Feeds'>
 								<IconButton
 									onClick={() => {
-										setFeedPagination({ page: undefined, pageSize: undefined });
-										setPagination({ page: 0, pageSize: 10 });
-										setDateFilter({
+										setFeedFilter({
+											page: 0,
+											pageSize: 10,
 											startDate: null,
 											endDate: null,
 										});
@@ -295,7 +295,6 @@ export default function SocialFeed(props) {
 											index={index}
 											ele={ele}
 											handleDeleteModal={handleDeleteModal}
-											handleContextPagination={handleContextPagination}
 										/>
 									</Grid>
 								</React.Fragment>
@@ -330,12 +329,18 @@ export default function SocialFeed(props) {
 											...prev,
 											page: data,
 										}));
+										setFeedFilter({
+											page: data,
+										});
 									}}
 									onRowsPerPageChange={(event) => {
 										setPagination((prev) => ({
 											...prev,
 											pageSize: event.target.value,
 										}));
+										setFeedFilter({
+											pageSize: event.target.value,
+										});
 									}}
 								/>
 							</Box>

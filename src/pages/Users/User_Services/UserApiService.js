@@ -176,6 +176,15 @@ let DashboardlistCustomer = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+//------------------------------------------ Dashboard list customer api ------------------------------------------------//
+
+let UserFeeds = (requestLoad) => {
+	let url = urls.SOCIAL_FEEDS.FEEDS_BY_USER_ID;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
 
 export {
 	listCustomer,
@@ -196,4 +205,5 @@ export {
 	findUserBySystemUserId,
 	findUserByUserId,
 	getUserCsvData,
+	UserFeeds,
 };

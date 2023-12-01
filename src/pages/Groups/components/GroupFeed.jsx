@@ -50,13 +50,6 @@ export default function GroupFeed({ groupId, groupName }) {
 		[pagination]
 	);
 
-	function handleContextPagination() {
-		setFeedPagination({
-			page: pagination?.page,
-			pageSize: pagination?.pageSize,
-		});
-	}
-
 	function handleDeleteModal(data) {
 		setDFeedData({ feedId: data?.feedId });
 		setOpenDModal(data?.open);
@@ -86,7 +79,6 @@ export default function GroupFeed({ groupId, groupName }) {
 											index={index}
 											ele={ele}
 											handleDeleteModal={handleDeleteModal}
-											handleContextPagination={handleContextPagination}
 										/>
 									</Grid>
 								</React.Fragment>

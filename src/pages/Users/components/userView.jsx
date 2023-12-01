@@ -14,6 +14,7 @@ import {
 	Container,
 	Button,
 	IconButton,
+	Divider,
 } from "@mui/material";
 import { findUserBySystemUserId } from "../User_Services/UserApiService";
 import { Male, Female, Transgender, ArrowBack } from "@mui/icons-material";
@@ -28,6 +29,7 @@ import BlogList from "./BlogList";
 import { MainContext } from "../../../context/Context";
 import moment from "moment";
 import TimeSpentList from "./TimeSpentList";
+import UserFeed from "./UserFeed";
 
 function CustomerView(props) {
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
@@ -358,6 +360,11 @@ function CustomerView(props) {
 										</TabPanel> */}
 									</SwipeableViews>
 								</Card>
+							</Grid>
+
+							{/* user feeds */}
+							<Grid item xs={12}>
+								<UserFeed userId={params?.id} />
 							</Grid>
 						</Grid>
 						{/* <Grid item container xs={12}> */}

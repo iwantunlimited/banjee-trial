@@ -91,6 +91,23 @@ export function ApprovalList({
 			},
 		},
 		{
+			id: "8",
+			field: "createdBy",
+			headerClassName: "app-header",
+			headerName: "Created By",
+			// align: "center",
+			flex: 0.3,
+			// type: "date",
+			// valueGetter: ({ value }) => value && new Date(value),
+			renderCell: (params) => {
+				if (params?.row?.createdByUser) {
+					return params?.row?.createdByUser?.firstName;
+				} else {
+					return "Banjee Admin";
+				}
+			},
+		},
+		{
 			id: "5",
 			field: "routingId",
 			headerClassName: "app-header-rejected",
