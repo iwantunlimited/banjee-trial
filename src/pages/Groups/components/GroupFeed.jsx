@@ -9,9 +9,10 @@ import DeleteFeedModal from "../../Social_Feeds/Components/DeleteFeedModal";
 import { PaginationContext } from "../../../context/PaginationContext";
 import { filterSocialFeeds } from "../../Social_Feeds/services/ApiServices";
 
-export default function GroupFeed({ groupId, groupName }) {
+export default function GroupFeed({ groupId, groupName, NHFeed }) {
 	const navigate = useNavigate();
-	const { feedPagination, setFeedPagination } = React.useContext(PaginationContext);
+	const { feedPagination, setFeedPagination, nhDetailPagination, setNhDetailPagination } =
+		React.useContext(PaginationContext);
 	const [data, setData] = React.useState([]);
 	const [modal, setModal] = React.useState({ open: false });
 	//delete menu ------
@@ -22,10 +23,11 @@ export default function GroupFeed({ groupId, groupName }) {
 	});
 
 	// pagination state
-	const [pagination, setPagination] = React.useState({
-		page: feedPagination?.page ? feedPagination?.page : 0,
-		pageSize: feedPagination?.pageSize ? feedPagination?.pageSize : 12,
-	});
+	// const [pagination, setPagination] = React.useState({
+	// 	page: NHFeed ? nhDetailPagination?.page : feedPagination?.page,
+	// 	pageSize: NHFeed ? nhDetailPagination?.pageSize : feedPagination?.pageSize,
+	// });
+
 	const [totalEle, setTotalEle] = React.useState();
 
 	const filterSocialFeedsApiCall = React.useCallback(
@@ -35,8 +37,8 @@ export default function GroupFeed({ groupId, groupName }) {
 				keywords: null,
 				pageId: groupId ? groupId : "",
 				pageName: groupName ? groupName : "",
-				page: pagination?.page,
-				pageSize: pagination?.pageSize,
+				page: NHFeed ? nhDetailPagination?.page : feedPagination?.page,
+				pageSize: NHFeed ? nhDetailPagination?.pageSize : feedPagination?.pageSize,
 			})
 				.then((res) => {
 					setData(res);
@@ -47,7 +49,7 @@ export default function GroupFeed({ groupId, groupName }) {
 				});
 		},
 		// remove dependecies startDate and endDate
-		[pagination]
+		[feedPagination, nhDetailPagination]
 	);
 
 	function handleDeleteModal(data) {
@@ -105,20 +107,34 @@ export default function GroupFeed({ groupId, groupName }) {
 								<TablePagination
 									component='div'
 									count={totalEle}
-									page={pagination.page}
-									rowsPerPage={pagination.pageSize}
-									rowsPerPageOptions={[10, 15, 20]}
+									page={NHFeed ? nhDetailPagination?.page : feedPagination?.page}
+									rowsPerPage={NHFeed ? nhDetailPagination?.pageSize : feedPagination?.pageSize}
+									rowsPerPageOptions={[12, 16, 20]}
 									onPageChange={(event, data) => {
-										setPagination((prev) => ({
-											...prev,
-											page: data,
-										}));
+										if (NHFeed) {
+											setNhDetailPagination({
+												page: data,
+												pageSize: nhDetailPagination?.pageSize,
+											});
+										} else {
+											setFeedPagination({
+												page: data,
+												pageSize: feedPagination?.pageSize,
+											});
+										}
 									}}
 									onRowsPerPageChange={(event) => {
-										setPagination((prev) => ({
-											...prev,
-											pageSize: event.target.value,
-										}));
+										if (NHFeed) {
+											setNhDetailPagination({
+												page: nhDetailPagination?.page,
+												pageSize: event.target.value,
+											});
+										} else {
+											setFeedPagination({
+												page: feedPagination?.page,
+												pageSize: event.target.value,
+											});
+										}
 									}}
 								/>
 							</Box>

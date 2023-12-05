@@ -9,23 +9,20 @@ import { PaginationContext } from "../../../context/PaginationContext";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { deleteAlert } from "../../BanjeeAlert/api-services/apiServices";
 
-function EventList({
-	totalElement,
-	data,
-	handlePagination,
-	pagination,
-	listApiCall,
-	handleEventListApiCall,
-}) {
+function EventList({ totalElement, data, listApiCall, handleEventListApiCall }) {
 	const navigate = useNavigate();
 
 	const context = React.useContext(MainContext);
-	const { setAlertPagination } = React.useContext(PaginationContext);
+	const { eventPagination, setEventPagination } = React.useContext(PaginationContext);
 
 	const [modalData, setModalData] = React.useState({
 		open: false,
 		id: "",
 	});
+
+	console.log("====================================");
+	console.log("eventPagination", eventPagination);
+	console.log("====================================");
 
 	function handleModal(data) {
 		setModalData((prev) => ({
@@ -115,7 +112,6 @@ function EventList({
 					<strong>
 						<IconButton
 							onClick={() => {
-								setAlertPagination({ page: pagination?.page, pageSize: pagination?.pageSize });
 								navigate("/banjee-event/" + params.row.id, { state: { reported: false } });
 							}}>
 							<Visibility />
@@ -160,11 +156,11 @@ function EventList({
 						<DataGrid
 							autoHeight
 							getRowClassName={(params) => `app-header-${params.row.status}`}
-							page={pagination?.page}
-							pageSize={pagination?.pageSize}
+							page={eventPagination?.page}
+							pageSize={eventPagination?.pageSize}
 							onPageSizeChange={(event) => {
-								handlePagination({
-									page: pagination?.page,
+								setEventPagination({
+									page: eventPagination?.page,
 									pageSize: event,
 								});
 							}}
@@ -175,9 +171,9 @@ function EventList({
 							// autoPageSize
 							pagination
 							onPageChange={(event) => {
-								handlePagination({
+								setEventPagination({
 									page: event,
-									pageSize: pagination?.pageSize,
+									pageSize: eventPagination?.pageSize,
 								});
 							}}
 							rowsPerPageOptions={[5, 10, 20]}

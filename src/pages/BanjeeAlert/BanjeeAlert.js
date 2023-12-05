@@ -74,8 +74,8 @@ function BanjeeAlert() {
 		listAlert({
 			// latitude: currentLocation?.lat,
 			// longitude: currentLocation?.lon,
-			page: pagination?.page,
-			pageSize: pagination?.pageSize,
+			page: alertPagination?.page,
+			pageSize: alertPagination?.pageSize,
 			eventCode: ["PANIC_EMERGENCY", "NEW_ALERT"],
 		})
 			.then((res) => {
@@ -93,7 +93,7 @@ function BanjeeAlert() {
 			})
 			.catch((err) => console.error(err));
 		// }
-	}, [pagination]);
+	}, [alertPagination]);
 
 	// const listAllData = React.useCallback(() => {
 	// 	if (navigator.geolocation) {
@@ -136,8 +136,7 @@ function BanjeeAlert() {
 							<Tooltip title='Refresh Alerts' arrow sx={{ bacground: "white", color: "black" }}>
 								<IconButton
 									onClick={() => {
-										setAlertPagination({ page: undefined, pageSize: undefined });
-										setPagination({ page: 0, pageSize: 10 });
+										setAlertPagination({ page: 0, pageSize: 10 });
 									}}>
 									<Refresh color='primary' />
 								</IconButton>
@@ -187,8 +186,6 @@ function BanjeeAlert() {
 							<AlertListTable
 								handleAlertListApiCall={handleAlertListApiCall}
 								listApiCall={ListAlertApiCall}
-								pagination={pagination}
-								handlePagination={handlePagination}
 								data={data}
 								totalElement={totalElements}
 							/>

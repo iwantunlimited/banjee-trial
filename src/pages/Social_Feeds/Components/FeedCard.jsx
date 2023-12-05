@@ -85,7 +85,7 @@ function FeedCard(props) {
 						// paddingX: "14px",
 						// paddingBottom: "7px",
 						width: "100%",
-						// height: "100%",
+						height: "100%",
 						// minHeight: "250px",
 						boxShadow: "rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset",
 						borderRadius: "8px",
@@ -100,6 +100,10 @@ function FeedCard(props) {
 							paddingX: "14px",
 							// paddingBottom: "7px",
 							width: "100%",
+							height: "100%",
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "space-between",
 						}}>
 						<Box
 							style={{

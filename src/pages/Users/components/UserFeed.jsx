@@ -7,6 +7,8 @@ import {
 	TablePagination,
 	Divider,
 	Card,
+	IconButton,
+	Tooltip,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -16,6 +18,7 @@ import { PaginationContext } from "../../../context/PaginationContext";
 import FeedCard from "../../Social_Feeds/Components/FeedCard";
 import DeleteFeedModal from "../../Social_Feeds/Components/DeleteFeedModal";
 import { UserFeeds } from "../User_Services/UserApiService";
+import { Refresh } from "@mui/icons-material";
 
 export default function UserFeed({ userId }) {
 	const navigate = useNavigate();
@@ -85,12 +88,28 @@ export default function UserFeed({ userId }) {
 					height: { xl: "100%" },
 					// width: "100%",
 				}}>
-				<Box sx={{ paddingBottom: "10px" }}>
+				<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 					<Typography sx={{ fontSize: "20px", color: "gray", fontWeight: "600" }}>
 						User Activity ({totalEle})
 					</Typography>
-					<Divider />
+					<Tooltip title='Refresh' arrow>
+						<IconButton
+							onClick={() => {
+								setUserFeedFilter({
+									page: 0,
+									pageSize: 12,
+								});
+								setPagination((prev) => ({
+									...prev,
+									page: 0,
+									pageSize: 12,
+								}));
+							}}>
+							<Refresh color='primary' />
+						</IconButton>
+					</Tooltip>
 				</Box>
+				<Divider sx={{ marginY: { xs: "10px", sm: "15px" } }} />
 				<Box>
 					{data?.content?.length > 0 ? (
 						<Grid container spacing={2}>
@@ -131,7 +150,7 @@ export default function UserFeed({ userId }) {
 										count={totalEle}
 										page={pagination.page}
 										rowsPerPage={pagination.pageSize}
-										rowsPerPageOptions={[10, 15, 20]}
+										rowsPerPageOptions={[12, 16, 20]}
 										onPageChange={(event, data) => {
 											setUserFeedFilter({
 												page: data,

@@ -49,7 +49,7 @@ import FeedCard from "./Components/FeedCard";
 export default function SocialFeed(props) {
 	const navigate = useNavigate();
 	const theme = useTheme();
-	const { setFeedPagination, feedFilter, setFeedFilter } = React.useContext(PaginationContext);
+	const { feedFilter, setFeedFilter } = React.useContext(PaginationContext);
 	const { themeData } = React.useContext(MainContext);
 	const [data, setData] = React.useState([]);
 	const [modal, setModal] = React.useState({ open: false });
@@ -160,8 +160,15 @@ export default function SocialFeed(props) {
 									label='Start Date'
 									value={startDate}
 									open={openStartDate}
-									onOpen={() => setOpenStartDate(true)}
-									onClose={() => setOpenEndDate(false)}
+									onOpen={() => {
+										setOpenStartDate((prev) => !prev);
+										setOpenEndDate(false);
+									}}
+									onClose={() => {
+										setOpenStartDate((prev) => !prev);
+										// setOpenEndDate((prev) => !prev);
+									}}
+									closeOnSelect
 									onChange={(newValue) => {
 										setStartDate(newValue);
 									}}
@@ -188,8 +195,15 @@ export default function SocialFeed(props) {
 									label='End Date'
 									value={endDate}
 									open={openEndDate}
-									onOpen={() => setOpenEndDate(true)}
-									onClose={() => setOpenEndDate(false)}
+									onOpen={() => {
+										setOpenStartDate(false);
+										setOpenEndDate((prev) => !prev);
+									}}
+									onClose={() => {
+										// setOpenEndDate((prev) => !prev);
+										setOpenEndDate((prev) => !prev);
+									}}
+									closeOnSelect
 									onChange={(newValue) => {
 										// const nowDate = moment(newValue).format("l") === moment().format("l");
 										// console.log("now date", nowDate);
@@ -225,6 +239,11 @@ export default function SocialFeed(props) {
 											startDate: startDate,
 											endDate: endDate,
 										});
+										setPagination((prev) => ({
+											...prev,
+											page: 0,
+											pageSize: 12,
+										}));
 									}}>
 									<Search />
 								</IconButton>
@@ -321,8 +340,8 @@ export default function SocialFeed(props) {
 								<TablePagination
 									component='div'
 									count={totalEle}
-									page={pagination.page}
-									rowsPerPage={pagination.pageSize}
+									page={feedFilter?.page}
+									rowsPerPage={feedFilter.pageSize}
 									rowsPerPageOptions={[10, 15, 20]}
 									onPageChange={(event, data) => {
 										setPagination((prev) => ({

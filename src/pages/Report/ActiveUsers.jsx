@@ -26,6 +26,7 @@ function ActiverUsers() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
 	const context = React.useContext(MainContext);
+	const { setReportedUserPagination, reportedUserPagination } = React.useContext(PaginationContext);
 	const decodeToken = jwt_decode(token);
 	const date = new Date();
 	const [userData, setUserData] = React.useState({
@@ -42,8 +43,10 @@ function ActiverUsers() {
 	const [userRow, setUserRow] = React.useState();
 
 	const [customerFilter, setCustomerFilter] = React.useState({
-		page: 0,
-		pageSize: 10,
+		page: reportedUserPagination?.activeUserPage ? reportedUserPagination?.activeUserPage : 0,
+		pageSize: reportedUserPagination?.activeUserpageSize
+			? reportedUserPagination?.activeUserpageSize
+			: 10,
 		// domain: decodeToken.domain,
 		fromDate: moment().set({ hour: 0, minute: 0, second: 0 }).format(),
 		toDate: moment().set({ hour: 23, minute: 59, second: 59 }).format(),
@@ -55,22 +58,33 @@ function ActiverUsers() {
 	}
 
 	function handleRefresh() {
-		ActiveUserApiCall({ page: 0, pageSize: 10 });
-		// setCustomerFilter((prev) => ({
-		// 	...prev,
-		// 	page: 0,
-		// 	pageSize: 10,
-		// }));
+		setCustomerFilter((prev) => ({
+			...prev,
+			page: 0,
+			pageSize: 10,
+		}));
+		setReportedUserPagination({
+			...reportedUserPagination,
+			activeUserPage: 0,
+			activeUserpageSize: 10,
+		});
 	}
 
 	function handleDate(data) {
 		setCustomerFilter((prev) => ({
 			...prev,
 			// fromDate: data?.startDate,
+			page: 0,
+			pageSize: 10,
 			fromDate: moment(data?.startDate).set({ hour: 0, minute: 0, second: 0 }).format(),
 			// toDate: data?.startDate,
 			toDate: moment(data?.startDate).set({ hour: 23, minute: 59, second: 59 }).format(),
 		}));
+		setReportedUserPagination({
+			...reportedUserPagination,
+			activeUserPage: 0,
+			activeUserpageSize: 10,
+		});
 	}
 
 	function sanckbarClose() {
@@ -340,6 +354,10 @@ function ActiverUsers() {
 													...prev,
 													pageSize: event,
 												}));
+												setReportedUserPagination({
+													...reportedUserPagination,
+													activeUserpageSize: event,
+												});
 											}}
 											rowCount={userData?.totalElement}
 											paginationMode='server'
@@ -349,6 +367,10 @@ function ActiverUsers() {
 													...prev,
 													page: event,
 												}));
+												setReportedUserPagination({
+													...reportedUserPagination,
+													activeUserPage: event,
+												});
 											}}
 											className='dataGridFooter'
 											// onCellClick = {(data) =>

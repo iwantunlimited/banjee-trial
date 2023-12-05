@@ -33,6 +33,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import moment from "moment";
+// import ffmpeg from "fluent-ffmpeg";
 
 function CreateFeed() {
 	const userType = localStorage.getItem("userType");
@@ -73,6 +74,8 @@ function CreateFeed() {
 	const [submitForm, setSubmitForm] = React.useState(false);
 	const [imageUploaded, setImageUploaded] = React.useState(false);
 	const [listData, setListData] = React.useState([]);
+	const [compressedVideoSrc, setCompressedVideoSrc] = React.useState(null);
+
 	const [finalPayload, setFinalPayload] = React.useState({
 		geoLocation: {
 			x: lng ? lng : 0,
@@ -366,6 +369,54 @@ function CreateFeed() {
 		listNeighbourApiCAll();
 	}, [listNeighbourApiCAll]);
 
+	async function handleFileSelect(event) {
+		const inputVideo = event.target.files[0];
+		console.log("input", inputVideo);
+		if (!inputVideo) {
+			alert("Please select a video file.");
+			return;
+		}
+
+		const compressedVideoCanvas = await resizeVideo(inputVideo);
+		const compressedVideoFile = await canvasToFile(
+			compressedVideoCanvas,
+			"compressed_video.mp4",
+			"video/mp4"
+		);
+
+		// You can now use compressedVideoFile as needed, for example, upload it to a server.
+		console.log("Compressed Video File:", compressedVideoFile);
+
+		// For demonstration purposes, log the size of the compressed video file
+		console.log("Compressed Video Size:", compressedVideoFile.size);
+	}
+
+	function canvasToFile(canvas, fileName, fileType) {
+		return new Promise((resolve) => {
+			canvas.toBlob((blob) => {
+				const file = new File([blob], fileName, { type: fileType });
+				resolve(file);
+			}, fileType);
+		});
+	}
+
+	const resizeVideo = async (inputVideo) => {
+		return new Promise((resolve) => {
+			const video = document.createElement("video");
+			video.src = URL.createObjectURL(inputVideo);
+			video.onloadedmetadata = () => {
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+
+				canvas.width = video.videoWidth / 2; // Adjust the width as needed
+				canvas.height = video.videoHeight / 2; // Adjust the height as needed
+
+				ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+				resolve(canvas);
+			};
+		});
+	};
 	// const descriptionText = <div dangerouslySetInnerHTML={{ __html: state }} />;
 
 	return (
@@ -812,6 +863,17 @@ function CreateFeed() {
 										/>
 									</Box> */}
 								</Grid>
+								{/* for compressing the video */}
+								{/* <Grid item xs={12}>
+									<input
+										type='file'
+										accept='video/*'
+										onChange={(event) => {
+											handleFileSelect(event);
+										}}
+										id='videoInput'
+									/>
+								</Grid> */}
 								<Grid item xs={12}>
 									<Box>
 										<Button type='submit' variant='contained'>

@@ -32,6 +32,7 @@
 		"export-to-csv": "^0.2.1",
 		"fast-equals": "^4.0.3",
 		"file-saver": "^2.0.5",
+		"fluent-ffmpeg": "^2.1.2",
 		"google-map-react": "^2.2.0",
 		"helmet": "^5.0.2",
 		"isomorphic-fetch": "^3.0.0",

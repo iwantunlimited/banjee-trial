@@ -12,6 +12,7 @@ import {
 	CircularProgress,
 	Stack,
 	Paper,
+	Tooltip,
 } from "@mui/material";
 import {
 	assignAdminToCloud,
@@ -24,13 +25,23 @@ import {
 } from "../../services/apiServices";
 import { useLocation, useNavigate, useParams } from "react-router";
 import moment from "moment";
-import { ArrowBack, Cancel, Close, Delete, Done, MoreHoriz, Visibility } from "@mui/icons-material";
+import {
+	ArrowBack,
+	Cancel,
+	Close,
+	Delete,
+	Done,
+	MoreHoriz,
+	Refresh,
+	Visibility,
+} from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import ModalComp from "../../../../CustomComponents/ModalComp";
 import { useTheme } from "@mui/material/styles";
 import { MainContext } from "../../../../context/Context";
 import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
 import GroupFeed from "../../../Groups/components/GroupFeed";
+import { PaginationContext } from "../../../../context/PaginationContext";
 
 function DetailPage() {
 	const params = useParams();
@@ -38,6 +49,7 @@ function DetailPage() {
 	const location = useLocation();
 	const theme = useTheme();
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
+	const { setNhDetailPagination } = React.useContext(PaginationContext);
 	const [state, setState] = React.useState();
 	const [nearByNH, setNearByNH] = React.useState();
 
@@ -589,7 +601,7 @@ function DetailPage() {
 					)}
 				</Box>
 				<Card sx={{ padding: "20px" }}>
-					<Grid item container xs={12}>
+					<Grid item container xs={12} spacing={2}>
 						<Grid item xs={12} sm={12}>
 							<Box sx={{ display: "flex", alignItems: "center", paddingY: "20px" }}>
 								{/* <Box>
@@ -763,13 +775,24 @@ function DetailPage() {
 						</Grid>
 						<Grid item xs={12}>
 							<Box>
-								<Box sx={{ paddingY: "10px" }}>
+								<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 									<Typography sx={{ fontSize: "20px", color: "gray", fontWeight: "600" }}>
 										Neighbourhood Activity
 									</Typography>
-									<Divider />
+									<Tooltip title='Refresh' arrow>
+										<IconButton
+											onClick={() => {
+												setNhDetailPagination({
+													page: 0,
+													pageSize: 12,
+												});
+											}}>
+											<Refresh color='primary' />
+										</IconButton>
+									</Tooltip>
 								</Box>
-								<GroupFeed groupId={params?.id} groupName={state?.name} />
+								<Divider sx={{ marginY: { xs: "10px", sm: "15px" } }} />
+								<GroupFeed NHFeed={true} groupId={params?.id} groupName={state?.name} />
 							</Box>
 						</Grid>
 					</Grid>

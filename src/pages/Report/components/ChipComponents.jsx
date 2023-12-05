@@ -17,19 +17,21 @@ function ChipComponents({ refreshApi, keyword, handleKey, handleDate, searchByDa
 	return (
 		<Card className='main-card space-css'>
 			<div style={{ display: "flex", alignItems: "center" }}>
-				<IconButton
-					onClick={() => {
-						refreshApi();
-					}}
-					style={{
-						borderRadius: "50px",
-						marginRight: window.innerWidth < 501 ? "10px" : "30px",
-						background: theme.palette.primary.main,
-						padding: window.innerWidth < 501 ? "5px" : "10px",
-						color: theme.palette.primary.contrastText,
-					}}>
-					<Refresh fontSize='small' />
-				</IconButton>
+				<Tooltip title='Refresh' arrow>
+					<IconButton
+						onClick={() => {
+							refreshApi();
+						}}
+						style={{
+							borderRadius: "50px",
+							marginRight: window.innerWidth < 501 ? "10px" : "30px",
+							background: theme.palette.primary.main,
+							padding: window.innerWidth < 501 ? "5px" : "10px",
+							color: theme.palette.primary.contrastText,
+						}}>
+						<Refresh fontSize='small' />
+					</IconButton>
+				</Tooltip>
 				{/* <TextField
 					size='small'
 					variant='outlined'
@@ -61,11 +63,7 @@ function ChipComponents({ refreshApi, keyword, handleKey, handleDate, searchByDa
 										setStartDate(newValue);
 									}}
 									renderInput={(params) => (
-										<TextField
-											size='small'
-											helperText={params?.InputProps?.placeholder}
-											{...params}
-										/>
+										<TextField size='small' helperText={params?.InputProps?.placeholder} {...params} />
 									)}
 								/>
 							</LocalizationProvider>

@@ -48,18 +48,6 @@ function BanjeeEvent() {
 	const [data, setData] = React.useState("");
 
 	const [totalElements, setTotalElements] = React.useState(0);
-	const [pagination, setPagination] = React.useState({
-		page: eventPagination?.page ? eventPagination?.page : 0,
-		pageSize: eventPagination?.pageSize ? eventPagination?.pageSize : 10,
-	});
-
-	const handlePagination = (data) => {
-		setPagination((prev) => ({
-			...prev,
-			page: data?.page,
-			pageSize: data?.pageSize,
-		}));
-	};
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
@@ -75,8 +63,8 @@ function BanjeeEvent() {
 			// latitude: currentLocation?.lat,
 			// longitude: currentLocation?.lon,
 			type: "EVENT",
-			page: pagination?.page,
-			pageSize: pagination?.pageSize,
+			page: eventPagination?.page,
+			pageSize: eventPagination?.pageSize,
 		})
 			.then((res) => {
 				console.log("res", res);
@@ -94,7 +82,7 @@ function BanjeeEvent() {
 			})
 			.catch((err) => console.error(err));
 		// }
-	}, [pagination]);
+	}, [eventPagination]);
 
 	// const listAllData = React.useCallback(() => {
 	// 	if (navigator.geolocation) {
@@ -137,8 +125,7 @@ function BanjeeEvent() {
 							<Tooltip title='Refresh Events' arrow sx={{ bacground: "white", color: "black" }}>
 								<IconButton
 									onClick={() => {
-										setEventPagination({ page: undefined, pageSize: undefined });
-										setPagination({ page: 0, pageSize: 10 });
+										setEventPagination({ page: 0, pageSize: 10 });
 									}}>
 									<Refresh color='primary' />
 								</IconButton>
@@ -163,8 +150,6 @@ function BanjeeEvent() {
 							<EventList
 								handleEventListApiCall={handleEventListApiCall}
 								listApiCall={ListEventApiCall}
-								pagination={pagination}
-								handlePagination={handlePagination}
 								data={data}
 								totalElement={totalElements}
 							/>

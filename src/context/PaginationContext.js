@@ -18,10 +18,14 @@ const PaginationContext = React.createContext({
 	setNotificationPagination: () => {},
 	groupPagination: {},
 	setGroupPagination: () => {},
+	nhDetailPagination: {},
+	setNhDetailPagination: () => {},
 	feedFilter: {},
 	setFeedFilter: () => {},
 	userFeedFilter: {},
 	setUserFeedFilter: () => {},
+	reportedUserPagination: {},
+	setReportedUserPagination: () => {},
 });
 
 function ContextHandler({ children }) {
@@ -30,8 +34,8 @@ function ContextHandler({ children }) {
 		pageSize: undefined,
 	});
 	const [feedPagination, setFeedPagination] = React.useState({
-		page: undefined,
-		pageSize: undefined,
+		page: 0,
+		pageSize: 12,
 	});
 	const [feedFilterData, setFeedFilterData] = React.useState({
 		page: 0,
@@ -48,12 +52,12 @@ function ContextHandler({ children }) {
 		pageSize: undefined,
 	});
 	const [alertPagination, setAlertPagination] = React.useState({
-		page: undefined,
-		pageSize: undefined,
+		page: 0,
+		pageSize: 10,
 	});
 	const [eventPagination, setEventPagination] = React.useState({
-		page: undefined,
-		pageSize: undefined,
+		page: 0,
+		pageSize: 10,
 	});
 	const [notificationPagination, setNotificationPagination] = React.useState({
 		page: undefined,
@@ -63,9 +67,19 @@ function ContextHandler({ children }) {
 		page: undefined,
 		pageSize: undefined,
 	});
+	const [nhDetailPagination, setNhDetailPagination] = React.useState({
+		page: 0,
+		pageSize: 12,
+	});
 	const [userFeed, setUserFeed] = React.useState({
-		page: undefined,
-		pageSize: undefined,
+		page: 0,
+		pageSize: 12,
+	});
+	const [reportedUser, setReportedUser] = React.useState({
+		page: 0,
+		pageSize: 12,
+		activeUserPage: 0,
+		activeUserpageSize: 10,
 	});
 
 	function handlePagination(data) {
@@ -76,8 +90,7 @@ function ContextHandler({ children }) {
 		}));
 	}
 	function handleFeedPagination(data) {
-		setFeedPagination((prev) => ({
-			...prev,
+		setFeedPagination(() => ({
 			page: data?.page,
 			pageSize: data?.pageSize,
 		}));
@@ -99,6 +112,12 @@ function ContextHandler({ children }) {
 			pageSize: data?.pageSize,
 		}));
 	}
+	function handleNeighbourhoodDetailPagination(data) {
+		setNhDetailPagination((prev) => ({
+			page: data?.page,
+			pageSize: data?.pageSize,
+		}));
+	}
 	function handleBlogPagination(data) {
 		setBlogPagination((prev) => ({
 			...prev,
@@ -113,9 +132,9 @@ function ContextHandler({ children }) {
 			pageSize: data?.pageSize,
 		}));
 	}
+
 	function handleEventPagination(data) {
-		setAlertPagination((prev) => ({
-			...prev,
+		setEventPagination(() => ({
 			page: data?.page,
 			pageSize: data?.pageSize,
 		}));
@@ -153,6 +172,8 @@ function ContextHandler({ children }) {
 				setFeedFilter: handleFeedFilter,
 				neighbourhoodPagination: neighbourPagination,
 				setNeighbourhoodPagination: handleNeighbourhoodPagination,
+				nhDetailPagination: nhDetailPagination,
+				setNhDetailPagination: handleNeighbourhoodDetailPagination,
 				blogPagination: blogPagination,
 				setBlogPagination: handleBlogPagination,
 				alertPagination: alertPagination,
@@ -165,6 +186,14 @@ function ContextHandler({ children }) {
 				setGroupPagination: handleGroupPagination,
 				userFeedFilter: userFeed,
 				setUserFeedFilter: handleUserFeedFilter,
+				reportedUserPagination: reportedUser,
+				setReportedUserPagination: (data) =>
+					setReportedUser({
+						page: data?.page,
+						pageSize: data?.pageSize,
+						activeUserPage: data?.activeUserPage,
+						activeUserpageSize: data?.activeUserpageSize,
+					}),
 			}}>
 			{children}
 		</PaginationContext.Provider>

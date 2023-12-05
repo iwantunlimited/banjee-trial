@@ -25,6 +25,7 @@ function UserReports() {
 	const navigate = useNavigate();
 	const token = localStorage.getItem("token");
 	const context = React.useContext(MainContext);
+	const { reportedUserPagination, setReportedUserPagination } = React.useContext(PaginationContext);
 	const decodeToken = jwt_decode(token);
 	const [userData, setUserData] = React.useState({
 		data: [],
@@ -111,8 +112,8 @@ function UserReports() {
 		(data) => {
 			listUserMembership({
 				exists: false,
-				page: customerFilter?.page,
-				pageSize: customerFilter?.pageSize,
+				page: reportedUserPagination?.page,
+				pageSize: reportedUserPagination?.pageSize,
 			})
 				.then((res) => {
 					console.log("====================================");
@@ -138,7 +139,7 @@ function UserReports() {
 					console.warn(err);
 				});
 		},
-		[customerFilter?.page, customerFilter?.pageSize]
+		[reportedUserPagination]
 	);
 
 	const UserCsvDataApi = React.useCallback((data) => {
@@ -191,7 +192,12 @@ function UserReports() {
 				>
 					<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 						<Grid item xs={12}>
-							<ChipComponents refreshApi={UserMembershipApiCall} searchByDate={false} />
+							<ChipComponents
+								refreshApi={() =>
+									setReportedUserPagination({ ...reportedUserPagination, page: 0, pageSize: 10 })
+								}
+								searchByDate={false}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -215,7 +221,12 @@ function UserReports() {
 				>
 					<Grid item container xs={12} spacing={window.innerWidth < 601 ? 2 : 4}>
 						<Grid item xs={12}>
-							<ChipComponents refreshApi={UserMembershipApiCall} searchByDate={false} />
+							<ChipComponents
+								refreshApi={() =>
+									setReportedUserPagination({ ...reportedUserPagination, page: 0, pageSize: 10 })
+								}
+								searchByDate={false}
+							/>
 						</Grid>
 						<Grid item xs={12}>
 							<Card className='main-card space-css'>
@@ -248,23 +259,23 @@ function UserReports() {
 									<div className='root' style={{ width: "100%" }}>
 										<DataGrid
 											pagination
-											page={customerFilter?.page}
-											pageSize={customerFilter?.pageSize}
-											rowsPerPageOptions={[5, 10, 20, 30]}
+											page={reportedUserPagination?.page}
+											pageSize={reportedUserPagination?.pageSize}
+											rowsPerPageOptions={[5, 10, 20]}
 											onPageSizeChange={(event) => {
-												setCustomerFilter((prev) => ({
-													...prev,
+												setReportedUserPagination({
+													...reportedUserPagination,
 													pageSize: event,
-												}));
+												});
 											}}
 											rowCount={userData?.totalElement}
 											paginationMode='server'
 											autoHeight
 											onPageChange={(event) => {
-												setCustomerFilter((prev) => ({
-													...prev,
+												setReportedUserPagination({
+													...reportedUserPagination,
 													page: event,
-												}));
+												});
 											}}
 											className='dataGridFooter'
 											// onCellClick = {(data) =>

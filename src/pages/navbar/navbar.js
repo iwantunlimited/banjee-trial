@@ -121,10 +121,6 @@ function Navbar(props) {
 		setUserType(localStorage?.getItem("userType"));
 	}, []);
 
-	// console.log("====================================");
-	// console.log("userType navbar", userType);
-	// console.log("====================================");
-
 	if (userType) {
 		return (
 			<div>

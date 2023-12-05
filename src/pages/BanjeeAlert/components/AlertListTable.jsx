@@ -9,18 +9,11 @@ import { PaginationContext } from "../../../context/PaginationContext";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { deleteAlert } from "../api-services/apiServices";
 
-function AlertListTable({
-	totalElement,
-	data,
-	handlePagination,
-	pagination,
-	listApiCall,
-	handleAlertListApiCall,
-}) {
+function AlertListTable({ totalElement, data, listApiCall, handleAlertListApiCall }) {
 	const navigate = useNavigate();
 
 	const context = React.useContext(MainContext);
-	const { setAlertPagination } = React.useContext(PaginationContext);
+	const { alertPagination, setAlertPagination } = React.useContext(PaginationContext);
 
 	const [modalData, setModalData] = React.useState({
 		open: false,
@@ -115,7 +108,6 @@ function AlertListTable({
 					<strong>
 						<IconButton
 							onClick={() => {
-								setAlertPagination({ page: pagination?.page, pageSize: pagination?.pageSize });
 								navigate("/banjee-alert/" + params.row.id, { state: { reported: false } });
 							}}>
 							<Visibility />
@@ -160,11 +152,11 @@ function AlertListTable({
 						<DataGrid
 							autoHeight
 							getRowClassName={(params) => `app-header-${params.row.status}`}
-							page={pagination?.page}
-							pageSize={pagination?.pageSize}
+							page={alertPagination?.page}
+							pageSize={alertPagination?.pageSize}
 							onPageSizeChange={(event) => {
-								handlePagination({
-									page: pagination?.page,
+								setAlertPagination({
+									page: alertPagination?.page,
 									pageSize: event,
 								});
 							}}
@@ -175,9 +167,9 @@ function AlertListTable({
 							// autoPageSize
 							pagination
 							onPageChange={(event) => {
-								handlePagination({
+								setAlertPagination({
 									page: event,
-									pageSize: pagination?.pageSize,
+									pageSize: alertPagination?.pageSize,
 								});
 							}}
 							rowsPerPageOptions={[5, 10, 20]}

@@ -1,4 +1,4 @@
-import { Cancel, Visibility, ArrowBack, Delete } from "@mui/icons-material";
+import { Cancel, Visibility, ArrowBack, Delete, Refresh } from "@mui/icons-material";
 import {
 	Avatar,
 	Box,
@@ -11,6 +11,7 @@ import {
 	Button,
 	IconButton,
 	Stack,
+	Tooltip,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { DataGrid } from "@mui/x-data-grid";
@@ -22,12 +23,14 @@ import ModalComp from "../../../CustomComponents/ModalComp";
 import { filterMembers } from "../../Neighbourhoods/services/apiServices";
 import { deleteCommunity, findCommunityById } from "../services/apiServices";
 import GroupFeed from "./GroupFeed";
+import { PaginationContext } from "../../../context/PaginationContext";
 
 function GroupDetailPage(props) {
 	const params = useParams();
 	const navigate = useNavigate();
 	const theme = useTheme();
 	const { themeData } = React.useContext(MainContext);
+	const { setFeedPagination } = React.useContext(PaginationContext);
 
 	const [state, setState] = React.useState();
 
@@ -251,7 +254,7 @@ function GroupDetailPage(props) {
 					</Button> */}
 				</Box>
 				<Card sx={{ padding: "20px" }}>
-					<Grid item container xs={12}>
+					<Grid item container xs={12} spacing={2}>
 						<Grid item xs={12} sm={12}>
 							<Box sx={{ display: "flex", alignItems: "center", paddingY: "20px" }}>
 								<Box>
@@ -332,15 +335,24 @@ function GroupDetailPage(props) {
 							</Card>
 						</Grid>
 						<Grid item xs={12}>
-							<Box>
-								<Box sx={{ paddingY: "10px" }}>
-									<Typography sx={{ fontSize: "20px", color: "gray", fontWeight: "600" }}>
-										Group Activity
-									</Typography>
-									<Divider />
-								</Box>
-								<GroupFeed groupId={params?.id} groupName={state?.name} />
+							<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+								<Typography sx={{ fontSize: "20px", color: "gray", fontWeight: "600" }}>
+									Group Activity
+								</Typography>
+								<Tooltip title='Refresh' arrow>
+									<IconButton
+										onClick={() => {
+											setFeedPagination({
+												page: 0,
+												pageSize: 12,
+											});
+										}}>
+										<Refresh color='primary' />
+									</IconButton>
+								</Tooltip>
 							</Box>
+							<Divider sx={{ marginY: { xs: "10px", sm: "15px" } }} />
+							<GroupFeed NHFeed={false} groupId={params?.id} groupName={state?.name} />
 						</Grid>
 					</Grid>
 				</Card>
