@@ -19,6 +19,7 @@ function FeedCard(props) {
 	const [fullScreenState, setFullScreenState] = React.useState({
 		imageModal: false,
 	});
+	const [collabVisible, setCollabVisible] = React.useState(true);
 
 	const { ele, handleDeleteModal, index } = props;
 
@@ -35,7 +36,7 @@ function FeedCard(props) {
 						left: 0,
 						margin: "10px",
 						width: "-webkit-fill-available",
-						display: "flex",
+						display: collabVisible ? "flex" : "none",
 						flexDirection: "row",
 						alignItems: "center",
 						color: "white",
@@ -438,15 +439,17 @@ function FeedCard(props) {
 									<ChatBubbleOutline />
 									<span style={{ marginLeft: "5px" }}>{ele?.totalComments || 0}</span>
 								</Box>
-								<Box
-									sx={{
-										display: "flex",
-										alignItems: "center",
-										marginLeft: "20px",
-									}}>
-									<Group />
-									<span style={{ marginLeft: "5px" }}>{ele?.collaborateFeeds?.length || 0}</span>
-								</Box>
+								{ele?.collaborateFeeds?.length > 0 ? (
+									<Box
+										sx={{
+											display: "flex",
+											alignItems: "center",
+											marginLeft: "20px",
+										}}>
+										<Group />
+										<span style={{ marginLeft: "5px" }}>{ele?.collaborateFeeds?.length || 0}</span>
+									</Box>
+								) : null}
 							</Box>
 						</Box>
 					</Box>
