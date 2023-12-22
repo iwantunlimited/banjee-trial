@@ -34,6 +34,7 @@ let postApiCall = (url, actionCode, payload, method, noToken) => {
 		http(method)(url, body, {
 			headers: {
 				...urls.headers,
+
 				Authorization: !noToken
 					? "Bearer " + localStorage.getItem("token")
 					: "Basic aXRwbDppd2FudHVubGltaXRlZA==",

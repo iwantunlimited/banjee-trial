@@ -6,11 +6,16 @@ import ChipComp from "./Components/CardChipComp";
 import "./neighbourhood.css";
 import NeighbourList from "./Components/NeighbourList";
 import { ApprovalList } from "./Components/ApprovalList";
-import { filterNeighbourhood, pendingApproval } from "./services/apiServices";
+import {
+	filterNeighbourhood,
+	pendingApproval,
+	requestCommunityFilter,
+} from "./services/apiServices";
 
 import { useTheme } from "@mui/material/styles";
 import { useLocation } from "react-router";
 import { PaginationContext } from "../../context/PaginationContext";
+import GeneralPendingMemberRequests from "./Components/NHPrivacy/GeneralPendingMemberReq";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -42,8 +47,11 @@ function a11yProps(index) {
 
 function Neighbourhood() {
 	const theme = useTheme();
-	const { neighbourhoodPagination, setNeighbourhoodPagination } =
-		React.useContext(PaginationContext);
+	const {
+		neighbourhoodPagination,
+		setNeighbourhoodPagination,
+		nHPrivacyPagination: { generalMemberRequestPageSize, generalMemberRequestPage },
+	} = React.useContext(PaginationContext);
 
 	const location = useLocation();
 	const [value, setValue] = React.useState(location?.state?.pending ? 1 : 0);
@@ -54,6 +62,11 @@ function Neighbourhood() {
 		pageSize: neighbourhoodPagination?.pageSize ? neighbourhoodPagination?.pageSize : 10,
 	});
 	const [pendingListData, setPendingListData] = React.useState("");
+	const [generalPendingReq, setGeneralPendingReq] = React.useState({
+		data: [],
+		totalElements: 0,
+	});
+
 	const [totalPendingElement, setTotalPendingElement] = React.useState(0);
 	const [pendingPagination, setPendingPagination] = React.useState({
 		page: 0,
@@ -137,9 +150,30 @@ function Neighbourhood() {
 			.catch((err) => console.error(err));
 	}, [pendingPagination]);
 
+	const generalPendingListApiCall = React.useCallback(() => {
+		requestCommunityFilter({
+			approved: false,
+			page: generalMemberRequestPage,
+			pageSize: generalMemberRequestPageSize,
+			userType: -1,
+			type: "SOCIAL_CLOUD",
+		})
+			.then((res) => {
+				console.log("general memebr resssss", res);
+				setGeneralPendingReq({
+					data: res?.content,
+					totalElements: res?.totalElements,
+				});
+			})
+			.catch((err) => {
+				console.error("error", err);
+			});
+	}, []);
+
 	React.useEffect(() => {
 		listApiCall();
-	}, [listApiCall]);
+		generalPendingListApiCall();
+	}, [listApiCall, generalPendingListApiCall]);
 
 	React.useEffect(() => {
 		pendingListApiCall();
@@ -173,6 +207,11 @@ function Neighbourhood() {
 									label={`Pending List (${totalPendingElement})`}
 									{...a11yProps(1)}
 								/>
+								<Tab
+									sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+									label={`Pending Member Requests (${generalPendingReq?.totalElements})`}
+									{...a11yProps(2)}
+								/>
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
@@ -195,6 +234,15 @@ function Neighbourhood() {
 									totalElement={totalPendingElement}
 									pagination={pendingPagination}
 									handlePagination={handlePendingPagination}
+									handleTabChange={handleChange}
+								/>
+							</Box>
+						</TabPanel>
+						<TabPanel value={value} index={2}>
+							<Box sx={{ paddingY: "15px" }}>
+								<GeneralPendingMemberRequests
+									pendingData={generalPendingReq}
+									refreshApi={generalPendingListApiCall}
 									handleTabChange={handleChange}
 								/>
 							</Box>

@@ -30,7 +30,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { filterSocialFeeds } from "./services/ApiServices";
 
 import FullScreenImageModal from "./Components/FullScreenImageModal";
-import DetailsModal from "./Components/DetailsModal";
 import { useNavigate } from "react-router-dom";
 import "./SocialFeed.css";
 
@@ -52,7 +51,6 @@ export default function SocialFeed(props) {
 	const { feedFilter, setFeedFilter } = React.useContext(PaginationContext);
 	const { themeData } = React.useContext(MainContext);
 	const [data, setData] = React.useState([]);
-	const [modal, setModal] = React.useState({ open: false });
 	//delete menu ------
 	const [openDModal, setOpenDModal] = React.useState(false);
 	const [dFeedData, setDFeedData] = React.useState({
@@ -384,13 +382,6 @@ export default function SocialFeed(props) {
 					<FullScreenImageModal
 						state={fullScreenState}
 						handleClose={() => setFullScreenState({ imageModal: false })}
-					/>
-				)}
-				{modal.open && (
-					<DetailsModal
-						state={modal}
-						handleClose={() => setModal({ open: false })}
-						filterApi={filterSocialFeedsApiCall}
 					/>
 				)}
 			</Container>

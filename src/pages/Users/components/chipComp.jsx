@@ -64,11 +64,7 @@ function ChipComp({ refreshApi, keyword, handleKey, handleDate }) {
 									setStartDate(moment(newValue).set({ hour: 0, minute: 0, second: 0 }).format());
 								}}
 								renderInput={(params) => (
-									<TextField
-										size='small'
-										helperText={params?.InputProps?.placeholder}
-										{...params}
-									/>
+									<TextField size='small' helperText={params?.InputProps?.placeholder} {...params} />
 								)}
 							/>
 						</LocalizationProvider>
@@ -103,18 +99,18 @@ function ChipComp({ refreshApi, keyword, handleKey, handleDate }) {
 						</Box>
 
 						{/* for get reported user list */}
-						{/* <Tooltip title='Reported Users'>
-						<IconButton
-							onClick={() => navigate("/user/reporteduser")}
-							style={{
-								borderRadius: "50px",
-								background: theme.palette.primary.main,
-								padding: window.innerWidth < 501 ? "5px" : "10px",
-								color: theme.palette.primary.contrastText,
-							}}>
-							<Report />
-						</IconButton>
-					</Tooltip> */}
+						<Tooltip title='Reported Users'>
+							<IconButton
+								onClick={() => navigate("/user/reporteduser")}
+								style={{
+									borderRadius: "50px",
+									background: theme.palette.primary.main,
+									padding: window.innerWidth < 501 ? "5px" : "10px",
+									color: theme.palette.primary.contrastText,
+								}}>
+								<Report />
+							</IconButton>
+						</Tooltip>
 					</Stack>
 				</form>
 			</div>

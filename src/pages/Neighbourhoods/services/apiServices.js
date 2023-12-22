@@ -34,13 +34,31 @@ export const updateNeighbourhood = (requestLoad) => {
 	return executePost(url, actionCode, payload, method);
 };
 
-export const filterMembers = (requestLoad) => {
-	let url = urls.GEO_CLOUD.FILTER_MEMBERS;
+export const sendLinkToUser = (requestLoad) => {
+	let url = urls.GEO_CLOUD.SEND_LINK;
+	// let url = "http://192.168.1.6:50001/social-cloud/members/filter";
 	let actionCode = "";
 	let payload = requestLoad;
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+export const filterMembers = (requestLoad) => {
+	let url = urls.GEO_CLOUD.FILTER_MEMBERS;
+	// let url = "http://192.168.1.6:50001/social-cloud/members/filter";
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export const requestCommunityFilter = (requestLoad) => {
+	let url = urls.GEO_CLOUD.REQUEST_COMMUNITY_FILTER;
+	// let url = "http://192.168.1.6:50001/request-community/filter";
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+
 export const assignAdminToCloud = (requestLoad) => {
 	let url = urls.GEO_CLOUD.Assign_Admin_To_Cloud;
 	let actionCode = "";
@@ -55,6 +73,13 @@ export const assignMemberToCloud = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+export const leaveAdminRoleToCloud = (requestLoad) => {
+	let url = urls.GEO_CLOUD.LEAVE_ADMIN_ROLE;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
 
 export const pendingApproval = (requestLoad) => {
 	let url = urls.GEO_CLOUD.PENDING_APPROVAL;
@@ -63,8 +88,36 @@ export const pendingApproval = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+export const adminVerificationApi = (requestLoad) => {
+	let url = urls.GEO_CLOUD.ADMIN_VERIFICATION;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
 export const approveRequest = (requestLoad) => {
 	let url = urls.GEO_CLOUD.APPROVE_NEIGHBOURHOOD;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export const approveRequestCommunity = (requestLoad) => {
+	let url = urls.GEO_CLOUD.REQUEST_COMMUNITY_APPROVE;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export const removeAdminRequests = (requestLoad) => {
+	let url = urls.GEO_CLOUD.REMOVE_ADMIN_REQUEST;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+export const rejectRequestCommunity = (requestLoad) => {
+	let url = urls.GEO_CLOUD.REQUEST_COMMUNITY_REJECT;
 	let actionCode = "";
 	let payload = requestLoad;
 	let method = "POST";
@@ -93,6 +146,20 @@ export const deleteNeighbourhood = (requestLoad) => {
 	return executeGet(url, actionCode, payload, method);
 };
 
+export const approveRemoveAdminReq = (requestLoad) => {
+	let url = urls.GEO_CLOUD.APPROVE_REMOVE_ADMIN_REQUEST + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
+export const rejectRemoveAdminReq = (requestLoad) => {
+	let url = urls.GEO_CLOUD.REJECT_REMOVE_ADMIN_REQUEST + requestLoad;
+	let actionCode = "";
+	let payload = {};
+	let method = "GET";
+	return executeGet(url, actionCode, payload, method);
+};
 export const findNeighbourhood = (requestLoad) => {
 	let url = urls.GEO_CLOUD.FIND_NEIGHBOURHOOD + requestLoad;
 	let actionCode = "";

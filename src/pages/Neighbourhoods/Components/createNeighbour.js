@@ -35,7 +35,8 @@ function CreateNeighbour(props) {
 		lon: "",
 		description: "",
 		imageUrl: "",
-		type: "PUBLIC",
+		type: "SOCIAL_CLOUD",
+		cloudType: "PRIVATE",
 		approvalType: "BY_ADMIN",
 	});
 	const [mapData, setMapData] = React.useState({
@@ -163,7 +164,8 @@ function CreateNeighbour(props) {
 					lon: "",
 					description: "",
 					imageUrl: "",
-					type: "PUBLIC",
+					type: "SOCIAL_CLOUD",
+					cloudType: "PRIVATE",
 					approvalType: "BY_ADMIN",
 				}));
 				handleExpanded();

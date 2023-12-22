@@ -26,6 +26,21 @@ const PaginationContext = React.createContext({
 	setUserFeedFilter: () => {},
 	reportedUserPagination: {},
 	setReportedUserPagination: () => {},
+	nHPrivacyPagination: {
+		nhMemberpage: 0,
+		nhMemberpageSize: 10,
+		nhPendingReqPage: 0,
+		nhPendingReqPageSize: 10,
+		nhPendingAdminPage: 0,
+		nhPendingAdminPageSize: 10,
+		suggestedAdminPage: 0,
+		suggestedAdminPageSize: 10,
+		removeAdminpage: 0,
+		removeAdminPageSize: 10,
+		generalMemberRequestPage: 0,
+		generalMemberRequestPageSize: 10,
+	},
+	setNHPrivacyPagination: () => {},
 });
 
 function ContextHandler({ children }) {
@@ -80,6 +95,21 @@ function ContextHandler({ children }) {
 		pageSize: 12,
 		activeUserPage: 0,
 		activeUserpageSize: 10,
+	});
+
+	const [nhPrivacyPagination, setNhPrivacyPagination] = React.useState({
+		nhMemberpage: 0,
+		nhMemberpageSize: 10,
+		nhPendingReqPage: 0,
+		nhPendingReqPageSize: 10,
+		nhPendingAdminPage: 0,
+		nhPendingAdminPageSize: 10,
+		suggestedAdminPage: 0,
+		suggestedAdminPageSize: 10,
+		removeAdminpage: 0,
+		removeAdminPageSize: 10,
+		generalMemberRequestPage: 0,
+		generalMemberRequestPageSize: 10,
 	});
 
 	function handlePagination(data) {
@@ -161,6 +191,46 @@ function ContextHandler({ children }) {
 		}));
 	}
 
+	function handlePrivacyPagination(data) {
+		if (data?.from === "member") {
+			setNhPrivacyPagination((prev) => ({
+				...prev,
+				nhMemberpage: data?.page,
+				nhMemberpageSize: data?.pageSize,
+			}));
+		} else if (data?.from === "pendingRequest") {
+			setNhPrivacyPagination((prev) => ({
+				...prev,
+				nhPendingReqPage: data?.page,
+				nhPendingReqPageSize: data?.pageSize,
+			}));
+		} else if (data?.from === "pendingAdmin") {
+			setNhPrivacyPagination((prev) => ({
+				...prev,
+				nhPendingAdminPage: data?.page,
+				nhPendingAdminPageSize: data?.pageSize,
+			}));
+		} else if (data?.from === "suggestedAdmin") {
+			setNhPrivacyPagination((prev) => ({
+				...prev,
+				suggestedAdminPage: data?.page,
+				suggestedAdminPageSize: data?.pageSize,
+			}));
+		} else if (data?.from === "removeAdminRequest") {
+			setNhPrivacyPagination((prev) => ({
+				...prev,
+				removeAdminpage: data?.page,
+				removeAdminPageSize: data?.pageSize,
+			}));
+		} else if (data?.from === "generalMemberRequest") {
+			setNhPrivacyPagination((prev) => ({
+				...prev,
+				generalMemberRequestPage: data?.page,
+				generalMemberRequestPageSize: data?.pageSize,
+			}));
+		}
+	}
+
 	return (
 		<PaginationContext.Provider
 			value={{
@@ -194,6 +264,8 @@ function ContextHandler({ children }) {
 						activeUserPage: data?.activeUserPage,
 						activeUserpageSize: data?.activeUserpageSize,
 					}),
+				nHPrivacyPagination: nhPrivacyPagination,
+				setNHPrivacyPagination: handlePrivacyPagination,
 			}}>
 			{children}
 		</PaginationContext.Provider>

@@ -184,15 +184,6 @@ const GoogleMapCustom = compose(
 		setCurrentLocation();
 	}, [setCurrentLocation]);
 
-	// console.log("====================================");
-	// console.log("prevLocation", localLat, localLng);
-	// console.log("====================================");
-	// console.log("====================================");
-	// console.log("locationData", locationData);
-	// console.log("====================================");
-	// console.log("====================================");
-	// console.log("state", state);
-	// console.log("====================================");
 	if (props?.view) {
 		if (props?.data?.lat && props?.data?.lng) {
 			return (

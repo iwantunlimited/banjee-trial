@@ -42,6 +42,7 @@ import { MainContext } from "../../../../context/Context";
 import GoogleMapCustom from "../../../../CustomComponents/GoogleMap";
 import GroupFeed from "../../../Groups/components/GroupFeed";
 import { PaginationContext } from "../../../../context/PaginationContext";
+import NHPrivacyTab from "../NHPrivacy/NHPrivacyTab";
 
 function DetailPage() {
 	const params = useParams();
@@ -57,15 +58,6 @@ function DetailPage() {
 		modalId: 1,
 		open: false,
 		data: "",
-	});
-
-	const [memberPagination, setMemberPagination] = React.useState({
-		page: 0,
-		pageSize: 10,
-	});
-	const [members, setMembers] = React.useState({
-		data: [],
-		totalMembers: 0,
 	});
 
 	function handleModal(data) {
@@ -97,157 +89,6 @@ function DetailPage() {
 			.catch((err) => console.warn(err));
 	};
 
-	let rows = members?.data ? members?.data : [];
-
-	let columns = [
-		{
-			id: "1",
-			field: "mavatarUrl",
-			headerClassName: "app-header",
-			headerName: "Avatar",
-			flex: 0.2,
-			align: "center",
-
-			renderCell: (params) => {
-				return (
-					<Avatar
-						src={`https://gateway.banjee.org/services/media-service/iwantcdn/resources/${params.row.mavtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
-						alt={params.row.muserName}
-					/>
-				);
-			},
-		},
-		{
-			id: "2",
-			field: "muserName",
-			headerClassName: "app-header",
-			headerName: "Full Name",
-			flex: 0.3,
-			renderCell: (params) => {
-				if (params?.row?.mfirstName) {
-					return params?.row?.mfirstName;
-				} else {
-					return "-";
-				}
-			},
-		},
-		{
-			id: "3",
-			field: "mmcc",
-			headerClassName: "app-header",
-			headerName: "Mobile",
-			// align: "center",
-			flex: 0.3,
-			renderCell: (params) => {
-				if (params?.row?.mmcc && params?.row?.mmobile) {
-					const number = params?.row?.mmcc && params?.row?.mmcc + " " + params?.row?.mmobile;
-
-					return number;
-				} else if (params?.row?.mmobile) {
-					const number = params?.row?.mmobile;
-					return number;
-				} else {
-					return "-";
-				}
-			},
-		},
-		{
-			id: "4",
-			field: "memail",
-			headerClassName: "app-header",
-			headerName: "Email",
-			// align: "center",
-			flex: 0.4,
-		},
-		{
-			id: "5",
-			field: "createdOn",
-			headerClassName: "app-header",
-			headerName: "Created On",
-			// align: "center",
-			flex: 0.4,
-			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return "-";
-				}
-			},
-		},
-		{
-			id: "6",
-			field: "id",
-			headerClassName: "app-header-rejected",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "Action",
-			// align: 'center',
-			flex: 0.3,
-			renderCell: (params) => {
-				return (
-					<strong>
-						<IconButton
-							onClick={() => {
-								setModal({ open: true, data: params?.row, modalId: 5 });
-								// navigate("/neighbourhood/" + params?.row?.routingId);
-							}}>
-							<Delete />
-						</IconButton>
-						<IconButton
-							onClick={() => {
-								setModal({ open: true, data: params?.row, modalId: 2 });
-								// navigate("/neighbourhood/" + params?.row?.routingId);
-							}}>
-							<Visibility />
-						</IconButton>
-					</strong>
-				);
-			},
-		},
-		{
-			id: "6",
-			field: "name",
-			headerClassName: "app-header-rejected",
-			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
-			headerName: "Assign Admin",
-			// align: 'center',
-			flex: 0.3,
-			renderCell: (params) => {
-				if (params?.row?.profile?.username === "root") {
-					return (
-						<strong>
-							<IconButton>
-								<Done color='success' />
-							</IconButton>
-						</strong>
-					);
-				} else {
-					return (
-						<strong>
-							<Stack direction={"row"} spacing={1}>
-								{params?.row?.role === "ADMIN" && (
-									<IconButton>
-										<Done color='success' />
-									</IconButton>
-								)}
-								<IconButton
-									onClick={() =>
-										setModal({
-											open: true,
-											data: params?.row?.profile.id,
-											modalId: params?.row?.role === "ADMIN" ? 4 : 3,
-										})
-									}>
-									<MoreHoriz />
-								</IconButton>
-							</Stack>
-						</strong>
-					);
-				}
-			},
-		},
-	];
-
 	const ApiCall = React.useCallback(() => {
 		findNeighbourhood(params?.id)
 			.then((res) => {
@@ -276,97 +117,6 @@ function DetailPage() {
 			})
 			.catch((err) => console.error(err));
 	}, []);
-
-	//for filtering members by cloud id
-	const filterMemberApiCall = React.useCallback(() => {
-		filterMembers({
-			cloudId: params?.id,
-			page: memberPagination?.page,
-			pageSize: memberPagination?.pageSize,
-		})
-			.then((res) => {
-				const resp = res?.content?.map((item, index) => ({
-					...item,
-					assignId: item?.profile?.id,
-					muserName: item?.profile?.username,
-					mavtarUrl: item?.profile?.avtarUrl,
-					memail: item?.profile?.email,
-					mmcc: item?.profile?.mcc,
-					mmobile: item?.profile?.mobile,
-					mfirstName: item?.profile?.firstName,
-					mlastName: item?.profile?.lastName,
-				}));
-				// setMemberPagination((prev) => ({
-				// 	...prev,
-				// 	page: res?.pageable?.pageNumber,
-				// 	pageSize: res?.pageable?.pageSize,
-				// }));
-				setMembers((prev) => ({
-					...prev,
-					data: resp,
-					totalMembers: res?.totalElements,
-				}));
-			})
-			.catch((err) => console.error(err));
-	}, [memberPagination, params?.id]);
-
-	const removeUserFromNeighbourhoodApiCall = React.useCallback((data) => {
-		removeUserFromNeighbourhood({
-			cloudId: params?.id,
-			userId: data?.profile?.id,
-		})
-			.then((res) => {
-				// console.log(res);
-				setModal((prev) => ({
-					...prev,
-					open: false,
-					modalId: 1,
-					data: "",
-				}));
-				setModalOpen(true);
-				setModalData("user removed from neighbourhood", "success");
-				filterMemberApiCall();
-			})
-			.catch((err) => {
-				console.error(err);
-				setModalOpen(true);
-				setModalData("something went wrong , try again !", "error");
-			});
-	}, []);
-
-	//api for assigning admin to the cloud
-	const AssignAdminApiCall = (payload) => {
-		assignAdminToCloud(payload)
-			.then((res) => {
-				setModal((prev) => ({
-					...prev,
-					open: false,
-					modalId: 1,
-					data: "",
-				}));
-				setModalOpen(true);
-				setModalData("New Admin Assigned", "success");
-				filterMemberApiCall();
-			})
-			.catch((err) => console.error(err));
-	};
-
-	//api for assigning member to the cloud
-	const AssignMemberApiCall = (payload) => {
-		assignMemberToCloud(payload)
-			.then((res) => {
-				setModal((prev) => ({
-					...prev,
-					open: false,
-					modalId: 1,
-					data: "",
-				}));
-				setModalOpen(true);
-				setModalData("Member Assigned", "success");
-				filterMemberApiCall();
-			})
-			.catch((err) => console.error(err));
-	};
 
 	function modalFunction(modalId) {
 		switch (modalId) {
@@ -465,96 +215,6 @@ function DetailPage() {
 						</Box>
 					</ModalComp>
 				);
-			case 3:
-				// for assign admin role
-				return (
-					<ModalComp handleModal={handleModal} data={modal}>
-						<Box>
-							<Typography
-								sx={{
-									fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
-									fontWeight: 400,
-								}}>
-								Are you sure to assign admin role ?
-							</Typography>
-							<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-								<Button variant='outlined' onClick={() => handleModal(false)}>
-									Cancel
-								</Button>
-								<Button
-									variant='contained'
-									sx={{ marginLeft: "20px" }}
-									onClick={() => {
-										AssignAdminApiCall({
-											cloudId: params?.id,
-											userId: modal?.data,
-										});
-									}}>
-									Confirm
-								</Button>
-							</Box>
-						</Box>
-					</ModalComp>
-				);
-			case 4:
-				// for assign member role
-				return (
-					<ModalComp handleModal={handleModal} data={modal}>
-						<Box>
-							<Typography
-								sx={{
-									fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
-									fontWeight: 400,
-								}}>
-								Are you sure to assign member role ?
-							</Typography>
-							<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-								<Button variant='outlined' onClick={() => handleModal(false)}>
-									Cancel
-								</Button>
-								<Button
-									variant='contained'
-									sx={{ marginLeft: "20px" }}
-									onClick={() => {
-										AssignMemberApiCall({
-											cloudId: params?.id,
-											userId: modal?.data,
-										});
-									}}>
-									Confirm
-								</Button>
-							</Box>
-						</Box>
-					</ModalComp>
-				);
-			case 5:
-				// for delete neighbourhood
-				return (
-					<ModalComp handleModal={handleModal} data={modal}>
-						<Box>
-							<Typography
-								sx={{
-									fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
-									fontWeight: 400,
-								}}>
-								Are you sure to remove user from neighbourhood ?
-							</Typography>
-							<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-								<Button variant='outlined' onClick={() => handleModal(false)}>
-									Cancel
-								</Button>
-								<Button
-									variant='contained'
-									sx={{ marginLeft: "20px" }}
-									onClick={() => {
-										removeUserFromNeighbourhoodApiCall(modal?.data);
-									}}>
-									Confirm
-								</Button>
-							</Box>
-						</Box>
-					</ModalComp>
-				);
 			default:
 				break;
 		}
@@ -562,12 +222,11 @@ function DetailPage() {
 
 	React.useEffect(() => {
 		ApiCall();
-		filterMemberApiCall();
-	}, [ApiCall, filterMemberApiCall]);
+	}, [ApiCall]);
 
 	if (state) {
 		return (
-			<Container maxWidth='lg' style={{ padding: "0px", margin: "auto" }}>
+			<Container maxWidth='xl' style={{ padding: "0px", margin: "auto" }}>
 				<Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
 					<IconButton
 						onClick={() => {
@@ -688,7 +347,7 @@ function DetailPage() {
 							</Paper>
 						</Grid>
 						<Grid item xs={12} sm={12}>
-							<Card sx={{ padding: "20px", borderRadius: "0px" }}>
+							{/* <Card sx={{ padding: "20px", borderRadius: "0px" }}>
 								<Box sx={{ paddingBottom: "10px" }}>
 									<Typography sx={{ fontSize: "20px", color: "gray", fontWeight: "600" }}>
 										Total Members({state?.totalMembers})
@@ -739,7 +398,8 @@ function DetailPage() {
 										</div>
 									)}
 								</Box>
-							</Card>
+							</Card> */}
+							<NHPrivacyTab />
 						</Grid>
 						<Grid item xs={12}>
 							<Card
