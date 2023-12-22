@@ -26,7 +26,7 @@ import { MainContext } from "../../../../context/Context";
 function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi }) {
 	const {
 		setNHPrivacyPagination,
-		nHPrivacyPagination: { nhPendingReqPage, nhPendingReqPageSize },
+		nHPrivacyPagination: { generalMemberRequestPage, generalMemberRequestPageSize },
 	} = useContext(PaginationContext);
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
 	let rows = pendingData?.data ? pendingData?.data : [];
@@ -149,11 +149,11 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 				// console.log("====================================");
 				setModalOpen(true);
 				setModalData("Request Accepted Successfully", "success");
-				if (nhPendingReqPage === 0) {
+				if (generalMemberRequestPage === 0) {
 					refreshApi();
 				} else {
 					setNHPrivacyPagination({
-						from: "pendingRequest",
+						from: "generalMemberRequest",
 						page: 0,
 						pageSize: 10,
 					});
@@ -173,11 +173,11 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 				// console.log("====================================");
 				setModalOpen(true);
 				setModalData("Request Rejected Successfully", "success");
-				if (nhPendingReqPage === 0) {
+				if (generalMemberRequestPage === 0) {
 					refreshApi();
 				} else {
 					setNHPrivacyPagination({
-						from: "pendingRequest",
+						from: "generalMemberRequest",
 						page: 0,
 						pageSize: 10,
 					});
@@ -207,12 +207,12 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 							<DataGrid
 								autoHeight
 								getRowClassName={(params) => `app-header-${params.row.status}`}
-								page={nhPendingReqPage}
-								pageSize={nhPendingReqPageSize}
+								page={generalMemberRequestPage}
+								pageSize={generalMemberRequestPageSize}
 								onPageSizeChange={(event) => {
 									setNHPrivacyPagination({
 										from: "pendingRequest",
-										page: nhPendingReqPage,
+										page: generalMemberRequestPage,
 										pageSize: event,
 									});
 								}}
@@ -226,7 +226,7 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 									setNHPrivacyPagination({
 										from: "pendingRequest",
 										page: event,
-										pageSize: nhPendingReqPageSize,
+										pageSize: generalMemberRequestPageSize,
 									});
 								}}
 								rowsPerPageOptions={[5, 10, 20]}

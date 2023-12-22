@@ -153,6 +153,7 @@ function Neighbourhood() {
 	const generalPendingListApiCall = React.useCallback(() => {
 		requestCommunityFilter({
 			approved: false,
+			processed: true,
 			page: generalMemberRequestPage,
 			pageSize: generalMemberRequestPageSize,
 			userType: -1,
@@ -168,7 +169,7 @@ function Neighbourhood() {
 			.catch((err) => {
 				console.error("error", err);
 			});
-	}, []);
+	}, [generalMemberRequestPage, generalMemberRequestPageSize]);
 
 	React.useEffect(() => {
 		listApiCall();

@@ -399,7 +399,7 @@ function DetailPage() {
 									)}
 								</Box>
 							</Card> */}
-							<NHPrivacyTab />
+							<NHPrivacyTab cloudType={state?.cloudType} />
 						</Grid>
 						<Grid item xs={12}>
 							<Card

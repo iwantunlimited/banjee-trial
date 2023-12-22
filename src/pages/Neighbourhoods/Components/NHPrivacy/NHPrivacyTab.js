@@ -1,4 +1,4 @@
-import { Tabs, Tab, Typography, Box, Avatar, Button, IconButton } from "@mui/material";
+import { Tabs, Tab, Typography, Box, Avatar, Button, IconButton, Hidden } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
@@ -102,9 +102,9 @@ function NHPrivacyTab(props) {
 		data: "",
 	});
 
-	console.log("====================================");
-	console.log("adminPendingData", adminPendingData);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("adminPendingData", adminPendingData);
+	// console.log("====================================");
 
 	function handleModal(d) {
 		setModal((prev) => ({
@@ -116,9 +116,9 @@ function NHPrivacyTab(props) {
 	}
 
 	const handleChange = (event, newValue) => {
-		console.log("====================================");
-		console.log("event", newValue);
-		console.log("====================================");
+		// console.log("====================================");
+		// console.log("event", newValue);
+		// console.log("====================================");
 		setValue(newValue);
 		// if(newValue === 0){
 		//      filterMemberApiCall()
@@ -481,38 +481,56 @@ function NHPrivacyTab(props) {
 	return (
 		<Box>
 			<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-				<Tabs
-					indicatorColor='primary'
-					textColor='primary'
-					value={value}
-					onChange={handleChange}
-					aria-label='basic tabs example'>
-					<Tab
-						sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
-						label={`TotalMembers (${members?.totalMembers})`}
-						{...a11yProps(0)}
-					/>
-					<Tab
-						sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
-						label={`Pending Member Request (${pendingMemberData?.totalMembers})`}
-						{...a11yProps(1)}
-					/>
-					<Tab
-						sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
-						label={`Pending Admin Request (${adminPendingData?.totalMembers})`}
-						{...a11yProps(2)}
-					/>
-					<Tab
-						sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
-						label={`Remove Admin Request (${removeAdminPendingData?.totalMembers})`}
-						{...a11yProps(3)}
-					/>
-					<Tab
-						sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
-						label={`Suggested Admin (${suggestedAdmin?.totalElements})`}
-						{...a11yProps(4)}
-					/>
-				</Tabs>
+				{props?.cloudType === "PRIVATE" ? (
+					<Tabs
+						indicatorColor='primary'
+						textColor='primary'
+						value={value}
+						onChange={handleChange}
+						aria-label='basic tabs example'>
+						<Tab
+							sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+							label={`TotalMembers (${members?.totalMembers})`}
+							{...a11yProps(0)}
+						/>
+						<Tab
+							sx={{
+								textTransform: "none",
+								fontSize: { lg: "18px" },
+							}}
+							label={`Pending Member Request (${pendingMemberData?.totalMembers})`}
+							{...a11yProps(1)}
+						/>
+						<Tab
+							sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+							label={`Pending Admin Request (${adminPendingData?.totalMembers})`}
+							{...a11yProps(2)}
+						/>
+						<Tab
+							sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+							label={`Remove Admin Request (${removeAdminPendingData?.totalMembers})`}
+							{...a11yProps(3)}
+						/>
+						<Tab
+							sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+							label={`Suggested Admin (${suggestedAdmin?.totalElements})`}
+							{...a11yProps(4)}
+						/>
+					</Tabs>
+				) : (
+					<Tabs
+						indicatorColor='primary'
+						textColor='primary'
+						value={value}
+						onChange={handleChange}
+						aria-label='basic tabs example'>
+						<Tab
+							sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+							label={`TotalMembers (${members?.totalMembers})`}
+							{...a11yProps(0)}
+						/>
+					</Tabs>
+				)}
 			</Box>
 			<TabPanel value={value} index={0}>
 				<Box sx={{ paddingY: "15px" }}>
@@ -574,6 +592,7 @@ function NHPrivacyTab(props) {
 					/>
 				</Box>
 			</TabPanel>
+
 			{modalFunction(modal?.modalId)}
 		</Box>
 	);
