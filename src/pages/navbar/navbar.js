@@ -27,9 +27,14 @@ import { DarkMode, Light, LightMode } from "@mui/icons-material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import NavRouting from "./navRouting";
 import Loader from "../Loader/Loader";
+import { WebSocketContext } from "../../context/WebSocketContext";
+import AlertModal from "../LiveAlerts/components/AlertModal";
 
 const LightTooltip = styled(({ className, ...props }) => (
-	<Tooltip {...props} classes={{ popper: className }} />
+	<Tooltip
+		{...props}
+		classes={{ popper: className }}
+	/>
 ))(({ theme }) => ({
 	[`& .${tooltipClasses.tooltip}`]: {
 		backgroundColor: theme.palette.common.white,
@@ -43,7 +48,17 @@ function Navbar(props) {
 	const routing = NavRouting();
 	let navigate = useNavigate();
 	const theme = useTheme();
-	const { setModalOpen, setModalData, setThemeData, themeData } = React.useContext(MainContext);
+	const socket = React.useContext(WebSocketContext).socketData;
+	const [alertData, setAlertData] = React.useState({
+		open: false,
+		data: {},
+	});
+	const handleClose = () => {
+		setAlertData({ open: false, data: {} });
+	};
+
+	const { setModalOpen, setModalData, setThemeData, themeData } =
+		React.useContext(MainContext);
 
 	const isDarkModeEnabled = useMediaQuery("(prefers-color-scheme: dark)");
 
@@ -64,7 +79,7 @@ function Navbar(props) {
 
 	const desktop = (
 		<Drawer
-			variant='permanent'
+			variant="permanent"
 			sx={{
 				width: drawerWidth,
 				flexShrink: 0,
@@ -74,11 +89,15 @@ function Navbar(props) {
 					// background: "#2787bd",
 					// background: theme.palette.common.white,
 				},
-			}}>
+			}}
+		>
 			<Toolbar />
 			<Box sx={{ overflow: "auto" }}>
 				<List sx={{ paddingTop: "3px !important" }}>
-					<SidebarList handleId={handleIdFun} handleClick={handleDrawerToggle} />
+					<SidebarList
+						handleId={handleIdFun}
+						handleClick={handleDrawerToggle}
+					/>
 				</List>
 			</Box>
 		</Drawer>
@@ -86,8 +105,8 @@ function Navbar(props) {
 
 	const mobile = (
 		<Drawer
-			anchor='top'
-			variant='temporary'
+			anchor="top"
+			variant="temporary"
 			open={mobileOpen}
 			onClose={handleDrawerToggle}
 			ModalProps={{
@@ -100,11 +119,15 @@ function Navbar(props) {
 					// width: drawerWidth,
 					width: "100%",
 				},
-			}}>
+			}}
+		>
 			<Toolbar />
 			<Box sx={{ overflow: "auto" }}>
 				<List>
-					<SidebarList handleId={handleIdFun} handleClick={handleDrawerToggle} />
+					<SidebarList
+						handleId={handleIdFun}
+						handleClick={handleDrawerToggle}
+					/>
 					{/* <Sidebar handleId={handleIdFun} handleClick={handleDrawerToggle} /> */}
 				</List>
 			</Box>
@@ -117,9 +140,23 @@ function Navbar(props) {
 		}
 	}, [navigate]);
 
+	const socketListener = React.useCallback(() => {
+		if (socket) {
+			console.log("socket.readyState", socket?.readyState);
+			socket?.addEventListener("message", ({ data }) => {
+				const { action, data: mData } = JSON.parse(data);
+				if (mData?.type === "ALERT" || mData?.type === "PANIC") {
+					setAlertData({ open: true, data: mData });
+				}
+				console.log("Socket Data------------->", JSON.parse(data));
+			});
+		}
+	}, [socket]);
+
 	React.useEffect(() => {
 		setUserType(localStorage?.getItem("userType"));
-	}, []);
+		socketListener();
+	}, [socketListener]);
 
 	if (userType) {
 		return (
@@ -130,20 +167,22 @@ function Navbar(props) {
 				<Box sx={{ display: "flex" }}>
 					<CssBaseline />
 					<AppBar
-						position='fixed'
+						position="fixed"
 						sx={{
 							zIndex: (theme) => theme.zIndex.drawer + 1,
 							background: theme.palette.primary.main,
 							// color: theme.palette.common.white,
-						}}>
+						}}
+					>
 						<Toolbar>
 							<Hidden mdUp>
 								<IconButton
-									color='inherit'
-									aria-label='open drawer'
-									edge='start'
+									color="inherit"
+									aria-label="open drawer"
+									edge="start"
 									onClick={handleDrawerToggle}
-									sx={{ marginRight: "20px", display: { lg: "none" } }}>
+									sx={{ marginRight: "20px", display: { lg: "none" } }}
+								>
 									<MenuIcon />
 								</IconButton>
 							</Hidden>
@@ -152,18 +191,20 @@ function Navbar(props) {
 									display: "flex",
 									width: "100%",
 									justifyContent: "space-between",
-								}}>
+								}}
+							>
 								<div
 									onClick={() => navigate("/")}
 									style={{
 										display: "flex",
 										alignItems: "center",
 										cursor: "pointer",
-									}}>
+									}}
+								>
 									<img
 										src={Logo}
 										style={{ width: window.innerWidth < 520 ? "80px" : "110px" }}
-										alt='BanjeeLogo'
+										alt="BanjeeLogo"
 									/>
 									<Hidden mdDown>
 										{routing.map((ele) => {
@@ -176,7 +217,8 @@ function Navbar(props) {
 															fontFamily: "inherit",
 														}}
 														noWrap
-														component='div'>
+														component="div"
+													>
 														{ele.name}
 													</Typography>
 												);
@@ -187,26 +229,32 @@ function Navbar(props) {
 									</Hidden>
 								</div>
 								<div style={{ display: "flex", justifyContent: "flex-end" }}>
-									<Stack direction='row' spacing={2} sx={{ display: "flex", alignItems: "center" }}>
+									<Stack
+										direction="row"
+										spacing={2}
+										sx={{ display: "flex", alignItems: "center" }}
+									>
 										{/* {isDarkModeEnabled === false && ( */}
-										<LightTooltip title='theme'>
+										<LightTooltip title="theme">
 											<IconButton
 												onClick={() => {
 													// console.log("themeData", themeData);
 													setThemeData(!themeData);
-												}}>
+												}}
+											>
 												{themeData ? <LightMode /> : <DarkMode />}
 											</IconButton>
 										</LightTooltip>
 										{/* )} */}
-										<LightTooltip title='Logout'>
+										<LightTooltip title="Logout">
 											<IconButton
 												onClick={() => {
 													setModalOpen(true);
 													setModalData("Logout Successfully", "success");
 													localStorage.clear();
 													navigate("/login");
-												}}>
+												}}
+											>
 												{/* <Link to='/login'> */}
 												<LogoutIcon style={{ color: theme.palette.primary.contrastText }} />
 												{/* </Link> */}
@@ -220,15 +268,21 @@ function Navbar(props) {
 					<Hidden mdDown>{desktop}</Hidden>
 					<Hidden mdUp>{mobile}</Hidden>
 					<Box
-						component='main'
+						component="main"
 						style={{
 							width: "100%",
 							height: "100%",
 							minHeight: "100vh",
 							// background: theme.palette.grey.A700,
 							padding: "20px",
-						}}>
+						}}
+					>
 						<Toolbar />
+						<AlertModal
+							open={alertData.open}
+							data={alertData.data}
+							handleClose={handleClose}
+						/>
 						<Outlet />
 					</Box>
 				</Box>

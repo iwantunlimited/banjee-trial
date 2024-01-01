@@ -13,6 +13,7 @@ import {
 	VerifiedUser,
 	EditNotifications,
 } from "@mui/icons-material";
+import CampaignIcon from "@mui/icons-material/Campaign";
 import SocialFeed from "../Social_Feeds/Social_Feed";
 import UsersReport from "../Report/UsersReport";
 import Neighbourhood from "../Neighbourhoods/Neighbourhood";
@@ -34,6 +35,7 @@ import { MainContext } from "../../context/Context";
 import BanjeeEvent from "../BanjeeEvent/BanjeeEvent";
 import Thoughts from "../Thoughts/Thoughts";
 import PsychologyIcon from "@mui/icons-material/Psychology";
+import LiveAlerts from "../LiveAlerts/LiveAlerts";
 
 function NavRouting(props) {
 	const userType = localStorage.getItem("userType");
@@ -209,6 +211,11 @@ function NavRouting(props) {
 			icon: <PsychologyIcon fontSize='medium' />,
 			component: <Thoughts />,
 			merchant: false,
+			id: 23,
+			path: "/livealerts",
+			name: "Live Alerts",
+			icon: <CampaignIcon fontSize='medium' />,
+			component: <LiveAlerts />,
 		},
 		// {
 		//     id:3,
