@@ -1,41 +1,20 @@
 import React, { useContext } from "react";
-import {
-	Card,
-	Container,
-	Typography,
-	Box,
-	Grid,
-	Divider,
-	Avatar,
-	IconButton,
-	Button,
-	CircularProgress,
-	Stack,
-	Paper,
-	Tooltip,
-	Chip,
-} from "@mui/material";
-import { useLocation, useNavigate, useParams } from "react-router";
-import moment from "moment";
-import { Delete, Done, MoreHoriz, Visibility } from "@mui/icons-material";
+import { Typography, Box, Avatar, IconButton, Stack, Chip } from "@mui/material";
+import { useNavigate } from "react-router";
+import { Visibility } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import { approveRequestCommunity, rejectRequestCommunity } from "../../services/apiServices";
 import { PaginationContext } from "../../../../context/PaginationContext";
 import { MainContext } from "../../../../context/Context";
 
-function MemberPendingRequests({
-	pendingData,
-	handleModal,
-	handleTabChange,
-	refreshApi,
-	RefreshMemberApiCall,
-}) {
+function MemberPendingRequests({ pendingData, refreshApi, RefreshMemberApiCall }) {
 	const {
 		setNHPrivacyPagination,
 		nHPrivacyPagination: { nhPendingReqPage, nhPendingReqPageSize },
 	} = useContext(PaginationContext);
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
 	let rows = pendingData?.data ? pendingData?.data : [];
+	const navigate = useNavigate();
 
 	// console.log("====================================");
 	// console.log("rows", rows);
@@ -141,6 +120,23 @@ function MemberPendingRequests({
 					</strong>
 				);
 			},
+		},
+		{
+			id: 7,
+			field: "View",
+			headerClassName: "app-header",
+			headerName: "View",
+			flex: 0.15,
+			renderCell: (params) => (
+				<strong>
+					<IconButton
+						onClick={() => {
+							navigate("/user/" + params?.row?.userDetails?.id);
+						}}>
+						<Visibility />
+					</IconButton>
+				</strong>
+			),
 		},
 	];
 

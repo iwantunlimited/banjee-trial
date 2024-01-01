@@ -65,18 +65,22 @@ function NeighrbourhoodList(props) {
 		},
 		{
 			id: "4",
-			field: "createdOn",
+			field: "role",
 			headerClassName: "app-header",
-			headerName: "Created On",
+			headerName: "Role",
 			// align: "center",
 			flex: 0.4,
 			renderCell: (params) => {
-				if (params.row && params.row.createdOn) {
-					const date = moment(params.row.createdOn).format("L");
-					return date;
-				} else {
-					return 0;
-				}
+				console.log("====================================");
+				console.log("params?.row", params?.row);
+				console.log("====================================");
+				return params?.row?.admin ? "ADMIN" : "MEMBER";
+				// if (params.row && params.row.createdOn) {
+				// 	const date = moment(params.row.createdOn).format("L");
+				// 	return date;
+				// } else {
+				// 	return 0;
+				// }
 			},
 		},
 		{

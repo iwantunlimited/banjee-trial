@@ -12,16 +12,7 @@ import {
 	TablePagination,
 	Avatar,
 } from "@mui/material";
-import {
-	FavoriteBorder,
-	ChatBubbleOutline,
-	Fullscreen,
-	Search,
-	Delete,
-	Report,
-	Add,
-	Refresh,
-} from "@mui/icons-material";
+import { Search, Delete, Report, Add, Refresh } from "@mui/icons-material";
 import moment from "moment";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -44,6 +35,7 @@ import { useTheme } from "@mui/material/styles";
 import { MainContext } from "../../context/Context";
 import { PaginationContext } from "../../context/PaginationContext";
 import FeedCard from "./Components/FeedCard";
+import { Helmet } from "react-helmet";
 
 export default function SocialFeed(props) {
 	const navigate = useNavigate();
@@ -112,9 +104,9 @@ export default function SocialFeed(props) {
 		setOpenDModal(data?.open);
 	}
 
-	console.log("====================================");
-	console.log("feed filter", feedFilter);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("feed filter", feedFilter);
+	// console.log("====================================");
 
 	React.useEffect(() => {
 		filterSocialFeedsApiCall();
@@ -128,276 +120,284 @@ export default function SocialFeed(props) {
 
 	if (data?.content) {
 		return (
-			<Container sx={{ padding: "0px !important", margin: "auto" }} maxWidth='xl'>
-				<Card
-					sx={{
-						padding: "20px",
-						marginBottom: "20px",
-						display: "flex",
-						justifyContent: "space-between",
-						alignItems: "center",
-						flexDirection: { xs: "column", sm: "row" },
-					}}>
-					<Box sx={{ marginBottom: { xs: "20px", sm: "0px" } }}>
-						<Typography
-							sx={{
-								color: themeData ? "default" : "#6b778c",
-								fontSize: "22px",
-								fontWeight: "500",
-								textAlign: "left",
-							}}>
-							Feeds({totalEle})
-						</Typography>
-					</Box>
-					<Box sx={{ display: "flex", alignItems: "center" }}>
-						<Box>
-							<LocalizationProvider dateAdapter={AdapterDateFns}>
-								<DatePicker
-									inputFormat='dd/MM/yyyy'
-									name='startDate'
-									label='Start Date'
-									value={startDate}
-									open={openStartDate}
-									onOpen={() => {
-										setOpenStartDate((prev) => !prev);
-										setOpenEndDate(false);
-									}}
-									onClose={() => {
-										setOpenStartDate((prev) => !prev);
-										// setOpenEndDate((prev) => !prev);
-									}}
-									closeOnSelect
-									onChange={(newValue) => {
-										setStartDate(newValue);
-									}}
-									renderInput={(params) => (
-										<TextField
-											// onClick={() => {
-											// 	setOpenEndDate(false);
-											// 	setOpenStartDate(true);
-											// }}
-											size='small'
-											helperText={params?.InputProps?.placeholder}
-											{...params}
-										/>
-									)}
-								/>
-							</LocalizationProvider>
-						</Box>
-						<Box sx={{ paddingX: "20px" }}>
-							<LocalizationProvider dateAdapter={AdapterDateFns}>
-								<DatePicker
-									minDate={startDate !== null && startDate}
-									inputFormat='dd/MM/yyyy'
-									name='endDate'
-									label='End Date'
-									value={endDate}
-									open={openEndDate}
-									onOpen={() => {
-										setOpenStartDate(false);
-										setOpenEndDate((prev) => !prev);
-									}}
-									onClose={() => {
-										// setOpenEndDate((prev) => !prev);
-										setOpenEndDate((prev) => !prev);
-									}}
-									closeOnSelect
-									onChange={(newValue) => {
-										// const nowDate = moment(newValue).format("l") === moment().format("l");
-										// console.log("now date", nowDate);
-										// console.log("now date ---", moment().format());
-										setEndDate(newValue);
-									}}
-									renderInput={(params) => (
-										<TextField
-											// onClick={() => {
-											// 	setOpenEndDate(true);
-											// 	setOpenStartDate(false);
-											// }}
-											size='small'
-											{...params}
-										/>
-									)}
-								/>
-							</LocalizationProvider>
-						</Box>
-						<Box>
-							<Tooltip title='Search'>
-								<IconButton
-									style={{
-										borderRadius: "50px",
-										background: theme.palette.primary.main,
-										padding: window.innerWidth < 501 ? "5px" : "10px",
-										color: theme.palette.primary.contrastText,
-									}}
-									onClick={() => {
-										setFeedFilter({
-											page: 0,
-											pageSize: 10,
-											startDate: startDate,
-											endDate: endDate,
-										});
-										setPagination((prev) => ({
-											...prev,
-											page: 0,
-											pageSize: 12,
-										}));
-									}}>
-									<Search />
-								</IconButton>
-							</Tooltip>
-						</Box>
-						<Box sx={{ marginLeft: "10px" }}>
-							<Tooltip title='Create Feed'>
-								<IconButton
-									onClick={() => navigate("/social-feeds/create")}
-									style={{
-										borderRadius: "50px",
-										background: theme.palette.primary.main,
-										padding: window.innerWidth < 501 ? "5px" : "10px",
-										color: theme.palette.primary.contrastText,
-									}}>
-									<Add />
-								</IconButton>
-							</Tooltip>
-						</Box>
-						<Box sx={{ marginLeft: "10px" }}>
-							<Tooltip title='Refresh Feeds'>
-								<IconButton
-									onClick={() => {
-										setFeedFilter({
-											page: 0,
-											pageSize: 10,
-											startDate: null,
-											endDate: null,
-										});
-										setStartDate(null);
-										setEndDate(null);
-									}}
-									style={{
-										borderRadius: "50px",
-										background: theme.palette.primary.main,
-										padding: window.innerWidth < 501 ? "5px" : "10px",
-										color: theme.palette.primary.contrastText,
-									}}>
-									<Refresh />
-								</IconButton>
-							</Tooltip>
-						</Box>
-						{/* <Box sx={{ marginLeft: "10px" }}>
-							<Tooltip title='Reported Feeds'>
-								<IconButton
-									onClick={() => navigate("reported-feeds")}
-									style={{
-										borderRadius: "50px",
-										background: theme.palette.primary.main,
-										padding: window.innerWidth < 501 ? "5px" : "10px",
-										color: theme.palette.primary.contrastText,
-									}}>
-									<Report />
-								</IconButton>
-							</Tooltip>
-						</Box> */}
-					</Box>
-				</Card>
-				{/* <Typography variant="h3">Social Feeds</Typography> */}
-				{data?.content?.length > 0 ? (
-					<Grid container spacing={2}>
-						{data?.content?.map((ele, index) => {
-							return (
-								<React.Fragment>
-									<Grid item xs={12} sm={6} md={4} lg={3} xl={2.4} key={index}>
-										<FeedCard
-											groupFeed={false}
-											index={index}
-											ele={ele}
-											handleDeleteModal={handleDeleteModal}
-										/>
-									</Grid>
-								</React.Fragment>
-							);
-						})}
-						<DeleteFeedModal
-							open={openDModal}
-							openModalfun={setOpenDModal}
-							dFeedData={dFeedData}
-							FeedDataFun={setDFeedData}
-							socialFilterApi={filterSocialFeedsApiCall}
-						/>
-						<Grid item xs={12}>
-							{/* <Card> */}
-							{/* pagination for all feeds */}
-							<Box
-								className='root'
-								sx={{
-									"& > div > div": {
-										display: "flex",
-										alignItems: "baseline !important",
-									},
-								}}>
-								<TablePagination
-									component='div'
-									count={totalEle}
-									page={feedFilter?.page}
-									rowsPerPage={feedFilter.pageSize}
-									rowsPerPageOptions={[10, 15, 20]}
-									onPageChange={(event, data) => {
-										setPagination((prev) => ({
-											...prev,
-											page: data,
-										}));
-										setFeedFilter({
-											page: data,
-										});
-									}}
-									onRowsPerPageChange={(event) => {
-										setPagination((prev) => ({
-											...prev,
-											pageSize: event.target.value,
-										}));
-										setFeedFilter({
-											pageSize: event.target.value,
-										});
-									}}
-								/>
-							</Box>
-							{/* </Card> */}
-						</Grid>
-					</Grid>
-				) : (
-					<Box
-						style={{
-							height: "100vh",
-							width: "100%",
+			<>
+				<Helmet>
+					<title>Feeds | Banjee Admin</title>
+				</Helmet>
+				<Container maxWidth={"xl"} sx={{ padding: "0px", margin: "auto" }}>
+					<Card
+						sx={{
+							padding: { xs: 1, md: 2 },
+							marginBottom: "20px",
 							display: "flex",
-							justifyContent: "center",
-							alignItems: " center",
+							justifyContent: "space-between",
+							alignItems: "center",
+							flexDirection: { xs: "column", sm: "row" },
 						}}>
-						<Typography>No Data Found !</Typography>
-					</Box>
-				)}
+						<Box sx={{ marginBottom: { xs: "20px", sm: "0px" } }}>
+							<Typography
+								sx={{
+									color: themeData ? "default" : "#6b778c",
+									fontSize: "22px",
+									fontWeight: "500",
+									textAlign: "left",
+								}}>
+								Feeds({totalEle})
+							</Typography>
+						</Box>
+						<Box sx={{ display: "flex", alignItems: "center" }}>
+							<Box>
+								<LocalizationProvider dateAdapter={AdapterDateFns}>
+									<DatePicker
+										inputFormat='dd/MM/yyyy'
+										name='startDate'
+										label='Start Date'
+										value={startDate}
+										open={openStartDate}
+										onOpen={() => {
+											setOpenStartDate((prev) => !prev);
+											setOpenEndDate(false);
+										}}
+										onClose={() => {
+											setOpenStartDate((prev) => !prev);
+											// setOpenEndDate((prev) => !prev);
+										}}
+										closeOnSelect
+										onChange={(newValue) => {
+											setStartDate(newValue);
+										}}
+										renderInput={(params) => (
+											<TextField
+												// onClick={() => {
+												// 	setOpenEndDate(false);
+												// 	setOpenStartDate(true);
+												// }}
+												size='small'
+												helperText={params?.InputProps?.placeholder}
+												{...params}
+											/>
+										)}
+									/>
+								</LocalizationProvider>
+							</Box>
+							<Box sx={{ paddingX: "20px" }}>
+								<LocalizationProvider dateAdapter={AdapterDateFns}>
+									<DatePicker
+										minDate={startDate !== null && startDate}
+										inputFormat='dd/MM/yyyy'
+										name='endDate'
+										label='End Date'
+										value={endDate}
+										open={openEndDate}
+										onOpen={() => {
+											setOpenStartDate(false);
+											setOpenEndDate((prev) => !prev);
+										}}
+										onClose={() => {
+											// setOpenEndDate((prev) => !prev);
+											setOpenEndDate((prev) => !prev);
+										}}
+										closeOnSelect
+										onChange={(newValue) => {
+											// const nowDate = moment(newValue).format("l") === moment().format("l");
+											// console.log("now date", nowDate);
+											// console.log("now date ---", moment().format());
+											setEndDate(newValue);
+										}}
+										renderInput={(params) => (
+											<TextField
+												// onClick={() => {
+												// 	setOpenEndDate(true);
+												// 	setOpenStartDate(false);
+												// }}
+												size='small'
+												{...params}
+											/>
+										)}
+									/>
+								</LocalizationProvider>
+							</Box>
+							<Box>
+								<Tooltip title='Search'>
+									<IconButton
+										style={{
+											borderRadius: "50px",
+											background: theme.palette.primary.main,
+											padding: window.innerWidth < 501 ? "5px" : "10px",
+											color: theme.palette.primary.contrastText,
+										}}
+										onClick={() => {
+											setFeedFilter({
+												page: 0,
+												pageSize: 10,
+												startDate: startDate,
+												endDate: endDate,
+											});
+											setPagination((prev) => ({
+												...prev,
+												page: 0,
+												pageSize: 12,
+											}));
+										}}>
+										<Search />
+									</IconButton>
+								</Tooltip>
+							</Box>
+							<Box sx={{ marginLeft: "10px" }}>
+								<Tooltip title='Create Feed'>
+									<IconButton
+										onClick={() => navigate("/social-feeds/create")}
+										style={{
+											borderRadius: "50px",
+											background: theme.palette.primary.main,
+											padding: window.innerWidth < 501 ? "5px" : "10px",
+											color: theme.palette.primary.contrastText,
+										}}>
+										<Add />
+									</IconButton>
+								</Tooltip>
+							</Box>
+							<Box sx={{ marginLeft: "10px" }}>
+								<Tooltip title='Refresh Feeds'>
+									<IconButton
+										onClick={() => {
+											setFeedFilter({
+												page: 0,
+												pageSize: 10,
+												startDate: null,
+												endDate: null,
+											});
+											setStartDate(null);
+											setEndDate(null);
+										}}
+										style={{
+											borderRadius: "50px",
+											background: theme.palette.primary.main,
+											padding: window.innerWidth < 501 ? "5px" : "10px",
+											color: theme.palette.primary.contrastText,
+										}}>
+										<Refresh />
+									</IconButton>
+								</Tooltip>
+							</Box>
+							<Box sx={{ marginLeft: "10px" }}>
+								<Tooltip title='Reported Feeds'>
+									<IconButton
+										onClick={() => navigate("reported-feeds")}
+										style={{
+											borderRadius: "50px",
+											background: theme.palette.primary.main,
+											padding: window.innerWidth < 501 ? "5px" : "10px",
+											color: theme.palette.primary.contrastText,
+										}}>
+										<Report />
+									</IconButton>
+								</Tooltip>
+							</Box>
+						</Box>
+					</Card>
+					{data?.content?.length > 0 ? (
+						<Grid item container spacing={2}>
+							{data?.content?.map((ele, index) => {
+								return (
+									<React.Fragment>
+										<Grid item xs={12} sm={6} md={4} lg={3} xl={2.4} key={index}>
+											<FeedCard
+												groupFeed={false}
+												index={index}
+												ele={ele}
+												handleDeleteModal={handleDeleteModal}
+											/>
+										</Grid>
+									</React.Fragment>
+								);
+							})}
+							<DeleteFeedModal
+								open={openDModal}
+								openModalfun={setOpenDModal}
+								dFeedData={dFeedData}
+								FeedDataFun={setDFeedData}
+								socialFilterApi={filterSocialFeedsApiCall}
+							/>
+							<Grid item xs={12}>
+								{/* <Card> */}
+								{/* pagination for all feeds */}
+								<Box
+									className='root'
+									sx={{
+										"& > div > div": {
+											display: "flex",
+											alignItems: "baseline !important",
+										},
+									}}>
+									<TablePagination
+										component='div'
+										count={totalEle}
+										page={feedFilter?.page}
+										rowsPerPage={feedFilter.pageSize}
+										rowsPerPageOptions={[10, 15, 20]}
+										onPageChange={(event, data) => {
+											setPagination((prev) => ({
+												...prev,
+												page: data,
+											}));
+											setFeedFilter({
+												page: data,
+											});
+										}}
+										onRowsPerPageChange={(event) => {
+											setPagination((prev) => ({
+												...prev,
+												pageSize: event.target.value,
+											}));
+											setFeedFilter({
+												pageSize: event.target.value,
+											});
+										}}
+									/>
+								</Box>
+								{/* </Card> */}
+							</Grid>
+						</Grid>
+					) : (
+						<Box
+							style={{
+								height: "100vh",
+								width: "100%",
+								display: "flex",
+								justifyContent: "center",
+								alignItems: " center",
+							}}>
+							<Typography>No Data Found !</Typography>
+						</Box>
+					)}
 
-				{/* image model for fullscreen show */}
-				{fullScreenState.imageModal && (
-					<FullScreenImageModal
-						state={fullScreenState}
-						handleClose={() => setFullScreenState({ imageModal: false })}
-					/>
-				)}
-			</Container>
+					{/* image model for fullscreen show */}
+					{fullScreenState.imageModal && (
+						<FullScreenImageModal
+							state={fullScreenState}
+							handleClose={() => setFullScreenState({ imageModal: false })}
+						/>
+					)}
+
+					{/* <Typography variant="h3">Social Feeds</Typography> */}
+				</Container>
+			</>
 		);
 	} else {
 		return (
-			<Box
-				style={{
-					height: "100vh",
-					width: "100%",
-					display: "flex",
-					justifyContent: "center",
-					alignItems: " center",
-				}}>
-				<CircularProgress />
-			</Box>
+			<Container>
+				<Box
+					style={{
+						height: "100vh",
+						width: "100%",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: " center",
+					}}>
+					<CircularProgress />
+				</Box>
+			</Container>
 		);
 	}
 }

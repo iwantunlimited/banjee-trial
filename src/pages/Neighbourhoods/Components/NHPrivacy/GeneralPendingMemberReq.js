@@ -30,6 +30,7 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 	} = useContext(PaginationContext);
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
 	let rows = pendingData?.data ? pendingData?.data : [];
+	const navigate = useNavigate();
 
 	// console.log("====================================");
 	// console.log("rows", rows);
@@ -57,7 +58,7 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 			field: "muserName",
 			headerClassName: "app-header",
 			headerName: "Full Name",
-			flex: 0.3,
+			flex: 0.25,
 			renderCell: (params) => {
 				if (params?.row?.userDetails?.firstName) {
 					return params?.row?.userDetails?.firstName;
@@ -94,9 +95,25 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 			headerClassName: "app-header",
 			headerName: "Neighbourhood Name",
 			// align: "center",
-			flex: 0.4,
+			flex: 0.5,
 			renderCell: (params) => {
 				return params?.row?.cloudName;
+			},
+		},
+		{
+			id: "4",
+			field: "createdOn",
+			headerClassName: "app-header",
+			headerName: "Created On",
+			// align: "center",
+			flex: 0.25,
+			renderCell: (params) => {
+				if (params?.row && params?.row?.createdOn) {
+					const date = moment(params?.row?.createdOn).format("DD/MM/YYYY");
+					return date;
+				} else {
+					return "-";
+				}
 			},
 		},
 		{
@@ -105,7 +122,7 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 			headerClassName: "app-header",
 			headerName: "Status",
 			align: "center",
-			flex: 0.4,
+			flex: 0.3,
 			renderCell: (params) => {
 				// console.log("====================================");
 				// console.log("8888", params);
@@ -135,6 +152,29 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 					</strong>
 				);
 			},
+		},
+		{
+			id: 7,
+			field: "View",
+			headerClassName: "app-header",
+			headerName: "View",
+			flex: 0.15,
+			renderCell: (params) => (
+				<strong>
+					<IconButton
+						onClick={() => {
+							// navigate(`/user/${params?.row?.userObject?.id}`);
+							navigate("/user/" + params?.row?.userDetails?.id);
+							// this.props.history.push(
+							// 	this.props.location.pathname +
+							// 		"/view/" +
+							// 		params.row.userObject.id
+							// );
+						}}>
+						<Visibility />
+					</IconButton>
+				</strong>
+			),
 		},
 	];
 

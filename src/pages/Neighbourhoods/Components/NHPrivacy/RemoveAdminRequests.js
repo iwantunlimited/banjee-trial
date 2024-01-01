@@ -28,13 +28,7 @@ import {
 import { PaginationContext } from "../../../../context/PaginationContext";
 import { MainContext } from "../../../../context/Context";
 
-function RemoveAdminRequests({
-	pendingData,
-	handleModal,
-	handleTabChange,
-	refreshApi,
-	RefreshMemberApiCall,
-}) {
+function RemoveAdminRequests({ pendingData, refreshApi, RefreshMemberApiCall }) {
 	const {
 		setNHPrivacyPagination,
 		nHPrivacyPagination: { nhPendingReqPage, nhPendingReqPageSize },
@@ -64,7 +58,7 @@ function RemoveAdminRequests({
 			field: "muserName",
 			headerClassName: "app-header",
 			headerName: "Full Name",
-			flex: 0.3,
+			flex: 0.25,
 			renderCell: (params) => {
 				if (params?.row?.admin?.firstName) {
 					return params?.row?.admin?.firstName;
@@ -79,24 +73,46 @@ function RemoveAdminRequests({
 			headerClassName: "app-header",
 			headerName: "Cloud Name",
 			// align: "center",
-			flex: 0.4,
+			flex: 0.3,
 			renderCell: (params) => {
 				return params?.row?.cloudName;
 			},
 		},
 		{
-			id: "3",
+			id: "4",
 			field: "requestedCount",
 			headerClassName: "app-header",
 			headerName: "Requested Count",
 			align: "center",
-			flex: 0.25,
+			flex: 0.15,
 			renderCell: (params) => {
-				return params?.row?.users?.length;
+				return params?.row?.removeRequestBy?.length;
+			},
+		},
+		{
+			id: "5",
+			field: "reasons",
+			headerClassName: "app-header",
+			headerName: "Reasons",
+			// align: "center",
+			flex: 0.35,
+			height: "auto",
+			// width: 150,
+			editable: true,
+			renderCell: (params) => {
+				return (
+					<strong>
+						<Stack direction={"column"} rowGap={1}>
+							{params?.row?.reasons?.map((item, index) => (
+								<Chip label={item} key={index} />
+							))}
+						</Stack>
+					</strong>
+				);
 			},
 		},
 		// {
-		// 	id: "5",
+		// 	id: "6",
 		// 	field: "requestBy",
 		// 	headerClassName: "app-header",
 
@@ -120,12 +136,12 @@ function RemoveAdminRequests({
 		// 	},
 		// },
 		{
-			id: "6",
+			id: "7",
 			field: "id",
 			headerClassName: "app-header",
 			headerName: "Status",
 			align: "center",
-			flex: 0.4,
+			flex: 0.3,
 			renderCell: (params) => {
 				// console.log("====================================");
 				// console.log("8888", params);
@@ -219,10 +235,11 @@ function RemoveAdminRequests({
 								"& .app-header-live": {
 									bgcolor: "#76e060",
 								},
+								// maxHeight: "100%",
 							}}>
 							<DataGrid
 								autoHeight
-								getRowClassName={(params) => `app-header-${params.row.status}`}
+								getRowClassName={(params) => `app-header-${params?.row?.status}`}
 								page={nhPendingReqPage}
 								pageSize={nhPendingReqPageSize}
 								onPageSizeChange={(event) => {
@@ -236,7 +253,20 @@ function RemoveAdminRequests({
 								rows={rows}
 								columns={columns}
 								paginationMode='server'
-								// autoPageSize
+								getRowHeight={(params) => {
+									console.log("params", params?.model);
+									if (params?.model?.removeRequestBy?.length < 2) {
+										return 53;
+									} else if (params?.model?.removeRequestBy?.length === 2) {
+										return 100;
+									} else if (params?.model?.removeRequestBy?.length === 3) {
+										return 150;
+									} else if (params?.model?.removeRequestBy?.length === 4) {
+										return 200;
+									} else {
+										return 250;
+									}
+								}}
 								pagination
 								onPageChange={(event) => {
 									setNHPrivacyPagination({

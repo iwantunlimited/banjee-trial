@@ -65,9 +65,9 @@ export const getSocialFeedsReactions = (requestLoad) => {
 };
 
 export const getReportedFeedDetail = (requestLoad) => {
-	let url = urls.SOCIAL_FEEDS.REPORTED_FEED_DETAIL + requestLoad;
+	let url = urls.SOCIAL_FEEDS.REPORTED_FEED_DETAIL;
 	let actionCode = "";
-	let payload = {};
-	let method = "GET";
-	return executeGet(url, actionCode, payload, method);
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
 };

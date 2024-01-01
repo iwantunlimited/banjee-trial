@@ -148,6 +148,8 @@ export const urls = {
 		FIND_BY_ID: services.USER_PROFILE + "profile/findById/",
 		FILTER: services.USER_PROFILE + "profile/filter",
 		UPDATE: services.USER_PROFILE + "profile",
+		REPORTED_USERS: services.USER_PROFILE + "user/report/filter",
+		REPORT_ACTION: services.USER_PROFILE + "user-report/action",
 	},
 
 	COUNTRY: {

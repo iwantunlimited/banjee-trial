@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	Card,
 	Container,
@@ -22,17 +22,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import AdminVerificationModal from "../../../../CustomComponents/AdminVerificationModal";
 import { adminVerificationApi } from "../../services/apiServices";
 import { MainContext } from "../../../../context/Context";
+import { PaginationContext } from "../../../../context/PaginationContext";
 
-function AdminPendingRequests({
-	pendingData,
-	adminPendingPagination,
-	handlePagination,
-	handleModal,
-	handleTabChange,
-	AdminRequestApiCall,
-	RefreshMemberApiCall,
-}) {
+function AdminPendingRequests({ pendingData, AdminRequestApiCall, RefreshMemberApiCall }) {
 	const { setModalData, setModalOpen } = React.useContext(MainContext);
+	const {
+		nHPrivacyPagination: { nhPendingAdminPage, nhPendingAdminPageSize },
+		setNHPrivacyPagination,
+	} = useContext(PaginationContext);
 	const [AdminVerificationModalOpen, setAdminVerificationModalOpen] = useState({
 		open: false,
 		data: "",
@@ -168,11 +165,12 @@ function AdminPendingRequests({
 		},
 	];
 
-	const AdminAcceptApiCall = React.useCallback((accept, cloudId, userId) => {
+	const AdminAcceptApiCall = React.useCallback((accept, cloudId, userId, remark) => {
 		adminVerificationApi({
 			verified: accept,
 			cloudId: cloudId,
 			userId: userId,
+			...(remark ? { remark: remark } : {}),
 			...(accept ? {} : { reUpload: true }),
 		})
 			.then((res) => {
@@ -198,11 +196,12 @@ function AdminPendingRequests({
 			});
 	}, []);
 
-	const PermenentRejectAdminApi = React.useCallback((cloudId, userId) => {
+	const PermenentRejectAdminApi = React.useCallback((cloudId, userId, remark) => {
 		adminVerificationApi({
 			cloudId: cloudId,
 			userId: userId,
 			verificationRejection: true,
+			reason: remark,
 		})
 			.then((res) => {
 				// console.log("====================================");
@@ -253,11 +252,12 @@ function AdminPendingRequests({
 						<DataGrid
 							autoHeight
 							getRowClassName={(params) => `app-header-${params.row.status}`}
-							page={adminPendingPagination?.page}
-							pageSize={adminPendingPagination?.pageSize}
+							page={nhPendingAdminPage}
+							pageSize={nhPendingAdminPageSize}
 							onPageSizeChange={(event) => {
-								handlePagination({
-									page: adminPendingPagination?.page,
+								setNHPrivacyPagination({
+									from: "pendingAdmin",
+									page: nhPendingAdminPage,
 									pageSize: event,
 								});
 							}}
@@ -268,9 +268,10 @@ function AdminPendingRequests({
 							// autoPageSize
 							pagination
 							onPageChange={(event) => {
-								handlePagination({
+								setNHPrivacyPagination({
+									from: "pendingAdmin",
 									page: event,
-									pageSize: adminPendingPagination?.pageSize,
+									pageSize: nhPendingAdminPageSize,
 								});
 							}}
 							rowsPerPageOptions={[5, 10, 20]}

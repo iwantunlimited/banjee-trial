@@ -59,6 +59,7 @@ import MapWithSearch from "./CustomComponents/TrialMap";
 import { Box } from "@mui/material";
 import MapContainer from "./CustomComponents/TrialMap";
 import Thoughts from "./pages/Thoughts/Thoughts";
+import ReportedFeeds from "./pages/Social_Feeds/Components/Reported_Feed/ReportedFeeds";
 
 const Routes = () => {
 	const navigate = useNavigate();
@@ -80,7 +81,7 @@ const Routes = () => {
 		},
 		{
 			path: "/social-feeds/reported-feeds",
-			element: <ReportedFeed />,
+			element: <ReportedFeeds />,
 		},
 		{
 			path: "/social-feeds/reported-feeds/:id",
@@ -155,11 +156,7 @@ const Routes = () => {
 		},
 		{
 			path: "/social-feeds/reported-feeds",
-			element: <ReportedFeed />,
-		},
-		{
-			path: "/social-feeds/reported-feeds/:id",
-			element: <ViewRFeed />,
+			element: <ReportedFeeds />,
 		},
 		{
 			path: "/report",

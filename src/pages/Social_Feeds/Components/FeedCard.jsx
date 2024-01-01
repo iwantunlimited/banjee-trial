@@ -11,6 +11,7 @@ import { Pagination } from "swiper";
 import { ChatBubbleOutline, Delete, FavoriteBorder, Fullscreen, Group } from "@mui/icons-material";
 import FullScreenImageModal from "./FullScreenImageModal";
 import moment from "moment";
+import ViewRFeed from "./Reported_Feed/ViewRFeed";
 
 function FeedCard(props) {
 	const navigate = useNavigate();
@@ -85,6 +86,7 @@ function FeedCard(props) {
 					sx={{
 						// paddingX: "14px",
 						// paddingBottom: "7px",
+						position: "relative",
 						width: "100%",
 						height: "100%",
 						// minHeight: "250px",
@@ -95,6 +97,7 @@ function FeedCard(props) {
 						"&:hover": {
 							background: themeData === false ? theme.palette.grey.A700 : "#323232",
 						},
+						paddingBottom: "22px",
 					}}>
 					<Box
 						sx={{
@@ -481,28 +484,30 @@ function FeedCard(props) {
 											</Typography>
 										)}
 									</Box> */}
-					{!props?.groupFeed && (
-						<Box
+					<Box
+						sx={{
+							background: theme?.palette?.primary?.main,
+							color: theme?.palette?.primary?.contrastText,
+							borderBottomLeftRadius: "8px",
+							borderBottomRightRadius: "8px",
+							textAlign: "center",
+							height: "22px",
+						}}>
+						<Typography
 							sx={{
-								background: theme?.palette?.primary?.main,
-								color: theme?.palette?.primary?.contrastText,
-								borderBottomLeftRadius: "8px",
-								borderBottomRightRadius: "8px",
+								fontSize: { xs: "14px", md: "14px", lg: "14px" },
+								display: "-webkit-box",
+								overflow: "hidden",
+								WebkitBoxOrient: "vertical",
+								WebkitLineClamp: 1,
 								textAlign: "center",
+								paddingX: { xs: 1, md: 2 },
 							}}>
-							<Typography
-								sx={{
-									fontSize: { xs: "14px", md: "14px", lg: "14px" },
-									display: "-webkit-box",
-									overflow: "hidden",
-									WebkitBoxOrient: "vertical",
-									WebkitLineClamp: 1,
-								}}>
-								{ele?.pageName}
-							</Typography>
-						</Box>
-					)}
+							{ele?.pageName}
+						</Typography>
+					</Box>
 				</Card>
+
 				{fullScreenState.imageModal && (
 					<FullScreenImageModal
 						state={fullScreenState}

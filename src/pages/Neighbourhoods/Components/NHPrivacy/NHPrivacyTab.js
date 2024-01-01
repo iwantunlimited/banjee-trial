@@ -164,9 +164,10 @@ function NHPrivacyTab(props) {
 			verificationReq: "true",
 			verificationRejection: "false",
 			reUpload: "false",
+			verified: "false",
 			role: "MEMBER",
-			page: adminPendingPagination?.page,
-			pageSize: adminPendingPagination?.pageSize,
+			page: nhPendingAdminPage,
+			pageSize: nhPendingAdminPageSize,
 		})
 			.then((res) => {
 				console.log("admin resssss", res);
@@ -178,7 +179,7 @@ function NHPrivacyTab(props) {
 			.catch((err) => {
 				console.error("error", err);
 			});
-	}, [adminPendingPagination]);
+	}, [nhPendingAdminPage, nhPendingAdminPageSize]);
 
 	const RemoveAdminRequestApiCall = React.useCallback(() => {
 		removeAdminRequests({
@@ -465,9 +466,9 @@ function NHPrivacyTab(props) {
 	}
 
 	useEffect(() => {
-		AdminRequestApiCall();
-		memberRequestApiCall();
 		filterMemberApiCall();
+		memberRequestApiCall();
+		AdminRequestApiCall();
 		SuggestedAdminApiCall();
 		RemoveAdminRequestApiCall();
 	}, [
@@ -546,8 +547,6 @@ function NHPrivacyTab(props) {
 				<Box sx={{ paddingY: "15px" }}>
 					<MemberPendingRequests
 						pendingData={pendingMemberData}
-						handleTabChange={handleChange}
-						handleModal={handleModal}
 						refreshApi={memberRequestApiCall}
 						RefreshMemberApiCall={filterMemberApiCall}
 					/>
@@ -557,15 +556,6 @@ function NHPrivacyTab(props) {
 				<Box sx={{ paddingY: "15px" }}>
 					<AdminPendingRequests
 						pendingData={adminPendingData}
-						adminPendingPagination={adminPendingPagination}
-						handlePagination={(data) => {
-							setAdminPendingPagination({
-								page: data?.page,
-								pageSize: data?.pageSize,
-							});
-						}}
-						handleTabChange={handleChange}
-						handleModal={handleModal}
 						AdminRequestApiCall={AdminRequestApiCall}
 						RefreshMemberApiCall={filterMemberApiCall}
 					/>
@@ -575,8 +565,6 @@ function NHPrivacyTab(props) {
 				<Box sx={{ paddingY: "15px" }}>
 					<RemoveAdminRequests
 						pendingData={removeAdminPendingData}
-						handleTabChange={handleChange}
-						handleModal={handleModal}
 						refreshApi={RemoveAdminRequestApiCall}
 						RefreshMemberApiCall={filterMemberApiCall}
 					/>

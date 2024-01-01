@@ -1,6 +1,17 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import { Container, Card, Button, Avatar, IconButton, CircularProgress } from "@mui/material";
+import {
+	Container,
+	Card,
+	Button,
+	Avatar,
+	IconButton,
+	CircularProgress,
+	darken,
+	lighten,
+	styled,
+	Chip,
+} from "@mui/material";
 import { ReportedUserList } from "../User_Services/UserApiService";
 import { DataGrid } from "@mui/x-data-grid";
 
@@ -33,17 +44,17 @@ function ReportedUser1(props) {
 
 	const classes = useStyles();
 
-	const [reportList, setReportList] = React.useState("");
+	const [reportList, setReportList] = React.useState({
+		data: [],
+		totalElements: 0,
+	});
 
 	const [pagination, setPagination] = React.useState({
 		page: 0,
 		pageSize: 10,
-		totalElement: 0,
 	});
 
-	const { page, pageSize } = pagination;
-
-	const rows = reportList ? reportList : [];
+	const rows = reportList?.data ? reportList?.data : [];
 
 	const columns = [
 		{
@@ -51,40 +62,69 @@ function ReportedUser1(props) {
 			field: "avatarurl",
 			headerClassName: "app-header",
 			headerName: "Avatar",
-			flex: 0.2,
+			flex: 0.15,
 			align: "center",
 			renderCell: (params) => (
-				<Avatar src={params.row.toUser.avtarUrl} alt={params.row.toUser.name} />
+				<Avatar
+					src={`https://gateway.banjee.org/services/media-service/iwantcdn/resources/${params?.row?.reportedUser?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+					alt={params?.row?.reportedUser?.firstName}
+				/>
 			),
 		},
 		{
 			id: "2",
 			field: "name",
 			headerClassName: "app-header",
-			headerName: "User Name",
-			flex: 0.5,
+			headerName: "Name",
+			flex: 0.2,
+			renderCell: (params) => params?.row?.reportedUser?.firstName,
 		},
 		{
 			id: "3",
 			field: "email",
 			headerClassName: "app-header",
 			headerName: "Email",
-			flex: 0.7,
+			flex: 0.3,
+			renderCell: (params) => params?.row?.reportedUser?.email,
 		},
 		{
 			id: "4",
 			field: "mobile",
 			headerClassName: "app-header",
 			headerName: "Mobile",
-			flex: 0.4,
+			flex: 0.2,
+			renderCell: (params) => params?.row?.reportedUser?.mobile,
 		},
 		{
 			id: "5",
 			field: "reports",
 			headerClassName: "app-header",
-			headerName: "Reported By",
-			flex: 0.5,
+			headerName: "Reported Count",
+			flex: 0.15,
 			align: "center",
+			renderCell: (params) => params?.row?.reportedBy?.length,
+		},
+		{
+			id: "6",
+			field: "warning",
+			headerClassName: "app-header",
+			headerName: "Send Warning",
+			align: "center",
+			flex: 0.2,
+			renderCell: (params) => (
+				<strong>
+					<Chip
+						label='Send Warning'
+						style={{ background: "green", color: "white" }}
+						onClick={(event) => {
+							// AcceptApiCall(params?.row?.cloudId, params?.row?.id);
+							// navigate("/rooms/view/" + params.row.routingId);
+							// ApproveApiCAll(params?.row?.routingId);
+							// pendingAPiCAll(0, 10);
+						}}
+					/>
+				</strong>
+			),
 		},
 		{
 			id: "6",
@@ -92,12 +132,14 @@ function ReportedUser1(props) {
 			headerClassName: "app-header",
 			headerName: "View",
 			align: "center",
-			flex: 0.3,
+			flex: 0.15,
 			renderCell: (params) => (
 				<strong>
 					<IconButton
 						onClick={() => {
-							navigate("/user/reportedUserView/" + params.row.toUserId);
+							navigate("/user/reportedUserView/" + params?.row?.reportedUserId, {
+								state: { userObject: params?.row?.reportedUser },
+							});
 						}}>
 						<VisibilityIcon />
 					</IconButton>
@@ -106,34 +148,51 @@ function ReportedUser1(props) {
 		},
 	];
 
-	//reported user list api 
-	const listApiCall = React.useCallback((page, pageSize) => {
-		ReportedUserList({ page: page, pageSize: pageSize })
+	const getBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.7) : lighten(color, 0.7);
+
+	const getHoverBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.6) : lighten(color, 0.6);
+	const getSelectedBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.5) : lighten(color, 0.5);
+
+	const getSelectedHoverBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.4) : lighten(color, 0.4);
+
+	const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+		"& .app-header-true": {
+			backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+			"&:hover": {
+				backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+			},
+			"&.Mui-selected": {
+				backgroundColor: getSelectedBackgroundColor(theme.palette.error.main, theme.palette.mode),
+				"&:hover": {
+					backgroundColor: getSelectedHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+				},
+			},
+		},
+	}));
+
+	//reported user list api
+	const listApiCall = React.useCallback(() => {
+		ReportedUserList({ page: pagination?.page, pageSize: pagination?.pageSize })
 			.then((response) => {
-				const resp = response.content.map((ele) => {
-					return {
-						...ele,
-						...ele.toUser,
-						reports: ele.reports ? (ele.reports.length > 0 ? ele.reports.length : 0) : null,
-					};
+				setReportList({
+					data: response?.content,
+					totalElements: response?.totalElements,
 				});
-				setReportList(() => resp);
-				setPagination(() => ({
-					page: response.pageable.pageNumber,
-					pageSize: response.pageable.pageSize,
-					totalElement: response.totalElements,
-				}));
 			})
 			.catch((err) => {
 				console.error(err);
 			});
-	}, []);
+	}, [pagination]);
 
 	React.useEffect(() => {
-		listApiCall(page, pageSize);
-	}, [listApiCall, page, pageSize]);
+		listApiCall();
+	}, [listApiCall]);
 
-	if (reportList && rows.length > 0) {
+	if (reportList?.data && rows.length > 0) {
 		return (
 			<div style={{ marginBottom: "20px" }}>
 				<Button
@@ -158,12 +217,12 @@ function ReportedUser1(props) {
 							borderRadius: "10px",
 						}}>
 						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
-							Reported Users ({pagination?.totalElement})
+							Reported Users ({reportList?.totalElements})
 						</div>
 						<hr />
 						<div style={{ width: "100%" }}>
 							<div className={classes.DataGridBackground}>
-								<DataGrid
+								<StyledDataGrid
 									autoHeight
 									page={pagination.page}
 									pageSize={pagination.pageSize}
@@ -172,16 +231,23 @@ function ReportedUser1(props) {
 											...prev,
 											pageSize: event,
 										}));
-										listApiCall(pagination.page, event);
 									}}
-									rowCount={pagination.totalElement}
+									getRowClassName={(params) => {
+										const reported = params?.row?.reportedBy?.length > 3;
+										console.log("params", reported);
+										return `app-header-${reported}`;
+									}}
+									rowCount={reportList?.totalElements}
 									rows={rows}
 									columns={columns}
 									paginationMode='server'
 									// autoPageSize
 									pagination
 									onPageChange={(event) => {
-										listApiCall(event, pagination.pageSize);
+										setPagination((prev) => ({
+											...prev,
+											page: event,
+										}));
 									}}
 									rowsPerPageOptions={[5, 10, 20]}
 									className={classes.dataGridFooter}

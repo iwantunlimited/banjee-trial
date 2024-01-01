@@ -170,7 +170,7 @@ function AdminVerificationModal(props) {
 									if (remark === "") {
 										setError(true);
 									} else {
-										PermenentRejectAdminApi(data?.cloudId, data?.userId);
+										PermenentRejectAdminApi(data?.cloudId, data?.userId, remark);
 									}
 								}}
 								variant='outlined'
@@ -182,7 +182,7 @@ function AdminVerificationModal(props) {
 									if (remark === "") {
 										setError(true);
 									} else {
-										AdminAcceptApiCall(false, data?.cloudId, data?.userId);
+										AdminAcceptApiCall(false, data?.cloudId, data?.userId, remark);
 									}
 								}}
 								variant='outlined'
@@ -190,7 +190,7 @@ function AdminVerificationModal(props) {
 								Re - Varification
 							</Button>
 							<Button
-								onClick={() => AdminAcceptApiCall(true, data?.cloudId, data?.userId)}
+								onClick={() => AdminAcceptApiCall(true, data?.cloudId, data?.userId, remark)}
 								variant='contained'
 								color='success'>
 								Accept

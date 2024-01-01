@@ -7,6 +7,7 @@ import "./neighbourhood.css";
 import NeighbourList from "./Components/NeighbourList";
 import { ApprovalList } from "./Components/ApprovalList";
 import {
+	filterMembers,
 	filterNeighbourhood,
 	pendingApproval,
 	requestCommunityFilter,
@@ -16,6 +17,7 @@ import { useTheme } from "@mui/material/styles";
 import { useLocation } from "react-router";
 import { PaginationContext } from "../../context/PaginationContext";
 import GeneralPendingMemberRequests from "./Components/NHPrivacy/GeneralPendingMemberReq";
+import AdminPendingRequests from "./Components/NHPrivacy/AdminPendingRequests";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -50,7 +52,12 @@ function Neighbourhood() {
 	const {
 		neighbourhoodPagination,
 		setNeighbourhoodPagination,
-		nHPrivacyPagination: { generalMemberRequestPageSize, generalMemberRequestPage },
+		nHPrivacyPagination: {
+			generalMemberRequestPageSize,
+			generalMemberRequestPage,
+			generalAdminReqPage,
+			generalAdminReqPageSize,
+		},
 	} = React.useContext(PaginationContext);
 
 	const location = useLocation();
@@ -65,6 +72,10 @@ function Neighbourhood() {
 	const [generalPendingReq, setGeneralPendingReq] = React.useState({
 		data: [],
 		totalElements: 0,
+	});
+	const [adminPendingData, setAdminPendingData] = React.useState({
+		data: [],
+		totalMembers: 0,
 	});
 
 	const [totalPendingElement, setTotalPendingElement] = React.useState(0);
@@ -171,6 +182,30 @@ function Neighbourhood() {
 			});
 	}, [generalMemberRequestPage, generalMemberRequestPageSize]);
 
+	const AdminRequestApiCall = React.useCallback(() => {
+		filterMembers({
+			// cloudId: params?.id,
+			verificationReq: "true",
+			verificationRejection: "false",
+			reUpload: "false",
+			verified: "false",
+			role: "MEMBER",
+			page: generalAdminReqPage,
+			pageSize: generalAdminReqPageSize,
+			cloudType: "SOCIAL_CLOUD",
+		})
+			.then((res) => {
+				// console.log("admin resssss", res);
+				setAdminPendingData({
+					data: res?.content,
+					totalMembers: res?.totalElements,
+				});
+			})
+			.catch((err) => {
+				console.error("error", err);
+			});
+	}, [generalAdminReqPage, generalAdminReqPageSize]);
+
 	React.useEffect(() => {
 		listApiCall();
 		generalPendingListApiCall();
@@ -213,6 +248,11 @@ function Neighbourhood() {
 									label={`Pending Member Requests (${generalPendingReq?.totalElements})`}
 									{...a11yProps(2)}
 								/>
+								<Tab
+									sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+									label={`Pending Admin Requests (${adminPendingData?.totalMembers})`}
+									{...a11yProps(3)}
+								/>
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
@@ -245,6 +285,15 @@ function Neighbourhood() {
 									pendingData={generalPendingReq}
 									refreshApi={generalPendingListApiCall}
 									handleTabChange={handleChange}
+								/>
+							</Box>
+						</TabPanel>
+						<TabPanel value={value} index={3}>
+							<Box sx={{ paddingY: "15px" }}>
+								<AdminPendingRequests
+									pendingData={adminPendingData}
+									AdminRequestApiCall={AdminRequestApiCall}
+									RefreshMemberApiCall={listApiCall}
 								/>
 							</Box>
 						</TabPanel>

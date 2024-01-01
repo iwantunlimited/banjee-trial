@@ -39,8 +39,12 @@ const PaginationContext = React.createContext({
 		removeAdminPageSize: 10,
 		generalMemberRequestPage: 0,
 		generalMemberRequestPageSize: 10,
+		generalAdminReqPage: 0,
+		generalAdminReqPageSize: 10,
 	},
 	setNHPrivacyPagination: () => {},
+	reportedFeedFilter: {},
+	setReportedFeedFilter: () => {},
 });
 
 function ContextHandler({ children }) {
@@ -53,6 +57,12 @@ function ContextHandler({ children }) {
 		pageSize: 12,
 	});
 	const [feedFilterData, setFeedFilterData] = React.useState({
+		page: 0,
+		pageSize: 10,
+		startDate: null,
+		endDate: null,
+	});
+	const [reportedFeedFilterData, setReportedFeedFilterData] = React.useState({
 		page: 0,
 		pageSize: 10,
 		startDate: null,
@@ -110,6 +120,8 @@ function ContextHandler({ children }) {
 		removeAdminPageSize: 10,
 		generalMemberRequestPage: 0,
 		generalMemberRequestPageSize: 10,
+		generalAdminReqPage: 0,
+		generalAdminReqPageSize: 10,
 	});
 
 	function handlePagination(data) {
@@ -128,6 +140,15 @@ function ContextHandler({ children }) {
 
 	function handleFeedFilter(data) {
 		setFeedFilterData({
+			page: data?.page === 0 ? 0 : data?.page ? data?.page : feedFilterData?.page,
+			pageSize: data?.pageSize ? data?.pageSize : feedFilterData?.pageSize,
+			startDate:
+				data?.startDate === null ? null : data?.startDate ? data?.startDate : feedFilterData?.startDate,
+			endDate: data?.endDate === null ? null : data?.endDate ? data?.endDate : feedFilterData?.endDate,
+		});
+	}
+	function handleReportedFeedFilter(data) {
+		setReportedFeedFilterData({
 			page: data?.page === 0 ? 0 : data?.page ? data?.page : feedFilterData?.page,
 			pageSize: data?.pageSize ? data?.pageSize : feedFilterData?.pageSize,
 			startDate:
@@ -228,6 +249,12 @@ function ContextHandler({ children }) {
 				generalMemberRequestPage: data?.page,
 				generalMemberRequestPageSize: data?.pageSize,
 			}));
+		} else if (data?.from === "generalAdminRequest") {
+			setNhPrivacyPagination((prev) => ({
+				...prev,
+				generalAdminReqPage: data?.page,
+				generalAdminReqPageSize: data?.pageSize,
+			}));
 		}
 	}
 
@@ -240,6 +267,10 @@ function ContextHandler({ children }) {
 				setFeedPagination: handleFeedPagination,
 				feedFilter: feedFilterData,
 				setFeedFilter: handleFeedFilter,
+				feedFilter: feedFilterData,
+				setFeedFilter: handleFeedFilter,
+				reportedFeedFilter: reportedFeedFilterData,
+				setReportedFeedFilter: handleReportedFeedFilter,
 				neighbourhoodPagination: neighbourPagination,
 				setNeighbourhoodPagination: handleNeighbourhoodPagination,
 				nhDetailPagination: nhDetailPagination,

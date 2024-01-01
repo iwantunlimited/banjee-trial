@@ -8,6 +8,7 @@ import { MainContext } from "../../../context/Context";
 import { PaginationContext } from "../../../context/PaginationContext";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { deleteAlert } from "../api-services/apiServices";
+import { styled, darken, lighten } from "@mui/material";
 
 function AlertListTable({ totalElement, data, listApiCall, handleAlertListApiCall }) {
 	const navigate = useNavigate();
@@ -144,14 +145,44 @@ function AlertListTable({ totalElement, data, listApiCall, handleAlertListApiCal
 		},
 	];
 
+	const getBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.7) : lighten(color, 0.7);
+
+	const getHoverBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.6) : lighten(color, 0.6);
+	const getSelectedBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.5) : lighten(color, 0.5);
+
+	const getSelectedHoverBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.4) : lighten(color, 0.4);
+
+	const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+		"& .app-header-true": {
+			backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+			"&:hover": {
+				backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+			},
+			"&.Mui-selected": {
+				backgroundColor: getSelectedBackgroundColor(theme.palette.error.main, theme.palette.mode),
+				"&:hover": {
+					backgroundColor: getSelectedHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+				},
+			},
+		},
+	}));
+
 	return (
 		<Box>
 			{data ? (
 				<div style={{ width: "100%" }}>
 					<Box className='root'>
-						<DataGrid
+						<StyledDataGrid
 							autoHeight
-							getRowClassName={(params) => `app-header-${params.row.status}`}
+							getRowClassName={(params) => {
+								const reported = params?.row?.reportCount > 0;
+								console.log("params", reported);
+								return `app-header-${reported}`;
+							}}
 							page={alertPagination?.page}
 							pageSize={alertPagination?.pageSize}
 							onPageSizeChange={(event) => {

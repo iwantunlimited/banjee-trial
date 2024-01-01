@@ -110,8 +110,18 @@ let penddingConnectionsList = (requestLoad) => {
 
 //----------------------------------------- REPORTED USERS ----------------------------------------//
 let ReportedUserList = (requestLoad) => {
-	let url = urls.SOCIAL_CONNECTION.FILTER_REPORTED_CUSTOMER;
-	let actionCode = "ACTION_FILTER_REPORT";
+	let url = urls.USERPROFILE.REPORTED_USERS;
+	// let actionCode = "ACTION_FILTER_REPORT";
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
+//----------------------------------------- REPORT ACTION ----------------------------------------//
+let ReportedUserAction = (requestLoad) => {
+	let url = urls.USERPROFILE.REPORT_ACTION;
+	// let actionCode = "ACTION_FILTER_REPORT";
+	let actionCode = "";
 	let payload = requestLoad;
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
@@ -206,4 +216,5 @@ export {
 	findUserByUserId,
 	getUserCsvData,
 	UserFeeds,
+	ReportedUserAction,
 };
