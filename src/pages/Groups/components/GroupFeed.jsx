@@ -80,6 +80,21 @@ export default function GroupFeed({ groupId, groupName, NHFeed }) {
 											groupFeed={true}
 											index={index}
 											ele={ele}
+											data={{
+												author: ele?.author,
+												mainMedia:
+													ele?.collaboration && ele?.collaborateFeeds?.length > 0
+														? [
+																...ele?.mediaContent,
+																...ele?.collaborateFeeds?.map((item) => ({
+																	...item,
+																	...item?.mediaContent,
+																})),
+														  ]
+														: ele?.mediaContent,
+												pageName: ele?.pageName,
+												text: ele?.text,
+											}}
 											handleDeleteModal={handleDeleteModal}
 										/>
 									</Grid>

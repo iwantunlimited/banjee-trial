@@ -7,27 +7,33 @@ import { Navigation, A11y } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.min.css";
 import moment from "moment";
+import { WebSocketContext } from "../../context/WebSocketContext";
+
 export default function LiveAlerts() {
 	const [alertList, setAlertList] = useState();
 	const [selectedCard, setSelectedCard] = useState();
 	const currentLat = localStorage?.getItem("lat");
 	const currentLng = localStorage?.getItem("lng");
+
+	const socket = React.useContext(WebSocketContext).socketData;
+
 	const getLiveAlerts = useCallback(() => {
 		listAlert({
 			eventCode: ["PANIC_EMERGENCY", "NEW_ALERT"],
+			resolved: false,
 		})
 			.then((res) => {
-				const date = new Date();
-				const content = res.content.filter((alert) => {
-					const today = moment(date).format("L");
-					console.log(today === moment(alert.createdOn).format("L"));
-					return (
-						today === moment(alert.createdOn).format("L") &&
-						alert.createdBy !== "61111e42bcc68b2a1fa3432c"
-					);
-				});
-				setAlertList(content);
-				setSelectedCard(content?.[0]);
+				// const date = new Date();
+				// const content = res.content.filter((alert) => {
+				// 	const today = moment(date).format("L");
+				// 	console.log(today === moment(alert.createdOn).format("L"));
+				// 	return (
+				// 		today === moment(alert.createdOn).format("L") &&
+				// 		alert.createdBy !== "61111e42bcc68b2a1fa3432c"
+				// 	);
+				// });
+				setAlertList(res?.content);
+				setSelectedCard(res?.content?.[0]);
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -36,9 +42,27 @@ export default function LiveAlerts() {
 		setSelectedCard(data);
 	}
 
-	useEffect(() => {
+	const socketListener = React.useCallback(() => {
+		if (socket) {
+			console.log("socket.readyState", socket?.readyState);
+			socket?.addEventListener("message", ({ data }) => {
+				const { action, data: mData } = JSON.parse(data);
+				if (mData?.type === "ALERT" || mData?.type === "PANIC") {
+					// setAlertData({ open: true, data: mData });
+					getLiveAlerts();
+				}
+				console.log("Socket Data------------->", JSON.parse(data));
+			});
+		}
+	}, [socket]);
+
+	React.useEffect(() => {
+		socketListener();
+	}, [socketListener]);
+
+	React.useEffect(() => {
 		getLiveAlerts();
-	}, []);
+	}, [getLiveAlerts]);
 
 	if (alertList?.length > 0) {
 		return (
@@ -66,8 +90,7 @@ export default function LiveAlerts() {
 						zIndex: 1,
 						backgroundColor: "rgba(0, 0, 0, 0.10)",
 						width: "100%",
-					}}
-				>
+					}}>
 					<Box
 						sx={{
 							display: "flex",
@@ -76,25 +99,17 @@ export default function LiveAlerts() {
 							width: "auto",
 							overflowX: "auto",
 							overflowY: "hidden",
-						}}
-					>
+						}}>
 						<Swiper
 							spaceBetween={20}
 							slidesPerView={4}
 							modules={[Navigation, A11y]}
 							navigation
-							style={{ width: "100%" }}
-						>
+							style={{ width: "100%" }}>
 							{alertList?.map((alert, index) => {
 								return (
-									<SwiperSlide
-										key={index}
-										virtualIndex={index}
-									>
-										<AlertCard
-											handleData={handleData}
-											alert={alert}
-										/>
+									<SwiperSlide key={index} virtualIndex={index}>
+										<AlertCard handleData={handleData} alert={alert} />
 									</SwiperSlide>
 								);
 							})}
@@ -119,29 +134,29 @@ export default function LiveAlerts() {
 					sx={{
 						position: "absolute",
 						right: "0px",
-						bottom: 0,
+						bottom: "10px",
 						zIndex: 1,
-						backgroundColor: "rgba(0, 0, 0, 0.10)",
 						width: "100%",
 						display: "flex",
 						justifyContent: "center",
-					}}
-				>
+					}}>
 					<Paper
 						sx={{
 							padding: "10px",
+							// backgroundColor: "rgba(0, 0, 0, 0.10)",
 							ml: "20px",
 							cursor: "pointer",
 							transition: "background-color 0.5s ease",
 							"&:hover": {
 								backgroundColor: "#f0f0f0",
 							},
-						}}
-					>
+						}}>
 						<Typography
-							variant="h4"
-							sx={{ textAlign: "center", fontWeight: "bold" }}
-						>
+							variant='h4'
+							sx={{
+								fontSize: { xs: "18px", md: "24px", lg: "26px" },
+								textAlign: "center",
+							}}>
 							No live alert today
 						</Typography>
 					</Paper>
@@ -156,8 +171,7 @@ export default function LiveAlerts() {
 					justifyContent: "center",
 					alignItems: "center",
 					height: "80vh",
-				}}
-			>
+				}}>
 				<CircularProgress />
 			</div>
 		);

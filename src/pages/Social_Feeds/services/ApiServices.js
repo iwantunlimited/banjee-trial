@@ -33,6 +33,13 @@ export const deleteSocialFeed = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+export const deleteCollabFeed = (requestLoad) => {
+	let url = urls.SOCIAL_FEEDS.DELETE_COLLAB_FEED;
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
 
 export const commentOnFeed = (requestLoad) => {
 	let url = urls.SOCIAL_FEEDS.COOMENT_ON_FEED;

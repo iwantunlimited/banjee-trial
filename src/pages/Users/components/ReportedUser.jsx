@@ -11,6 +11,7 @@ import {
 	lighten,
 	styled,
 	Chip,
+	Box,
 } from "@mui/material";
 import { ReportedUserList } from "../User_Services/UserApiService";
 import { DataGrid } from "@mui/x-data-grid";
@@ -138,7 +139,12 @@ function ReportedUser1(props) {
 					<IconButton
 						onClick={() => {
 							navigate("/user/reportedUserView/" + params?.row?.reportedUserId, {
-								state: { userObject: params?.row?.reportedUser },
+								state: {
+									userObject: {
+										...params?.row?.reportedUser,
+										reportedCount: params?.row?.reportedBy?.length,
+									},
+								},
 							});
 						}}>
 						<VisibilityIcon />
@@ -192,7 +198,7 @@ function ReportedUser1(props) {
 		listApiCall();
 	}, [listApiCall]);
 
-	if (reportList?.data && rows.length > 0) {
+	if (reportList?.data) {
 		return (
 			<div style={{ marginBottom: "20px" }}>
 				<Button
@@ -220,51 +226,51 @@ function ReportedUser1(props) {
 							Reported Users ({reportList?.totalElements})
 						</div>
 						<hr />
-						<div style={{ width: "100%" }}>
-							<div className={classes.DataGridBackground}>
-								<StyledDataGrid
-									autoHeight
-									page={pagination.page}
-									pageSize={pagination.pageSize}
-									onPageSizeChange={(event) => {
-										setPagination((prev) => ({
-											...prev,
-											pageSize: event,
-										}));
-									}}
-									getRowClassName={(params) => {
-										const reported = params?.row?.reportedBy?.length > 3;
-										console.log("params", reported);
-										return `app-header-${reported}`;
-									}}
-									rowCount={reportList?.totalElements}
-									rows={rows}
-									columns={columns}
-									paginationMode='server'
-									// autoPageSize
-									pagination
-									onPageChange={(event) => {
-										setPagination((prev) => ({
-											...prev,
-											page: event,
-										}));
-									}}
-									rowsPerPageOptions={[5, 10, 20]}
-									className={classes.dataGridFooter}
-								/>
+						{reportList?.data?.length > 0 ? (
+							<div style={{ width: "100%" }}>
+								<div className={classes.DataGridBackground}>
+									<StyledDataGrid
+										autoHeight
+										page={pagination.page}
+										pageSize={pagination.pageSize}
+										onPageSizeChange={(event) => {
+											setPagination((prev) => ({
+												...prev,
+												pageSize: event,
+											}));
+										}}
+										getRowClassName={(params) => {
+											const reported = params?.row?.reportedBy?.length > 3;
+											console.log("params", reported);
+											return `app-header-${reported}`;
+										}}
+										rowCount={reportList?.totalElements}
+										rows={rows}
+										columns={columns}
+										paginationMode='server'
+										// autoPageSize
+										pagination
+										onPageChange={(event) => {
+											setPagination((prev) => ({
+												...prev,
+												page: event,
+											}));
+										}}
+										rowsPerPageOptions={[5, 10, 20]}
+										className={classes.dataGridFooter}
+									/>
+								</div>
 							</div>
-						</div>
+						) : (
+							<Box
+								style={{ width: "100%", height: "100vh" }}
+								className='d-flex justify-content-center align-items-center'>
+								<p>No data found !</p>
+							</Box>
+						)}
 					</Card>
 				</Container>
 			</div>
-		);
-	} else if (reportList?.length === 0) {
-		return (
-			<box
-				style={{ width: "100%", height: "100vh" }}
-				className='d-flex justify-content-center align-items-center'>
-				<p>no data found !</p>
-			</box>
 		);
 	} else {
 		return (

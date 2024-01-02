@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Typography, Box, Button, TextField } from "@mui/material";
-import { deleteSocialFeed } from "../services/ApiServices";
+import { deleteCollabFeed, deleteSocialFeed } from "../services/ApiServices";
 import { MainContext } from "../../../context/Context";
 import { Navigate, useLocation, useNavigate } from "react-router";
 
@@ -17,16 +17,16 @@ function DeleteFeedModal({
 	const navigate = useNavigate();
 	const path1 = pathname?.split("/")?.[1];
 
-	const deleteFeedApiCall = React.useCallback(() => {
+	const deleteFeedApiCall = React.useCallback((data) => {
 		deleteSocialFeed({
-			feedId: dFeedData.feedId,
-			remark: dFeedData.remark,
+			feedId: data.feedId,
+			remark: data.remark,
 		})
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Feed Deleted", "success");
 				// setOpenSnackBar(true);
-				if (pathname === "/social-feeds/reported-feeds/" + dFeedData.feedId) {
+				if (pathname === "/social-feeds/reported-feeds/" + data.feedId) {
 					navigate("/social-feeds/reported-feeds");
 				}
 				socialFilterApi(0, 10);
@@ -34,7 +34,28 @@ function DeleteFeedModal({
 			.catch((err) => {
 				console.error(err);
 			});
-	}, [dFeedData.remark, dFeedData.feedId]);
+	}, []);
+
+	const deleteCollabFeedApi = React.useCallback((data) => {
+		deleteCollabFeed({
+			feedId: data.feedId,
+			collaborateId: data?.collaborateId,
+			remark: data.remark,
+		})
+			.then((res) => {
+				setModalOpen(true);
+				setModalData("Feed Deleted", "success");
+				// setOpenSnackBar(true);
+				if (pathname === "/social-feeds/reported-feeds/" + data.feedId) {
+					navigate("/social-feeds/reported-feeds");
+				}
+				socialFilterApi(0, 10);
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}, []);
+
 	return (
 		<Modal
 			className='delete-modal'
@@ -63,7 +84,11 @@ function DeleteFeedModal({
 				className='delete1-modal'>
 				<form
 					onSubmit={() => {
-						deleteFeedApiCall();
+						if (dFeedData?.collaborateId) {
+							deleteCollabFeedApi(dFeedData);
+						} else {
+							deleteFeedApiCall(dFeedData);
+						}
 						openModalfun(false);
 						mainModal();
 					}}>

@@ -28,7 +28,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import { filterSocialFeeds } from "../../services/ApiServices";
+import { filterSocialFeeds, getReportedFeedDetail } from "../../services/ApiServices";
 
 import FullScreenImageModal from "../../Components/FullScreenImageModal";
 import { useNavigate } from "react-router-dom";
@@ -56,6 +56,7 @@ export default function ReportedFeeds(props) {
 	const [openDModal, setOpenDModal] = React.useState(false);
 	const [dFeedData, setDFeedData] = React.useState({
 		feedId: "",
+		collaborateId: "",
 		remark: "",
 	});
 
@@ -77,27 +78,30 @@ export default function ReportedFeeds(props) {
 	const filterReportedFeedsApiCall = React.useCallback(
 		() => {
 			// setData();
-			filterSocialFeeds({
-				deleted: null,
-				domain: null,
-				fields: null,
-				finishDate: reportedFeedFilter?.endDate
-					? moment(reportedFeedFilter?.endDate).set({ hour: 23, minute: 59, second: 58 }).format()
-					: null,
-				inactive: null,
-				keywords: null,
-				reported: true,
+			getReportedFeedDetail({
 				page: reportedFeedFilter?.page,
 				pageSize: reportedFeedFilter?.pageSize,
-				sortBy: null,
-				startDate: reportedFeedFilter?.startDate
-					? moment(reportedFeedFilter?.startDate).set({ hour: 0, minute: 0, second: 0 }).format()
-					: null,
+				// finishDate: reportedFeedFilter?.endDate
+				// 	? moment(reportedFeedFilter?.endDate).set({ hour: 23, minute: 59, second: 58 }).format()
+				// 	: null,
+				// startDate: reportedFeedFilter?.startDate
+				// 	? moment(reportedFeedFilter?.startDate).set({ hour: 0, minute: 0, second: 0 }).format()
+				// 	: null,
 			})
 				.then((res) => {
 					console.log("====================================");
 					console.log("res", res);
 					console.log("====================================");
+					// const resp = res?.content?.map((item, index) => {
+					// 	if (item?.collaborateId) {
+					// 		return item?.feed?.collaborateFeeds?.filter((ele) => ele?.id === item?.collaborateId)?.[0];
+					// 	} else {
+					// 		return { ...item?.user, ...item?.feed };
+					// 	}
+					// });
+					// console.log("====================================");
+					// console.log("resp", resp);
+					// console.log("====================================");
 					setData(res);
 					setTotalEle(res.totalElements);
 				})
@@ -110,13 +114,13 @@ export default function ReportedFeeds(props) {
 	);
 
 	function handleDeleteModal(data) {
-		setDFeedData({ feedId: data?.feedId });
+		setDFeedData({ feedId: data?.feedId, collaborateId: data?.collaborateId });
 		setOpenDModal(data?.open);
 	}
 
-	console.log("====================================");
-	console.log("reportedFeed filter", reportedFeedFilter);
-	console.log("====================================");
+	// console.log("====================================");
+	// console.log("reportedFeed filter", reportedFeedFilter);
+	// console.log("====================================");
 
 	React.useEffect(() => {
 		filterReportedFeedsApiCall();
@@ -155,7 +159,7 @@ export default function ReportedFeeds(props) {
 						</Typography>
 					</Box>
 					<Box sx={{ display: "flex", alignItems: "center" }}>
-						<Box>
+						{/* <Box>
 							<LocalizationProvider dateAdapter={AdapterDateFns}>
 								<DatePicker
 									inputFormat='dd/MM/yyyy'
@@ -225,7 +229,7 @@ export default function ReportedFeeds(props) {
 									)}
 								/>
 							</LocalizationProvider>
-						</Box>
+						</Box> */}
 						<Box>
 							<Tooltip title='Search'>
 								<IconButton
@@ -276,15 +280,50 @@ export default function ReportedFeeds(props) {
 				{data?.content?.length > 0 ? (
 					<Grid container spacing={2}>
 						{data?.content?.map((ele, index) => {
+							const collab = ele?.collaborateId
+								? ele?.feed?.collaborateFeeds?.filter((item, index) => item?.id === ele?.collaborateId)?.[0]
+								: null;
 							return (
 								<React.Fragment>
 									<Grid item xs={12} sm={6} md={4} lg={3} xl={2.4} key={index}>
-										<FeedCard
-											groupFeed={false}
-											index={index}
-											ele={ele}
-											handleDeleteModal={handleDeleteModal}
-										/>
+										{ele?.collaborateId ? (
+											<FeedCard
+												reported={true}
+												groupFeed={false}
+												index={index}
+												ele={ele}
+												data={{
+													author: collab?.user,
+													mainMedia: [collab?.mediaContent],
+													pageName: ele?.feed?.pageName,
+													text: collab?.text,
+												}}
+												handleDeleteModal={handleDeleteModal}
+											/>
+										) : (
+											<FeedCard
+												reported={true}
+												groupFeed={false}
+												index={index}
+												ele={ele}
+												data={{
+													author: ele?.feed?.author,
+													mainMedia:
+														ele?.feed?.collaboration && ele?.feed?.collaborateFeeds?.length > 0
+															? [
+																	...ele?.feed?.mediaContent,
+																	...ele?.feed?.collaborateFeeds?.map((item) => ({
+																		...item,
+																		...item?.mediaContent,
+																	})),
+															  ]
+															: ele?.feed?.mediaContent,
+													pageName: ele?.feed?.pageName,
+													text: ele?.feed?.text,
+												}}
+												handleDeleteModal={handleDeleteModal}
+											/>
+										)}
 									</Grid>
 								</React.Fragment>
 							);

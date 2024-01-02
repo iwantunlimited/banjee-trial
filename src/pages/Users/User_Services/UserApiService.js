@@ -117,6 +117,15 @@ let ReportedUserList = (requestLoad) => {
 	let method = "POST";
 	return executePost(url, actionCode, payload, method);
 };
+//----------------------------------------- REPORTED USERS by userId ----------------------------------------//
+export let ReportedUserByUserId = (requestLoad) => {
+	let url = urls.USERPROFILE.REPORTED_USER_BY_ID;
+	// let actionCode = "ACTION_FILTER_REPORT";
+	let actionCode = "";
+	let payload = requestLoad;
+	let method = "POST";
+	return executePost(url, actionCode, payload, method);
+};
 //----------------------------------------- REPORT ACTION ----------------------------------------//
 let ReportedUserAction = (requestLoad) => {
 	let url = urls.USERPROFILE.REPORT_ACTION;

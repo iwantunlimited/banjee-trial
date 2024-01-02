@@ -30,7 +30,7 @@ import SnackbarContext from "../../../CustomComponents/SnackbarContext";
 import "../alert.css";
 import Compressor from "compressorjs";
 import { v4 as uuidv4 } from "uuid";
-import SuspiciousActivity from "../../../assets/alerticonset/SuspiciousActivity.webp";
+import SuspiciousActivity from "../../../assets/alerticonset/SuspiciousActivity.png";
 import SuspiciousPerson from "../../../assets/alerticonset/Suspiciousperson.webp";
 import MissingPerson from "../../../assets/alerticonset/Missingperson.webp";
 import Fire from "../../../assets/alerticonset/Fire.webp";
@@ -48,7 +48,7 @@ import useLocation from "../../../hook/useLocation";
 
 const eventData = [
 	{
-		icon: "local-activity",
+		icon: "activity",
 		img: SuspiciousActivity,
 		name: "Suspicious activity",
 		select: false,

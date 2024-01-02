@@ -58,6 +58,7 @@ export const urls = {
 		DELETE_COMMENTS: services.SOCIAL_FEEDS + "comments/delete/",
 		GET_REACTIONS: services.SOCIAL_FEEDS + "reaction/",
 		DELETEFEED: services.SOCIAL_FEEDS + "api/feeds/admin/remove",
+		DELETE_COLLAB_FEED: services.SOCIAL_FEEDS + "feeds/collaborate/delete",
 		REPORTED_FEED_DETAIL: services.SOCIAL_FEEDS + "api/feeds/admin/reports/",
 	},
 
@@ -149,6 +150,7 @@ export const urls = {
 		FILTER: services.USER_PROFILE + "profile/filter",
 		UPDATE: services.USER_PROFILE + "profile",
 		REPORTED_USERS: services.USER_PROFILE + "user/report/filter",
+		REPORTED_USER_BY_ID: services.USER_PROFILE + "user/report/byUsers",
 		REPORT_ACTION: services.USER_PROFILE + "user-report/action",
 	},
 

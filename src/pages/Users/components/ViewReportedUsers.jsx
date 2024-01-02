@@ -20,14 +20,13 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import {
 	ReportedUserAction,
-	ReportedUserList,
+	ReportedUserByUserId,
 	findReportedCustomer,
 } from "../User_Services/UserApiService";
 import { Male, Female, Transgender } from "@mui/icons-material";
 import PropTypes from "prop-types";
 import "../users.css";
 import SwipeableViews from "react-swipeable-views";
-import { getReportedFeedDetail } from "../../Social_Feeds/services/ApiServices";
 
 function ViewReportedUser(props) {
 	const navigate = useNavigate();
@@ -72,8 +71,8 @@ function ViewReportedUser(props) {
 
 	const columns = [
 		{
-			id: "1",
-			field: "mavatarUrl",
+			id: 1,
+			field: "avtarUrl",
 			headerClassName: "app-header",
 			headerName: "Avatar",
 			flex: 0.15,
@@ -81,41 +80,25 @@ function ViewReportedUser(props) {
 			renderCell: (params) => {
 				return (
 					<Avatar
-						src={`https://gateway.banjee.org/services/media-service/iwantcdn/resources/${params?.row?.reportedBy?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
-						alt={params?.row?.reportedBy?.avtarUrl}
+						src={`https://gateway.banjee.org/services/media-service/iwantcdn/resources/${params?.row?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+						alt={params?.row?.avtarUrl}
 					/>
 				);
 			},
 		},
 		{
-			id: "2",
+			id: 2,
 			field: "firstName",
 			headerClassName: "app-header",
 			headerName: "Name",
 			flex: 0.3,
-			renderCell: (params) => params?.row?.reportedBy?.firstName,
 		},
-		// {
-		// 	id: "3",
-		// 	field: "email",
-		// 	headerClassName: "app-header",
-		// 	headerName: "Email",
-		// 	flex: 0.4,
-		// },
-		// {
-		// 	id: "4",
-		// 	field: "mobile",
-		// 	headerClassName: "app-header",
-		// 	headerName: "Mobile",
-		// 	flex: 0.4,
-		// },
 		{
-			id: "5",
+			id: 3,
 			field: "remark",
 			headerClassName: "app-header",
 			headerName: "Remark",
 			flex: 0.4,
-			renderCell: (params) => params?.row?.remark,
 		},
 	];
 
@@ -154,18 +137,19 @@ function ViewReportedUser(props) {
 	// ------------------------------------ find Reported Customer Api Call ---------------------------------------
 
 	const findReportedCustomerApiCall = React.useCallback(() => {
-		ReportedUserList({
+		ReportedUserByUserId({
 			page: pagination?.page,
 			pageSize: pagination?.pageSize,
 			reportedUserId: params?.id,
 		})
 			.then((response) => {
-				console.log("====================================");
-				console.log("respo", response);
-				console.log("====================================");
+				const resp = response?.content?.map((item, index) => ({
+					...item,
+					...item?.byUser,
+				}));
 				setReportedDataAvailable(true);
 				setReportList({
-					data: response?.content,
+					data: resp,
 					totalElements: response?.totalElements,
 				});
 			})
@@ -177,10 +161,10 @@ function ViewReportedUser(props) {
 	const ReportActionApiCall = React.useCallback((data) => {
 		ReportedUserAction({
 			systemUserId: data?.userId,
-			warning: data?.warning,
-			temporarilySuspend: data?.temporarilySuspend,
-			permanentSuspend: data?.permanentSuspend,
-			...(data?.temporarilySuspend ? { suspensionDays: data?.duration } : {}),
+			warning: data?.warning ? data?.warning : false,
+			temporarilySuspend: data?.temporarilySuspend ? data?.temporarilySuspend : false,
+			permanentSuspend: data?.permanentSuspend ? data?.permanentSuspend : false,
+			...(data?.temporarilySuspend ? { suspensionDays: data?.suspensionDays } : {}),
 		})
 			.then((res) => {
 				console.log("====================================");
@@ -270,23 +254,21 @@ function ViewReportedUser(props) {
 								style={{ marginTop: "10px", textAlign: "left" }}>
 								<Grid item xs={12} sm={12} md={12} lg={12} style={{ display: "flex" }}>
 									<Typography variant='h6'>Mobile:</Typography>
-									{/* </Grid>
-                                        <Grid item xs={6} sm={8} md={9} lg={9}> */}
+
 									<Typography variant='h6' style={{ color: "#666", marginLeft: "15px" }}>
 										{state?.userObject?.mobile}
 									</Typography>
 								</Grid>
 								<Grid item xs={12} sm={12} md={12} lg={12} style={{ display: "flex" }}>
 									<Typography variant='h6'> {state?.userObject?.email && "Email:"}</Typography>
-									{/* </Grid>
-                                        <Grid item xs={6} sm={8} md={10} lg={10}> */}
+
 									<Typography variant='h6' style={{ color: "#666", marginLeft: "15px" }}>
 										{state?.userObject?.email}
 									</Typography>
 								</Grid>
 								<Grid item xs={12} sm={12} md={12} lg={12}>
 									<Typography variant='h6' style={{ marginTop: "2px" }}>
-										Reported By: {state?.userObject?.length}
+										Reported By: {state?.userObject?.reportedCount}
 									</Typography>
 								</Grid>
 								<Grid
@@ -297,6 +279,7 @@ function ViewReportedUser(props) {
 										flexDirection: "column",
 										justifyContent: "center",
 										alignItems: "center",
+										paddingTop: { xs: 1, md: 2 },
 									}}>
 									{temporaryBtnClick && (
 										<Autocomplete
@@ -305,9 +288,22 @@ function ViewReportedUser(props) {
 											id='combo-box-demo'
 											onChange={(event, newEvent) => {
 												console.log("newEvent", newEvent);
-												setSuspendDuration(newEvent);
+												setSuspendDuration(newEvent?.value);
 											}}
-											options={["1 Day", "3 Days", "7 Days"]}
+											options={[
+												{
+													label: "1 Day",
+													value: 1,
+												},
+												{
+													label: "3 Days",
+													value: 3,
+												},
+												{
+													label: "7 Days",
+													value: 7,
+												},
+											]}
 											sx={{ width: 300, marginBottom: { xs: 1, md: 2 } }}
 											renderInput={(params) => (
 												<TextField error={btnError} focused={btnError} {...params} label='Time Duration' />
@@ -315,7 +311,17 @@ function ViewReportedUser(props) {
 										/>
 									)}
 									<Stack columnGap={2} flexDirection={"row"} alignItems={"center"}>
-										<Button color='info' variant='outlined' sx={{ textTransform: "none" }}>
+										<Button
+											color='info'
+											variant='outlined'
+											onClick={() => {
+												console.log("state", state);
+												ReportActionApiCall({
+													userId: state?.userObject?.id ? state?.userObject?.id : params?.id,
+													warning: true,
+												});
+											}}
+											sx={{ textTransform: "none" }}>
 											Send Warning
 										</Button>
 										<Button
@@ -326,11 +332,11 @@ function ViewReportedUser(props) {
 														setBtnError(true);
 													} else {
 														ReportActionApiCall({
-															userId: state?.userObject?.id,
-															warning: true,
-															temporarilySuspend: false,
+															userId: state?.userObject?.id ? state?.userObject?.id : params?.id,
+															warning: false,
+															temporarilySuspend: true,
 															permanentSuspend: false,
-															suspensionDays: "",
+															suspensionDays: suspendDuration,
 														});
 													}
 												} else {
@@ -377,60 +383,10 @@ function ViewReportedUser(props) {
 									onChangeIndex={handleChangeIndex}>
 									<TabPanel value={value} index={0} dir={theme.direction}>
 										<Grid item container xs={12} sm={12} md={12} lg={12} spacing={2}>
-											{/* <div> */}
-											{/* <Hidden xsUp>
-												{reportList?.data &&
-													reportList?.data?.length > 0 &&
-													reportList?.data?.map((ele, index) => {
-														return (
-															<Grid item xs={6} sm={4} md={4} lg={4} id={index}>
-																<Card
-																	// onClick={() => {props.history.push( '/reporteduser/view/' + ele.fromUserId)}}
-																	style={{
-																		display: "flex",
-																		justifyContent: "center",
-																		alignItems: "center",
-																		flexDirection: "column",
-																		padding: "15px 5px 15px 5px",
-																		boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
-																		width: "100%",
-																	}}>
-																	<Avatar
-																		src={`https://gateway.banjee.org/services/media-service/iwantcdn/resources/${ele?.byUser?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
-																		alt={ele?.byUser?.firstName}
-																	/>
-																	<div
-																		style={{
-																			display: "flex",
-																			alignItems: "center",
-																			marginTop: "10px",
-																		}}>
-																		<Typography variant='h5'>{ele?.byUser?.firstName}</Typography>
-																		{ele?.byUser && ele?.byUser?.gender && (
-																			<div>
-																				{ele?.byUser?.gender?.toLowerCase() === "male" ? (
-																					<Male style={{ color: "blue" }} />
-																				) : ele?.byUser?.gender?.toLowerCase() === "female" ? (
-																					<Female style={{ color: "#B73BA4" }} />
-																				) : (
-																					<Transgender style={{ color: "rgb(246,191,188)" }} />
-																				)}
-																			</div>
-																		)}
-																	</div>
-																	<Typography style={{ color: "#666" }}>{ele?.byUser?.email}</Typography>
-																	<Typography style={{ color: "#666" }}>{ele?.byUser?.mobile}</Typography>
-																</Card>
-															</Grid>
-														);
-													})}
-											</Hidden> */}
-											{/* </div> */}
-											{/* <Hidden xsDown> */}
 											<Grid item xs={12}>
 												<div
 													style={{
-														width: "100%",
+														// width: "100%",
 														background: "white",
 														marginTop: "10px",
 														padding: "10px",
@@ -464,7 +420,6 @@ function ViewReportedUser(props) {
 													</div>
 												</div>
 											</Grid>
-											{/* </Hidden> */}
 										</Grid>
 									</TabPanel>
 								</SwipeableViews>

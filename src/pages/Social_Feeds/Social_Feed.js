@@ -22,7 +22,6 @@ import { filterSocialFeeds } from "./services/ApiServices";
 
 import FullScreenImageModal from "./Components/FullScreenImageModal";
 import { useNavigate } from "react-router-dom";
-import "./SocialFeed.css";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -306,6 +305,22 @@ export default function SocialFeed(props) {
 												groupFeed={false}
 												index={index}
 												ele={ele}
+												reported={false}
+												data={{
+													author: ele?.author,
+													mainMedia:
+														ele?.collaboration && ele?.collaborateFeeds?.length > 0
+															? [
+																	...ele?.mediaContent,
+																	...ele?.collaborateFeeds?.map((item) => ({
+																		...item,
+																		...item?.mediaContent,
+																	})),
+															  ]
+															: ele?.mediaContent,
+													pageName: ele?.pageName,
+													text: ele?.text,
+												}}
 												handleDeleteModal={handleDeleteModal}
 											/>
 										</Grid>

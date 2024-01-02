@@ -22,6 +22,7 @@ import SwiperComp from "../../../../CustomComponents/SwiperComp";
 import {
 	commentOnFeed,
 	deleteSocialFeed,
+	deleteCollabFeed,
 	deleteSocialFeedsComments,
 	getSocialFeedDetails,
 } from "../../services/ApiServices";
@@ -77,15 +78,21 @@ function FeedDetail(props) {
 	const params = useParams();
 	const theme = useTheme();
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { setModalData, setModalOpen } = React.useContext(MainContext);
 	const { pathname } = useLocation();
 	const [data, setData] = React.useState("");
 	const [textState, setTextState] = React.useState(false);
+	const collabObj =
+		location?.state?.collaborateId && data?.collaborateFeeds?.length > 0
+			? data?.collaborateFeeds?.filter((ele) => ele?.id === location?.state?.collaborateId)?.[0]
+			: null;
 	const [deleteModal, setDeleteModal] = React.useState({
 		open: false,
 		feedId: params?.id,
 		remark: "",
 		commentId: "",
+		collaborateId: collabObj?.id,
 	});
 	const [commentText, setCommentText] = React.useState("");
 	const [commentReply, setCommentReply] = React.useState({
@@ -109,6 +116,7 @@ function FeedDetail(props) {
 			open: false,
 			remark: "",
 			commentId: "",
+			collaborateId: "",
 		}));
 		setModalType("feed");
 	};
@@ -160,8 +168,8 @@ function FeedDetail(props) {
 				// navigate(-1);
 			})
 			.catch((err) => {
-				console.error(err);
-				if (err === "-404:Requested Item [Feed[65292ec11b37be7c18a11af5]] Not Found") {
+				console.err(err);
+				if (err?.startsWith(-404)) {
 					console.log("404");
 					setModalOpen(true);
 					setModalData("Requested Item [Feed[65292ec11b37be7c18a11af5]] Not Found ", "error");
@@ -174,10 +182,30 @@ function FeedDetail(props) {
 			});
 	}, []);
 
-	const deleteFeedApiCall = React.useCallback(() => {
+	const deleteFeedApiCall = React.useCallback((feedId, remark) => {
 		deleteSocialFeed({
-			feedId: deleteModal.feedId,
-			remark: deleteModal.remark,
+			feedId: feedId,
+			remark: remark,
+		})
+			.then((res) => {
+				setModalOpen(true);
+				setModalData("Feed Deleted", "success");
+				// setOpenSnackBar(true);
+				// if (pathname === "/social-feeds/reported-feeds/" + deleteModal.feedId) {
+				// 	navigate("/social-feeds/reported-feeds");
+				// }
+				navigate("/social-feeds");
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}, []);
+
+	const deleteCollabFeedApi = React.useCallback((collabId, feedId, remark) => {
+		deleteCollabFeed({
+			collaborateId: collabId,
+			feedId: feedId,
+			remark: remark,
 		})
 			.then((res) => {
 				setModalOpen(true);
@@ -248,7 +276,11 @@ function FeedDetail(props) {
 						<form
 							onSubmit={(event) => {
 								event?.preventDefault();
-								deleteFeedApiCall();
+								if (location?.state?.collaborateId) {
+									deleteCollabFeedApi(deleteModal?.collaborateId, deleteModal?.feedId, deleteModal?.remark);
+								} else {
+									deleteFeedApiCall(deleteModal?.feedId, deleteModal?.remark);
+								}
 							}}>
 							<Typography
 								id='modal-modal-title'
@@ -279,15 +311,7 @@ function FeedDetail(props) {
 								<Button variant='outlined' onClick={() => handleCloseModal()}>
 									Cancel
 								</Button>
-								<Button
-									variant='contained'
-									type='submit'
-									sx={{ marginLeft: { xs: "10px", md: "20px" } }}
-									// onClick={() => {
-									// 	deleteFeedApiCall();
-									// 	filterSocialFeedsApiCall();
-									// }}
-								>
+								<Button variant='contained' type='submit' sx={{ marginLeft: { xs: "10px", md: "20px" } }}>
 									Submit
 								</Button>
 							</Box>
@@ -319,12 +343,7 @@ function FeedDetail(props) {
 									type='submit'
 									sx={{
 										marginLeft: { xs: "10px", md: "20px" },
-									}}
-									// onClick={() => {
-									// 	deleteFeedApiCall();
-									// 	filterSocialFeedsApiCall();
-									// }}
-								>
+									}}>
 									Submit
 								</Button>
 							</Box>
@@ -337,7 +356,11 @@ function FeedDetail(props) {
 						<form
 							onSubmit={(event) => {
 								event?.preventDefault();
-								deleteFeedApiCall();
+								if (location?.state?.collaborateId) {
+									deleteCollabFeedApi(deleteModal?.collaborateId, deleteModal?.feedId, deleteModal?.remark);
+								} else {
+									deleteFeedApiCall(deleteModal?.feedId, deleteModal?.remark);
+								}
 							}}>
 							<Typography
 								id='modal-modal-title'
@@ -404,10 +427,6 @@ function FeedDetail(props) {
 			});
 	}, []);
 
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
-
 	React.useEffect(() => {
 		ApiCall();
 		feedCommentApiCall();
@@ -415,6 +434,9 @@ function FeedDetail(props) {
 	}, [ApiCall, feedReactionApiCall, feedCommentApiCall]);
 
 	if (data) {
+		const author = location?.state?.collaborateId
+			? { ...collabObj?.user, authorId: collabObj?.user?.id }
+			: { ...data?.author, authorId: data?.authorId };
 		return (
 			<React.Fragment>
 				<Container maxWidth='md' sx={{ marginTop: "10px" }}>
@@ -450,14 +472,14 @@ function FeedDetail(props) {
 										<Box
 											onClick={() => {
 												if (
-													data?.authorId === "61111e42bcc68b2a1fa3432c" ||
-													data?.authorId === "63f75ffa4c16dbbb155fc380"
+													author?.authorId === "61111e42bcc68b2a1fa3432c" ||
+													author?.authorId === "63f75ffa4c16dbbb155fc380"
 												) {
 													// setModalOpen(true);
 													// setModalData("Admin User", "warning");
 												} else {
 													if (localStorage?.getItem("userType") !== "merchant") {
-														navigate("/user/" + data?.authorId);
+														navigate("/user/" + author?.authorId);
 													}
 												}
 											}}
@@ -470,7 +492,7 @@ function FeedDetail(props) {
 											}}>
 											<Avatar
 												alt='#'
-												src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${data?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
+												src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
 												style={{
 													height: "60px",
 													width: "60px",
@@ -486,10 +508,10 @@ function FeedDetail(props) {
 													flexDirection: "column",
 													fontSize: "18px",
 												}}>
-												{data?.author?.firstName ? (
-													<span>{`${data?.author?.firstName}`}</span>
+												{author?.firstName ? (
+													<span>{`${author?.firstName}`}</span>
 												) : (
-													<span>{`${data?.author?.userName || "userName"}`}</span>
+													<span>{`${author?.userName || "userName"}`}</span>
 												)}
 												{data?.scheduled === true ? (
 													<span style={{ fontSize: "14px" }}>
@@ -497,7 +519,11 @@ function FeedDetail(props) {
 														{"Scheduled at " + moment(data?.dateTime).format("dddd")}
 													</span>
 												) : (
-													<span style={{ fontSize: "14px" }}>{moment(data?.createdOn).format("lll")}</span>
+													<span style={{ fontSize: "14px" }}>
+														{moment(
+															location?.state?.collaborateId ? collabObj?.createdOn : data?.createdOn
+														).format("lll")}
+													</span>
 												)}
 											</Typography>
 										</Box>
@@ -507,6 +533,8 @@ function FeedDetail(props) {
 													setDeleteModal((prev) => ({
 														...prev,
 														open: true,
+														feedId: params?.id,
+														collaborateId: location?.state?.collaborateId,
 													}));
 												}}
 												style={{ width: "40px", height: "40px" }}>
@@ -518,7 +546,9 @@ function FeedDetail(props) {
 										<Box sx={{ marginY: "10px" }}>
 											<SwiperComp
 												data={
-													data?.collaboration && data?.collaborateFeeds?.length > 0
+													location?.state?.collaborateId
+														? data?.collaborateFeeds?.length > 0 && [collabObj?.mediaContent]
+														: data?.collaboration && data?.collaborateFeeds?.length > 0
 														? [
 																...data?.mediaContent,
 																...data?.collaborateFeeds?.map((item) => ({
@@ -528,22 +558,12 @@ function FeedDetail(props) {
 														  ]
 														: data?.mediaContent
 												}
+												collaborateId={location?.state?.collaborateId}
 											/>
 										</Box>
 									)}
 									<Box sx={{ marginY: "10px" }}>
-										{textFun(data?.text)}
-										{/* {data?.text?.length < 350 && textState === false ? (
-									<Typography>
-										{data?.text.slice(0, 350) + " "}
-										<a>more</a>
-									</Typography>
-								) : (
-									<Typography>
-										{data?.text + ""}
-										<a>less</a>
-									</Typography>
-								)} */}
+										{textFun(location?.state?.collaborateId ? collabObj?.text : data?.text)}
 									</Box>
 									{data?.collaboration && data?.collaborateFeeds?.length > 0 ? (
 										<Box sx={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
@@ -923,9 +943,9 @@ function FeedDetail(props) {
 					</Grid>
 					{modalHandler()}
 				</Container>
-				{data?.reportedCount > 0 ? (
+				{location?.state?.reported ? (
 					<Container maxWidth='xl' sx={{ marginTop: { xs: 1, md: 2 } }}>
-						<ViewRFeed feedId={data?.id} />
+						<ViewRFeed feedId={data?.id} collaborateId={location?.state?.collaborateId} />
 					</Container>
 				) : null}
 			</React.Fragment>

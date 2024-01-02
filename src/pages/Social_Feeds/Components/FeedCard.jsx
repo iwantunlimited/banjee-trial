@@ -11,7 +11,7 @@ import { Pagination } from "swiper";
 import { ChatBubbleOutline, Delete, FavoriteBorder, Fullscreen, Group } from "@mui/icons-material";
 import FullScreenImageModal from "./FullScreenImageModal";
 import moment from "moment";
-import ViewRFeed from "./Reported_Feed/ViewRFeed";
+import "../SocialFeed.css";
 
 function FeedCard(props) {
 	const navigate = useNavigate();
@@ -22,7 +22,12 @@ function FeedCard(props) {
 	});
 	const [collabVisible, setCollabVisible] = React.useState(true);
 
-	const { ele, handleDeleteModal, index } = props;
+	const {
+		data: { author, mainMedia, collaborate, pageName, text },
+		ele,
+		handleDeleteModal,
+		index,
+	} = props;
 
 	function CollaborateItem(data) {
 		if (data?.mediaContent) {
@@ -65,16 +70,16 @@ function FeedCard(props) {
 	}
 
 	if (props?.ele) {
-		const mainMedia =
-			ele?.collaboration && ele?.collaborateFeeds?.length > 0
-				? [
-						...ele?.mediaContent,
-						...ele?.collaborateFeeds?.map((item) => ({
-							...item,
-							...item?.mediaContent,
-						})),
-				  ]
-				: ele?.mediaContent;
+		// const mainMedia =
+		// 	ele?.collaboration && ele?.collaborateFeeds?.length > 0
+		// 		? [
+		// 				...ele?.mediaContent,
+		// 				...ele?.collaborateFeeds?.map((item) => ({
+		// 					...item,
+		// 					...item?.mediaContent,
+		// 				})),
+		// 		  ]
+		// 		: ele?.mediaContent;
 
 		return (
 			<React.Fragment>
@@ -117,7 +122,13 @@ function FeedCard(props) {
 							}}>
 							<Box
 								onClick={() => {
-									navigate("/social-feeds/" + ele?.id);
+									if (props?.reported) {
+										navigate("/social-feeds/" + ele?.feed?.id, {
+											state: { reported: true, collaborateId: ele?.collaborateId },
+										});
+									} else {
+										navigate("/social-feeds/" + ele?.id);
+									}
 									// setModal({ open: true, data: ele });
 								}}
 								style={{
@@ -126,9 +137,9 @@ function FeedCard(props) {
 									paddingLeft: "10px",
 								}}>
 								<Avatar
-									alt={ele?.author?.userName}
+									alt={author?.userName}
 									// src={`https://gateway.banjee.org//services/media-service/iwantcdn/resources/${ele?.author?.avtarUrl}?actionCode=ACTION_DOWNLOAD_RESOURCE`}
-									src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${ele?.author?.id}`}
+									src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${author?.id}`}
 									style={{
 										height: "40px",
 										width: "40px",
@@ -142,14 +153,14 @@ function FeedCard(props) {
 										display: "flex",
 										flexDirection: "column",
 									}}>
-									{ele?.author?.firstName ? (
+									{author?.firstName ? (
 										<span
 											style={{
 												display: "-webkit-box",
 												overflow: "hidden",
 												WebkitBoxOrient: "vertical",
 												WebkitLineClamp: 1,
-											}}>{`${ele?.author?.firstName}`}</span>
+											}}>{`${author?.firstName}`}</span>
 									) : (
 										<span
 											style={{
@@ -158,7 +169,7 @@ function FeedCard(props) {
 												WebkitBoxOrient: "vertical",
 												WebkitLineClamp: 1,
 											}}>
-											{ele?.author?.username ? ele?.author?.username : "username"}
+											{author?.username ? author?.username : "username"}
 										</span>
 									)}
 									{ele?.scheduled === true ? (
@@ -173,9 +184,18 @@ function FeedCard(props) {
 							</Box>
 							<IconButton
 								onClick={() => {
-									// setDFeedData({ feedId: ele.id });
-									// setOpenDModal(true);
-									handleDeleteModal({ open: true, feedId: ele?.id });
+									if (props?.reported) {
+										handleDeleteModal({
+											open: true,
+											feedId: ele?.feedId,
+											collaborateId: ele?.collaborateId ? ele?.collaborateId : null,
+										});
+									} else {
+										handleDeleteModal({
+											open: true,
+											feedId: ele?.id,
+										});
+									}
 								}}
 								style={{ width: "40px", height: "40px" }}>
 								<Delete />
@@ -207,8 +227,13 @@ function FeedCard(props) {
 							{/* swiper for media */}
 							<Swiper
 								onClick={() => {
-									navigate("/social-feeds/" + ele?.id);
-									// setModal({ open: true, data: ele });
+									if (props?.reported) {
+										navigate("/social-feeds/" + ele?.feed?.id, {
+											state: { reported: true, collaborateId: ele?.collaborateId },
+										});
+									} else {
+										navigate("/social-feeds/" + ele?.id);
+									} // setModal({ open: true, data: ele });
 								}}
 								pagination={
 									mainMedia?.length > 1
@@ -218,8 +243,9 @@ function FeedCard(props) {
 										: false
 								}
 								modules={[Pagination]}
-								className='mySwiper'>
-								{ele?.mediaContent?.length > 0 ? (
+								className='mySwiper'
+								style={{ position: "relative", width: "100%" }}>
+								{mainMedia?.length > 0 ? (
 									mainMedia?.map((item, iIndex) => {
 										if (item?.type === "video" || item?.mimeType?.startsWith("video")) {
 											return (
@@ -351,41 +377,6 @@ function FeedCard(props) {
 												</Box>
 											);
 										}
-										{
-											/* else {
-														return (
-															<SwiperSlide>
-																<Box
-																	key={iIndex}
-																	sx={{
-																		height: "200px",
-																		width: "100%",
-																		display: "flex",
-																		justifyContent: "center",
-																		alignItems: "center",
-																		position: "relative",
-																	}}>
-																	<Box
-																		variant='filled'
-																		sx={{
-																			position: "absolute",
-																			top: "20px",
-																			right: "20px",
-																			fontSize: "14px",
-																			background: "black",
-																			color: "white",
-																			borderRadius: "5px",
-																			paddingX: "0.5px",
-																		}}>
-																		{ele?.mediaContent?.length > 1 &&
-																			iIndex + 1 + "/" + ele?.mediaContent?.length}
-																	</Box>
-																	<Typography>{ele?.text}</Typography>
-																</Box>
-															</SwiperSlide>
-														);
-													} */
-										}
 									})
 								) : (
 									<SwiperSlide>
@@ -394,17 +385,37 @@ function FeedCard(props) {
 												height: "200px",
 												width: "100%",
 												display: "flex",
-												justifyContent: "center",
+												justifyContent: text?.length > 200 ? "left" : "center",
 												alignItems: "center",
+												// textAlign: "center",
 											}}>
-											{ele?.text?.length > 200 ? (
+											{text?.length > 200 ? (
 												<Typography>
-													{ele?.text?.slice(0, 200) + "... "}
+													{text?.slice(0, 200) + "... "}
 													<span style={{ textTransform: "none", color: "blue" }}>more</span>
 												</Typography>
 											) : (
-												<Typography>{ele?.text}</Typography>
+												<Typography
+													sx={{
+														display: "-webkit-box",
+														WebkitLineClamp: "3",
+														WebkitBoxOrient: "vertical",
+														overflow: "hidden",
+														textOverflow: "ellipsis",
+													}}>
+													{text}
+												</Typography>
 											)}
+											{/* <Typography
+												style={{
+													display: "-webkit-box",
+													WebkitLineClamp: "3",
+													WebkitBoxOrient: "vertical",
+													overflow: "hidden",
+													textOverflow: "ellipsis",
+												}}>
+												{ele?.text}
+											</Typography> */}
 										</Box>
 									</SwiperSlide>
 								)}
@@ -418,11 +429,16 @@ function FeedCard(props) {
 								flexDirection: "column",
 							}}
 							onClick={() => {
-								navigate("/social-feeds/" + ele?.id);
-								// setModal({ open: true, data: ele })
+								if (props?.reported) {
+									navigate("/social-feeds/" + ele?.feed?.id, {
+										state: { reported: true, collaborateId: ele?.collaborateId },
+									});
+								} else {
+									navigate("/social-feeds/" + ele?.id);
+								} // setModal({ open: true, data: ele })
 							}}>
-							{ele?.text && ele?.mediaContent?.length > 0 ? (
-								<Typography noWrap={true}>{ele?.text || <p style={{ height: "16px" }}> </p>}</Typography>
+							{text && mainMedia?.length > 0 ? (
+								<Typography noWrap={true}>{text || <p style={{ height: "16px" }}> </p>}</Typography>
 							) : (
 								<Box style={{ height: "24px" }}></Box>
 							)}
@@ -430,7 +446,9 @@ function FeedCard(props) {
 								<Box style={{ display: "flex", alignItems: "center" }}>
 									<FavoriteBorder />
 									<span style={{ marginLeft: "5px" }}>
-										{ele?.totalReactions || ele?.reactions?.length || 0}
+										{props?.reported
+											? ele?.feed?.totalReactions
+											: ele?.totalReactions || ele?.reactions?.length || 0}
 									</span>
 								</Box>
 								<Box
@@ -440,9 +458,11 @@ function FeedCard(props) {
 										marginLeft: "20px",
 									}}>
 									<ChatBubbleOutline />
-									<span style={{ marginLeft: "5px" }}>{ele?.totalComments || 0}</span>
+									<span style={{ marginLeft: "5px" }}>
+										{props?.reported ? ele?.feed?.totalComments : ele?.totalComments || 0}
+									</span>
 								</Box>
-								{ele?.collaborateFeeds?.length > 0 ? (
+								{!props?.reported && ele?.collaborateFeeds?.length > 0 ? (
 									<Box
 										sx={{
 											display: "flex",
@@ -450,7 +470,18 @@ function FeedCard(props) {
 											marginLeft: "20px",
 										}}>
 										<Group />
-										<span style={{ marginLeft: "5px" }}>{ele?.collaborateFeeds?.length || 0}</span>
+										<span style={{ marginLeft: "5px" }}>{ele?.collaborateFeeds?.length}</span>
+									</Box>
+								) : null}
+								{props?.reported && ele?.feed?.collaborateFeeds?.length > 0 ? (
+									<Box
+										sx={{
+											display: "flex",
+											alignItems: "center",
+											marginLeft: "20px",
+										}}>
+										<Group />
+										<span style={{ marginLeft: "5px" }}>{ele?.feed?.collaborateFeeds?.length}</span>
 									</Box>
 								) : null}
 							</Box>
@@ -503,7 +534,7 @@ function FeedCard(props) {
 								textAlign: "center",
 								paddingX: { xs: 1, md: 2 },
 							}}>
-							{ele?.pageName}
+							{pageName}
 						</Typography>
 					</Box>
 				</Card>

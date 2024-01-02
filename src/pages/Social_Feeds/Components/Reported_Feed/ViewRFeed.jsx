@@ -63,14 +63,14 @@ function ViewRFeed(props) {
 
 	const ReportedFeedApiCall = React.useCallback(() => {
 		getReportedFeedDetail({
-			feedId: props?.feedId,
 			page: pagination?.page,
 			pageSize: pagination?.pageSize,
+			...(props?.collaborateId ? { collaborateId: props?.collaborateId } : { feedId: props?.feedId }),
 		})
 			.then((res) => {
-				console.log("====================================");
-				console.log("ressss", res);
-				console.log("====================================");
+				// console.log("====================================");
+				// console.log("ressss", res);
+				// console.log("====================================");
 				setReportedData({
 					data: res?.content,
 					totalElements: res?.totalElements,

@@ -39,6 +39,12 @@
 	font-size: 12px;
 	padding: 2px 4px;
 	z-index: 2;
+	width: fit-content;
+	height: fit-content;
+}
+.mySwiper > .swiper-pagination-fraction {
+	right: 0px !important;
+	left: auto;
 }
 /* .mySwiper > .swiper-pagination-bullets {
 	display: none !important;
