@@ -24,9 +24,6 @@ function TimeSpentList(props) {
 	//find neighbourhood by user id
 
 	const ActiveUserApiCall = React.useCallback(() => {
-		// console.log("====================================");
-		// console.log(newData);
-		// console.log("====================================");
 		const payload = {
 			userId: props?.data,
 			page: pagination?.page,
@@ -38,7 +35,6 @@ function TimeSpentList(props) {
 				const rowData =
 					res?.content?.length > 0 &&
 					res?.content?.map((item, index) => {
-						// console.log("listActive user", item);
 						return {
 							...item,
 							id: index,
@@ -59,10 +55,6 @@ function TimeSpentList(props) {
 				console.warn(err);
 			});
 	}, [pagination]);
-
-	console.log("====================================");
-	console.log("state", state);
-	console.log("====================================");
 
 	let rows = state ? state : [];
 

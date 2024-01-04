@@ -71,9 +71,6 @@ function NeighrbourhoodList(props) {
 			// align: "center",
 			flex: 0.4,
 			renderCell: (params) => {
-				console.log("====================================");
-				console.log("params?.row", params?.row);
-				console.log("====================================");
 				return params?.row?.admin ? "ADMIN" : "MEMBER";
 				// if (params.row && params.row.createdOn) {
 				// 	const date = moment(params.row.createdOn).format("L");

@@ -101,9 +101,6 @@ function ViewEvent() {
 				setData(res);
 			})
 			.catch((err) => {
-				// console.log("====================================");
-				// console.log("error", err?.split(":"));
-				// console.log("====================================");
 				const errMessage = err?.split(":");
 				if (errMessage[0] === "-501") {
 					context?.setModalOpen(true);

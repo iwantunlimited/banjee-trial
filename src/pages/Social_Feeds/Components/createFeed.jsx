@@ -371,7 +371,7 @@ function CreateFeed() {
 
 	async function handleFileSelect(event) {
 		const inputVideo = event.target.files[0];
-		console.log("input", inputVideo);
+		// console.log("input", inputVideo);
 		if (!inputVideo) {
 			alert("Please select a video file.");
 			return;
@@ -385,10 +385,10 @@ function CreateFeed() {
 		);
 
 		// You can now use compressedVideoFile as needed, for example, upload it to a server.
-		console.log("Compressed Video File:", compressedVideoFile);
+		// console.log("Compressed Video File:", compressedVideoFile);
 
 		// For demonstration purposes, log the size of the compressed video file
-		console.log("Compressed Video Size:", compressedVideoFile.size);
+		// console.log("Compressed Video Size:", compressedVideoFile.size);
 	}
 
 	function canvasToFile(canvas, fileName, fileType) {

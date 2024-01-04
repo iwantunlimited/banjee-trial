@@ -143,9 +143,6 @@ function RemoveAdminRequests({ pendingData, refreshApi, RefreshMemberApiCall }) 
 			align: "center",
 			flex: 0.3,
 			renderCell: (params) => {
-				// console.log("====================================");
-				// console.log("8888", params);
-				// console.log("====================================");
 				return (
 					<strong>
 						<Stack direction='row' spacing={2}>
@@ -177,9 +174,6 @@ function RemoveAdminRequests({ pendingData, refreshApi, RefreshMemberApiCall }) 
 	const AcceptApiCall = React.useCallback((cloudId, requestId) => {
 		approveRemoveAdminReq(requestId)
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("community approve res", res);
-				// console.log("====================================");
 				setModalOpen(true);
 				setModalData("Request Accepted");
 				RefreshMemberApiCall();
@@ -199,10 +193,6 @@ function RemoveAdminRequests({ pendingData, refreshApi, RefreshMemberApiCall }) 
 	const RejectApiCall = React.useCallback((cloudId, requestId) => {
 		rejectRemoveAdminReq(requestId)
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("community reject res", res);
-				// console.log("====================================");
-
 				setModalOpen(true);
 				setModalData("Request Rejected");
 				if (nhPendingReqPage === 0) {
@@ -254,7 +244,6 @@ function RemoveAdminRequests({ pendingData, refreshApi, RefreshMemberApiCall }) 
 								columns={columns}
 								paginationMode='server'
 								getRowHeight={(params) => {
-									console.log("params", params?.model);
 									if (params?.model?.removeRequestBy?.length < 2) {
 										return 53;
 									} else if (params?.model?.removeRequestBy?.length === 2) {

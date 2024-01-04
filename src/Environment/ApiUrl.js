@@ -151,7 +151,7 @@ export const urls = {
 		UPDATE: services.USER_PROFILE + "profile",
 		REPORTED_USERS: services.USER_PROFILE + "user/report/filter",
 		REPORTED_USER_BY_ID: services.USER_PROFILE + "user/report/byUsers",
-		REPORT_ACTION: services.USER_PROFILE + "user-report/action",
+		REPORT_ACTION: services.USER_PROFILE_MEMBERSHIP + "user-report/action",
 	},
 
 	COUNTRY: {

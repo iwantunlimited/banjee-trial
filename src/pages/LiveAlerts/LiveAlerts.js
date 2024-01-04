@@ -45,20 +45,31 @@ export default function LiveAlerts() {
 	const socketListener = React.useCallback(() => {
 		if (socket) {
 			console.log("socket.readyState", socket?.readyState);
+
 			socket?.addEventListener("message", ({ data }) => {
-				const { action, data: mData } = JSON.parse(data);
-				if (mData?.type === "ALERT" || mData?.type === "PANIC") {
-					// setAlertData({ open: true, data: mData });
-					getLiveAlerts();
-				}
-				console.log("Socket Data------------->", JSON.parse(data));
+				// console.log(data);
+				// const { action, data: mData } = JSON.parse(data);
+				// console.log("====================================");
+				// console.log("action", action);
+				// console.log("n", mData);
+				// console.log("====================================");
+				// if (mData?.type === "ALERT" || mData?.type === "PANIC") {
+				// 	// setAlertData({ open: true, data: mData });
+				// 	getLiveAlerts();
+				// }
+				// console.log("Socket Data------------->", JSON.parse(data));
 			});
 		}
 	}, [socket]);
 
+	// useEffect(() => {
+	// 	setInterval(() => {
+	// 		socket.send(JSON.stringify({ action: "PING", data: {} }));
+	// 	}, 1000);
+	// }, []);
 	React.useEffect(() => {
 		socketListener();
-	}, [socketListener]);
+	}, []);
 
 	React.useEffect(() => {
 		getLiveAlerts();

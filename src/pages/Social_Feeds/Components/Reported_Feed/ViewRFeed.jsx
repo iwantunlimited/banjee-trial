@@ -57,10 +57,6 @@ function ViewRFeed(props) {
 		pageSize: 10,
 	});
 
-	// console.log("====================================");
-	// console.log("reportedData", reportedData);
-	// console.log("====================================");
-
 	const ReportedFeedApiCall = React.useCallback(() => {
 		getReportedFeedDetail({
 			page: pagination?.page,
@@ -68,9 +64,6 @@ function ViewRFeed(props) {
 			...(props?.collaborateId ? { collaborateId: props?.collaborateId } : { feedId: props?.feedId }),
 		})
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("ressss", res);
-				// console.log("====================================");
 				setReportedData({
 					data: res?.content,
 					totalElements: res?.totalElements,

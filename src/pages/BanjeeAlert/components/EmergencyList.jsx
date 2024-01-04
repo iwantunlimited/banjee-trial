@@ -7,13 +7,14 @@ import { useNavigate } from "react-router";
 import { MainContext } from "../../../context/Context";
 import { PaginationContext } from "../../../context/PaginationContext";
 import ModalComp from "../../../CustomComponents/ModalComp";
-import { deleteAlert } from "../../BanjeeAlert/api-services/apiServices";
+import { deleteAlert } from "../api-services/apiServices";
+import { styled, darken, lighten } from "@mui/material";
 
-function EventList({ totalElement, data, listApiCall, handleEventListApiCall }) {
+function EmergencyList({ totalElement, data, listApiCall, handleAlertListApiCall }) {
 	const navigate = useNavigate();
 
 	const context = React.useContext(MainContext);
-	const { eventPagination, setEventPagination } = React.useContext(PaginationContext);
+	const { alertPagination, setAlertPagination } = React.useContext(PaginationContext);
 
 	const [modalData, setModalData] = React.useState({
 		open: false,
@@ -31,11 +32,11 @@ function EventList({ totalElement, data, listApiCall, handleEventListApiCall }) 
 		deleteAlert(id)
 			.then((res) => {
 				if (res) {
-					handleEventListApiCall();
+					handleAlertListApiCall();
 				}
-				navigate("/banjee-event");
+				navigate("/banjee-alert");
 				context?.setModalOpen(true);
-				context?.setModalData("Event Deleted Successfully", "success");
+				context?.setModalData("Alert Deleted Successfully", "success");
 				setModalData((prev) => ({
 					open: false,
 					id: "",
@@ -49,7 +50,7 @@ function EventList({ totalElement, data, listApiCall, handleEventListApiCall }) 
 	let columns = [
 		{
 			id: "1",
-			field: "title",
+			field: "eventName",
 			headerClassName: "app-header",
 			headerName: "Name",
 			// cellClassName: (params) => (params.row.live === true ? "app-header-live" : "app-header"),
@@ -108,7 +109,7 @@ function EventList({ totalElement, data, listApiCall, handleEventListApiCall }) 
 					<strong>
 						<IconButton
 							onClick={() => {
-								navigate("/banjee-event/" + params.row.id, { state: { reported: false } });
+								navigate("/banjee-alert/" + params.row.id, { state: { reported: false } });
 							}}>
 							<Visibility />
 						</IconButton>
@@ -144,19 +145,49 @@ function EventList({ totalElement, data, listApiCall, handleEventListApiCall }) 
 		},
 	];
 
+	const getBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.7) : lighten(color, 0.7);
+
+	const getHoverBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.6) : lighten(color, 0.6);
+	const getSelectedBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.5) : lighten(color, 0.5);
+
+	const getSelectedHoverBackgroundColor = (color, mode) =>
+		mode === "dark" ? darken(color, 0.4) : lighten(color, 0.4);
+
+	const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+		"& .app-header-true": {
+			backgroundColor: getBackgroundColor(theme.palette.error.main, theme.palette.mode),
+			"&:hover": {
+				backgroundColor: getHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+			},
+			"&.Mui-selected": {
+				backgroundColor: getSelectedBackgroundColor(theme.palette.error.main, theme.palette.mode),
+				"&:hover": {
+					backgroundColor: getSelectedHoverBackgroundColor(theme.palette.error.main, theme.palette.mode),
+				},
+			},
+		},
+	}));
+
 	return (
 		<Box>
 			{data ? (
 				<div style={{ width: "100%" }}>
 					<Box className='root'>
-						<DataGrid
+						<StyledDataGrid
 							autoHeight
-							getRowClassName={(params) => `app-header-${params.row.status}`}
-							page={eventPagination?.page}
-							pageSize={eventPagination?.pageSize}
+							getRowClassName={(params) => {
+								const reported = params?.row?.reportCount > 0;
+								// console.log("params", reported);
+								return `app-header-${reported}`;
+							}}
+							page={alertPagination?.page}
+							pageSize={alertPagination?.pageSize}
 							onPageSizeChange={(event) => {
-								setEventPagination({
-									page: eventPagination?.page,
+								setAlertPagination({
+									page: alertPagination?.page,
 									pageSize: event,
 								});
 							}}
@@ -167,9 +198,9 @@ function EventList({ totalElement, data, listApiCall, handleEventListApiCall }) 
 							// autoPageSize
 							pagination
 							onPageChange={(event) => {
-								setEventPagination({
+								setAlertPagination({
 									page: event,
-									pageSize: eventPagination?.pageSize,
+									pageSize: alertPagination?.pageSize,
 								});
 							}}
 							rowsPerPageOptions={[5, 10, 20]}
@@ -183,7 +214,7 @@ function EventList({ totalElement, data, listApiCall, handleEventListApiCall }) 
 									fontSize: { xs: "14px", sm: "16px", md: "16px", lg: "18px", xl: "20px" },
 									fontWeight: 400,
 								}}>
-								Are you sure to delete the Event ?
+								Are you sure to delete the alert ?
 							</Typography>
 							<Box sx={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
 								<Button size='small' variant='outlined' onClick={() => handleModal(false)}>
@@ -217,4 +248,4 @@ function EventList({ totalElement, data, listApiCall, handleEventListApiCall }) 
 	);
 }
 
-export default EventList;
+export default EmergencyList;

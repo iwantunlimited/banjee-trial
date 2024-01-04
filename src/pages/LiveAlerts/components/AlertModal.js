@@ -86,28 +86,7 @@ const style = {
 // 	totalUsersOnWay: 0,
 // 	stopTime: null,
 // };
-const useAudio = (url) => {
-	const [audio] = useState(new Audio(url));
-	const [playing, setPlaying] = useState(false);
-	const toggle = () => setPlaying(!playing);
 
-	useEffect(() => {
-		audio.muted = false;
-		playing
-			? audio.play().catch((error) => {
-					console.log(error);
-			  })
-			: audio.pause();
-	}, [playing, audio]);
-
-	useEffect(() => {
-		audio.addEventListener("ended", () => setPlaying(false));
-		return () => {
-			audio.removeEventListener("ended", () => setPlaying(false));
-		};
-	}, [audio]);
-	return [toggle];
-};
 
 export default function AlertModal({ open, data, handleClose }) {
 	// data = dummyData;
@@ -115,23 +94,11 @@ export default function AlertModal({ open, data, handleClose }) {
 
 	const theme = useTheme();
 	const navigate = useNavigate();
-	const emergencyUrl = "https://banjee.s3.eu-central-1.amazonaws.com/root/sound/emergency.mp3";
-	const alertUrl = "https://banjee.s3.eu-central-1.amazonaws.com/root/sound/alert.mp3";
+	// const emergencyUrl = "https://banjee.s3.eu-central-1.amazonaws.com/root/sound/emergency.mp3";
+	// const alertUrl = "https://banjee.s3.eu-central-1.amazonaws.com/root/sound/alert.mp3";
 
-	const [emergencyAudio, playEmergencyAudio] = useAudio(emergencyUrl);
-	const [alertAudio, playAlertAudio] = useAudio(alertUrl);
-	console.log("Data==============>", data, open);
+	// console.log("Data==============>", data, open);
 
-	React.useEffect(() => {
-		setTimeout(() => {
-			if (open && data?.eventCode === "NEW_ALERT") {
-				playAlertAudio();
-			}
-			if (open && data?.eventCode === "PANIC_EMERGENCY") {
-				playEmergencyAudio();
-			}
-		}, 200);
-	}, []);
 
 	const eventNames = [
 		"Suspiciousactivity",

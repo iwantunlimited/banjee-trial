@@ -3,7 +3,7 @@ import React from "react";
 import moment from "moment";
 
 export default function AlertCard({ alert, handleData }) {
-	console.log(alert);
+	// console.log(alert);
 	if (alert?.eventCode === "NEW_ALERT" || alert?.eventCode === "PANIC_EMERGENCY") {
 		return (
 			<Paper
@@ -17,6 +17,9 @@ export default function AlertCard({ alert, handleData }) {
 					"&:hover": {
 						backgroundColor: "#f0f0f0",
 					},
+					borderRadius: "8px",
+					boxShadow: "0 2px 7px 1px rgba(0,0,0,.3)",
+					marginBottom: "5px",
 				}}>
 				<Box>
 					<Typography variant='h6' sx={{ textAlign: "center", marginBottom: { xs: 0.5, md: 1 } }}>
@@ -26,16 +29,16 @@ export default function AlertCard({ alert, handleData }) {
 								: alert?.eventName}
 						</strong>
 					</Typography>
-					<Grid item container rowSpacing={1.5}>
+					<Grid item container rowSpacing={1}>
 						<Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
 							<Avatar
 								src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${alert?.createdBy}`}
 								alt={alert?.createdByUser?.firstName}
 								variant='circular'
-								sx={{ height: "50px", width: "50px" }}
+								sx={{ height: "40px", width: "40px" }}
 							/>
 							<Typography
-								sx={{ fontSize: { xs: "18px", md: "20px", lg: "22px" }, marginLeft: { xs: 1, md: 2 } }}>
+								sx={{ fontSize: { xs: "16px", md: "18px", lg: "18px" }, marginLeft: { xs: 1, md: 2 } }}>
 								{alert?.createdByUser?.firstName}
 							</Typography>
 						</Grid>

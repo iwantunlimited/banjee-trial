@@ -208,9 +208,6 @@ function GroupDetailPage(props) {
 			.then((res) => {
 				setModalId("view");
 				navigate(-1);
-				// console.log("====================================");
-				// console.log(res);
-				// console.log("====================================");
 			})
 			.catch((err) => console.error(err));
 	}, []);
@@ -223,9 +220,6 @@ function GroupDetailPage(props) {
 		filterMemberApiCall();
 	}, [filterMemberApiCall]);
 
-	// console.log("====================================");
-	// console.log(modalData);
-	// console.log("====================================");
 
 	if (state) {
 		return (

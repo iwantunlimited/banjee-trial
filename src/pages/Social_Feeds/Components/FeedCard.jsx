@@ -189,11 +189,13 @@ function FeedCard(props) {
 											open: true,
 											feedId: ele?.feedId,
 											collaborateId: ele?.collaborateId ? ele?.collaborateId : null,
+											report: true,
 										});
 									} else {
 										handleDeleteModal({
 											open: true,
 											feedId: ele?.id,
+											report: false,
 										});
 									}
 								}}

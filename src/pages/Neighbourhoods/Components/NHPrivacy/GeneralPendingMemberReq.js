@@ -32,10 +32,6 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 	let rows = pendingData?.data ? pendingData?.data : [];
 	const navigate = useNavigate();
 
-	// console.log("====================================");
-	// console.log("rows", rows);
-	// console.log("====================================");
-
 	let columns = [
 		{
 			id: "1",
@@ -124,9 +120,6 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 			align: "center",
 			flex: 0.3,
 			renderCell: (params) => {
-				// console.log("====================================");
-				// console.log("8888", params);
-				// console.log("====================================");
 				return (
 					<strong>
 						<Stack direction='row' spacing={2}>
@@ -184,9 +177,6 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 			requestId: requestId,
 		})
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("community approve res", res);
-				// console.log("====================================");
 				setModalOpen(true);
 				setModalData("Request Accepted Successfully", "success");
 				if (generalMemberRequestPage === 0) {
@@ -208,9 +198,6 @@ function GeneralPendingMemberRequests({ pendingData, handleTabChange, refreshApi
 			requestId: requestId,
 		})
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("community reject res", res);
-				// console.log("====================================");
 				setModalOpen(true);
 				setModalData("Request Rejected Successfully", "success");
 				if (generalMemberRequestPage === 0) {

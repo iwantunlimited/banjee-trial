@@ -35,10 +35,6 @@ function SuggestedAdmin({ pendingData, handleModal, handleTabChange, SuggestedAd
 	const { setModalOpen, setModalData } = React.useContext(MainContext);
 	let rows = pendingData?.data ? pendingData?.data : [];
 
-	// console.log("====================================");
-	// console.log("rows", rows);
-	// console.log("====================================");
-
 	const SendLinkApiCall = React.useCallback((userId, cloudId) => {
 		sendLinkToUser({
 			userId: userId,
@@ -125,9 +121,6 @@ function SuggestedAdmin({ pendingData, handleModal, handleTabChange, SuggestedAd
 			align: "center",
 			flex: 0.4,
 			renderCell: (params) => {
-				// console.log("====================================");
-				// console.log("8888", params);
-				// console.log("====================================");
 				return (
 					<strong>
 						<Stack direction='row' spacing={2}>

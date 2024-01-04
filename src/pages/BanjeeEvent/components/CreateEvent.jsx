@@ -125,9 +125,6 @@ function CreateEvent() {
 		if (event?.target?.files?.length > 0) {
 			for (let index = 0; index < event?.target?.files?.length; index++) {
 				const image = event.target.files[index];
-				// console.log("====================================");
-				// console.log("image height", image?.size);
-				// console.log("====================================");
 				const imageSize = event.target.files[index]?.size * 0.000001;
 				const inputType = image.type.split("/")?.[0];
 				if (inputType === "image") {
@@ -377,12 +374,6 @@ function CreateEvent() {
 		}
 	};
 
-	// console.log("====================================");
-	// console.log("locationData", locationData);
-	// console.log("====================================");
-	console.log("====================================");
-	console.log("data", data);
-	console.log("====================================");
 	// const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
 
 	if (data) {

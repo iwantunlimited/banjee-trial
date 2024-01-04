@@ -8,7 +8,7 @@ import { MainContext } from "../../../context/Context";
 import ModalComp from "../../../CustomComponents/ModalComp";
 import { deleteAlert, filterReportList } from "../api-services/apiServices";
 
-function ReportedAlertList() {
+function ReportedEmergencyList() {
 	const navigate = useNavigate();
 
 	const context = React.useContext(MainContext);
@@ -43,7 +43,7 @@ function ReportedAlertList() {
 	}
 
 	const ReportedAlertListApiCall = React.useCallback((page, pageSize) => {
-		filterReportList({ page: page, pageSize: pageSize, type: "ALERT" })
+		filterReportList({ page: page, pageSize: pageSize, type: "PANIC" })
 			.then((res) => {
 				const resp = res?.content?.map((item) => {
 					return {
@@ -282,4 +282,4 @@ function ReportedAlertList() {
 	}
 }
 
-export default ReportedAlertList;
+export default ReportedEmergencyList;

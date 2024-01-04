@@ -9,6 +9,7 @@ import { Add, Refresh } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router";
 import { MainContext } from "../../context/Context";
 import { PaginationContext } from "../../context/PaginationContext";
+import ReportedEmergencyList from "./components/ReportedEmergencyList";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -46,6 +47,10 @@ function BanjeeAlert() {
 	const [value, setValue] = React.useState(location?.state?.reportedDetail ? 1 : 0);
 
 	const [data, setData] = React.useState("");
+	const [emergencyData, setEmergencyData] = React.useState({
+		data: "",
+		totalElements: 0,
+	});
 
 	const [totalElements, setTotalElements] = React.useState(0);
 	const [pagination, setPagination] = React.useState({
@@ -76,7 +81,7 @@ function BanjeeAlert() {
 			// longitude: currentLocation?.lon,
 			page: alertPagination?.page,
 			pageSize: alertPagination?.pageSize,
-			eventCode: ["PANIC_EMERGENCY", "NEW_ALERT"],
+			eventCode: ["NEW_ALERT", "PANIC_EMERGENCY"],
 		})
 			.then((res) => {
 				const resp = res?.content?.map((item) => {
@@ -94,19 +99,6 @@ function BanjeeAlert() {
 			.catch((err) => console.error(err));
 		// }
 	}, [alertPagination]);
-
-	// const listAllData = React.useCallback(() => {
-	// 	if (navigator.geolocation) {
-	// 		navigator.geolocation.getCurrentPosition((position) => {
-	// 			setCurrentLocation(() => ({
-	// 				lat: position.coords.latitude,
-	// 				lon: position.coords.longitude,
-	// 			}));
-	// 		});
-	// 	} else {
-	// 		console.error("Geolocation is not supported by this browser.");
-	// 	}
-	// }, []);
 
 	React.useEffect(() => {
 		ListAlertApiCall();
@@ -144,31 +136,7 @@ function BanjeeAlert() {
 						</Box>
 					</Card>
 				</Grid>
-				{/* <Grid item xs={12}>
-					<Card sx={{ padding: "20px", borderRadius: "0px" }}>
-						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>
-							Banjee Alert
-						</div>
-						<Box sx={{ marginY: "10px" }}>
-							<Divider />
-						</Box>
-						<AlertLocation currentLocation={currentLocation} zoom={10} data={data} type={"array"} />
-					</Card>
-				</Grid> */}
-				{/* <Grid item xs={12}>
-					<Card sx={{ padding: "10px", borderRadius: "0px" }}>
-						<div style={{ color: "#6b778c", fontSize: "20px", fontWeight: "500" }}>Alert List</div>
-						<Box sx={{ marginY: "10px" }}>
-							<Divider />
-						</Box>
-						<AlertListTable
-							listApiCall={ListAlertApiCall}
-							pagination={state}
-							handlePagination={handlePagination}
-							data={data}
-						/>
-					</Card>
-				</Grid> */}
+
 				<Grid item xs={12}>
 					<Card sx={{ padding: "10px", borderRadius: "0px" }}>
 						<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -179,7 +147,8 @@ function BanjeeAlert() {
 								onChange={handleChange}
 								aria-label='basic tabs example'>
 								<Tab label='Alert List' {...a11yProps(0)} />
-								<Tab label='Reported List' {...a11yProps(1)} />
+								<Tab label='Reported Alert List' {...a11yProps(1)} />
+								<Tab label='Reported Emergency List' {...a11yProps(2)} />
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
@@ -192,6 +161,9 @@ function BanjeeAlert() {
 						</TabPanel>
 						<TabPanel value={value} index={1}>
 							<ReportedAlertList />
+						</TabPanel>
+						<TabPanel value={value} index={2}>
+							<ReportedEmergencyList />
 						</TabPanel>
 					</Card>
 				</Grid>

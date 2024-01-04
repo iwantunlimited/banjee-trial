@@ -282,9 +282,6 @@ function EditNeighbourhood() {
 		}
 	}
 
-	// console.log("====================================");
-	// console.log("data", data);
-	// console.log("====================================");
 	return (
 		<Container maxWidth='xl'>
 			<Grid item container xs={12} spacing={2}>

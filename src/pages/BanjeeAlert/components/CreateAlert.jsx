@@ -135,7 +135,6 @@ function CreateAlert() {
 
 	const location = useLocation();
 
-	// console.log("location", location);
 
 	const [data, setData] = React.useState({
 		anonymous: false,
@@ -445,12 +444,6 @@ function CreateAlert() {
 		}
 	};
 
-	// console.log("====================================");
-	// console.log("locationData", locationData);
-	// console.log("====================================");
-	// console.log("====================================");
-	// console.log("data", data);
-	// console.log("====================================");
 	const descriptionText = <div dangerouslySetInnerHTML={{ __html: data?.description }} />;
 
 	if (data) {

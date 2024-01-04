@@ -21,6 +21,7 @@ function DeleteFeedModal({
 		deleteSocialFeed({
 			feedId: data.feedId,
 			remark: data.remark,
+			...(data?.report ? { report: true } : {}),
 		})
 			.then((res) => {
 				setModalOpen(true);
@@ -41,6 +42,7 @@ function DeleteFeedModal({
 			feedId: data.feedId,
 			collaborateId: data?.collaborateId,
 			remark: data.remark,
+			...(data?.report ? { report: true } : {}),
 		})
 			.then((res) => {
 				setModalOpen(true);

@@ -36,10 +36,6 @@ function AdminPendingRequests({ pendingData, AdminRequestApiCall, RefreshMemberA
 	});
 	let rows = pendingData?.data ? pendingData?.data : [];
 
-	// console.log("====================================");
-	// console.log("rows", rows);
-	// console.log("====================================");
-
 	let columns = [
 		{
 			id: "1",
@@ -174,9 +170,6 @@ function AdminPendingRequests({ pendingData, AdminRequestApiCall, RefreshMemberA
 			...(accept ? {} : { reUpload: true }),
 		})
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("admin verification accept", res);
-				// console.log("====================================");
 				setModalOpen(true);
 				setModalData(
 					accept ? "Admin Verified" : "Request send successfully for re-verification ",
@@ -204,9 +197,6 @@ function AdminPendingRequests({ pendingData, AdminRequestApiCall, RefreshMemberA
 			reason: remark,
 		})
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("PermenentRejectAdminApi", res);
-				// console.log("====================================");
 				setModalData("Request Rejected Successfully", "success");
 				setAdminVerificationModalOpen({
 					open: false,

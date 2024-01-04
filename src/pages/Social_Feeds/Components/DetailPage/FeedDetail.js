@@ -93,6 +93,7 @@ function FeedDetail(props) {
 		remark: "",
 		commentId: "",
 		collaborateId: collabObj?.id,
+		report: false,
 	});
 	const [commentText, setCommentText] = React.useState("");
 	const [commentReply, setCommentReply] = React.useState({
@@ -117,6 +118,7 @@ function FeedDetail(props) {
 			remark: "",
 			commentId: "",
 			collaborateId: "",
+			report: false,
 		}));
 		setModalType("feed");
 	};
@@ -163,7 +165,6 @@ function FeedDetail(props) {
 	const ApiCall = React.useCallback(() => {
 		getSocialFeedDetails(params?.id)
 			.then((res) => {
-				// console.log("res", res);
 				setData(res);
 				// navigate(-1);
 			})
@@ -182,10 +183,11 @@ function FeedDetail(props) {
 			});
 	}, []);
 
-	const deleteFeedApiCall = React.useCallback((feedId, remark) => {
+	const deleteFeedApiCall = React.useCallback((feedId, remark, report) => {
 		deleteSocialFeed({
 			feedId: feedId,
 			remark: remark,
+			...(report ? { report: report } : {}),
 		})
 			.then((res) => {
 				setModalOpen(true);
@@ -201,11 +203,12 @@ function FeedDetail(props) {
 			});
 	}, []);
 
-	const deleteCollabFeedApi = React.useCallback((collabId, feedId, remark) => {
+	const deleteCollabFeedApi = React.useCallback((collabId, feedId, remark, report) => {
 		deleteCollabFeed({
 			collaborateId: collabId,
 			feedId: feedId,
 			remark: remark,
+			...(report ? { report: report } : {}),
 		})
 			.then((res) => {
 				setModalOpen(true);
@@ -277,9 +280,14 @@ function FeedDetail(props) {
 							onSubmit={(event) => {
 								event?.preventDefault();
 								if (location?.state?.collaborateId) {
-									deleteCollabFeedApi(deleteModal?.collaborateId, deleteModal?.feedId, deleteModal?.remark);
+									deleteCollabFeedApi(
+										deleteModal?.collaborateId,
+										deleteModal?.feedId,
+										deleteModal?.remark,
+										deleteModal?.report
+									);
 								} else {
-									deleteFeedApiCall(deleteModal?.feedId, deleteModal?.remark);
+									deleteFeedApiCall(deleteModal?.feedId, deleteModal?.remark, deleteModal?.report);
 								}
 							}}>
 							<Typography
@@ -357,9 +365,14 @@ function FeedDetail(props) {
 							onSubmit={(event) => {
 								event?.preventDefault();
 								if (location?.state?.collaborateId) {
-									deleteCollabFeedApi(deleteModal?.collaborateId, deleteModal?.feedId, deleteModal?.remark);
+									deleteCollabFeedApi(
+										deleteModal?.collaborateId,
+										deleteModal?.feedId,
+										deleteModal?.remark,
+										deleteModal?.report
+									);
 								} else {
-									deleteFeedApiCall(deleteModal?.feedId, deleteModal?.remark);
+									deleteFeedApiCall(deleteModal?.feedId, deleteModal?.remark, deleteModal?.report);
 								}
 							}}>
 							<Typography
@@ -414,7 +427,6 @@ function FeedDetail(props) {
 	const commentApiCall = React.useCallback((payload) => {
 		commentOnFeed(payload)
 			.then((res) => {
-				console.log("res", res);
 				setCommentText("");
 				setCommentReply((prev) => ({
 					...prev,
@@ -535,6 +547,7 @@ function FeedDetail(props) {
 														open: true,
 														feedId: params?.id,
 														collaborateId: location?.state?.collaborateId,
+														report: location?.state?.reported ? true : false,
 													}));
 												}}
 												style={{ width: "40px", height: "40px" }}>

@@ -58,6 +58,7 @@ export default function ReportedFeeds(props) {
 		feedId: "",
 		collaborateId: "",
 		remark: "",
+		report: false,
 	});
 
 	const [totalEle, setTotalEle] = React.useState();
@@ -81,6 +82,7 @@ export default function ReportedFeeds(props) {
 			getReportedFeedDetail({
 				page: reportedFeedFilter?.page,
 				pageSize: reportedFeedFilter?.pageSize,
+				feeds: true,
 				// finishDate: reportedFeedFilter?.endDate
 				// 	? moment(reportedFeedFilter?.endDate).set({ hour: 23, minute: 59, second: 58 }).format()
 				// 	: null,
@@ -89,9 +91,6 @@ export default function ReportedFeeds(props) {
 				// 	: null,
 			})
 				.then((res) => {
-					console.log("====================================");
-					console.log("res", res);
-					console.log("====================================");
 					// const resp = res?.content?.map((item, index) => {
 					// 	if (item?.collaborateId) {
 					// 		return item?.feed?.collaborateFeeds?.filter((ele) => ele?.id === item?.collaborateId)?.[0];
@@ -99,9 +98,7 @@ export default function ReportedFeeds(props) {
 					// 		return { ...item?.user, ...item?.feed };
 					// 	}
 					// });
-					// console.log("====================================");
-					// console.log("resp", resp);
-					// console.log("====================================");
+
 					setData(res);
 					setTotalEle(res.totalElements);
 				})
@@ -114,7 +111,11 @@ export default function ReportedFeeds(props) {
 	);
 
 	function handleDeleteModal(data) {
-		setDFeedData({ feedId: data?.feedId, collaborateId: data?.collaborateId });
+		setDFeedData((prev) => ({
+			feedId: data?.feedId,
+			collaborateId: data?.collaborateId,
+			report: data?.report,
+		}));
 		setOpenDModal(data?.open);
 	}
 

@@ -67,7 +67,6 @@ function BanjeeEvent() {
 			pageSize: eventPagination?.pageSize,
 		})
 			.then((res) => {
-				console.log("res", res);
 				const resp = res?.content?.map((item) => {
 					return {
 						routingId: item?.id,

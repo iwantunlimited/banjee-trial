@@ -138,14 +138,7 @@ function ReportedUser1(props) {
 				<strong>
 					<IconButton
 						onClick={() => {
-							navigate("/user/reportedUserView/" + params?.row?.reportedUserId, {
-								state: {
-									userObject: {
-										...params?.row?.reportedUser,
-										reportedCount: params?.row?.reportedBy?.length,
-									},
-								},
-							});
+							navigate("/user/reportedUserView/" + params?.row?.reportedUserId);
 						}}>
 						<VisibilityIcon />
 					</IconButton>
@@ -241,7 +234,6 @@ function ReportedUser1(props) {
 										}}
 										getRowClassName={(params) => {
 											const reported = params?.row?.reportedBy?.length > 3;
-											console.log("params", reported);
 											return `app-header-${reported}`;
 										}}
 										rowCount={reportList?.totalElements}

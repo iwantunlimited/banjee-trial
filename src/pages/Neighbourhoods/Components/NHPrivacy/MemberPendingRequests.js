@@ -16,10 +16,6 @@ function MemberPendingRequests({ pendingData, refreshApi, RefreshMemberApiCall }
 	let rows = pendingData?.data ? pendingData?.data : [];
 	const navigate = useNavigate();
 
-	// console.log("====================================");
-	// console.log("rows", rows);
-	// console.log("====================================");
-
 	let columns = [
 		{
 			id: "1",
@@ -146,9 +142,6 @@ function MemberPendingRequests({ pendingData, refreshApi, RefreshMemberApiCall }
 			requestId: requestId,
 		})
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("community approve res", res);
-				// console.log("====================================");
 				setModalOpen(true);
 				setModalData("Request Accepted Successfully", "success");
 				RefreshMemberApiCall();
@@ -173,9 +166,7 @@ function MemberPendingRequests({ pendingData, refreshApi, RefreshMemberApiCall }
 			.then((res) => {
 				setModalOpen(true);
 				setModalData("Request Rejected Successfully", "success");
-				// console.log("====================================");
-				// console.log("community reject res", res);
-				// console.log("====================================");
+
 				if (nhPendingReqPage === 0) {
 					refreshApi();
 				} else {

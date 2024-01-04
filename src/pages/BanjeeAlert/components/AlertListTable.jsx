@@ -180,7 +180,6 @@ function AlertListTable({ totalElement, data, listApiCall, handleAlertListApiCal
 							autoHeight
 							getRowClassName={(params) => {
 								const reported = params?.row?.reportCount > 0;
-								console.log("params", reported);
 								return `app-header-${reported}`;
 							}}
 							page={alertPagination?.page}

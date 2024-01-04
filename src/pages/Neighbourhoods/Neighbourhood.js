@@ -171,7 +171,6 @@ function Neighbourhood() {
 			type: "SOCIAL_CLOUD",
 		})
 			.then((res) => {
-				console.log("general memebr resssss", res);
 				setGeneralPendingReq({
 					data: res?.content,
 					totalElements: res?.totalElements,
@@ -195,7 +194,6 @@ function Neighbourhood() {
 			cloudType: "SOCIAL_CLOUD",
 		})
 			.then((res) => {
-				// console.log("admin resssss", res);
 				setAdminPendingData({
 					data: res?.content,
 					totalMembers: res?.totalElements,

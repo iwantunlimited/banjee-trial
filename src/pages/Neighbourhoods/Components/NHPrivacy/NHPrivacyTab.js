@@ -102,10 +102,6 @@ function NHPrivacyTab(props) {
 		data: "",
 	});
 
-	// console.log("====================================");
-	// console.log("adminPendingData", adminPendingData);
-	// console.log("====================================");
-
 	function handleModal(d) {
 		setModal((prev) => ({
 			...prev,
@@ -116,9 +112,6 @@ function NHPrivacyTab(props) {
 	}
 
 	const handleChange = (event, newValue) => {
-		// console.log("====================================");
-		// console.log("event", newValue);
-		// console.log("====================================");
 		setValue(newValue);
 		// if(newValue === 0){
 		//      filterMemberApiCall()
@@ -156,8 +149,6 @@ function NHPrivacyTab(props) {
 		[nhMemberpage, nhMemberpageSize, params?.id]
 	);
 
-	// console.log("parm", params);
-
 	const AdminRequestApiCall = React.useCallback(() => {
 		filterMembers({
 			cloudId: params?.id,
@@ -170,7 +161,6 @@ function NHPrivacyTab(props) {
 			pageSize: nhPendingAdminPageSize,
 		})
 			.then((res) => {
-				console.log("admin resssss", res);
 				setAdminPendingData({
 					data: res?.content,
 					totalMembers: res?.totalElements,
@@ -190,7 +180,6 @@ function NHPrivacyTab(props) {
 			processed: "true",
 		})
 			.then((res) => {
-				console.log("remove admin resssss", res);
 				setRemoveAdminPendingData({
 					data: res?.content,
 					totalMembers: res?.totalElements,
@@ -211,7 +200,6 @@ function NHPrivacyTab(props) {
 			userType: -1,
 		})
 			.then((res) => {
-				console.log("memebr resssss", res);
 				setPendingMemberData({
 					data: res?.content,
 					totalMembers: res?.totalElements,
@@ -228,7 +216,6 @@ function NHPrivacyTab(props) {
 			userId: data?.profile?.id,
 		})
 			.then((res) => {
-				// console.log(res);
 				setModal((prev) => ({
 					...prev,
 					open: false,
@@ -289,9 +276,6 @@ function NHPrivacyTab(props) {
 			suggestion: "true",
 		})
 			.then((res) => {
-				console.log("====================================");
-				console.log("res suggetion", res);
-				console.log("====================================");
 				setSuggestedAdmin({
 					data: res?.content,
 					totalElements: res?.totalElements,

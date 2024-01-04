@@ -69,10 +69,6 @@ function DetailPage() {
 		}));
 	}
 
-	// console.log("====================================");
-	// console.log("filtere data", nearByNH);
-	// console.log("====================================");
-
 	const deleteAlertApiCall = (id) => {
 		deleteNeighbourhood(id)
 			.then((res) => {
@@ -109,9 +105,6 @@ function DetailPage() {
 			pageSize: 10,
 		})
 			.then((res) => {
-				console.log("====================================");
-				console.log("nearby nh", res);
-				console.log("====================================");
 				const filteredData = res?.content?.filter((item, index) => item?.id !== params?.id);
 				setNearByNH(filteredData);
 			})
@@ -308,7 +301,6 @@ function DetailPage() {
 							<Paper
 								sx={{ boxShadow: "none", marginBottom: { xs: 2, md: 4 } }}
 								onClick={() => {
-									console.log("asdasdads", state);
 									if (
 										state?.createdBy === "61111e42bcc68b2a1fa3432c" ||
 										state?.createdBy === "63f75ffa4c16dbbb155fc380"

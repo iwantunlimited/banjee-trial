@@ -148,7 +148,6 @@ function CreateNeighbour(props) {
 	}
 
 	const createApiCall = React.useCallback((payload) => {
-		console.log("payload", payload);
 		createNeighbourhood(payload)
 			.then((res) => {
 				setModalOpen(true);
@@ -253,12 +252,7 @@ function CreateNeighbour(props) {
 
 	const newImageFunc = async (data) => {
 		const base64 = await blobToBase64(data);
-		// console.log(base64);
 	};
-
-	// console.log("====================================");
-	// console.log("map data", mapData);
-	// console.log("====================================");
 
 	// React.useEffect(() => {
 	// 	CountryApi();

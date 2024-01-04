@@ -28,9 +28,6 @@ function SidebarList({ handleId, handleClick }) {
 	const [open, setOpen] = React.useState(false);
 	const [id, setId] = React.useState("");
 
-	console.log("====================================");
-	console.log("pathname", pathname);
-	console.log("====================================");
 	return (
 		<List
 			sx={{
@@ -43,16 +40,7 @@ function SidebarList({ handleId, handleClick }) {
 			{userType &&
 				routing?.map((item, index) => {
 					const routingPath = item?.path.split("/")?.[1];
-					{
-						/* console.log("====================================");
-					console.log("routingPath", routingPath);
-					console.log("===================================="); */
-					}
-					{
-						/* console.log("====================================");
-				console.log("routingPath", routingPath, path1 === routingPath);
-				console.log("===================================="); */
-					}
+
 					if (item?.children?.length > 0) {
 						return (
 							<>
@@ -66,22 +54,16 @@ function SidebarList({ handleId, handleClick }) {
 									}}
 									sx={{
 										color:
-											`/${path1}` === routingPath
-												? theme.palette.common.white
-												: theme.palette.common.white,
+											`/${path1}` === routingPath ? theme.palette.common.white : theme.palette.common.white,
 										// padding: "5px 10px",
 										background:
-											path1 === routingPath
-												? theme.palette.secondary.main
-												: theme.palette.primary.main,
+											path1 === routingPath ? theme.palette.secondary.main : theme.palette.primary.main,
 										borderRadius: "10px",
 										marginTop: "2.5px",
 										marginX: "5px",
 										":hover": {
 											background:
-												path1 === routingPath
-													? theme.palette.secondary.main
-													: theme.palette.primary.main,
+												path1 === routingPath ? theme.palette.secondary.main : theme.palette.primary.main,
 											opacity: "0.8",
 										},
 									}}>
@@ -124,12 +106,7 @@ function SidebarList({ handleId, handleClick }) {
 											const childPathUrlForDetail = text?.path + "/detail/" + params?.id;
 											const childPathUrlForView = text?.path + "/" + params?.id;
 											const childPathUrlForUpdate = text?.path + "/detail/update/" + params?.id;
-											{
-												/* console.log("====================================");
-										console.log("childPathUrlForDetail", childPathUrlForDetail);
-										console.log("pathname", pathname);
-										console.log("===================================="); */
-											}
+
 											return (
 												<ListItemButton
 													key={index}
@@ -248,9 +225,7 @@ function SidebarList({ handleId, handleClick }) {
 										// 		? theme.palette.secondary.main
 										// 		: theme.palette.primary.main,
 										background:
-											path1 === routingPath
-												? theme.palette.secondary.main
-												: theme.palette.primary.main,
+											path1 === routingPath ? theme.palette.secondary.main : theme.palette.primary.main,
 										opacity: "0.8",
 									},
 								}}>
