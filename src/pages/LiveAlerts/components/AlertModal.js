@@ -19,7 +19,7 @@ const style = {
 	transform: "translate(-50%, -50%)",
 	// height: 550,
 	bgcolor: "background.paper",
-	border: "2px solid #000",
+	// border: "2px solid #000",
 	borderRadius: "10px",
 	boxShadow: 24,
 	p: 4,
@@ -87,7 +87,6 @@ const style = {
 // 	stopTime: null,
 // };
 
-
 export default function AlertModal({ open, data, handleClose }) {
 	// data = dummyData;
 	// open = true;
@@ -98,7 +97,6 @@ export default function AlertModal({ open, data, handleClose }) {
 	// const alertUrl = "https://banjee.s3.eu-central-1.amazonaws.com/root/sound/alert.mp3";
 
 	// console.log("Data==============>", data, open);
-
 
 	const eventNames = [
 		"Suspiciousactivity",

@@ -56,8 +56,7 @@ function SidebarList({ handleId, handleClick }) {
 										color:
 											`/${path1}` === routingPath ? theme.palette.common.white : theme.palette.common.white,
 										// padding: "5px 10px",
-										background:
-											path1 === routingPath ? theme.palette.secondary.main : theme.palette.primary.main,
+										background: path1 === routingPath ? "#121212" : theme.palette.primary.main,
 										borderRadius: "10px",
 										marginTop: "2.5px",
 										marginX: "5px",

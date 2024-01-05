@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -78,6 +78,23 @@ function Navbar(props) {
 	function handleIdFun(event) {
 		setId(event);
 	}
+	function showNotification(data) {
+		var options = {
+			body: data?.description,
+			icon: "/logo.png",
+			dir: "ltr",
+			action: data?.action,
+			requireInteraction: true,
+		};
+		var notification = new Notification(data?.title, options);
+
+		notification.addEventListener("click", (event) => {
+			event.preventDefault();
+			window.open("https://adminv1.banjee.org/banjee-alert/" + data?.alertId, "_blank");
+		});
+
+		setTimeout(notification.close.bind(notification), 20000);
+	}
 
 	const drawerWidth = window.innerWidth < 700 ? "190px" : "230px";
 
@@ -97,6 +114,12 @@ function Navbar(props) {
 			<Toolbar />
 			<Box sx={{ overflow: "auto" }}>
 				<List sx={{ paddingTop: "3px !important" }}>
+					{/* <Button
+						onClick={() =>
+							showNotification({ title: "banjee", description: "Description", action: navigate("/user") })
+						}>
+						Show notification
+					</Button> */}
 					<SidebarList handleId={handleIdFun} handleClick={handleDrawerToggle} />
 				</List>
 			</Box>
@@ -144,12 +167,28 @@ function Navbar(props) {
 				const { action, data: mData } = JSON.parse(data);
 
 				// console.log("====================================");
-				// console.log("action", action);
-				// console.log("mData", mData);
+				console.log("action", action);
+				console.log("mData", mData);
 				// console.log("====================================");
-				if (mData?.type === "ALERT" || mData?.type === "PANIC") {
+				if (mData?.type === "ALERT" || mData?.type === "PANIC" || action === "ALERT_REPORT") {
 					PlayAudio();
-					setAlertData({ open: true, data: mData });
+					if (mData?.type === "ALERT" || mData?.type === "PANIC") {
+						setAlertData({ open: true, data: mData });
+					} else if (action === "ALERT_REPORT") {
+						showNotification(
+							mData?.payload?.content?.type === "ALERT"
+								? {
+										alertId: mData?.payload?.alertId,
+										title: mData?.payload?.content?.eventName,
+										description: "Alert has been reported. Take actions",
+								  }
+								: {
+										alertId: mData?.payload?.alertId,
+										title: "Emergenecy",
+										description: "has been reported fake. Take actions immediately",
+								  }
+						);
+					}
 				}
 				console.log("Socket Data------------->", JSON.parse(data));
 			});
@@ -160,6 +199,30 @@ function Navbar(props) {
 		setUserType(localStorage?.getItem("userType"));
 		socketListener();
 	}, [socketListener]);
+
+	const notificationPermission = React.useCallback(() => {
+		if (!("Notification" in window)) {
+			console.log("Browser does not support desktop notification");
+		} else {
+			console.log("Notifications are supported");
+			if (Notification.permission === "granted") {
+				console.log("permission allowed");
+				// console.log("permission", Notification.permission);
+			} else {
+				Notification.requestPermission()
+					.then(function (result) {
+						console.log(result);
+					})
+					.catch((err) => {
+						console.error("err", err);
+					});
+			}
+		}
+	}, [Notification]);
+
+	useEffect(() => {
+		notificationPermission();
+	}, [notificationPermission]);
 
 	if (userType) {
 		return (

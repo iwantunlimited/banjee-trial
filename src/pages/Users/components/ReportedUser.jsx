@@ -13,7 +13,7 @@ import {
 	Chip,
 	Box,
 } from "@mui/material";
-import { ReportedUserList } from "../User_Services/UserApiService";
+import { ReportedUserAction, ReportedUserList } from "../User_Services/UserApiService";
 import { DataGrid } from "@mui/x-data-grid";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -105,28 +105,28 @@ function ReportedUser1(props) {
 			align: "center",
 			renderCell: (params) => params?.row?.reportedBy?.length,
 		},
-		{
-			id: "6",
-			field: "warning",
-			headerClassName: "app-header",
-			headerName: "Send Warning",
-			align: "center",
-			flex: 0.2,
-			renderCell: (params) => (
-				<strong>
-					<Chip
-						label='Send Warning'
-						style={{ background: "green", color: "white" }}
-						onClick={(event) => {
-							// AcceptApiCall(params?.row?.cloudId, params?.row?.id);
-							// navigate("/rooms/view/" + params.row.routingId);
-							// ApproveApiCAll(params?.row?.routingId);
-							// pendingAPiCAll(0, 10);
-						}}
-					/>
-				</strong>
-			),
-		},
+		// {
+		// 	id: "6",
+		// 	field: "warning",
+		// 	headerClassName: "app-header",
+		// 	headerName: "Send Warning",
+		// 	align: "center",
+		// 	flex: 0.2,
+		// 	renderCell: (params) => (
+		// 		<strong>
+		// 			<Chip
+		// 				label='Send Warning'
+		// 				style={{ background: "green", color: "white" }}
+		// 				onClick={(event) => {
+		// 					// AcceptApiCall(params?.row?.cloudId, params?.row?.id);
+		// 					// navigate("/rooms/view/" + params.row.routingId);
+		// 					// ApproveApiCAll(params?.row?.routingId);
+		// 					// pendingAPiCAll(0, 10);
+		// 				}}
+		// 			/>
+		// 		</strong>
+		// 	),
+		// },
 		{
 			id: "6",
 			field: "view",
@@ -209,7 +209,7 @@ function ReportedUser1(props) {
 				<Container maxWidth='xl'>
 					<Card
 						style={{
-							background: "white",
+							// background: "white",
 							padding: "25px",
 							border: "1px solid lightgrey",
 							marginTop: "30px",

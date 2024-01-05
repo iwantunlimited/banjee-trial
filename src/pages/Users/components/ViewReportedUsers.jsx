@@ -414,7 +414,7 @@ function ViewReportedUser(props) {
 							lg={12}
 							style={{ background: "transparent", paddingTop: "10px", paddingLeft: "20px" }}>
 							{reportedDataAvailable ? (
-								<Box sx={{ bgcolor: "background.paper", background: "white", padding: "10px" }}>
+								<Card sx={{ bgcolor: "background.paper", padding: "10px" }}>
 									<Tabs
 										value={value}
 										onChange={handleChange}
@@ -435,7 +435,7 @@ function ViewReportedUser(props) {
 													<div
 														style={{
 															// width: "100%",
-															background: "white",
+															// background: "white",
 															marginTop: "10px",
 															padding: "10px",
 														}}>
@@ -471,7 +471,7 @@ function ViewReportedUser(props) {
 											</Grid>
 										</TabPanel>
 									</SwipeableViews>
-								</Box>
+								</Card>
 							) : (
 								<div className='d-flex justify-content-center' style={{ margin: "25%" }}>
 									<CircularProgress />

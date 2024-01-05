@@ -10,7 +10,7 @@ import SnackbarContext from "./CustomComponents/SnackbarContext";
 import NotificationPopup from "./CustomComponents/NotificationPopup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { SocketConfiguration, initWebSocket } from "./WebSocketConfig";
-import {WebSocketProvider} from "./context/WebSocketContext";
+import { WebSocketProvider } from "./context/WebSocketContext";
 
 function App() {
 	const { themeData, setThemeData, setLocationData } = React.useContext(MainContext);
@@ -36,18 +36,16 @@ function App() {
 		return position;
 	});
 
-
-
 	return (
 		<WebSocketProvider>
 			<SocketConfiguration />
-		<ThemeProvider theme={themeData ? darkTheme : theme}>
-			<BrowserRouter>
-				<Routes />
-				<SnackbarContext />
-				<NotificationPopup />
-			</BrowserRouter>
-		</ThemeProvider>
+			<ThemeProvider theme={themeData ? darkTheme : theme}>
+				<BrowserRouter>
+					<Routes />
+					<SnackbarContext />
+					<NotificationPopup />
+				</BrowserRouter>
+			</ThemeProvider>
 		</WebSocketProvider>
 	);
 }

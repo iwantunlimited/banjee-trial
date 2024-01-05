@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography, Grid, Button } from "@mui/material";
+import { Avatar, Box, Typography, Grid, Button, Card } from "@mui/material";
 import React, { useEffect } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useNavigate } from "react-router";
@@ -173,7 +173,7 @@ const LiveAlertMap = compose(
 						<Marker key={index} position={marker.position} onClick={handleModal}>
 							{openModal && (
 								<InfoWindow onCloseClick={handleModal}>
-									<Box style={{ width: "350px", height: "170px" }}>
+									<Card style={{ width: "350px", height: "170px", boxShadow: "none" }}>
 										<Typography variant='h6' sx={{ textAlign: "center", marginBottom: { xs: 0.5, md: 1 } }}>
 											{props?.alertData?.eventName.startsWith("Test") ||
 											props?.alertData?.eventName.startsWith("test")
@@ -220,7 +220,7 @@ const LiveAlertMap = compose(
 												</Typography>
 											</Grid>
 										</Grid>
-									</Box>
+									</Card>
 								</InfoWindow>
 							)}
 						</Marker>

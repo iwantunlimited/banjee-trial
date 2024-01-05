@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import React from "react";
 import StandaloneSearchBox from "react-google-maps/lib/components/places/StandaloneSearchBox";
 import { MainContext } from "../context/Context";
@@ -213,6 +213,7 @@ const GoogleMapCustom = compose(
 											lat: item?.geoLocation?.coordinates?.[1],
 											lng: item?.geoLocation?.coordinates?.[0],
 										}}
+
 										// title={item?.name}
 										// label={item?.name}
 										// labelStyle={{
@@ -222,7 +223,7 @@ const GoogleMapCustom = compose(
 										// }}
 									>
 										<InfoWindow>
-											<div>{item?.name}</div>
+											<Typography color={"black"}>{item?.name}</Typography>
 										</InfoWindow>
 									</Marker>
 							  ))

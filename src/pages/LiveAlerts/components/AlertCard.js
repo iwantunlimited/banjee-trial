@@ -1,8 +1,11 @@
-import { Box, Paper, Typography, Grid, Avatar } from "@mui/material";
+import { Box, Paper, Typography, Grid, Avatar, useTheme } from "@mui/material";
 import React from "react";
 import moment from "moment";
+import { MainContext } from "../../../context/Context";
 
 export default function AlertCard({ alert, handleData }) {
+	const { themeData } = React.useContext(MainContext);
+	const theme = useTheme();
 	// console.log(alert);
 	if (alert?.eventCode === "NEW_ALERT" || alert?.eventCode === "PANIC_EMERGENCY") {
 		return (
@@ -14,12 +17,17 @@ export default function AlertCard({ alert, handleData }) {
 					ml: "20px",
 					cursor: "pointer",
 					transition: "background-color 0.5s ease",
-					"&:hover": {
-						backgroundColor: "#f0f0f0",
-					},
+					// "&:hover": {
+					// 	backgroundColor: "#f0f0f0",
+					// },
 					borderRadius: "8px",
 					boxShadow: "0 2px 7px 1px rgba(0,0,0,.3)",
 					marginBottom: "5px",
+					background: themeData === false ? "#FFF" : "default",
+					cursor: "pointer",
+					"&:hover": {
+						background: themeData === false ? theme.palette.grey.A700 : "#323232",
+					},
 				}}>
 				<Box>
 					<Typography variant='h6' sx={{ textAlign: "center", marginBottom: { xs: 0.5, md: 1 } }}>
@@ -29,7 +37,13 @@ export default function AlertCard({ alert, handleData }) {
 								: alert?.eventName}
 						</strong>
 					</Typography>
-					<Grid item container rowSpacing={1}>
+					<Grid
+						item
+						container
+						rowSpacing={1}
+						sx={{
+							paddingX: { xs: 1, md: 1.5 },
+						}}>
 						<Grid item xs={12} sx={{ display: "flex", alignItems: "center" }}>
 							<Avatar
 								src={`https://gateway.banjee.org/services/media-service/iwantcdn/user/${alert?.createdBy}`}

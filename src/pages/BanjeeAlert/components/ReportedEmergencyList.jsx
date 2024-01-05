@@ -262,7 +262,7 @@ function ReportedEmergencyList() {
 							justifyContent: "center",
 							alignItems: "center",
 						}}>
-						<p>No data available!</p>
+						<p>No Emergency Reported!</p>
 					</div>
 				)}
 			</Box>

@@ -43,7 +43,7 @@ function ReportedEventList() {
 	}
 
 	const ReportedEventListApiCall = React.useCallback((page, pageSize) => {
-		filterReportList({ page: page, pageSize: pageSize, eventCode: "NEW_ALERT" })
+		filterReportList({ page: page, pageSize: pageSize, type: "EVENT" })
 			.then((res) => {
 				const resp = res?.content?.map((item) => {
 					return {

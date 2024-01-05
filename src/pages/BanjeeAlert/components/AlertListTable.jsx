@@ -179,7 +179,7 @@ function AlertListTable({ totalElement, data, listApiCall, handleAlertListApiCal
 						<StyledDataGrid
 							autoHeight
 							getRowClassName={(params) => {
-								const reported = params?.row?.reportCount > 0;
+								const reported = params?.row?.reportCount > 3;
 								return `app-header-${reported}`;
 							}}
 							page={alertPagination?.page}

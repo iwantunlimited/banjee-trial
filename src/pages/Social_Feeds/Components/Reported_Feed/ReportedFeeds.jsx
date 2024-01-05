@@ -231,7 +231,7 @@ export default function ReportedFeeds(props) {
 								/>
 							</LocalizationProvider>
 						</Box> */}
-						<Box>
+						{/* <Box>
 							<Tooltip title='Search'>
 								<IconButton
 									style={{
@@ -251,7 +251,7 @@ export default function ReportedFeeds(props) {
 									<Search />
 								</IconButton>
 							</Tooltip>
-						</Box>
+						</Box> */}
 						<Box sx={{ marginLeft: "10px" }}>
 							<Tooltip title='Refresh Feeds'>
 								<IconButton
