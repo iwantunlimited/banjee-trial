@@ -27,7 +27,13 @@ import {
 import { PaginationContext } from "../../../../context/PaginationContext";
 import { MainContext } from "../../../../context/Context";
 
-function SuggestedAdmin({ pendingData, handleModal, handleTabChange, SuggestedAdminApiCall }) {
+function SuggestedAdmin({
+	pendingData,
+	handleModal,
+	handleTabChange,
+	SuggestedAdminApiCall,
+	viewNHName,
+}) {
 	const {
 		setNHPrivacyPagination,
 		nHPrivacyPagination: { suggestedAdminPage, suggestedAdminPageSize },
@@ -113,6 +119,19 @@ function SuggestedAdmin({ pendingData, handleModal, handleTabChange, SuggestedAd
 				return params?.row?.profile?.email;
 			},
 		},
+		viewNHName
+			? {
+					id: "10",
+					field: "neighbourhoodname",
+					headerClassName: "app-header",
+					headerName: "Neighbourhood Name",
+					// align: "center",
+					flex: 0.4,
+					renderCell: (params) => {
+						return params?.row?.payload?.name;
+					},
+			  }
+			: {},
 		{
 			id: "6",
 			field: "id",

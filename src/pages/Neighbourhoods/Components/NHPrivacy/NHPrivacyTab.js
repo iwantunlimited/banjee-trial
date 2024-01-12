@@ -561,6 +561,7 @@ function NHPrivacyTab(props) {
 						handleTabChange={handleChange}
 						handleModal={handleModal}
 						SuggestedAdminApiCall={SuggestedAdminApiCall}
+						viewNHName={false}
 					/>
 				</Box>
 			</TabPanel>

@@ -18,6 +18,7 @@ import { useLocation } from "react-router";
 import { PaginationContext } from "../../context/PaginationContext";
 import GeneralPendingMemberRequests from "./Components/NHPrivacy/GeneralPendingMemberReq";
 import AdminPendingRequests from "./Components/NHPrivacy/AdminPendingRequests";
+import SuggestedAdmin from "./Components/NHPrivacy/SuggestedAdmin";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -57,6 +58,8 @@ function Neighbourhood() {
 			generalMemberRequestPage,
 			generalAdminReqPage,
 			generalAdminReqPageSize,
+			suggestedAdminPage,
+			suggestedAdminPageSize,
 		},
 	} = React.useContext(PaginationContext);
 
@@ -74,6 +77,10 @@ function Neighbourhood() {
 		totalElements: 0,
 	});
 	const [adminPendingData, setAdminPendingData] = React.useState({
+		data: [],
+		totalMembers: 0,
+	});
+	const [suggestAdminData, setSuggestAdminData] = React.useState({
 		data: [],
 		totalMembers: 0,
 	});
@@ -204,10 +211,27 @@ function Neighbourhood() {
 			});
 	}, [generalAdminReqPage, generalAdminReqPageSize]);
 
+	const SuggestedAdminApiCall = React.useCallback(() => {
+		filterMembers({
+			page: suggestedAdminPage,
+			pageSize: suggestedAdminPageSize,
+			suggestion: "true",
+		})
+			.then((res) => {
+				setSuggestAdminData({
+					data: res?.content,
+					totalMembers: res?.totalElements,
+				});
+			})
+			.catch((err) => console.error(err));
+	}, [suggestedAdminPage, suggestedAdminPageSize]);
+
 	React.useEffect(() => {
 		listApiCall();
 		generalPendingListApiCall();
-	}, [listApiCall, generalPendingListApiCall]);
+		SuggestedAdminApiCall();
+		AdminRequestApiCall();
+	}, [listApiCall, generalPendingListApiCall, SuggestedAdminApiCall, AdminRequestApiCall]);
 
 	React.useEffect(() => {
 		pendingListApiCall();
@@ -251,6 +275,11 @@ function Neighbourhood() {
 									label={`Pending Admin Requests (${adminPendingData?.totalMembers})`}
 									{...a11yProps(3)}
 								/>
+								<Tab
+									sx={{ textTransform: "none", fontSize: { lg: "18px" } }}
+									label={`Suggested Admin (${suggestAdminData?.totalMembers})`}
+									{...a11yProps(4)}
+								/>
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
@@ -292,6 +321,15 @@ function Neighbourhood() {
 									pendingData={adminPendingData}
 									AdminRequestApiCall={AdminRequestApiCall}
 									RefreshMemberApiCall={listApiCall}
+								/>
+							</Box>
+						</TabPanel>
+						<TabPanel value={value} index={4}>
+							<Box sx={{ paddingY: "15px" }}>
+								<SuggestedAdmin
+									pendingData={suggestAdminData}
+									SuggestedAdminApiCall={SuggestedAdminApiCall}
+									viewNHName={true}
 								/>
 							</Box>
 						</TabPanel>
