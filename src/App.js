@@ -15,9 +15,6 @@ import { WebSocketProvider } from "./context/WebSocketContext";
 function App() {
 	const { themeData, setThemeData, setLocationData } = React.useContext(MainContext);
 	const isDarkModeEnabled = useMediaQuery("(prefers-color-scheme: dark)");
-	// console.log("====================================");
-	// console.log("themeData", isDarkModeEnabled, "----", themeData);
-	// console.log("====================================");
 
 	// if (isDarkModeEnabled) {
 	// 	console.log("====================================");
@@ -39,7 +36,7 @@ function App() {
 	return (
 		<WebSocketProvider>
 			<SocketConfiguration />
-			<ThemeProvider theme={themeData ? darkTheme : theme}>
+			<ThemeProvider theme={theme}>
 				<BrowserRouter>
 					<Routes />
 					<SnackbarContext />

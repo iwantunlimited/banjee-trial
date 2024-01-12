@@ -59,22 +59,6 @@ function Login() {
 		const { name, value } = event.target;
 		setState((prevState) => ({ ...prevState, [name]: value }));
 	};
-	// console.log("====================================");
-	// console.log("state", state);
-	// console.log("====================================");
-
-	const handleTokenExpired = (exp) => {
-		// let expiredTimer;
-		// window.clearTimeout(expiredTimer);
-		// const currentTime = Date.now();
-		// const timeLeft = exp * 1000 - currentTime;
-		// // console.log(timeLeft);
-		// expiredTimer = window.setTimeout(() => {
-		// 	localStorage.removeItem("token");
-		// 	window.location.reload();
-		// 	// You can do what ever you want here, like show a notification
-		// }, timeLeft);
-	};
 
 	React.useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -212,8 +196,7 @@ function Login() {
 														required
 													/>
 												</div>
-												<div
-													style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
+												<div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
 													<TextField
 														fullWidth
 														type={showPassword ? "text" : "password"}
@@ -240,8 +223,7 @@ function Login() {
 														}}
 													/>
 												</div>
-												<div
-													style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+												<div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
 													<Button type='submit' variant='contained' className='login-btn'>
 														Login
 													</Button>

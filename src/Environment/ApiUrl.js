@@ -1,4 +1,3 @@
-import { DATA_GRID_DEFAULT_SLOTS_COMPONENTS } from "@mui/x-data-grid";
 import { services } from "./Environment.dev";
 
 let token = "Basic aXRwbDppd2FudHVubGltaXRlZA==";
@@ -26,7 +25,6 @@ export const urls = {
 			EXECUTE: services.BIG_DATA + "api/analytics/execute",
 		},
 	},
-
 	ASSETS_SERVICES: {
 		FILTER_CATEGORY: services.ASSETS_SERVICES + "category/filter",
 		CREATE_CATEGORY: services.ASSETS_SERVICES + "category",
@@ -61,7 +59,6 @@ export const urls = {
 		DELETE_COLLAB_FEED: services.SOCIAL_FEEDS + "feeds/collaborate/delete",
 		REPORTED_FEED_DETAIL: services.SOCIAL_FEEDS + "api/feeds/admin/reports/",
 	},
-
 	GEO_CLOUD: {
 		CREATE_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud",
 		REMOVE_USER_FROM_NEIGHBOURHOOD: services.GEO_CLOUD + "social-cloud/quit",
@@ -94,7 +91,6 @@ export const urls = {
 		DELETE_THOUGHTS: services.GEO_CLOUD + "thoughts/",
 		SEND_LINK: services.GEO_CLOUD + "api/send/smsAndEmail",
 	},
-
 	LOCAL_DISCOVERY: {
 		FILTER_BUSINESS: services.LOCAL_DISCOVERY + "business/filter",
 		APPROVE_BUSINESS: services.LOCAL_DISCOVERY + "business/approve",
@@ -110,7 +106,6 @@ export const urls = {
 		DELETE_COMMENTS: services.LOCAL_DISCOVERY_V2 + "blog/comments/delete/",
 		CREATE_REACTIONS: services.LOCAL_DISCOVERY_V2 + "user-reactions",
 	},
-
 	CDN: {
 		FIND_FOLDER: services.CDN_SERVICE + "resources/find",
 		FOLDER_CREATE: services.CDN_SERVICE + "resources/directory",
@@ -119,7 +114,6 @@ export const urls = {
 		ANALYSTICS: services.CDN_SERVICE + "resources/analytics/",
 		DELETE: services.CDN_SERVICE + "resources/",
 	},
-
 	CATEGORY: {
 		ADD: services.PRODUCT + "category",
 		FILTERLIST: services.PRODUCT + "category/filter",
@@ -128,14 +122,12 @@ export const urls = {
 		FIND_ACTIVATE: services.PRODUCT + "category/activate/",
 		FIND_DELETE: services.PRODUCT + "category/delete/",
 	},
-
 	THEME: {
 		ADD: services.MERCHANT + "theme",
 		FILTERLIST: services.MERCHANT + "theme/filter",
 		FIND_BY_ID: services.MERCHANT + "theme/findById/",
 		FIND_DELETE: services.MERCHANT + "theme/delete/",
 	},
-
 	USERPROFILE: {
 		USER_CSV_DATA: services?.USER_PROFILE + "remote/user/csvdownload",
 		USER_MEMBERSHIP: services?.USER_PROFILE_MEMBERSHIP + "/user-membership",
@@ -153,7 +145,6 @@ export const urls = {
 		REPORTED_USER_BY_ID: services.USER_PROFILE + "user/report/byUsers",
 		REPORT_ACTION: services.USER_PROFILE_MEMBERSHIP + "user-report/action",
 	},
-
 	COUNTRY: {
 		ADD: services.LOCATION + "system/country",
 		UPDATE: services.LOCATION + "system/country",
@@ -163,7 +154,6 @@ export const urls = {
 		FILTER: services.LOCATION + "system/country/findAll",
 		FIND_BY_ID: services.LOCATION + "system/country/findById/", // pass id when calling this api
 	},
-
 	STATE: {
 		ADD: services.LOCATION + "system/states",
 		UPDATE: services.LOCATION + "system/states",

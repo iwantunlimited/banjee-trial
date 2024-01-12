@@ -1,10 +1,8 @@
 import React from "react";
-// import Account from "./pages/Account/Account";
 import Navbar from "./pages/navbar/navbar";
 import { useNavigate, useRoutes } from "react-router-dom";
 import Login from "./pages/Login/login";
 import CustomerView from "./pages/Users/components/userView";
-// import Example from "./pages/Users/components/example";
 import ReportedUser1 from "./pages/Users/components/ReportedUser";
 import ViewReportedUsers from "./pages/Users/components/ViewReportedUsers";
 import Room from "./pages/Rooms/Rooms";

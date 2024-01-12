@@ -28,8 +28,7 @@ import {
 	CreateSubCategory,
 	deleteCategory,
 	deleteSubCategory,
-} from "../Users/User_Services/UserApiService";
-import SwitchSelector from "react-switch-selector";
+} from "../../Environment/Apis";
 import { MainContext } from "../../context/Context";
 import ModalComp from "../../CustomComponents/ModalComp";
 
@@ -405,11 +404,7 @@ function Category(props) {
 																				}}>
 																				<Cancel fontSize='small' style={{ color: "brown" }} />
 																			</IconButton>
-																			<img
-																				src={imgShow}
-																				alt='photo'
-																				style={{ width: "100%", height: "100%" }}
-																			/>
+																			<img src={imgShow} alt='photo' style={{ width: "100%", height: "100%" }} />
 																		</Box>
 																	)}
 																</Box>
@@ -473,12 +468,8 @@ function Category(props) {
 																	options={categoryList.content}
 																	getOptionLabel={(e) => e.name}
 																	// sx={{ width: 300 }}
-																	onChange={(e, d) =>
-																		handleChange({ target: { name: "category", value: d } })
-																	}
-																	renderInput={(params) => (
-																		<TextField {...params} label='Select Category' />
-																	)}
+																	onChange={(e, d) => handleChange({ target: { name: "category", value: d } })}
+																	renderInput={(params) => <TextField {...params} label='Select Category' />}
 																/>
 															</Box>
 														</Grid>
@@ -510,10 +501,7 @@ function Category(props) {
 															display: "flex",
 															justifyContent: "flex-end",
 														}}>
-														<Button
-															variant='contained'
-															style={{ background: "#1976D2" }}
-															type='submit'>
+														<Button variant='contained' style={{ background: "#1976D2" }} type='submit'>
 															Submit
 														</Button>
 													</Box>
@@ -590,9 +578,7 @@ function Category(props) {
 																}}>
 																<Box style={{ display: "flex", flexDirection: "column" }}>
 																	<Box>
-																		<h4 style={{ textAlign: "center" }}>
-																			{ele.id === showId && ele.name}
-																		</h4>
+																		<h4 style={{ textAlign: "center" }}>{ele.id === showId && ele.name}</h4>
 																	</Box>
 																	<Box
 																		style={{
@@ -603,9 +589,7 @@ function Category(props) {
 																		<div style={{ marginRight: "10px" }}>
 																			{ele && ele.description ? "Description:" : null}
 																		</div>
-																		<div style={{ color: "grey" }}>
-																			{ele.id === showId && ele.name}
-																		</div>
+																		<div style={{ color: "grey" }}>{ele.id === showId && ele.name}</div>
 																	</Box>
 																	<Box
 																		style={{
@@ -624,20 +608,14 @@ function Category(props) {
 																					.filter((ele) => ele.deleted === false)
 																					.map((ele) => {
 																						return (
-																							<div
-																								style={{ display: "flex", alignItems: "center" }}>
-																								<span style={{ fontSize: "18px", color: "grey" }}>
-																									{ele.name + " "}
-																								</span>
+																							<div style={{ display: "flex", alignItems: "center" }}>
+																								<span style={{ fontSize: "18px", color: "grey" }}>{ele.name + " "}</span>
 																								<IconButton
 																									style={{ fontSize: "20px" }}
 																									onClick={() => {
 																										handleSubCategoryDelete(ele.id);
 																									}}>
-																									<Delete
-																										fontSize='smaller'
-																										style={{ color: "grey" }}
-																									/>
+																									<Delete fontSize='smaller' style={{ color: "grey" }} />
 																								</IconButton>
 																							</div>
 																						);
@@ -655,9 +633,7 @@ function Category(props) {
 																			<div style={{ marginRight: "10px" }}>
 																				{ele && ele.priority ? "Priority:" : null}
 																			</div>
-																			<div style={{ color: "grey" }}>
-																				{ele.id === showId && ele.priority}
-																			</div>
+																			<div style={{ color: "grey" }}>{ele.id === showId && ele.priority}</div>
 																		</div>
 																		<div>
 																			<IconButton
@@ -671,9 +647,7 @@ function Category(props) {
 																				style={{ color: "#5664D2" }}>
 																				<Delete />
 																			</IconButton>
-																			<ModalComp
-																				data={deleteCategoryModal}
-																				handleModal={handleModal}>
+																			<ModalComp data={deleteCategoryModal} handleModal={handleModal}>
 																				<Box>
 																					<Typography
 																						sx={{
@@ -694,9 +668,7 @@ function Category(props) {
 																							display: "flex",
 																							justifyContent: "center",
 																						}}>
-																						<Button
-																							variant='outlined'
-																							onClick={() => handleModal(false)}>
+																						<Button variant='outlined' onClick={() => handleModal(false)}>
 																							Cancel
 																						</Button>
 																						<Button
