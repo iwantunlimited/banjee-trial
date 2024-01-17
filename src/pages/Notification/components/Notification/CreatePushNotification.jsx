@@ -66,7 +66,7 @@ function CreatePushNotification() {
 	const [blogList, setBLogList] = React.useState("");
 
 	const NeighbourListApi = React.useCallback(() => {
-		filterNeighbourhood({ page: 0, size: 1000, online: true })
+		filterNeighbourhood({ page: 0, pageSize: 1000, online: true })
 			.then((res) => {
 				setNeighbourList(res?.content);
 			})
