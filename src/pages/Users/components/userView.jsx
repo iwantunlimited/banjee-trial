@@ -136,13 +136,28 @@ function CustomerView(props) {
 									elevation={1}
 									sx={{
 										boxShadow: "0px 0px 10px rgb(0,0,0,0.5)",
-										paddingY: { xs: "20px", xl: "40px" },
-										paddingX: "10px",
+
 										// background: "white ",
 										// minHeight: { lg: "427px" },
 										height: { xl: "100%" },
 										// width: "100%",
 									}}>
+									{(state?.permanentSuspend || state?.temporarilySuspend) && (
+										<Typography
+											sx={{
+												background: theme?.palette?.error?.main,
+												width: "100%",
+												padding: { xs: 0.5, md: 0.7, xl: 1 },
+												color: theme?.palette?.common?.white,
+												textAlign: "center",
+											}}>
+											{state?.permanentSuspend
+												? "Permanent Suspended"
+												: state?.temporarilySuspend
+												? "Temporarily Suspended"
+												: ""}
+										</Typography>
+									)}
 									<Box
 										sx={{
 											display: "flex",
@@ -151,9 +166,10 @@ function CustomerView(props) {
 												sm: "flex-start",
 												lg: "center",
 											},
+											paddingY: { xs: "20px", xl: "40px" },
+											paddingX: "20px",
 											alignItems: "center",
 											flexDirection: { xs: "column", sm: "row", xl: "column" },
-											padding: "0 10px 0 10px",
 										}}>
 										<Avatar
 											alt={state?.firstName ? state?.firstName : "A"}
