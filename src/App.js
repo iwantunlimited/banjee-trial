@@ -16,12 +16,12 @@ function App() {
 	const { themeData, setThemeData, setLocationData } = React.useContext(MainContext);
 	const isDarkModeEnabled = useMediaQuery("(prefers-color-scheme: dark)");
 
-	// if (isDarkModeEnabled) {
-	// 	console.log("====================================");
-	// 	console.log("dark");
-	// 	console.log("====================================");
-	// 	setThemeData(true);
-	// }
+	if (isDarkModeEnabled) {
+		console.log("====================================");
+		console.log("dark");
+		console.log("====================================");
+		setThemeData(true);
+	}
 
 	//navigator for getting current lat lon
 	navigator.geolocation.getCurrentPosition(function (position) {
@@ -36,7 +36,7 @@ function App() {
 	return (
 		<WebSocketProvider>
 			<SocketConfiguration />
-			<ThemeProvider theme={theme}>
+			<ThemeProvider theme={themeData ? theme : darkTheme}>
 				<BrowserRouter>
 					<Routes />
 					<SnackbarContext />

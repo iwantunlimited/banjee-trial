@@ -154,18 +154,19 @@ function NavRouting(props) {
 			children: [
 				{
 					id: 15,
-					path: "/notification/template",
-					name: "Template",
-					icon: <Notifications fontSize='medium' />,
-					component: <Announcement />,
-				},
-				{
-					id: 16,
 					path: "/notification",
 					name: "Notification",
 					icon: <Notifications fontSize='medium' />,
 					component: <Notification />,
 				},
+				{
+					id: 16,
+					path: "/notification/template",
+					name: "Template",
+					icon: <Notifications fontSize='medium' />,
+					component: <Announcement />,
+				},
+
 				{
 					id: 21,
 					path: "/notification/automation",

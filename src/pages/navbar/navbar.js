@@ -120,7 +120,7 @@ function Navbar(props) {
 						}>
 						Show notification
 					</Button> */}
-					<SidebarList handleId={handleIdFun} handleClick={handleDrawerToggle} />
+					<SidebarList mainId={id} handleId={handleIdFun} handleClick={handleDrawerToggle} />
 				</List>
 			</Box>
 		</Drawer>
@@ -146,7 +146,7 @@ function Navbar(props) {
 			<Toolbar />
 			<Box sx={{ overflow: "auto" }}>
 				<List>
-					<SidebarList handleId={handleIdFun} handleClick={handleDrawerToggle} />
+					<SidebarList mainId={id} handleId={handleIdFun} handleClick={handleDrawerToggle} />
 					{/* <Sidebar handleId={handleIdFun} handleClick={handleDrawerToggle} /> */}
 				</List>
 			</Box>
