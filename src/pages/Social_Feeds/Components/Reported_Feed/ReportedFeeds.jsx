@@ -59,6 +59,10 @@ export default function ReportedFeeds(props) {
 		collaborateId: "",
 		remark: "",
 		report: false,
+		pageName: "",
+		pageId: "",
+		authorName: "",
+		authorId: null,
 	});
 
 	const [totalEle, setTotalEle] = React.useState();
@@ -112,9 +116,14 @@ export default function ReportedFeeds(props) {
 
 	function handleDeleteModal(data) {
 		setDFeedData((prev) => ({
+			...prev,
 			feedId: data?.feedId,
 			collaborateId: data?.collaborateId,
 			report: data?.report,
+			pageId: data?.pageId,
+			pageName: data?.pageName,
+			authorName: data?.authorName,
+			authorId: data?.authorId,
 		}));
 		setOpenDModal(data?.open);
 	}
@@ -284,6 +293,7 @@ export default function ReportedFeeds(props) {
 							const collab = ele?.collaborateId
 								? ele?.feed?.collaborateFeeds?.filter((item, index) => item?.id === ele?.collaborateId)?.[0]
 								: null;
+
 							return (
 								<React.Fragment>
 									<Grid item xs={12} sm={6} md={4} lg={3} xl={2.4} key={index}>
@@ -335,6 +345,7 @@ export default function ReportedFeeds(props) {
 							dFeedData={dFeedData}
 							FeedDataFun={setDFeedData}
 							socialFilterApi={filterReportedFeedsApiCall}
+							removeUser={true}
 						/>
 						<Grid item xs={12}>
 							{/* <Card> */}

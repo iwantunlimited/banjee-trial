@@ -107,7 +107,6 @@ function FeedCard(props) {
 					<Box
 						sx={{
 							paddingX: "14px",
-							// paddingBottom: "7px",
 							width: "100%",
 							height: "100%",
 							display: "flex",
@@ -190,12 +189,20 @@ function FeedCard(props) {
 											feedId: ele?.feedId,
 											collaborateId: ele?.collaborateId ? ele?.collaborateId : null,
 											report: true,
+											pageId: ele?.feed?.pageId,
+											pageName: ele?.feed?.pageName,
+											authorName: author?.firstName,
+											authorId: author?.id,
 										});
 									} else {
 										handleDeleteModal({
 											open: true,
 											feedId: ele?.id,
 											report: false,
+											pageId: ele?.feed?.pageId,
+											pageName: ele?.feed?.pageName,
+											authorName: author?.firstName,
+											authorId: author?.id,
 										});
 									}
 								}}
@@ -208,24 +215,6 @@ function FeedCard(props) {
 							sx={{ marginY: "10px", height: "200px", position: "relative" }}
 							// onClick={() => setModal({ open: true, data: ele })}
 						>
-							{/* {ele?.mediaContent?.length > 1 && (
-											<Box
-												sx={{
-													position: "absolute",
-													top: 2,
-													right: 2,
-													fontSize: "14px",
-													background: "black",
-													color: "white",
-													borderRadius: "5px",
-													zIndex: 100000,
-													px: 0.5,
-												}}
-											>
-												{cNumber + "/" + ele?.mediaContent?.length}
-											</Box>
-										)} */}
-
 							{/* swiper for media */}
 							<Swiper
 								onClick={() => {

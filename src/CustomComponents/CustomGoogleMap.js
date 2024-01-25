@@ -1,9 +1,7 @@
 import { Box, CircularProgress } from "@mui/material";
 import React from "react";
 import StandaloneSearchBox from "react-google-maps/lib/components/places/StandaloneSearchBox";
-import { MainContext } from "../context/Context";
 import axios from "axios";
-import { findPlaceByPlaceId } from "../pages/Neighbourhoods/services/apiServices";
 import { urls } from "../Environment/ApiUrl";
 const _ = require("lodash");
 const { compose, withProps, lifecycle } = require("recompose");

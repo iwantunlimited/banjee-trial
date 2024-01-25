@@ -30,14 +30,8 @@ function AlertList(props) {
 			pageSize: 10,
 		})
 			.then((res) => {
-				// console.log("====================================");
-				// console.log("alert response", res);
-				// console.log("====================================");
 				setState(res?.content);
-				// setPagination({
-				// 	page: res?.pageable?.pageNumber,
-				// 	pageSize: res?.pageable?.pageSize,
-				// });
+
 				setTotalEle(res?.totalElements);
 			})
 			.catch((err) => console.error(err));

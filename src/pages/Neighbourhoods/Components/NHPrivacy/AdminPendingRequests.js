@@ -120,31 +120,6 @@ function AdminPendingRequests({ pendingData, AdminRequestApiCall, RefreshMemberA
 			renderCell: (params) => {
 				return (
 					<React.Fragment>
-						{/* <strong>
-							<Stack direction='row' spacing={2}>
-								<Chip
-									label='Reject'
-									style={{ background: "red", color: "white" }}
-									onClick={(event) => {
-										// navigate("/rooms/view/" + params.row.routingId);
-										handleModal({
-											open: true,
-											data: params?.row?.userId,
-											event: event,
-										});
-									}}
-								/>
-								<Chip
-									label='Approve'
-									style={{ background: "green", color: "white" }}
-									onClick={(event) => {
-										// navigate("/rooms/view/" + params.row.routingId);
-										// ApproveApiCAll(params?.row?.routingId);
-										// pendingAPiCAll(0, 10);
-									}}
-								/>
-							</Stack>
-						</strong> */}
 						<IconButton
 							onClick={() =>
 								setAdminVerificationModalOpen((prev) => ({

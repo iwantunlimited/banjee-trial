@@ -32,7 +32,6 @@ export default function GroupFeed({ groupId, groupName, NHFeed }) {
 
 	const filterSocialFeedsApiCall = React.useCallback(
 		() => {
-			// setData();
 			filterSocialFeeds({
 				keywords: null,
 				pageId: groupId ? groupId : "",

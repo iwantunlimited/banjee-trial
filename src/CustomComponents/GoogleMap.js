@@ -2,7 +2,6 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import React from "react";
 import StandaloneSearchBox from "react-google-maps/lib/components/places/StandaloneSearchBox";
 import { MainContext } from "../context/Context";
-import { LocalActivity, PinDrop } from "@mui/icons-material";
 const _ = require("lodash");
 const { compose, withProps, lifecycle } = require("recompose");
 const {
